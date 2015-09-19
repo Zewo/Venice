@@ -1,0 +1,526 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 47;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B06CEBA61BAE026200A88073 /* Go.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E201B7E6353004CBD6E /* Go.swift */; settings = {ASSET_TAGS = (); }; };
+		B06CEBA71BAE026200A88073 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E221B7E6380004CBD6E /* Channel.swift */; settings = {ASSET_TAGS = (); }; };
+		B06CEBA81BAE026200A88073 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E241B7E63BA004CBD6E /* Select.swift */; settings = {ASSET_TAGS = (); }; };
+		B06CEBA91BAE026200A88073 /* Ticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E451B7EA641004CBD6E /* Ticker.swift */; settings = {ASSET_TAGS = (); }; };
+		B06CEBAA1BAE026200A88073 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E431B7E8B03004CBD6E /* Timer.swift */; settings = {ASSET_TAGS = (); }; };
+		B06CEBDC1BAE09CD00A88073 /* SwiftGo.h in Headers */ = {isa = PBXBuildFile; fileRef = B06CEBDB1BAE09A500A88073 /* SwiftGo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B06CEBDD1BAE09D600A88073 /* SwiftGo.h in Headers */ = {isa = PBXBuildFile; fileRef = B06CEBDB1BAE09A500A88073 /* SwiftGo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B06F5A291BAE16F5006927AE /* chan.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A171BAE16F5006927AE /* chan.c */; settings = {ASSET_TAGS = (); }; };
+		B06F5A2A1BAE16F5006927AE /* chan.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A171BAE16F5006927AE /* chan.c */; settings = {ASSET_TAGS = (); }; };
+		B06F5A2D1BAE16F5006927AE /* cr.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A191BAE16F5006927AE /* cr.c */; settings = {ASSET_TAGS = (); }; };
+		B06F5A2E1BAE16F5006927AE /* cr.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A191BAE16F5006927AE /* cr.c */; settings = {ASSET_TAGS = (); }; };
+		B06F5A331BAE16F5006927AE /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A1C1BAE16F5006927AE /* list.c */; settings = {ASSET_TAGS = (); }; };
+		B06F5A341BAE16F5006927AE /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A1C1BAE16F5006927AE /* list.c */; settings = {ASSET_TAGS = (); }; };
+		B06F5A371BAE16F5006927AE /* poller.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A1F1BAE16F5006927AE /* poller.c */; settings = {ASSET_TAGS = (); }; };
+		B06F5A381BAE16F5006927AE /* poller.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A1F1BAE16F5006927AE /* poller.c */; settings = {ASSET_TAGS = (); }; };
+		B06F5A3B1BAE16F5006927AE /* slist.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A211BAE16F5006927AE /* slist.c */; settings = {ASSET_TAGS = (); }; };
+		B06F5A3C1BAE16F5006927AE /* slist.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A211BAE16F5006927AE /* slist.c */; settings = {ASSET_TAGS = (); }; };
+		B06F5A3F1BAE16F5006927AE /* stack.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A231BAE16F5006927AE /* stack.c */; settings = {ASSET_TAGS = (); }; };
+		B06F5A401BAE16F5006927AE /* stack.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A231BAE16F5006927AE /* stack.c */; settings = {ASSET_TAGS = (); }; };
+		B06F5A431BAE16F5006927AE /* SwiftGo.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A251BAE16F5006927AE /* SwiftGo.c */; settings = {ASSET_TAGS = (); }; };
+		B06F5A441BAE16F5006927AE /* SwiftGo.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A251BAE16F5006927AE /* SwiftGo.c */; settings = {ASSET_TAGS = (); }; };
+		B06F5A471BAE16F5006927AE /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A271BAE16F5006927AE /* utils.c */; settings = {ASSET_TAGS = (); }; };
+		B06F5A481BAE16F5006927AE /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A271BAE16F5006927AE /* utils.c */; settings = {ASSET_TAGS = (); }; };
+		B0E8CE811B82EC6F007F6857 /* Go.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E201B7E6353004CBD6E /* Go.swift */; };
+		B0E8CE821B82EC6F007F6857 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E221B7E6380004CBD6E /* Channel.swift */; };
+		B0E8CE831B82EC6F007F6857 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E241B7E63BA004CBD6E /* Select.swift */; };
+		B0E8CE841B82EC6F007F6857 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E431B7E8B03004CBD6E /* Timer.swift */; };
+		B0E8CE851B82EC6F007F6857 /* Ticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E451B7EA641004CBD6E /* Ticker.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B06CEB961BAE020600A88073 /* SwiftGo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftGo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B06CEBDB1BAE09A500A88073 /* SwiftGo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwiftGo.h; path = SwiftGo/SwiftGo.h; sourceTree = "<group>"; };
+		B06F5A171BAE16F5006927AE /* chan.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = chan.c; sourceTree = "<group>"; };
+		B06F5A181BAE16F5006927AE /* chan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chan.h; sourceTree = "<group>"; };
+		B06F5A191BAE16F5006927AE /* cr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cr.c; sourceTree = "<group>"; };
+		B06F5A1A1BAE16F5006927AE /* cr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cr.h; sourceTree = "<group>"; };
+		B06F5A1B1BAE16F5006927AE /* libmill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libmill.h; sourceTree = "<group>"; };
+		B06F5A1C1BAE16F5006927AE /* list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = list.c; sourceTree = "<group>"; };
+		B06F5A1D1BAE16F5006927AE /* list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = list.h; sourceTree = "<group>"; };
+		B06F5A1E1BAE16F5006927AE /* module.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.map; sourceTree = "<group>"; };
+		B06F5A1F1BAE16F5006927AE /* poller.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = poller.c; sourceTree = "<group>"; };
+		B06F5A201BAE16F5006927AE /* poller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = poller.h; sourceTree = "<group>"; };
+		B06F5A211BAE16F5006927AE /* slist.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = slist.c; sourceTree = "<group>"; };
+		B06F5A221BAE16F5006927AE /* slist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slist.h; sourceTree = "<group>"; };
+		B06F5A231BAE16F5006927AE /* stack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stack.c; sourceTree = "<group>"; };
+		B06F5A241BAE16F5006927AE /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
+		B06F5A251BAE16F5006927AE /* SwiftGo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SwiftGo.c; sourceTree = "<group>"; };
+		B06F5A261BAE16F5006927AE /* SwiftGo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftGo.h; sourceTree = "<group>"; };
+		B06F5A271BAE16F5006927AE /* utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utils.c; sourceTree = "<group>"; };
+		B06F5A281BAE16F5006927AE /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		B0E27E201B7E6353004CBD6E /* Go.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Go.swift; path = SwiftGo/Go.swift; sourceTree = "<group>"; };
+		B0E27E221B7E6380004CBD6E /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Channel.swift; path = SwiftGo/Channel.swift; sourceTree = "<group>"; };
+		B0E27E241B7E63BA004CBD6E /* Select.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Select.swift; path = SwiftGo/Select.swift; sourceTree = "<group>"; };
+		B0E27E431B7E8B03004CBD6E /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Timer.swift; path = SwiftGo/Timer.swift; sourceTree = "<group>"; };
+		B0E27E451B7EA641004CBD6E /* Ticker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Ticker.swift; path = SwiftGo/Ticker.swift; sourceTree = "<group>"; };
+		B0E8CE601B82C255007F6857 /* SwiftGo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftGo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0E8CE641B82C255007F6857 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = SwiftGo/Info.plist; sourceTree = "<group>"; };
+		B0E8CE771B82EC39007F6857 /* Examples.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Examples.playground; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B06CEB921BAE020600A88073 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0E8CE5C1B82C255007F6857 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B06A144A1B7D16800095BA12 = {
+			isa = PBXGroup;
+			children = (
+				B06F5A161BAE16F5006927AE /* Libmill */,
+				B06CEBAB1BAE029C00A88073 /* SwiftGo */,
+				B0E8CE781B82EC4E007F6857 /* Examples */,
+				B06A14541B7D16800095BA12 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B06A14541B7D16800095BA12 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B0E8CE601B82C255007F6857 /* SwiftGo.framework */,
+				B06CEB961BAE020600A88073 /* SwiftGo.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B06CEBAB1BAE029C00A88073 /* SwiftGo */ = {
+			isa = PBXGroup;
+			children = (
+				B06CEBDB1BAE09A500A88073 /* SwiftGo.h */,
+				B0E27E201B7E6353004CBD6E /* Go.swift */,
+				B0E27E221B7E6380004CBD6E /* Channel.swift */,
+				B0E27E241B7E63BA004CBD6E /* Select.swift */,
+				B0E27E451B7EA641004CBD6E /* Ticker.swift */,
+				B0E27E431B7E8B03004CBD6E /* Timer.swift */,
+				B0E8CE641B82C255007F6857 /* Info.plist */,
+			);
+			name = SwiftGo;
+			sourceTree = "<group>";
+		};
+		B06F5A161BAE16F5006927AE /* Libmill */ = {
+			isa = PBXGroup;
+			children = (
+				B06F5A1E1BAE16F5006927AE /* module.map */,
+				B06F5A261BAE16F5006927AE /* SwiftGo.h */,
+				B06F5A251BAE16F5006927AE /* SwiftGo.c */,
+				B06F5A171BAE16F5006927AE /* chan.c */,
+				B06F5A181BAE16F5006927AE /* chan.h */,
+				B06F5A191BAE16F5006927AE /* cr.c */,
+				B06F5A1A1BAE16F5006927AE /* cr.h */,
+				B06F5A1B1BAE16F5006927AE /* libmill.h */,
+				B06F5A1C1BAE16F5006927AE /* list.c */,
+				B06F5A1D1BAE16F5006927AE /* list.h */,
+				B06F5A1F1BAE16F5006927AE /* poller.c */,
+				B06F5A201BAE16F5006927AE /* poller.h */,
+				B06F5A211BAE16F5006927AE /* slist.c */,
+				B06F5A221BAE16F5006927AE /* slist.h */,
+				B06F5A231BAE16F5006927AE /* stack.c */,
+				B06F5A241BAE16F5006927AE /* stack.h */,
+				B06F5A271BAE16F5006927AE /* utils.c */,
+				B06F5A281BAE16F5006927AE /* utils.h */,
+			);
+			path = Libmill;
+			sourceTree = "<group>";
+		};
+		B0E8CE781B82EC4E007F6857 /* Examples */ = {
+			isa = PBXGroup;
+			children = (
+				B0E8CE771B82EC39007F6857 /* Examples.playground */,
+			);
+			path = Examples;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		B06CEB931BAE020600A88073 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B06CEBDD1BAE09D600A88073 /* SwiftGo.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0E8CE5D1B82C255007F6857 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B06CEBDC1BAE09CD00A88073 /* SwiftGo.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		B06CEB951BAE020600A88073 /* SwiftGo iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B06CEB9B1BAE020600A88073 /* Build configuration list for PBXNativeTarget "SwiftGo iOS" */;
+			buildPhases = (
+				B06CEB911BAE020600A88073 /* Sources */,
+				B06CEB921BAE020600A88073 /* Frameworks */,
+				B06CEB931BAE020600A88073 /* Headers */,
+				B06CEB941BAE020600A88073 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SwiftGo iOS";
+			productName = "SwiftGo iOS";
+			productReference = B06CEB961BAE020600A88073 /* SwiftGo.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		B0E8CE5F1B82C255007F6857 /* SwiftGo OSX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B0E8CE711B82C256007F6857 /* Build configuration list for PBXNativeTarget "SwiftGo OSX" */;
+			buildPhases = (
+				B0E8CE5B1B82C255007F6857 /* Sources */,
+				B0E8CE5C1B82C255007F6857 /* Frameworks */,
+				B0E8CE5D1B82C255007F6857 /* Headers */,
+				B0E8CE5E1B82C255007F6857 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SwiftGo OSX";
+			productName = Go;
+			productReference = B0E8CE601B82C255007F6857 /* SwiftGo.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B06A144B1B7D16800095BA12 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = Zewo;
+				TargetAttributes = {
+					B06CEB951BAE020600A88073 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					B0E8CE5F1B82C255007F6857 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+				};
+			};
+			buildConfigurationList = B06A144E1B7D16800095BA12 /* Build configuration list for PBXProject "SwiftGo" */;
+			compatibilityVersion = "Xcode 6.3";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = B06A144A1B7D16800095BA12;
+			productRefGroup = B06A14541B7D16800095BA12 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B0E8CE5F1B82C255007F6857 /* SwiftGo OSX */,
+				B06CEB951BAE020600A88073 /* SwiftGo iOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B06CEB941BAE020600A88073 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0E8CE5E1B82C255007F6857 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B06CEB911BAE020600A88073 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B06CEBA91BAE026200A88073 /* Ticker.swift in Sources */,
+				B06F5A2A1BAE16F5006927AE /* chan.c in Sources */,
+				B06CEBA71BAE026200A88073 /* Channel.swift in Sources */,
+				B06F5A341BAE16F5006927AE /* list.c in Sources */,
+				B06F5A381BAE16F5006927AE /* poller.c in Sources */,
+				B06CEBAA1BAE026200A88073 /* Timer.swift in Sources */,
+				B06F5A2E1BAE16F5006927AE /* cr.c in Sources */,
+				B06F5A481BAE16F5006927AE /* utils.c in Sources */,
+				B06F5A401BAE16F5006927AE /* stack.c in Sources */,
+				B06CEBA81BAE026200A88073 /* Select.swift in Sources */,
+				B06F5A441BAE16F5006927AE /* SwiftGo.c in Sources */,
+				B06CEBA61BAE026200A88073 /* Go.swift in Sources */,
+				B06F5A3C1BAE16F5006927AE /* slist.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0E8CE5B1B82C255007F6857 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0E8CE851B82EC6F007F6857 /* Ticker.swift in Sources */,
+				B06F5A291BAE16F5006927AE /* chan.c in Sources */,
+				B0E8CE821B82EC6F007F6857 /* Channel.swift in Sources */,
+				B06F5A331BAE16F5006927AE /* list.c in Sources */,
+				B06F5A371BAE16F5006927AE /* poller.c in Sources */,
+				B0E8CE841B82EC6F007F6857 /* Timer.swift in Sources */,
+				B06F5A2D1BAE16F5006927AE /* cr.c in Sources */,
+				B06F5A471BAE16F5006927AE /* utils.c in Sources */,
+				B06F5A3F1BAE16F5006927AE /* stack.c in Sources */,
+				B0E8CE831B82EC6F007F6857 /* Select.swift in Sources */,
+				B06F5A431BAE16F5006927AE /* SwiftGo.c in Sources */,
+				B0E8CE811B82EC6F007F6857 /* Go.swift in Sources */,
+				B06F5A3B1BAE16F5006927AE /* slist.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B06A14581B7D16800095BA12 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B06A14591B7D16800095BA12 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		B06CEB9C1BAE020600A88073 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "$(SRCROOT)/SwiftGo/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zewo.SwiftGo;
+				PRODUCT_NAME = SwiftGo;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Libmill";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		B06CEB9D1BAE020600A88073 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "$(SRCROOT)/SwiftGo/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zewo.SwiftGo;
+				PRODUCT_NAME = SwiftGo;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Libmill";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		B0E8CE721B82C256007F6857 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = SwiftGo/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zewo.SwiftGo;
+				PRODUCT_MODULE_NAME = SwiftGo;
+				PRODUCT_NAME = SwiftGo;
+				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Libmill";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		B0E8CE731B82C256007F6857 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_OPTIMIZATION_LEVEL = fast;
+				INFOPLIST_FILE = SwiftGo/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zewo.SwiftGo;
+				PRODUCT_MODULE_NAME = SwiftGo;
+				PRODUCT_NAME = SwiftGo;
+				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Libmill";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B06A144E1B7D16800095BA12 /* Build configuration list for PBXProject "SwiftGo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B06A14581B7D16800095BA12 /* Debug */,
+				B06A14591B7D16800095BA12 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B06CEB9B1BAE020600A88073 /* Build configuration list for PBXNativeTarget "SwiftGo iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B06CEB9C1BAE020600A88073 /* Debug */,
+				B06CEB9D1BAE020600A88073 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B0E8CE711B82C256007F6857 /* Build configuration list for PBXNativeTarget "SwiftGo OSX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0E8CE721B82C256007F6857 /* Debug */,
+				B0E8CE731B82C256007F6857 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B06A144B1B7D16800095BA12 /* Project object */;
+}

@@ -1,0 +1,4 @@
+module Libmill [system] {
+    header "SwiftGo.h"
+    export *
+}
