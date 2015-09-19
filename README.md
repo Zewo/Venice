@@ -3,7 +3,7 @@ SwiftGo
 
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
-**SwiftGo** is a pure Swift/C library that allows you to use *Go*'s concurrent features in **Swift 2**.
+**SwiftGo** is a pure Swift/C library that allows you to use *Go*'s concurrency features in **Swift 2**.
 
 ## Features
 
