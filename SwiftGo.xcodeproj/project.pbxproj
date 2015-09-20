@@ -7,29 +7,47 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B06CEBA61BAE026200A88073 /* Go.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E201B7E6353004CBD6E /* Go.swift */; settings = {ASSET_TAGS = (); }; };
-		B06CEBA71BAE026200A88073 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E221B7E6380004CBD6E /* Channel.swift */; settings = {ASSET_TAGS = (); }; };
-		B06CEBA81BAE026200A88073 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E241B7E63BA004CBD6E /* Select.swift */; settings = {ASSET_TAGS = (); }; };
-		B06CEBA91BAE026200A88073 /* Ticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E451B7EA641004CBD6E /* Ticker.swift */; settings = {ASSET_TAGS = (); }; };
-		B06CEBAA1BAE026200A88073 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E431B7E8B03004CBD6E /* Timer.swift */; settings = {ASSET_TAGS = (); }; };
+		B004C8AC1BAF08A300C0919E /* chan.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89A1BAF08A300C0919E /* chan.c */; };
+		B004C8AD1BAF08A300C0919E /* chan.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89A1BAF08A300C0919E /* chan.c */; };
+		B004C8AE1BAF08A300C0919E /* chan.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C89B1BAF08A300C0919E /* chan.h */; };
+		B004C8AF1BAF08A300C0919E /* chan.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C89B1BAF08A300C0919E /* chan.h */; };
+		B004C8B01BAF08A300C0919E /* cr.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89C1BAF08A300C0919E /* cr.c */; };
+		B004C8B11BAF08A300C0919E /* cr.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89C1BAF08A300C0919E /* cr.c */; };
+		B004C8B21BAF08A300C0919E /* cr.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C89D1BAF08A300C0919E /* cr.h */; };
+		B004C8B31BAF08A300C0919E /* cr.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C89D1BAF08A300C0919E /* cr.h */; };
+		B004C8B41BAF08A300C0919E /* libmill.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C89E1BAF08A300C0919E /* libmill.h */; };
+		B004C8B51BAF08A300C0919E /* libmill.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C89E1BAF08A300C0919E /* libmill.h */; };
+		B004C8B61BAF08A300C0919E /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89F1BAF08A300C0919E /* list.c */; };
+		B004C8B71BAF08A300C0919E /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89F1BAF08A300C0919E /* list.c */; };
+		B004C8B81BAF08A300C0919E /* list.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A01BAF08A300C0919E /* list.h */; };
+		B004C8B91BAF08A300C0919E /* list.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A01BAF08A300C0919E /* list.h */; };
+		B004C8BA1BAF08A300C0919E /* poller.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A21BAF08A300C0919E /* poller.c */; };
+		B004C8BB1BAF08A300C0919E /* poller.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A21BAF08A300C0919E /* poller.c */; };
+		B004C8BC1BAF08A300C0919E /* poller.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A31BAF08A300C0919E /* poller.h */; };
+		B004C8BD1BAF08A300C0919E /* poller.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A31BAF08A300C0919E /* poller.h */; };
+		B004C8BE1BAF08A300C0919E /* slist.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A41BAF08A300C0919E /* slist.c */; };
+		B004C8BF1BAF08A300C0919E /* slist.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A41BAF08A300C0919E /* slist.c */; };
+		B004C8C01BAF08A300C0919E /* slist.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A51BAF08A300C0919E /* slist.h */; };
+		B004C8C11BAF08A300C0919E /* slist.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A51BAF08A300C0919E /* slist.h */; };
+		B004C8C21BAF08A300C0919E /* stack.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A61BAF08A300C0919E /* stack.c */; };
+		B004C8C31BAF08A300C0919E /* stack.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A61BAF08A300C0919E /* stack.c */; };
+		B004C8C41BAF08A300C0919E /* stack.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A71BAF08A300C0919E /* stack.h */; };
+		B004C8C51BAF08A300C0919E /* stack.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A71BAF08A300C0919E /* stack.h */; };
+		B004C8C61BAF08A300C0919E /* SwiftGo.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A81BAF08A300C0919E /* SwiftGo.c */; };
+		B004C8C71BAF08A300C0919E /* SwiftGo.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A81BAF08A300C0919E /* SwiftGo.c */; };
+		B004C8C81BAF08A300C0919E /* SwiftGo.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A91BAF08A300C0919E /* SwiftGo.h */; };
+		B004C8C91BAF08A300C0919E /* SwiftGo.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A91BAF08A300C0919E /* SwiftGo.h */; };
+		B004C8CA1BAF08A300C0919E /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8AA1BAF08A300C0919E /* utils.c */; };
+		B004C8CB1BAF08A300C0919E /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8AA1BAF08A300C0919E /* utils.c */; };
+		B004C8CC1BAF08A300C0919E /* utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8AB1BAF08A300C0919E /* utils.h */; };
+		B004C8CD1BAF08A300C0919E /* utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8AB1BAF08A300C0919E /* utils.h */; };
+		B06CEBA61BAE026200A88073 /* Go.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E201B7E6353004CBD6E /* Go.swift */; };
+		B06CEBA71BAE026200A88073 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E221B7E6380004CBD6E /* Channel.swift */; };
+		B06CEBA81BAE026200A88073 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E241B7E63BA004CBD6E /* Select.swift */; };
+		B06CEBA91BAE026200A88073 /* Ticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E451B7EA641004CBD6E /* Ticker.swift */; };
+		B06CEBAA1BAE026200A88073 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E431B7E8B03004CBD6E /* Timer.swift */; };
 		B06CEBDC1BAE09CD00A88073 /* SwiftGo.h in Headers */ = {isa = PBXBuildFile; fileRef = B06CEBDB1BAE09A500A88073 /* SwiftGo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B06CEBDD1BAE09D600A88073 /* SwiftGo.h in Headers */ = {isa = PBXBuildFile; fileRef = B06CEBDB1BAE09A500A88073 /* SwiftGo.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B06F5A291BAE16F5006927AE /* chan.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A171BAE16F5006927AE /* chan.c */; settings = {ASSET_TAGS = (); }; };
-		B06F5A2A1BAE16F5006927AE /* chan.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A171BAE16F5006927AE /* chan.c */; settings = {ASSET_TAGS = (); }; };
-		B06F5A2D1BAE16F5006927AE /* cr.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A191BAE16F5006927AE /* cr.c */; settings = {ASSET_TAGS = (); }; };
-		B06F5A2E1BAE16F5006927AE /* cr.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A191BAE16F5006927AE /* cr.c */; settings = {ASSET_TAGS = (); }; };
-		B06F5A331BAE16F5006927AE /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A1C1BAE16F5006927AE /* list.c */; settings = {ASSET_TAGS = (); }; };
-		B06F5A341BAE16F5006927AE /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A1C1BAE16F5006927AE /* list.c */; settings = {ASSET_TAGS = (); }; };
-		B06F5A371BAE16F5006927AE /* poller.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A1F1BAE16F5006927AE /* poller.c */; settings = {ASSET_TAGS = (); }; };
-		B06F5A381BAE16F5006927AE /* poller.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A1F1BAE16F5006927AE /* poller.c */; settings = {ASSET_TAGS = (); }; };
-		B06F5A3B1BAE16F5006927AE /* slist.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A211BAE16F5006927AE /* slist.c */; settings = {ASSET_TAGS = (); }; };
-		B06F5A3C1BAE16F5006927AE /* slist.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A211BAE16F5006927AE /* slist.c */; settings = {ASSET_TAGS = (); }; };
-		B06F5A3F1BAE16F5006927AE /* stack.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A231BAE16F5006927AE /* stack.c */; settings = {ASSET_TAGS = (); }; };
-		B06F5A401BAE16F5006927AE /* stack.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A231BAE16F5006927AE /* stack.c */; settings = {ASSET_TAGS = (); }; };
-		B06F5A431BAE16F5006927AE /* SwiftGo.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A251BAE16F5006927AE /* SwiftGo.c */; settings = {ASSET_TAGS = (); }; };
-		B06F5A441BAE16F5006927AE /* SwiftGo.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A251BAE16F5006927AE /* SwiftGo.c */; settings = {ASSET_TAGS = (); }; };
-		B06F5A471BAE16F5006927AE /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A271BAE16F5006927AE /* utils.c */; settings = {ASSET_TAGS = (); }; };
-		B06F5A481BAE16F5006927AE /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B06F5A271BAE16F5006927AE /* utils.c */; settings = {ASSET_TAGS = (); }; };
 		B0E8CE811B82EC6F007F6857 /* Go.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E201B7E6353004CBD6E /* Go.swift */; };
 		B0E8CE821B82EC6F007F6857 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E221B7E6380004CBD6E /* Channel.swift */; };
 		B0E8CE831B82EC6F007F6857 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E241B7E63BA004CBD6E /* Select.swift */; };
@@ -38,26 +56,26 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B004C89A1BAF08A300C0919E /* chan.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = chan.c; sourceTree = "<group>"; };
+		B004C89B1BAF08A300C0919E /* chan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chan.h; sourceTree = "<group>"; };
+		B004C89C1BAF08A300C0919E /* cr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cr.c; sourceTree = "<group>"; };
+		B004C89D1BAF08A300C0919E /* cr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cr.h; sourceTree = "<group>"; };
+		B004C89E1BAF08A300C0919E /* libmill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libmill.h; sourceTree = "<group>"; };
+		B004C89F1BAF08A300C0919E /* list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = list.c; sourceTree = "<group>"; };
+		B004C8A01BAF08A300C0919E /* list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = list.h; sourceTree = "<group>"; };
+		B004C8A11BAF08A300C0919E /* module.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.map; sourceTree = "<group>"; };
+		B004C8A21BAF08A300C0919E /* poller.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = poller.c; sourceTree = "<group>"; };
+		B004C8A31BAF08A300C0919E /* poller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = poller.h; sourceTree = "<group>"; };
+		B004C8A41BAF08A300C0919E /* slist.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = slist.c; sourceTree = "<group>"; };
+		B004C8A51BAF08A300C0919E /* slist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slist.h; sourceTree = "<group>"; };
+		B004C8A61BAF08A300C0919E /* stack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stack.c; sourceTree = "<group>"; };
+		B004C8A71BAF08A300C0919E /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
+		B004C8A81BAF08A300C0919E /* SwiftGo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SwiftGo.c; sourceTree = "<group>"; };
+		B004C8A91BAF08A300C0919E /* SwiftGo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftGo.h; sourceTree = "<group>"; };
+		B004C8AA1BAF08A300C0919E /* utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utils.c; sourceTree = "<group>"; };
+		B004C8AB1BAF08A300C0919E /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		B06CEB961BAE020600A88073 /* SwiftGo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftGo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B06CEBDB1BAE09A500A88073 /* SwiftGo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwiftGo.h; path = SwiftGo/SwiftGo.h; sourceTree = "<group>"; };
-		B06F5A171BAE16F5006927AE /* chan.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = chan.c; sourceTree = "<group>"; };
-		B06F5A181BAE16F5006927AE /* chan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chan.h; sourceTree = "<group>"; };
-		B06F5A191BAE16F5006927AE /* cr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cr.c; sourceTree = "<group>"; };
-		B06F5A1A1BAE16F5006927AE /* cr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cr.h; sourceTree = "<group>"; };
-		B06F5A1B1BAE16F5006927AE /* libmill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libmill.h; sourceTree = "<group>"; };
-		B06F5A1C1BAE16F5006927AE /* list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = list.c; sourceTree = "<group>"; };
-		B06F5A1D1BAE16F5006927AE /* list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = list.h; sourceTree = "<group>"; };
-		B06F5A1E1BAE16F5006927AE /* module.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.map; sourceTree = "<group>"; };
-		B06F5A1F1BAE16F5006927AE /* poller.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = poller.c; sourceTree = "<group>"; };
-		B06F5A201BAE16F5006927AE /* poller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = poller.h; sourceTree = "<group>"; };
-		B06F5A211BAE16F5006927AE /* slist.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = slist.c; sourceTree = "<group>"; };
-		B06F5A221BAE16F5006927AE /* slist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slist.h; sourceTree = "<group>"; };
-		B06F5A231BAE16F5006927AE /* stack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stack.c; sourceTree = "<group>"; };
-		B06F5A241BAE16F5006927AE /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
-		B06F5A251BAE16F5006927AE /* SwiftGo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SwiftGo.c; sourceTree = "<group>"; };
-		B06F5A261BAE16F5006927AE /* SwiftGo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftGo.h; sourceTree = "<group>"; };
-		B06F5A271BAE16F5006927AE /* utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utils.c; sourceTree = "<group>"; };
-		B06F5A281BAE16F5006927AE /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		B0E27E201B7E6353004CBD6E /* Go.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Go.swift; path = SwiftGo/Go.swift; sourceTree = "<group>"; };
 		B0E27E221B7E6380004CBD6E /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Channel.swift; path = SwiftGo/Channel.swift; sourceTree = "<group>"; };
 		B0E27E241B7E63BA004CBD6E /* Select.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Select.swift; path = SwiftGo/Select.swift; sourceTree = "<group>"; };
@@ -86,10 +104,43 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B004C8981BAF08A300C0919E /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				B004C8991BAF08A300C0919E /* Libmill */,
+			);
+			path = Dependencies;
+			sourceTree = "<group>";
+		};
+		B004C8991BAF08A300C0919E /* Libmill */ = {
+			isa = PBXGroup;
+			children = (
+				B004C89A1BAF08A300C0919E /* chan.c */,
+				B004C89B1BAF08A300C0919E /* chan.h */,
+				B004C89C1BAF08A300C0919E /* cr.c */,
+				B004C89D1BAF08A300C0919E /* cr.h */,
+				B004C89E1BAF08A300C0919E /* libmill.h */,
+				B004C89F1BAF08A300C0919E /* list.c */,
+				B004C8A01BAF08A300C0919E /* list.h */,
+				B004C8A11BAF08A300C0919E /* module.map */,
+				B004C8A21BAF08A300C0919E /* poller.c */,
+				B004C8A31BAF08A300C0919E /* poller.h */,
+				B004C8A41BAF08A300C0919E /* slist.c */,
+				B004C8A51BAF08A300C0919E /* slist.h */,
+				B004C8A61BAF08A300C0919E /* stack.c */,
+				B004C8A71BAF08A300C0919E /* stack.h */,
+				B004C8A81BAF08A300C0919E /* SwiftGo.c */,
+				B004C8A91BAF08A300C0919E /* SwiftGo.h */,
+				B004C8AA1BAF08A300C0919E /* utils.c */,
+				B004C8AB1BAF08A300C0919E /* utils.h */,
+			);
+			path = Libmill;
+			sourceTree = "<group>";
+		};
 		B06A144A1B7D16800095BA12 = {
 			isa = PBXGroup;
 			children = (
-				B06F5A161BAE16F5006927AE /* Libmill */,
+				B004C8981BAF08A300C0919E /* Dependencies */,
 				B06CEBAB1BAE029C00A88073 /* SwiftGo */,
 				B0E8CE781B82EC4E007F6857 /* Examples */,
 				B06A14541B7D16800095BA12 /* Products */,
@@ -119,31 +170,6 @@
 			name = SwiftGo;
 			sourceTree = "<group>";
 		};
-		B06F5A161BAE16F5006927AE /* Libmill */ = {
-			isa = PBXGroup;
-			children = (
-				B06F5A1E1BAE16F5006927AE /* module.map */,
-				B06F5A261BAE16F5006927AE /* SwiftGo.h */,
-				B06F5A251BAE16F5006927AE /* SwiftGo.c */,
-				B06F5A171BAE16F5006927AE /* chan.c */,
-				B06F5A181BAE16F5006927AE /* chan.h */,
-				B06F5A191BAE16F5006927AE /* cr.c */,
-				B06F5A1A1BAE16F5006927AE /* cr.h */,
-				B06F5A1B1BAE16F5006927AE /* libmill.h */,
-				B06F5A1C1BAE16F5006927AE /* list.c */,
-				B06F5A1D1BAE16F5006927AE /* list.h */,
-				B06F5A1F1BAE16F5006927AE /* poller.c */,
-				B06F5A201BAE16F5006927AE /* poller.h */,
-				B06F5A211BAE16F5006927AE /* slist.c */,
-				B06F5A221BAE16F5006927AE /* slist.h */,
-				B06F5A231BAE16F5006927AE /* stack.c */,
-				B06F5A241BAE16F5006927AE /* stack.h */,
-				B06F5A271BAE16F5006927AE /* utils.c */,
-				B06F5A281BAE16F5006927AE /* utils.h */,
-			);
-			path = Libmill;
-			sourceTree = "<group>";
-		};
 		B0E8CE781B82EC4E007F6857 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
@@ -159,7 +185,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B004C8CD1BAF08A300C0919E /* utils.h in Headers */,
+				B004C8B91BAF08A300C0919E /* list.h in Headers */,
+				B004C8B51BAF08A300C0919E /* libmill.h in Headers */,
+				B004C8BD1BAF08A300C0919E /* poller.h in Headers */,
+				B004C8C51BAF08A300C0919E /* stack.h in Headers */,
+				B004C8AF1BAF08A300C0919E /* chan.h in Headers */,
 				B06CEBDD1BAE09D600A88073 /* SwiftGo.h in Headers */,
+				B004C8B31BAF08A300C0919E /* cr.h in Headers */,
+				B004C8C11BAF08A300C0919E /* slist.h in Headers */,
+				B004C8C91BAF08A300C0919E /* SwiftGo.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,7 +202,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B004C8CC1BAF08A300C0919E /* utils.h in Headers */,
+				B004C8B81BAF08A300C0919E /* list.h in Headers */,
+				B004C8B41BAF08A300C0919E /* libmill.h in Headers */,
+				B004C8BC1BAF08A300C0919E /* poller.h in Headers */,
+				B004C8C41BAF08A300C0919E /* stack.h in Headers */,
+				B004C8AE1BAF08A300C0919E /* chan.h in Headers */,
 				B06CEBDC1BAE09CD00A88073 /* SwiftGo.h in Headers */,
+				B004C8B21BAF08A300C0919E /* cr.h in Headers */,
+				B004C8C01BAF08A300C0919E /* slist.h in Headers */,
+				B004C8C81BAF08A300C0919E /* SwiftGo.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,18 +314,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				B06CEBA91BAE026200A88073 /* Ticker.swift in Sources */,
-				B06F5A2A1BAE16F5006927AE /* chan.c in Sources */,
+				B004C8AD1BAF08A300C0919E /* chan.c in Sources */,
 				B06CEBA71BAE026200A88073 /* Channel.swift in Sources */,
-				B06F5A341BAE16F5006927AE /* list.c in Sources */,
-				B06F5A381BAE16F5006927AE /* poller.c in Sources */,
+				B004C8B71BAF08A300C0919E /* list.c in Sources */,
+				B004C8BB1BAF08A300C0919E /* poller.c in Sources */,
+				B004C8C71BAF08A300C0919E /* SwiftGo.c in Sources */,
 				B06CEBAA1BAE026200A88073 /* Timer.swift in Sources */,
-				B06F5A2E1BAE16F5006927AE /* cr.c in Sources */,
-				B06F5A481BAE16F5006927AE /* utils.c in Sources */,
-				B06F5A401BAE16F5006927AE /* stack.c in Sources */,
+				B004C8CB1BAF08A300C0919E /* utils.c in Sources */,
+				B004C8B11BAF08A300C0919E /* cr.c in Sources */,
+				B004C8C31BAF08A300C0919E /* stack.c in Sources */,
 				B06CEBA81BAE026200A88073 /* Select.swift in Sources */,
-				B06F5A441BAE16F5006927AE /* SwiftGo.c in Sources */,
 				B06CEBA61BAE026200A88073 /* Go.swift in Sources */,
-				B06F5A3C1BAE16F5006927AE /* slist.c in Sources */,
+				B004C8BF1BAF08A300C0919E /* slist.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,18 +334,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0E8CE851B82EC6F007F6857 /* Ticker.swift in Sources */,
-				B06F5A291BAE16F5006927AE /* chan.c in Sources */,
+				B004C8AC1BAF08A300C0919E /* chan.c in Sources */,
 				B0E8CE821B82EC6F007F6857 /* Channel.swift in Sources */,
-				B06F5A331BAE16F5006927AE /* list.c in Sources */,
-				B06F5A371BAE16F5006927AE /* poller.c in Sources */,
+				B004C8B61BAF08A300C0919E /* list.c in Sources */,
+				B004C8BA1BAF08A300C0919E /* poller.c in Sources */,
+				B004C8C61BAF08A300C0919E /* SwiftGo.c in Sources */,
 				B0E8CE841B82EC6F007F6857 /* Timer.swift in Sources */,
-				B06F5A2D1BAE16F5006927AE /* cr.c in Sources */,
-				B06F5A471BAE16F5006927AE /* utils.c in Sources */,
-				B06F5A3F1BAE16F5006927AE /* stack.c in Sources */,
+				B004C8CA1BAF08A300C0919E /* utils.c in Sources */,
+				B004C8B01BAF08A300C0919E /* cr.c in Sources */,
+				B004C8C21BAF08A300C0919E /* stack.c in Sources */,
 				B0E8CE831B82EC6F007F6857 /* Select.swift in Sources */,
-				B06F5A431BAE16F5006927AE /* SwiftGo.c in Sources */,
 				B0E8CE811B82EC6F007F6857 /* Go.swift in Sources */,
-				B06F5A3B1BAE16F5006927AE /* slist.c in Sources */,
+				B004C8BE1BAF08A300C0919E /* slist.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,7 +449,7 @@
 				PRODUCT_NAME = SwiftGo;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Libmill";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies/**";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -430,7 +474,7 @@
 				PRODUCT_NAME = SwiftGo;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Libmill";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies/**";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -457,7 +501,7 @@
 				PRODUCT_MODULE_NAME = SwiftGo;
 				PRODUCT_NAME = SwiftGo;
 				SKIP_INSTALL = YES;
-				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Libmill";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies/**";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -483,7 +527,7 @@
 				PRODUCT_MODULE_NAME = SwiftGo;
 				PRODUCT_NAME = SwiftGo;
 				SKIP_INSTALL = YES;
-				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Libmill";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies/**";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
