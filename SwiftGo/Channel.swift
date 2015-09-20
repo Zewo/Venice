@@ -178,7 +178,7 @@ public prefix func <-<R: Sendable>(channel: R) -> R.T? {
     return channel.send()
 }
 
-func fanIn<T>(channels: SendingChannel<T>...) -> SendingChannel<T> {
+public func fanIn<T>(channels: SendingChannel<T>...) -> SendingChannel<T> {
     let fanInChannel = Channel<T>()
     for channel in channels { go { for element in channel { fanInChannel <- element } } }
     return fanInChannel.sendingChannel
