@@ -13,12 +13,12 @@ let channel2 = Channel<String>()
 //: of time, to simulate e.g. blocking RPC operations
 //: executing in concurrent goroutines.
 go {
-    nap(now + 1 * second)
+    nap(1 * second)
     channel1 <- "one"
 }
 
 go {
-    nap(now + 2 * second)
+    nap(2 * second)
     channel2 <- "two"
 }
 //: We'll use `select` to await both of these values

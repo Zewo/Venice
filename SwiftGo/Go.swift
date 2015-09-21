@@ -44,8 +44,13 @@ public func go(routine: Void -> Void) {
     go_routine(routine)
 }
 
-/// Sleeps until the deadline
-public func nap(deadline: Int) {
+/// Sleeps for duration
+public func nap(duration: Int) {
+    go_sleep(Int64(now + duration))
+}
+
+/// Wakes up at deadline
+public func wakeUp(deadline: Int) {
     go_sleep(Int64(deadline))
 }
 

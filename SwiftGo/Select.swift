@@ -226,7 +226,7 @@ public class SelectCaseBuilder {
         let done = Channel<Bool>()
 
         go {
-            nap(deadline)
+            wakeUp(deadline)
             done <- true
         }
 

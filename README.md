@@ -125,7 +125,7 @@ goroutines now, so execution falls through to here. We wait 1 second
 before the program exits
 
 ```swift
-nap(now + 1 * second)
+nap(1 * second)
 print("done")
 ```
 
@@ -246,7 +246,7 @@ goroutine that this function's work is done.
 ```swift
 func worker(done: Channel<Bool>) {
     print("working...")
-    nap(now + 1 * second)
+    nap(1 * second)
     print("done")
     done <- true // Send a value to notify that we're done.
 }
@@ -339,12 +339,12 @@ executing in concurrent goroutines.
 
 ```swift
 go {
-    nap(now + 1 * second)
+    nap(1 * second)
     channel1 <- "one"
 }
 
 go {
-    nap(now + 2 * second)
+    nap(2 * second)
     channel2 <- "two"
 }
 ```
@@ -392,7 +392,7 @@ after 2s.
 let channel1 = Channel<String>(bufferSize: 1)
 
 go {
-    nap(now + 2 * second)
+    nap(2 * second)
     channel1 <- "result 1"
 }
 ```
@@ -422,7 +422,7 @@ from `channel2` will succeed and we'll print the result.
 let channel2 = Channel<String>(bufferSize: 1)
 
 go {
-    nap(now + 2 * second)
+    nap(2 * second)
     channel2 <- "result 2"
 }
 
@@ -716,7 +716,7 @@ is stopped it won't receive any more values on its
 channel. We'll stop ours after 1600ms.
 
 ```swift
-nap(now + 1600 * millisecond)
+nap(1600 * millisecond)
 ticker.stop()
 print("Ticker stopped")
 ```
@@ -748,7 +748,7 @@ simulate an expensive task.
 func worker(id: Int, jobs: Channel<Int>, results: Channel<Int>) {
     for job in jobs {
         print("worker \(id) processing job \(job)")
-        nap(now + 1 * second)
+        nap(1 * second)
         results <- job * 2
     }
 }
@@ -1036,7 +1036,7 @@ for _ in 0 ..< 10 {
 Let the goroutines work for a second.
 
 ```swift
-nap(now + 1 * second)
+nap(1 * second)
 ```
 
 Finally, capture and report the `operations` count.

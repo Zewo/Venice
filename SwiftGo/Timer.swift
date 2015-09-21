@@ -32,7 +32,7 @@ public final class Timer {
 
     public init(deadline: Int) {
         go {
-            nap(deadline)
+            wakeUp(deadline)
             if !self.stopped {
                 self.stopped = true
                 self.internalChannel <- Void()

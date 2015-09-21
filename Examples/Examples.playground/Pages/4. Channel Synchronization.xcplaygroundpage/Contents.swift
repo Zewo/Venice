@@ -11,7 +11,7 @@ import SwiftGo
 //: goroutine that this function's work is done.
 func worker(done: Channel<Bool>) {
     print("working...")
-    nap(now + 1 * second)
+    nap(1 * second)
     print("done")
     done <- true // Send a value to notify that we're done.
 }

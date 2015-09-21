@@ -13,7 +13,7 @@ import SwiftGo
 let channel1 = Channel<String>(bufferSize: 1)
 
 go {
-    nap(now + 2 * second)
+    nap(2 * second)
     channel1 <- "result 1"
 }
 //: Here's the `select` implementing a timeout.
@@ -35,7 +35,7 @@ select { when in
 let channel2 = Channel<String>(bufferSize: 1)
 
 go {
-    nap(now + 2 * second)
+    nap(2 * second)
     channel2 <- "result 2"
 }
 

@@ -33,7 +33,7 @@ public final class Ticker {
     public init(period: Int) {
         go {
             while true {
-                nap(now + period)
+                nap(period)
                 if self.stopped { break }
                 self.internalChannel <- now
             }

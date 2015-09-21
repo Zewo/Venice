@@ -86,7 +86,7 @@ for _ in 0 ..< 10 {
     }
 }
 //: Let the goroutines work for a second.
-nap(now + 1 * second)
+nap(1 * second)
 //: Finally, capture and report the `operations` count.
 print("operations: \(operations)")
 //:

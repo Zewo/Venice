@@ -22,7 +22,7 @@ go {
 //: Our two function calls are running asynchronously in separate 
 //: goroutines now, so execution falls through to here. We wait 1 second 
 //: before the program exits
-nap(now + 1 * second)
+nap(1 * second)
 print("done")
 //: When we run this program, we see the output of the blocking call 
 //: first, then the interleaved output of the two gouroutines. This 

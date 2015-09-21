@@ -13,7 +13,7 @@ import SwiftGo
 func worker(id: Int, jobs: Channel<Int>, results: Channel<Int>) {
     for job in jobs {
         print("worker \(id) processing job \(job)")
-        nap(now + 1 * second)
+        nap(1 * second)
         results <- job * 2
     }
 }
