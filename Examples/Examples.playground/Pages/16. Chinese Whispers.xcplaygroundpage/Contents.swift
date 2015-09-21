@@ -4,7 +4,7 @@ import SwiftGo
 //:
 //: ![!Gophers Chinese Whisper](https://talks.golang.org/2012/concurrency/images/gophereartrumpet.jpg)
 func whisper(left: ReceivingChannel<Int>, _ right: SendingChannel<Int>) {
-    left <- 1 + (<-right)!
+    left <- 1 + !<-right
 }
 
 let n = 1000
@@ -23,4 +23,4 @@ go {
     right <- 1
 }
 
-print((<-leftmost)!)
+print(!<-leftmost)

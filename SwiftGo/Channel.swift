@@ -146,7 +146,7 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
     public func receive(var value: T) {
         lastValue = value
         go_send_to_channel(channel, &value, strideof(T))
-        
+
         if bufferSize <= 0 || valuesInBuffer < bufferSize {
             valuesInBuffer++
         }
@@ -166,15 +166,15 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
     }
 }
 
-infix operator <- {}
-
 public func <-<W: Receivable>(channel: W, value: W.T) {
     channel.receive(value)
 }
 
-prefix operator <- {}
-
 public prefix func <-<R: Sendable>(channel: R) -> R.T? {
+    return channel.send()
+}
+
+public prefix func !<-<R: Sendable>(channel: R) -> R.T! {
     return channel.send()
 }
 

@@ -29,6 +29,6 @@ print(message!)
 //:
 //: Values received from channels are `Optional`s. If you try to get a value 
 //: from a closed channel with no values left in the buffer, it'll return 
-//: `nil`.
+//: `nil`. If you are sure that there is a value wraped in the `Optional`, you can use the `!<-` operator, which returns an implictly unwraped optional.
 //:
 //: Next example: [Channel Buffering](@next)

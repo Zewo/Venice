@@ -13,6 +13,7 @@ SwiftGo
 - [x] No `Foundation` depency (**Linux ready**)
 - [x] Goroutines
 - [x] Channels
+- [x] Failable Channels
 - [x] Select
 - [x] Timer
 - [x] Ticker
@@ -183,7 +184,7 @@ print(message!)
 When we run the program the "ping" message is successfully passed from 
 one goroutine to another via our channel. By default sends and receives block until both the sender and receiver are ready. This property allowed us to wait at the end of our program for the "ping" message without having to use any other synchronization.
 
-Values received from channels are `Optional`s. If you try to get a value from a closed channel with no values left in the buffer, it'll return `nil`.
+Values received from channels are `Optional`s. If you try to get a value from a closed channel with no values left in the buffer, it'll return `nil`. If you are sure that there is a value wraped in the `Optional`, you can use the `!<-` operator, which returns an implictly unwraped optional.
 
 ###Output
 
@@ -220,8 +221,8 @@ messages <- "channel"
 Later we can receive these two values as usual.
 
 ```swift
-print((<-messages)!)
-print((<-messages)!)
+print(!<-messages)
+print(!<-messages)
 ```
 
 ###Output
@@ -299,8 +300,8 @@ The `pong` function accepts one channel that only sends values
 
 ```swift
 func pong(pings: SendingChannel<String>, _ pongs: ReceivingChannel<String>) {
-    let message = <-pings
-    pongs <- message!
+    let message = !<-pings
+    pongs <- message
 }
 
 let pings = Channel<String>(bufferSize: 1)
@@ -309,7 +310,7 @@ let pongs = Channel<String>(bufferSize: 1)
 ping(pings.receivingChannel, message: "passed message")
 pong(pings.sendingChannel, pongs.receivingChannel)
 
-print((<-pongs)!)
+print(!<-pongs)
 ```
 
 ###Output
@@ -1057,7 +1058,7 @@ Chinese Whispers
 
 ```swift
 func whisper(left: ReceivingChannel<Int>, _ right: SendingChannel<Int>) {
-    left <- 1 + (<-right)!
+    left <- 1 + !<-right
 }
 
 let n = 1000
@@ -1076,7 +1077,7 @@ go {
     right <- 1
 }
 
-print((<-leftmost)!)
+print(!<-leftmost)
 ```
 
 ###Output

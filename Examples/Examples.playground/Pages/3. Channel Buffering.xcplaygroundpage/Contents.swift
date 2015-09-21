@@ -18,7 +18,7 @@ let messages = Channel<String>(bufferSize: 2)
 messages <- "buffered"
 messages <- "channel"
 //: Later we can receive these two values as usual.
-print((<-messages)!)
-print((<-messages)!)
+print(!<-messages)
+print(!<-messages)
 //:
 //: Next example: [Channel Synchronization](@next)

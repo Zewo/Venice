@@ -1,4 +1,5 @@
 import SwiftGo
+import Darwin
 //: Stateful Goroutines
 //: -------------------
 //:

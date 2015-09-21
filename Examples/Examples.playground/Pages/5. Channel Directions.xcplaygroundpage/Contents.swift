@@ -16,8 +16,8 @@ func ping(pings: ReceivingChannel<String>, message: String) {
 //: The `pong` function accepts one channel that only sends values
 //: (`pings`) and a second that only receives values (`pongs`).
 func pong(pings: SendingChannel<String>, _ pongs: ReceivingChannel<String>) {
-    let message = <-pings
-    pongs <- message!
+    let message = !<-pings
+    pongs <- message
 }
 
 let pings = Channel<String>(bufferSize: 1)
@@ -26,6 +26,6 @@ let pongs = Channel<String>(bufferSize: 1)
 ping(pings.receivingChannel, message: "passed message")
 pong(pings.sendingChannel, pongs.receivingChannel)
 
-print((<-pongs)!)
+print(!<-pongs)
 //:
 //: Next example: [Select](@next)
