@@ -13,7 +13,7 @@ SwiftGo
 - [x] No `Foundation` depency (**Linux ready**)
 - [x] Goroutines
 - [x] Channels
-- [x] Fallible Channels
+- [x] FallibleChannels
 - [x] Select
 - [x] Timer
 - [x] Ticker
