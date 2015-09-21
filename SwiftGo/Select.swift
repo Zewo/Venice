@@ -26,7 +26,8 @@ import Libmill
 
 protocol SelectCase {
     mutating func register(clause: UnsafeMutablePointer<Void>, index: Int)
-    func call()
+    func execute() -> Bool
+    func hasHash(hash: Int) -> Bool
 }
 
 struct ReceiveCase<T> : SelectCase {
@@ -37,10 +38,64 @@ struct ReceiveCase<T> : SelectCase {
         go_select_in(clause, channel.channel, strideof(T), Int32(index))
     }
 
-    func call() {
+    func execute() -> Bool {
         let pointer = go_select_value(strideof(T))
         let valuePointer = UnsafeMutablePointer<T>(pointer)
         closure(valuePointer.memory)
+        return true
+    }
+
+    func hasHash(hash: Int) -> Bool {
+        return false
+    }
+}
+
+final class FailableReceiveCase<T> : SelectCase {
+    let channel: FailableChannel<T>
+    var valueClosure: (T -> Void)?
+    var errorClosure: (ErrorType -> Void)?
+
+    init(channel: FailableChannel<T>, valueClosure: T -> Void) {
+        self.channel = channel
+        self.valueClosure = valueClosure
+        self.errorClosure = nil
+    }
+
+    init(channel: FailableChannel<T>, errorClosure: ErrorType -> Void) {
+        self.channel = channel
+        self.valueClosure = nil
+        self.errorClosure = errorClosure
+    }
+
+    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+        go_select_in(clause, channel.channel, strideof(ChannelValue<T>), Int32(index))
+    }
+
+    func execute() -> Bool {
+        let pointer = go_select_value(strideof(ChannelValue<T>))
+        let resultPointer = UnsafeMutablePointer<ChannelValue<T>>(pointer)
+        let result = resultPointer.memory
+
+        switch result {
+        case .Value(let value):
+            if let valueClosure = valueClosure {
+                valueClosure(value)
+                return true
+            } else {
+                return false
+            }
+        case .Error(let error):
+            if let errorClosure = errorClosure {
+                errorClosure(error)
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+
+    func hasHash(hash: Int) -> Bool {
+        return channel.hashValue == hash
     }
 }
 
@@ -53,8 +108,13 @@ struct SendCase<T> : SelectCase {
         go_select_out(clause, channel.channel, &value, strideof(T), Int32(index))
     }
 
-    func call() {
+    func execute() -> Bool {
         closure()
+        return true
+    }
+
+    func hasHash(hash: Int) -> Bool {
+        return false
     }
 }
 
@@ -66,8 +126,13 @@ struct TimeoutCase<T> : SelectCase {
         go_select_in(clause, channel.channel, strideof(T), Int32(index))
     }
 
-    func call() {
+    func execute() -> Bool {
         closure()
+        return true
+    }
+
+    func hasHash(hash: Int) -> Bool {
+        return false
     }
 }
 
@@ -75,9 +140,31 @@ public class SelectCaseBuilder {
     var cases: [SelectCase] = []
     var otherwise: (Void -> Void)?
 
+    func findCaseWithHash(hash: Int) -> SelectCase? {
+        return cases.filter({ $0.hasHash(hash) }).first
+    }
+
     public func receiveFrom<T>(channel: Channel<T>, closure: T -> Void) {
         let patternCase = ReceiveCase(channel: channel, closure: closure)
         cases.append(patternCase)
+    }
+
+    public func receiveFrom<T>(channel: FailableChannel<T>, closure: T -> Void) {
+        if let failableCase = findCaseWithHash(channel.hashValue) as? FailableReceiveCase<T> {
+            failableCase.valueClosure = closure
+        } else {
+            let patternCase = FailableReceiveCase(channel: channel, valueClosure: closure)
+            cases.append(patternCase)
+        }
+    }
+
+    public func receiveErrorFrom<T>(channel: FailableChannel<T>, closure: ErrorType -> Void) {
+        if let failableCase = findCaseWithHash(channel.hashValue) as? FailableReceiveCase<T> {
+            failableCase.errorClosure = closure
+        } else {
+            let patternCase = FailableReceiveCase(channel: channel, errorClosure: closure)
+            cases.append(patternCase)
+        }
     }
 
     public func sendValue<T>(value: T, to channel: Channel<T>, closure: Void -> Void) {
@@ -105,31 +192,35 @@ public class SelectCaseBuilder {
 public func select(build: SelectCaseBuilder -> Void) {
     let builder = SelectCaseBuilder()
     build(builder)
+    var done = false
 
-    go_select_init()
+    while !done {
 
-    var clausePointers: [UnsafeMutablePointer<Void>] = []
+        go_select_init()
 
-    for (index, var pattern) in builder.cases.enumerate() {
-        let clausePointer = malloc(go_clause_length())
-        clausePointers.append(clausePointer)
-        pattern.register(clausePointer, index: index)
-    }
+        var clausePointers: [UnsafeMutablePointer<Void>] = []
 
-    if builder.otherwise != nil {
-        go_select_otherwise()
-    }
+        for (index, var pattern) in builder.cases.enumerate() {
+            let clausePointer = malloc(go_clause_length())
+            clausePointers.append(clausePointer)
+            pattern.register(clausePointer, index: index)
+        }
 
-    let index = go_select_wait()
-    
-    if index == -1 {
-        builder.otherwise?()
-    } else {
-        let pattern = builder.cases[Int(index)]
-        pattern.call()
-    }
-    
-    for pointer in clausePointers {
-        free(pointer)
+        if builder.otherwise != nil {
+            go_select_otherwise()
+        }
+
+        let index = go_select_wait()
+        
+        if index == -1 {
+            builder.otherwise?()
+        } else {
+            let pattern = builder.cases[Int(index)]
+            done = pattern.execute()
+        }
+        
+        for pointer in clausePointers {
+            free(pointer)
+        }
     }
 }

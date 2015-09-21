@@ -117,12 +117,15 @@ enum ChannelValue<T> {
     case Error(ErrorType)
 }
 
-public final class FailableChannel<T> : SequenceType, FailableSendable, FailableReceivable {
+var failableChannelCounter: Int = 0
+
+public final class FailableChannel<T> : SequenceType, FailableSendable, FailableReceivable, Hashable {
     let channel: chan
     public let bufferSize: Int
     private var valuesInBuffer: Int = 0
     public var closed: Bool = false
     private var lastValue: ChannelValue<T>?
+    public let hashValue: Int
 
     public convenience init() {
         self.init(bufferSize: 0)
@@ -131,6 +134,7 @@ public final class FailableChannel<T> : SequenceType, FailableSendable, Failable
     public init(bufferSize: Int) {
         self.channel = go_make_channel(strideof(ChannelValue<T>), bufferSize)
         self.bufferSize = bufferSize
+        self.hashValue = failableChannelCounter++
     }
 
     deinit {
@@ -192,6 +196,10 @@ public final class FailableChannel<T> : SequenceType, FailableSendable, Failable
             }
         }
     }
+}
+
+public func ==<T>(lhs: FailableChannel<T>, rhs: FailableChannel<T>) -> Bool {
+    return lhs.hashValue == rhs.hashValue
 }
 
 public func <-<W: FailableReceivable>(channel: W, value: W.T) {
