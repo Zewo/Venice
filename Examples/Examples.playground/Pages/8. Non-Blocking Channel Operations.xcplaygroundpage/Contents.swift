@@ -13,19 +13,19 @@ let signals = Channel<Bool>()
 //: the `receiveFrom(messages)` case with that value. If not
 //: it will immediately take the `otherwise` case.
 select { when in
-    when.receiveFrom(messages) { msg in
-        print("received message \(msg)")
+    when.receiveFrom(messages) { message in
+        print("received message \(message)")
     }
     when.otherwise {
         print("no message received")
     }
 }
 //: A non-blocking send works similarly.
-let msg = "hi"
+let message = "hi"
 
 select { when in
-    when.sendValue(msg, to: messages) {
-        print("sent message \(msg)")
+    when.send(message, to: messages) {
+        print("sent message \(message)")
     }
     when.otherwise {
         print("no message sent")
@@ -36,11 +36,11 @@ select { when in
 //: select. Here we attempt non-blocking receives
 //: on both `messages` and `signals`.
 select { when in
-    when.receiveFrom(messages) { msg in
-        print("receive message \(msg)")
+    when.receiveFrom(messages) { message in
+        print("received message \(message)")
     }
-    when.receiveFrom(signals) { sig in
-        print("received signal \(sig)")
+    when.receiveFrom(signals) { signal in
+        print("received signal \(signal)")
     }
     when.otherwise {
         print("no activity")

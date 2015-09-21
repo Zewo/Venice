@@ -355,11 +355,11 @@ simultaneously, printing each one as it arrives.
 ```swift
 for _ in 0 ..< 2 {
     select { when in
-        when.receiveFrom(channel1) { msg1 in
-            print("received \(msg1)")
+        when.receiveFrom(channel1) { message1 in
+            print("received \(message1)")
         }
-        when.receiveFrom(channel2) { msg2 in
-            print("received \(msg2)")
+        when.receiveFrom(channel2) { message2 in
+            print("received \(message2)")
         }
     }
 }
@@ -469,8 +469,8 @@ it will immediately take the `otherwise` case.
 
 ```swift
 select { when in
-    when.receiveFrom(messages) { msg in
-        print("received message \(msg)")
+    when.receiveFrom(messages) { message in
+        print("received message \(message)")
     }
     when.otherwise {
         print("no message received")
@@ -481,11 +481,11 @@ select { when in
 A non-blocking send works similarly.
 
 ```swift
-let msg = "hi"
+let message = "hi"
 
 select { when in
-    when.sendValue(msg, to: messages) {
-        print("sent message \(msg)")
+    when.send(message, to: messages) {
+        print("sent message \(message)")
     }
     when.otherwise {
         print("no message sent")
@@ -500,11 +500,11 @@ on both `messages` and `signals`.
 
 ```swift
 select { when in
-    when.receiveFrom(messages) { msg in
-        print("receive message \(msg)")
+    when.receiveFrom(messages) { message in
+        print("received message \(message)")
     }
-    when.receiveFrom(signals) { sig in
-        print("received signal \(sig)")
+    when.receiveFrom(signals) { signal in
+        print("received signal \(signal)")
     }
     when.otherwise {
         print("no activity")

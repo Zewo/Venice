@@ -25,11 +25,11 @@ go {
 //: simultaneously, printing each one as it arrives.
 for _ in 0 ..< 2 {
     select { when in
-        when.receiveFrom(channel1) { msg1 in
-            print("received \(msg1)")
+        when.receiveFrom(channel1) { message1 in
+            print("received \(message1)")
         }
-        when.receiveFrom(channel2) { msg2 in
-            print("received \(msg2)")
+        when.receiveFrom(channel2) { message2 in
+            print("received \(message2)")
         }
     }
 }

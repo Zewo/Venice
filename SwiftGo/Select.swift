@@ -118,6 +118,46 @@ struct SendCase<T> : SelectCase {
     }
 }
 
+struct FailableSendCase<T> : SelectCase {
+    let channel: FailableChannel<T>
+    let value: T
+    let closure: Void -> Void
+
+    mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+        var channelValue = ChannelValue<T>.Value(self.value)
+        go_select_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
+    }
+
+    func execute() -> Bool {
+        closure()
+        return true
+    }
+
+    func hasHash(hash: Int) -> Bool {
+        return false
+    }
+}
+
+struct FailableSendErrorCase<T> : SelectCase {
+    let channel: FailableChannel<T>
+    let error: ErrorType
+    let closure: Void -> Void
+
+    mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+        var channelValue = ChannelValue<T>.Error(self.error)
+        go_select_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
+    }
+
+    func execute() -> Bool {
+        closure()
+        return true
+    }
+
+    func hasHash(hash: Int) -> Bool {
+        return false
+    }
+}
+
 struct TimeoutCase<T> : SelectCase {
     let channel: Channel<T>
     let closure: Void -> Void
@@ -140,7 +180,7 @@ public class SelectCaseBuilder {
     var cases: [SelectCase] = []
     var otherwise: (Void -> Void)?
 
-    func findCaseWithHash(hash: Int) -> SelectCase? {
+    private func findCaseWithHash(hash: Int) -> SelectCase? {
         return cases.filter({ $0.hasHash(hash) }).first
     }
 
@@ -158,7 +198,7 @@ public class SelectCaseBuilder {
         }
     }
 
-    public func receiveErrorFrom<T>(channel: FailableChannel<T>, closure: ErrorType -> Void) {
+    public func catchErrorFrom<T>(channel: FailableChannel<T>, closure: ErrorType -> Void) {
         if let failableCase = findCaseWithHash(channel.hashValue) as? FailableReceiveCase<T> {
             failableCase.errorClosure = closure
         } else {
@@ -167,8 +207,18 @@ public class SelectCaseBuilder {
         }
     }
 
-    public func sendValue<T>(value: T, to channel: Channel<T>, closure: Void -> Void) {
+    public func send<T>(value: T, to channel: Channel<T>, closure: Void -> Void) {
         let patternCase = SendCase(channel: channel, value: value, closure: closure)
+        cases.append(patternCase)
+    }
+
+    public func send<T>(value: T, to channel: FailableChannel<T>, closure: Void -> Void) {
+        let patternCase = FailableSendCase(channel: channel, value: value, closure: closure)
+        cases.append(patternCase)
+    }
+
+    public func throwError<T>(error: ErrorType, into channel: FailableChannel<T>, closure: Void -> Void) {
+        let patternCase = FailableSendErrorCase(channel: channel, error: error, closure: closure)
         cases.append(patternCase)
     }
 
@@ -214,6 +264,7 @@ public func select(build: SelectCaseBuilder -> Void) {
         
         if index == -1 {
             builder.otherwise?()
+            done = true
         } else {
             let pattern = builder.cases[Int(index)]
             done = pattern.execute()
