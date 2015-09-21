@@ -1,4 +1,4 @@
-// Channel.swift
+// FallibleChannel.swift
 //
 // The MIT License (MIT)
 //
@@ -24,16 +24,16 @@
 
 import Libmill
 
-public protocol FailableSendable {
+public protocol FallibleSendable {
     typealias T
     func send() throws -> T?
 }
 
-class _FailableSendableBoxBase<T> : FailableSendable {
+class _FallibleSendableBoxBase<T> : FallibleSendable {
     func send() throws -> T? { fatalError() }
 }
 
-class _FailableSendableBox<R: FailableSendable> : _FailableSendableBoxBase<R.T> {
+class _FallibleSendableBox<R: FallibleSendable> : _FallibleSendableBoxBase<R.T> {
     let base: R
 
     init(_ base: R) {
@@ -45,34 +45,34 @@ class _FailableSendableBox<R: FailableSendable> : _FailableSendableBoxBase<R.T> 
     }
 }
 
-public final class FailableSendingChannel<T> : FailableSendable, SequenceType {
-    private let box: _FailableSendableBoxBase<T>
+public final class FallibleSendingChannel<T> : FallibleSendable, SequenceType {
+    private let box: _FallibleSendableBoxBase<T>
 
-    init<R: FailableSendable where R.T == T>(_ base: R) {
-        self.box = _FailableSendableBox(base)
+    init<R: FallibleSendable where R.T == T>(_ base: R) {
+        self.box = _FallibleSendableBox(base)
     }
 
     public func send() throws -> T? {
         return try box.send()
     }
 
-    public func generate() -> FailableChannelGenerator<T> {
-        return FailableChannelGenerator(channel: self)
+    public func generate() -> FallibleChannelGenerator<T> {
+        return FallibleChannelGenerator(channel: self)
     }
 }
 
-public protocol FailableReceivable {
+public protocol FallibleReceivable {
     typealias T
     func receive(value: T)
     func receiveError(error: ErrorType)
 }
 
-class _FailableReceivableBoxBase<T> : FailableReceivable {
+class _FallibleReceivableBoxBase<T> : FallibleReceivable {
     func receive(value: T) { fatalError() }
     func receiveError(error: ErrorType) { fatalError() }
 }
 
-class _FailableReceivableBox<W: FailableReceivable> : _FailableReceivableBoxBase<W.T> {
+class _FallibleReceivableBox<W: FallibleReceivable> : _FallibleReceivableBoxBase<W.T> {
     let base: W
 
     init(_ base: W) {
@@ -88,11 +88,11 @@ class _FailableReceivableBox<W: FailableReceivable> : _FailableReceivableBoxBase
     }
 }
 
-public final class FailableReceivingChannel<T> : FailableReceivable {
-    private let box: _FailableReceivableBoxBase<T>
+public final class FallibleReceivingChannel<T> : FallibleReceivable {
+    private let box: _FallibleReceivableBoxBase<T>
 
-    init<W: FailableReceivable where W.T == T>(_ base: W) {
-        self.box = _FailableReceivableBox(base)
+    init<W: FallibleReceivable where W.T == T>(_ base: W) {
+        self.box = _FallibleReceivableBox(base)
     }
 
     public func receive(value: T) {
@@ -104,8 +104,8 @@ public final class FailableReceivingChannel<T> : FailableReceivable {
     }
 }
 
-public struct FailableChannelGenerator<T> : GeneratorType {
-    let channel: FailableSendingChannel<T>
+public struct FallibleChannelGenerator<T> : GeneratorType {
+    let channel: FallibleSendingChannel<T>
 
     public mutating func next() -> T? {
         return (try? channel.send()) ?? nil
@@ -117,9 +117,9 @@ enum ChannelValue<T> {
     case Error(ErrorType)
 }
 
-var failableChannelCounter: Int = 0
+var fallibleChannelCounter: Int = 0
 
-public final class FailableChannel<T> : SequenceType, FailableSendable, FailableReceivable, Hashable {
+public final class FallibleChannel<T> : SequenceType, FallibleSendable, FallibleReceivable, Hashable {
     let channel: chan
     public let bufferSize: Int
     private var valuesInBuffer: Int = 0
@@ -134,7 +134,7 @@ public final class FailableChannel<T> : SequenceType, FailableSendable, Failable
     public init(bufferSize: Int) {
         self.channel = go_make_channel(strideof(ChannelValue<T>), bufferSize)
         self.bufferSize = bufferSize
-        self.hashValue = failableChannelCounter++
+        self.hashValue = fallibleChannelCounter++
     }
 
     deinit {
@@ -142,14 +142,14 @@ public final class FailableChannel<T> : SequenceType, FailableSendable, Failable
     }
 
     /// Reference that can only send values.
-    public lazy var sendingChannel: FailableSendingChannel<T> = FailableSendingChannel(self)
+    public lazy var sendingChannel: FallibleSendingChannel<T> = FallibleSendingChannel(self)
 
     /// Reference that can only receive values.
-    public lazy var receivingChannel: FailableReceivingChannel<T> = FailableReceivingChannel(self)
+    public lazy var receivingChannel: FallibleReceivingChannel<T> = FallibleReceivingChannel(self)
 
     /// Creates a generator.
-    public func generate() -> FailableChannelGenerator<T> {
-        return FailableChannelGenerator(channel: sendingChannel)
+    public func generate() -> FallibleChannelGenerator<T> {
+        return FallibleChannelGenerator(channel: sendingChannel)
     }
 
     /// Closes the channel. When a channel is closed it cannot receive values anymore.
@@ -198,28 +198,28 @@ public final class FailableChannel<T> : SequenceType, FailableSendable, Failable
     }
 }
 
-public func ==<T>(lhs: FailableChannel<T>, rhs: FailableChannel<T>) -> Bool {
+public func ==<T>(lhs: FallibleChannel<T>, rhs: FallibleChannel<T>) -> Bool {
     return lhs.hashValue == rhs.hashValue
 }
 
-public func <-<W: FailableReceivable>(channel: W, value: W.T) {
+public func <-<W: FallibleReceivable>(channel: W, value: W.T) {
     channel.receive(value)
 }
 
-public func <-<W: FailableReceivable>(channel: W, error: ErrorType) {
+public func <-<W: FallibleReceivable>(channel: W, error: ErrorType) {
     channel.receiveError(error)
 }
 
-public prefix func <-<R: FailableSendable>(channel: R) throws -> R.T? {
+public prefix func <-<R: FallibleSendable>(channel: R) throws -> R.T? {
     return try channel.send()
 }
 
-public prefix func !<-<R: FailableSendable>(channel: R) throws -> R.T! {
+public prefix func !<-<R: FallibleSendable>(channel: R) throws -> R.T! {
     return try channel.send()!
 }
 
-func fanIn<T>(channels: FailableSendingChannel<T>...) -> FailableSendingChannel<T> {
-    let fanInChannel = FailableChannel<T>()
+func fanIn<T>(channels: FallibleSendingChannel<T>...) -> FallibleSendingChannel<T> {
+    let fanInChannel = FallibleChannel<T>()
     for channel in channels { go { for element in channel { fanInChannel <- element } } }
     return fanInChannel.sendingChannel
 }
