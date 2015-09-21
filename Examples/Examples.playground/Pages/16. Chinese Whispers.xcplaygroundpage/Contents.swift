@@ -7,20 +7,17 @@ func whisper(left: ReceivingChannel<Int>, _ right: SendingChannel<Int>) {
     left <- 1 + !<-right
 }
 
-let n = 1000
+let numberOfWhispers = 100
 
 let leftmost = Channel<Int>()
 var right = leftmost
 var left = leftmost
 
-for _ in 0 ..< n {
+for _ in 0 ..< numberOfWhispers {
     right = Channel<Int>()
     go(whisper(left.receivingChannel, right.sendingChannel))
     left = right
 }
 
-go {
-    right <- 1
-}
-
+go(right <- 1)
 print(!<-leftmost)

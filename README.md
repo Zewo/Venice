@@ -546,8 +546,8 @@ all our jobs.
 ```swift
 go {
     while true {
-        if let j = <-jobs {
-            print("received job \(j)")
+        if let job = <-jobs {
+            print("received job \(job)")
         } else {
             print("received all jobs")
             done <- true
@@ -561,9 +561,9 @@ This sends 3 jobs to the worker over the `jobs`
 channel, then closes it.
 
 ```swift
-for j in 1 ... 3 {
-    print("sent job \(j)")
-    jobs <- j
+for job in 1 ... 3 {
+    print("sent job \(job)")
+    jobs <- job
 }
 
 jobs.close()
@@ -615,8 +615,8 @@ receiving the 2 elements. If we didn't `close` it
 we'd block on a 3rd receive in the loop.
 
 ```swift
-for elem in queue {
-    print(elem)
+for element in queue {
+    print(element)
 }
 ```
 
@@ -702,11 +702,11 @@ channel that is sent values. Here we'll use the
 the values as they arrive every 500ms.
 
 ```swift
-let ticker = Ticker(period: 500)
+let ticker = Ticker(period: 500 * millisecond)
 
 go {
-    for t in ticker.channel {
-        print("Tick at \(t)")
+    for time in ticker.channel {
+        print("Tick at \(time)")
     }
 }
 ```
@@ -716,7 +716,7 @@ is stopped it won't receive any more values on its
 channel. We'll stop ours after 1600ms.
 
 ```swift
-nap(now + 1600)
+nap(now + 1600 * millisecond)
 ticker.stop()
 print("Ticker stopped")
 ```
@@ -746,10 +746,10 @@ simulate an expensive task.
 
 ```swift
 func worker(id: Int, jobs: Channel<Int>, results: Channel<Int>) {
-    for j in jobs {
-        print("worker \(id) processing job \(j)")
+    for job in jobs {
+        print("worker \(id) processing job \(job)")
         nap(now + 1 * second)
-        results <- j * 2
+        results <- job * 2
     }
 }
 ```
@@ -767,8 +767,8 @@ This starts up 3 workers, initially blocked
 because there are no jobs yet.
 
 ```swift
-for w in 1 ... 3 {
-    go(worker(w, jobs: jobs, results: results))
+for workerId in 1 ... 3 {
+    go(worker(workerId, jobs: jobs, results: results))
 }
 ```
 
@@ -776,8 +776,8 @@ Here we send 9 `jobs` and then `close` that
 channel to indicate that's all the work we have.
 
 ```swift
-for j in 1 ... 9 {
-    jobs <- j
+for job in 1 ... 9 {
+    jobs <- job
 }
 
 jobs.close()
@@ -826,8 +826,8 @@ same name.
 ```swift
 var requests = Channel<Int>(bufferSize: 5)
 
-for i in 1 ... 5 {
-    requests <- i
+for request in 1 ... 5 {
+    requests <- request
 }
 
 requests.close()
@@ -877,8 +877,8 @@ value to `burstyLimiter`, up to its limit of 3.
 
 ```swift
 go {
-    for t in Ticker(period: 200).channel {
-        burstyLimiter <- t
+    for time in Ticker(period: 200 * millisecond).channel {
+        burstyLimiter <- time
     }
 }
 ```
@@ -890,8 +890,8 @@ of `burstyLimiter`.
 ```swift
 let burstyRequests = Channel<Int>(bufferSize: 5)
 
-for i in 1 ... 5 {
-    burstyRequests <- i
+for request in 1 ... 5 {
+    burstyRequests <- request
 }
 
 burstyRequests.close()

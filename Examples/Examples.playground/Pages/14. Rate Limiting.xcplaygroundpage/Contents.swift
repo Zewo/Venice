@@ -14,8 +14,8 @@ import SwiftGo
 //: same name.
 var requests = Channel<Int>(bufferSize: 5)
 
-for i in 1 ... 5 {
-    requests <- i
+for request in 1 ... 5 {
+    requests <- request
 }
 
 requests.close()
@@ -45,8 +45,8 @@ for _ in 0 ..< 3 {
 //: Every 200 milliseconds we'll try to add a new
 //: value to `burstyLimiter`, up to its limit of 3.
 go {
-    for t in Ticker(period: 200).channel {
-        burstyLimiter <- t
+    for time in Ticker(period: 200 * millisecond).channel {
+        burstyLimiter <- time
     }
 }
 //: Now simulate 5 more incoming requests. The first
@@ -54,8 +54,8 @@ go {
 //: of `burstyLimiter`.
 let burstyRequests = Channel<Int>(bufferSize: 5)
 
-for i in 1 ... 5 {
-    burstyRequests <- i
+for request in 1 ... 5 {
+    burstyRequests <- request
 }
 
 burstyRequests.close()

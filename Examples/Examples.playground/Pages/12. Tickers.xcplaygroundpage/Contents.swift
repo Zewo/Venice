@@ -12,17 +12,17 @@ import SwiftGo
 //: channel that is sent values. Here we'll use the
 //: `generator` builtin on the channel to iterate over
 //: the values as they arrive every 500ms.
-let ticker = Ticker(period: 500)
+let ticker = Ticker(period: 500 * millisecond)
 
 go {
-    for t in ticker.channel {
-        print("Tick at \(t)")
+    for time in ticker.channel {
+        print("Tick at \(time)")
     }
 }
 //: Tickers can be stopped like timers. Once a ticker
 //: is stopped it won't receive any more values on its
 //: channel. We'll stop ours after 1600ms.
-nap(now + 1600)
+nap(now + 1600 * millisecond)
 ticker.stop()
 print("Ticker stopped")
 //: When we run this program the ticker should tick 3 times before we stop it.

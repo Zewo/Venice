@@ -19,8 +19,8 @@ let done = Channel<Bool>()
 //: all our jobs.
 go {
     while true {
-        if let j = <-jobs {
-            print("received job \(j)")
+        if let job = <-jobs {
+            print("received job \(job)")
         } else {
             print("received all jobs")
             done <- true
@@ -30,9 +30,9 @@ go {
 }
 //: This sends 3 jobs to the worker over the `jobs`
 //: channel, then closes it.
-for j in 1 ... 3 {
-    print("sent job \(j)")
-    jobs <- j
+for job in 1 ... 3 {
+    print("sent job \(job)")
+    jobs <- job
 }
 
 jobs.close()

@@ -15,8 +15,8 @@ queue.close()
 //: channel above, the iteration terminates after
 //: receiving the 2 elements. If we didn't `close` it
 //: we'd block on a 3rd receive in the loop.
-for elem in queue {
-    print(elem)
+for element in queue {
+    print(element)
 }
 //: This example also showed that it’s possible to close a non-empty channel but still have the 
 //: remaining values be received.
