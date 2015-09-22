@@ -170,6 +170,10 @@ public func <-<W: Receivable>(channel: W, value: W.T) {
     channel.receive(value)
 }
 
+public func <-<W: Receivable>(channel: W?, value: W.T) {
+    channel?.receive(value)
+}
+
 public prefix func <-<R: Sendable>(channel: R) -> R.T? {
     return channel.send()
 }

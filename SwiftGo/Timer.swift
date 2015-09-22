@@ -23,7 +23,7 @@
 // SOFTWARE.
 
 public final class Timer {
-    private let internalChannel = Channel<Void>()
+    public let internalChannel = Channel<Void>()
     private var stopped: Bool = false
 
     public var channel: SendingChannel<Void> {

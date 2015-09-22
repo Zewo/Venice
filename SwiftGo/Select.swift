@@ -184,42 +184,54 @@ public class SelectCaseBuilder {
         return cases.filter({ $0.hasHash(hash) }).first
     }
 
-    public func receiveFrom<T>(channel: Channel<T>, closure: T -> Void) {
-        let patternCase = ReceiveCase(channel: channel, closure: closure)
-        cases.append(patternCase)
-    }
-
-    public func receiveFrom<T>(channel: FallibleChannel<T>, closure: T -> Void) {
-        if let fallibleCase = findCaseWithHash(channel.hashValue) as? FallibleReceiveCase<T> {
-            fallibleCase.valueClosure = closure
-        } else {
-            let patternCase = FallibleReceiveCase(channel: channel, valueClosure: closure)
+    public func receiveFrom<T>(channel: Channel<T>?, closure: T -> Void) {
+        if let channel = channel {
+            let patternCase = ReceiveCase(channel: channel, closure: closure)
             cases.append(patternCase)
         }
     }
 
-    public func catchErrorFrom<T>(channel: FallibleChannel<T>, closure: ErrorType -> Void) {
-        if let fallibleCase = findCaseWithHash(channel.hashValue) as? FallibleReceiveCase<T> {
-            fallibleCase.errorClosure = closure
-        } else {
-            let patternCase = FallibleReceiveCase(channel: channel, errorClosure: closure)
+    public func receiveFrom<T>(channel: FallibleChannel<T>?, closure: T -> Void) {
+        if let channel = channel {
+            if let fallibleCase = findCaseWithHash(channel.hashValue) as? FallibleReceiveCase<T> {
+                fallibleCase.valueClosure = closure
+            } else {
+                let patternCase = FallibleReceiveCase(channel: channel, valueClosure: closure)
+                cases.append(patternCase)
+            }
+        }
+    }
+
+    public func catchErrorFrom<T>(channel: FallibleChannel<T>?, closure: ErrorType -> Void) {
+        if let channel = channel {
+            if let fallibleCase = findCaseWithHash(channel.hashValue) as? FallibleReceiveCase<T> {
+                fallibleCase.errorClosure = closure
+            } else {
+                let patternCase = FallibleReceiveCase(channel: channel, errorClosure: closure)
+                cases.append(patternCase)
+            }
+        }
+    }
+
+    public func send<T>(value: T, to channel: Channel<T>?, closure: Void -> Void) {
+        if let channel = channel {
+            let patternCase = SendCase(channel: channel, value: value, closure: closure)
             cases.append(patternCase)
         }
     }
 
-    public func send<T>(value: T, to channel: Channel<T>, closure: Void -> Void) {
-        let patternCase = SendCase(channel: channel, value: value, closure: closure)
-        cases.append(patternCase)
+    public func send<T>(value: T, to channel: FallibleChannel<T>?, closure: Void -> Void) {
+        if let channel = channel {
+            let patternCase = FallibleSendCase(channel: channel, value: value, closure: closure)
+            cases.append(patternCase)
+        }
     }
 
-    public func send<T>(value: T, to channel: FallibleChannel<T>, closure: Void -> Void) {
-        let patternCase = FallibleSendCase(channel: channel, value: value, closure: closure)
-        cases.append(patternCase)
-    }
-
-    public func throwError<T>(error: ErrorType, into channel: FallibleChannel<T>, closure: Void -> Void) {
-        let patternCase = FallibleSendErrorCase(channel: channel, error: error, closure: closure)
-        cases.append(patternCase)
+    public func throwError<T>(error: ErrorType, into channel: FallibleChannel<T>?, closure: Void -> Void) {
+        if let channel = channel {
+            let patternCase = FallibleSendErrorCase(channel: channel, error: error, closure: closure)
+            cases.append(patternCase)
+        }
     }
 
     public func timeout(deadline: Int, closure: Void -> Void) {

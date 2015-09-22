@@ -23,7 +23,7 @@
 // SOFTWARE.
 
 public final class Ticker {
-    private let internalChannel = Channel<Int>()
+    public let internalChannel = Channel<Int>()
     private var stopped: Bool = false
 
     public var channel: SendingChannel<Int> {
