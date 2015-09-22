@@ -1,4 +1,4 @@
-// Ticker.swift
+// Receivable.swift
 //
 // The MIT License (MIT)
 //
@@ -22,26 +22,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class Ticker {
-    private let internalChannel = Channel<Int>()
-    private var stopped: Bool = false
+public protocol Receivable {
+    typealias T
+    func receive(value: T)
+}
 
-    public var channel: SendingChannel<Int> {
-        return internalChannel.sendingChannel
-    }
+public func <-<R: Receivable>(receiver: R, value: R.T) {
+    receiver.receive(value)
+}
 
-    public init(period: Int) {
-        go {
-            while true {
-                nap(period)
-                if self.stopped { break }
-                self.internalChannel <- now
-            }
-        }
-    }
-
-    public func stop() {
-        self.stopped = true
-    }
-    
+public func <-<R: Receivable>(receiver: R?, value: R.T) {
+    receiver?.receive(value)
 }

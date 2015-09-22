@@ -1,4 +1,4 @@
-// Ticker.swift
+// ReceivingChannel.swift
 //
 // The MIT License (MIT)
 //
@@ -22,26 +22,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class Ticker {
-    private let internalChannel = Channel<Int>()
-    private var stopped: Bool = false
+import Libmill
 
-    public var channel: SendingChannel<Int> {
-        return internalChannel.sendingChannel
-    }
-
-    public init(period: Int) {
-        go {
-            while true {
-                nap(period)
-                if self.stopped { break }
-                self.internalChannel <- now
-            }
-        }
-    }
-
-    public func stop() {
-        self.stopped = true
+public final class ReceivingChannel<T> : Receivable {
+    private let referenceChannel: Channel<T>
+    
+    init(_ channel: Channel<T>) {
+        self.referenceChannel = channel
     }
     
+    public func receive(value: T) {
+        return referenceChannel.receive(value)
+    }
+    
+    var channel: chan {
+        return referenceChannel.channel
+    }
+    
+    var closed: Bool {
+        return referenceChannel.closed
+    }
 }

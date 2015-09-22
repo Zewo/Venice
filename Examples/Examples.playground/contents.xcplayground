@@ -21,5 +21,7 @@
         <page name='18. Fliping Coins'/>
         <page name='19. Fibonacci'/>
         <page name='20. Bomb'/>
+        <page name='21. Fallible Channels'/>
+        <page name='22. Select and Fallible Channels'/>
     </pages>
 </playground>

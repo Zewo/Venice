@@ -253,5 +253,7 @@ MILL_EXPORT void mill_choose_otherwise(void);
 MILL_EXPORT int mill_choose_wait(void);
 MILL_EXPORT void *mill_choose_val(size_t sz);
 
+MILL_EXPORT void mill_panic(const char *text);
+
 #endif
 

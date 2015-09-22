@@ -1,26 +1,26 @@
 import SwiftGo
 import Darwin
 
-var a: Channel<String>? = Channel<String>()
-var b: Channel<String>? = Channel<String>()
+var channelA: Channel<String>? = Channel<String>()
+var channelB: Channel<String>? = Channel<String>()
 
 if arc4random_uniform(2) == 0 {
-    a = nil
-    print("nil a")
+    channelA = nil
+    print("disabled channel a")
 } else {
-    b = nil
-    print("nil b")
+    channelB = nil
+    print("disabled channel b")
 }
 
-go(a <- "a")
-go(b <- "b")
+go(channelA <- "a")
+go(channelB <- "b")
 
 select { when in
-    when.receiveFrom(a) { s in
-        print("got \(s)")
+    when.receiveFrom(channelA) { value in
+        print("received \(value) from channel a")
     }
-    when.receiveFrom(b) { s in
-        print("got \(s)")
+    when.receiveFrom(channelB) { value in
+        print("received \(value) from channel b")
     }
 }
 

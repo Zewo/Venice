@@ -1,7 +1,7 @@
 import SwiftGo
 
-let tick = Ticker(period: 100 * millisecond).internalChannel
-let boom = Timer(deadline: now + 500 * millisecond).internalChannel
+let tick = Ticker(period: 100 * millisecond).channel
+let boom = Timer(deadline: now + 500 * millisecond).channel
 
 var done = false
 while !done {

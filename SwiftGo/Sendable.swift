@@ -1,4 +1,4 @@
-// Ticker.swift
+// Sendable.swift
 //
 // The MIT License (MIT)
 //
@@ -22,26 +22,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class Ticker {
-    private let internalChannel = Channel<Int>()
-    private var stopped: Bool = false
+public protocol Sendable {
+    typealias T
+    func send() -> T?
+    func close()
+}
 
-    public var channel: SendingChannel<Int> {
-        return internalChannel.sendingChannel
-    }
+public prefix func <-<S: Sendable>(sender: S) -> S.T? {
+    return sender.send()
+}
 
-    public init(period: Int) {
-        go {
-            while true {
-                nap(period)
-                if self.stopped { break }
-                self.internalChannel <- now
-            }
-        }
-    }
-
-    public func stop() {
-        self.stopped = true
-    }
-    
+public prefix func !<-<S: Sendable>(sender: S) -> S.T! {
+    return sender.send()
 }

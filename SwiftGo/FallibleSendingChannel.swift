@@ -1,4 +1,4 @@
-// Ticker.swift
+// FallibleSendingChannel.swift
 //
 // The MIT License (MIT)
 //
@@ -22,26 +22,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class Ticker {
-    private let internalChannel = Channel<Int>()
-    private var stopped: Bool = false
+import Libmill
 
-    public var channel: SendingChannel<Int> {
-        return internalChannel.sendingChannel
-    }
-
-    public init(period: Int) {
-        go {
-            while true {
-                nap(period)
-                if self.stopped { break }
-                self.internalChannel <- now
-            }
-        }
-    }
-
-    public func stop() {
-        self.stopped = true
+public final class FallibleSendingChannel<T> : FallibleSendable, SequenceType {
+    private let referenceChannel: FallibleChannel<T>
+    
+    init(_ channel: FallibleChannel<T>) {
+        self.referenceChannel = channel
     }
     
+    public func send() throws -> T? {
+        return try referenceChannel.send()
+    }
+    
+    public func generate() -> FallibleChannelGenerator<T> {
+        return FallibleChannelGenerator(channel: self)
+    }
+    
+    public func close() {
+        referenceChannel.close()
+    }
+    
+    var channel: chan {
+        return referenceChannel.channel
+    }
+    
+    func valueFromPointer(pointer: UnsafeMutablePointer<Void>) -> ChannelValue<T>? {
+        return referenceChannel.valueFromPointer(pointer)
+    }
 }

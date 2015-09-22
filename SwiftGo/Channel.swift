@@ -24,76 +24,6 @@
 
 import Libmill
 
-public protocol Sendable {
-    typealias T
-    func send() -> T?
-}
-
-class _SendableBoxBase<T> : Sendable {
-    func send() -> T? { fatalError() }
-}
-
-class _SendableBox<R: Sendable> : _SendableBoxBase<R.T> {
-    let base: R
-
-    init(_ base: R) {
-        self.base = base
-    }
-
-    override func send() -> R.T? {
-        return base.send()
-    }
-}
-
-public final class SendingChannel<T> : Sendable, SequenceType {
-    private let box: _SendableBoxBase<T>
-
-    init<R: Sendable where R.T == T>(_ base: R) {
-        self.box = _SendableBox(base)
-    }
-
-    public func send() -> T? {
-        return box.send()
-    }
-
-    public func generate() -> ChannelGenerator<T> {
-        return ChannelGenerator(channel: self)
-    }
-}
-
-public protocol Receivable {
-    typealias T
-    func receive(value: T)
-}
-
-class _ReceivableBoxBase<T> : Receivable {
-    func receive(value: T) { fatalError() }
-}
-
-class _ReceivableBox<W: Receivable> : _ReceivableBoxBase<W.T> {
-    let base: W
-
-    init(_ base: W) {
-        self.base = base
-    }
-
-    override func receive(value: W.T) {
-        return base.receive(value)
-    }
-}
-
-public final class ReceivingChannel<T> : Receivable {
-    private let box: _ReceivableBoxBase<T>
-
-    init<W: Receivable where W.T == T>(_ base: W) {
-        self.box = _ReceivableBox(base)
-    }
-
-    public func receive(value: T) {
-        return box.receive(value)
-    }
-}
-
 public struct ChannelGenerator<T> : GeneratorType {
     let channel: SendingChannel<T>
 
@@ -105,7 +35,7 @@ public struct ChannelGenerator<T> : GeneratorType {
 public final class Channel<T> : SequenceType, Sendable, Receivable {
     let channel: chan
     public let bufferSize: Int
-    private var valuesInBuffer: Int = 0
+    var valuesInBuffer: Int = 0
     public var closed: Bool = false
     private var lastValue: T?
 
@@ -135,6 +65,10 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
 
     /// Closes the channel. When a channel is closed it cannot receive values anymore.
     public func close() {
+        if closed {
+            go_panic("close of closed channel")
+        }
+        
         closed = true
 
         if var value = lastValue {
@@ -144,6 +78,9 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
 
     /// Receives a value.
     public func receive(var value: T) {
+        if closed {
+            go_panic("send on closed channel")
+        }
         lastValue = value
         go_send_to_channel(channel, &value, strideof(T))
 
@@ -154,10 +91,14 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
 
     /// Sends a value.
     public func send() -> T? {
+        let pointer = go_receive_from_channel(channel, strideof(T))
+        return valueFromPointer(pointer)
+    }
+    
+    func valueFromPointer(pointer: UnsafeMutablePointer<Void>) -> T? {
         if closed && valuesInBuffer <= 0 {
             return nil
         } else {
-            let pointer = go_receive_from_channel(channel, strideof(T))
             valuesInBuffer--
             let value = UnsafeMutablePointer<T>(pointer).memory
             lastValue = value
@@ -166,23 +107,7 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
     }
 }
 
-public func <-<W: Receivable>(channel: W, value: W.T) {
-    channel.receive(value)
-}
-
-public func <-<W: Receivable>(channel: W?, value: W.T) {
-    channel?.receive(value)
-}
-
-public prefix func <-<R: Sendable>(channel: R) -> R.T? {
-    return channel.send()
-}
-
-public prefix func !<-<R: Sendable>(channel: R) -> R.T! {
-    return channel.send()
-}
-
-public func fanIn<T>(channels: SendingChannel<T>...) -> SendingChannel<T> {
+public func fanIn<T>(channels: Channel<T>...) -> SendingChannel<T> {
     let fanInChannel = Channel<T>()
     for channel in channels { go { for element in channel { fanInChannel <- element } } }
     return fanInChannel.sendingChannel

@@ -100,3 +100,7 @@ void go_select_otherwise() {
 int go_select_wait() {
     return mill_choose_wait();
 }
+
+void go_panic(const char *text) {
+    mill_panic(text);
+}

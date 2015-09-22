@@ -45,5 +45,6 @@ void *go_select_value(size_t sz);
 void go_select_out(void *clause, chan ch, void *val, size_t sz, int idx);
 void go_select_otherwise();
 int go_select_wait();
+void go_panic(const char *text);
 
 #endif /* defined(Go_h) */

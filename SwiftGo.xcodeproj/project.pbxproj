@@ -7,6 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A568BBC1BB1806E00548E11 /* ReceivingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BBB1BB1806E00548E11 /* ReceivingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BBD1BB1807000548E11 /* ReceivingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BBB1BB1806E00548E11 /* ReceivingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BBF1BB180AF00548E11 /* SendingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BBE1BB180AF00548E11 /* SendingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BC01BB180AF00548E11 /* SendingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BBE1BB180AF00548E11 /* SendingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BC21BB1814700548E11 /* Receivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC11BB1814700548E11 /* Receivable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BC31BB1814700548E11 /* Receivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC11BB1814700548E11 /* Receivable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BC51BB1819D00548E11 /* Sendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC41BB1819D00548E11 /* Sendable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BC61BB1819D00548E11 /* Sendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC41BB1819D00548E11 /* Sendable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BC81BB182FB00548E11 /* FallibleSendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC71BB182FB00548E11 /* FallibleSendable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BC91BB182FB00548E11 /* FallibleSendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC71BB182FB00548E11 /* FallibleSendable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BCB1BB1834E00548E11 /* FallibleReceivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BCA1BB1834E00548E11 /* FallibleReceivable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BCC1BB1834E00548E11 /* FallibleReceivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BCA1BB1834E00548E11 /* FallibleReceivable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BCE1BB183D400548E11 /* FallibleReceivingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BCD1BB183D400548E11 /* FallibleReceivingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BCF1BB183D400548E11 /* FallibleReceivingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BCD1BB183D400548E11 /* FallibleReceivingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BD11BB1840900548E11 /* FallibleSendingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BD01BB1840900548E11 /* FallibleSendingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BD21BB1840900548E11 /* FallibleSendingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BD01BB1840900548E11 /* FallibleSendingChannel.swift */; settings = {ASSET_TAGS = (); }; };
 		B003AD801BAF838B00AAD51E /* FallibleChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003AD7F1BAF838B00AAD51E /* FallibleChannel.swift */; settings = {ASSET_TAGS = (); }; };
 		B003AD811BAF838B00AAD51E /* FallibleChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003AD7F1BAF838B00AAD51E /* FallibleChannel.swift */; settings = {ASSET_TAGS = (); }; };
 		B003AD831BAF84F700AAD51E /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003AD821BAF84F700AAD51E /* Operators.swift */; settings = {ASSET_TAGS = (); }; };
@@ -60,6 +76,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3A568BBB1BB1806E00548E11 /* ReceivingChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReceivingChannel.swift; path = SwiftGo/ReceivingChannel.swift; sourceTree = "<group>"; };
+		3A568BBE1BB180AF00548E11 /* SendingChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SendingChannel.swift; path = SwiftGo/SendingChannel.swift; sourceTree = "<group>"; };
+		3A568BC11BB1814700548E11 /* Receivable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Receivable.swift; path = SwiftGo/Receivable.swift; sourceTree = "<group>"; };
+		3A568BC41BB1819D00548E11 /* Sendable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Sendable.swift; path = SwiftGo/Sendable.swift; sourceTree = "<group>"; };
+		3A568BC71BB182FB00548E11 /* FallibleSendable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FallibleSendable.swift; path = SwiftGo/FallibleSendable.swift; sourceTree = "<group>"; };
+		3A568BCA1BB1834E00548E11 /* FallibleReceivable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FallibleReceivable.swift; path = SwiftGo/FallibleReceivable.swift; sourceTree = "<group>"; };
+		3A568BCD1BB183D400548E11 /* FallibleReceivingChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FallibleReceivingChannel.swift; path = SwiftGo/FallibleReceivingChannel.swift; sourceTree = "<group>"; };
+		3A568BD01BB1840900548E11 /* FallibleSendingChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FallibleSendingChannel.swift; path = SwiftGo/FallibleSendingChannel.swift; sourceTree = "<group>"; };
 		B003AD7F1BAF838B00AAD51E /* FallibleChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = FallibleChannel.swift; path = SwiftGo/FallibleChannel.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B003AD821BAF84F700AAD51E /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Operators.swift; path = SwiftGo/Operators.swift; sourceTree = "<group>"; };
 		B004C89A1BAF08A300C0919E /* chan.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = chan.c; sourceTree = "<group>"; };
@@ -169,7 +193,15 @@
 				B0E27E201B7E6353004CBD6E /* Go.swift */,
 				B003AD821BAF84F700AAD51E /* Operators.swift */,
 				B0E27E221B7E6380004CBD6E /* Channel.swift */,
+				3A568BC11BB1814700548E11 /* Receivable.swift */,
+				3A568BC41BB1819D00548E11 /* Sendable.swift */,
+				3A568BBB1BB1806E00548E11 /* ReceivingChannel.swift */,
+				3A568BBE1BB180AF00548E11 /* SendingChannel.swift */,
 				B003AD7F1BAF838B00AAD51E /* FallibleChannel.swift */,
+				3A568BCA1BB1834E00548E11 /* FallibleReceivable.swift */,
+				3A568BC71BB182FB00548E11 /* FallibleSendable.swift */,
+				3A568BCD1BB183D400548E11 /* FallibleReceivingChannel.swift */,
+				3A568BD01BB1840900548E11 /* FallibleSendingChannel.swift */,
 				B0E27E241B7E63BA004CBD6E /* Select.swift */,
 				B0E27E451B7EA641004CBD6E /* Ticker.swift */,
 				B0E27E431B7E8B03004CBD6E /* Timer.swift */,
@@ -324,18 +356,26 @@
 				B06CEBA91BAE026200A88073 /* Ticker.swift in Sources */,
 				B004C8AD1BAF08A300C0919E /* chan.c in Sources */,
 				B06CEBA71BAE026200A88073 /* Channel.swift in Sources */,
+				3A568BC31BB1814700548E11 /* Receivable.swift in Sources */,
+				3A568BC61BB1819D00548E11 /* Sendable.swift in Sources */,
+				3A568BCC1BB1834E00548E11 /* FallibleReceivable.swift in Sources */,
 				B004C8B71BAF08A300C0919E /* list.c in Sources */,
+				3A568BC91BB182FB00548E11 /* FallibleSendable.swift in Sources */,
 				B004C8BB1BAF08A300C0919E /* poller.c in Sources */,
 				B004C8C71BAF08A300C0919E /* SwiftGo.c in Sources */,
+				3A568BBD1BB1807000548E11 /* ReceivingChannel.swift in Sources */,
 				B06CEBAA1BAE026200A88073 /* Timer.swift in Sources */,
 				B004C8CB1BAF08A300C0919E /* utils.c in Sources */,
 				B004C8B11BAF08A300C0919E /* cr.c in Sources */,
 				B004C8C31BAF08A300C0919E /* stack.c in Sources */,
+				3A568BD21BB1840900548E11 /* FallibleSendingChannel.swift in Sources */,
 				B06CEBA81BAE026200A88073 /* Select.swift in Sources */,
 				B003AD841BAF84F700AAD51E /* Operators.swift in Sources */,
+				3A568BC01BB180AF00548E11 /* SendingChannel.swift in Sources */,
 				B06CEBA61BAE026200A88073 /* Go.swift in Sources */,
 				B004C8BF1BAF08A300C0919E /* slist.c in Sources */,
 				B003AD811BAF838B00AAD51E /* FallibleChannel.swift in Sources */,
+				3A568BCF1BB183D400548E11 /* FallibleReceivingChannel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,18 +386,26 @@
 				B0E8CE851B82EC6F007F6857 /* Ticker.swift in Sources */,
 				B004C8AC1BAF08A300C0919E /* chan.c in Sources */,
 				B0E8CE821B82EC6F007F6857 /* Channel.swift in Sources */,
+				3A568BC21BB1814700548E11 /* Receivable.swift in Sources */,
+				3A568BC51BB1819D00548E11 /* Sendable.swift in Sources */,
+				3A568BCB1BB1834E00548E11 /* FallibleReceivable.swift in Sources */,
 				B004C8B61BAF08A300C0919E /* list.c in Sources */,
+				3A568BC81BB182FB00548E11 /* FallibleSendable.swift in Sources */,
 				B004C8BA1BAF08A300C0919E /* poller.c in Sources */,
 				B004C8C61BAF08A300C0919E /* SwiftGo.c in Sources */,
+				3A568BBC1BB1806E00548E11 /* ReceivingChannel.swift in Sources */,
 				B0E8CE841B82EC6F007F6857 /* Timer.swift in Sources */,
 				B004C8CA1BAF08A300C0919E /* utils.c in Sources */,
 				B004C8B01BAF08A300C0919E /* cr.c in Sources */,
 				B004C8C21BAF08A300C0919E /* stack.c in Sources */,
+				3A568BD11BB1840900548E11 /* FallibleSendingChannel.swift in Sources */,
 				B0E8CE831B82EC6F007F6857 /* Select.swift in Sources */,
 				B003AD831BAF84F700AAD51E /* Operators.swift in Sources */,
+				3A568BBF1BB180AF00548E11 /* SendingChannel.swift in Sources */,
 				B0E8CE811B82EC6F007F6857 /* Go.swift in Sources */,
 				B004C8BE1BAF08A300C0919E /* slist.c in Sources */,
 				B003AD801BAF838B00AAD51E /* FallibleChannel.swift in Sources */,
+				3A568BCE1BB183D400548E11 /* FallibleReceivingChannel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

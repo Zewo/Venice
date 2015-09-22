@@ -1,4 +1,4 @@
-// Ticker.swift
+// FallibleReceivable.swift
 //
 // The MIT License (MIT)
 //
@@ -22,26 +22,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class Ticker {
-    private let internalChannel = Channel<Int>()
-    private var stopped: Bool = false
+public protocol FallibleReceivable {
+    typealias T
+    func receive(value: T)
+    func receiveError(error: ErrorType)
+}
 
-    public var channel: SendingChannel<Int> {
-        return internalChannel.sendingChannel
-    }
+public func <-<W: FallibleReceivable>(channel: W, value: W.T) {
+    channel.receive(value)
+}
 
-    public init(period: Int) {
-        go {
-            while true {
-                nap(period)
-                if self.stopped { break }
-                self.internalChannel <- now
-            }
-        }
-    }
+public func <-<W: FallibleReceivable>(channel: W?, value: W.T) {
+    channel?.receive(value)
+}
 
-    public func stop() {
-        self.stopped = true
-    }
-    
+public func <-<W: FallibleReceivable>(channel: W, error: ErrorType) {
+    channel.receiveError(error)
 }

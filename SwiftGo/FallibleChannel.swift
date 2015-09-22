@@ -24,86 +24,6 @@
 
 import Libmill
 
-public protocol FallibleSendable {
-    typealias T
-    func send() throws -> T?
-}
-
-class _FallibleSendableBoxBase<T> : FallibleSendable {
-    func send() throws -> T? { fatalError() }
-}
-
-class _FallibleSendableBox<R: FallibleSendable> : _FallibleSendableBoxBase<R.T> {
-    let base: R
-
-    init(_ base: R) {
-        self.base = base
-    }
-
-    override func send() throws -> R.T? {
-        return try base.send()
-    }
-}
-
-public final class FallibleSendingChannel<T> : FallibleSendable, SequenceType {
-    private let box: _FallibleSendableBoxBase<T>
-
-    init<R: FallibleSendable where R.T == T>(_ base: R) {
-        self.box = _FallibleSendableBox(base)
-    }
-
-    public func send() throws -> T? {
-        return try box.send()
-    }
-
-    public func generate() -> FallibleChannelGenerator<T> {
-        return FallibleChannelGenerator(channel: self)
-    }
-}
-
-public protocol FallibleReceivable {
-    typealias T
-    func receive(value: T)
-    func receiveError(error: ErrorType)
-}
-
-class _FallibleReceivableBoxBase<T> : FallibleReceivable {
-    func receive(value: T) { fatalError() }
-    func receiveError(error: ErrorType) { fatalError() }
-}
-
-class _FallibleReceivableBox<W: FallibleReceivable> : _FallibleReceivableBoxBase<W.T> {
-    let base: W
-
-    init(_ base: W) {
-        self.base = base
-    }
-
-    override func receive(value: W.T) {
-        return base.receive(value)
-    }
-
-    override func receiveError(error: ErrorType) {
-        return base.receiveError(error)
-    }
-}
-
-public final class FallibleReceivingChannel<T> : FallibleReceivable {
-    private let box: _FallibleReceivableBoxBase<T>
-
-    init<W: FallibleReceivable where W.T == T>(_ base: W) {
-        self.box = _FallibleReceivableBox(base)
-    }
-
-    public func receive(value: T) {
-        return box.receive(value)
-    }
-
-    public func receiveError(error: ErrorType) {
-        return box.receiveError(error)
-    }
-}
-
 public struct FallibleChannelGenerator<T> : GeneratorType {
     let channel: FallibleSendingChannel<T>
 
@@ -112,20 +32,31 @@ public struct FallibleChannelGenerator<T> : GeneratorType {
     }
 }
 
-enum ChannelValue<T> {
+public enum ChannelValue<T> {
     case Value(T)
     case Error(ErrorType)
+    
+    public func success(closure: T -> Void) {
+        switch self {
+        case .Value(let value): closure(value)
+        default: break
+        }
+    }
+    
+    public func failure(closure: ErrorType -> Void) {
+        switch self {
+        case .Error(let error): closure(error)
+        default: break
+        }
+    }
 }
 
-var fallibleChannelCounter: Int = 0
-
-public final class FallibleChannel<T> : SequenceType, FallibleSendable, FallibleReceivable, Hashable {
+public final class FallibleChannel<T> : SequenceType, FallibleSendable, FallibleReceivable {
     let channel: chan
     public let bufferSize: Int
     private var valuesInBuffer: Int = 0
     public var closed: Bool = false
     private var lastValue: ChannelValue<T>?
-    public let hashValue: Int
 
     public convenience init() {
         self.init(bufferSize: 0)
@@ -134,7 +65,6 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
     public init(bufferSize: Int) {
         self.channel = go_make_channel(strideof(ChannelValue<T>), bufferSize)
         self.bufferSize = bufferSize
-        self.hashValue = fallibleChannelCounter++
     }
 
     deinit {
@@ -183,46 +113,30 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
 
     /// Sends a value.
     public func send() throws -> T? {
-        if closed && valuesInBuffer <= 0 {
-            return nil
-        } else {
-            let pointer = go_receive_from_channel(channel, strideof(ChannelValue<T>))
-            valuesInBuffer--
-            let value = UnsafeMutablePointer<ChannelValue<T>>(pointer).memory
-            lastValue = value
-            switch lastValue! {
+        let pointer = go_receive_from_channel(channel, strideof(ChannelValue<T>))
+        if let value = valueFromPointer(pointer) {
+            switch value {
             case .Value(let value): return value
             case .Error(let error): throw error
             }
+        } else {
+            return nil
+        }
+    }
+    
+    func valueFromPointer(pointer: UnsafeMutablePointer<Void>) -> ChannelValue<T>? {
+        if closed && valuesInBuffer <= 0 {
+            return nil
+        } else {
+            valuesInBuffer--
+            let value = UnsafeMutablePointer<ChannelValue<T>>(pointer).memory
+            lastValue = value
+            return value
         }
     }
 }
 
-public func ==<T>(lhs: FallibleChannel<T>, rhs: FallibleChannel<T>) -> Bool {
-    return lhs.hashValue == rhs.hashValue
-}
-
-public func <-<W: FallibleReceivable>(channel: W, value: W.T) {
-    channel.receive(value)
-}
-
-public func <-<W: FallibleReceivable>(channel: W?, value: W.T) {
-    channel?.receive(value)
-}
-
-public func <-<W: FallibleReceivable>(channel: W, error: ErrorType) {
-    channel.receiveError(error)
-}
-
-public prefix func <-<R: FallibleSendable>(channel: R) throws -> R.T? {
-    return try channel.send()
-}
-
-public prefix func !<-<R: FallibleSendable>(channel: R) throws -> R.T! {
-    return try channel.send()!
-}
-
-func fanIn<T>(channels: FallibleSendingChannel<T>...) -> FallibleSendingChannel<T> {
+func fanIn<T>(channels: FallibleChannel<T>...) -> FallibleSendingChannel<T> {
     let fanInChannel = FallibleChannel<T>()
     for channel in channels { go { for element in channel { fanInChannel <- element } } }
     return fanInChannel.sendingChannel
