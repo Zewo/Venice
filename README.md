@@ -39,7 +39,7 @@ $ brew install carthage
 To integrate **SwiftGo** into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "Zewo/SwiftGo" ~> 0.1
+github "Zewo/SwiftGo" ~> 0.2
 ```
 
 ### Manually
