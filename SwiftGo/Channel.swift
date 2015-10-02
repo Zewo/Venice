@@ -44,12 +44,12 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
     }
 
     public init(bufferSize: Int) {
-        self.channel = go_make_channel(strideof(T), bufferSize)
+        self.channel = mill_chmake(strideof(T), bufferSize)
         self.bufferSize = bufferSize
     }
 
     deinit {
-        go_free_channel(channel)
+        mill_chclose(channel)
     }
 
     /// Reference that can only send values.
@@ -66,23 +66,23 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
     /// Closes the channel. When a channel is closed it cannot receive values anymore.
     public func close() {
         if closed {
-            go_panic("close of closed channel")
+            mill_panic("tried to close an already closed channel")
         }
         
         closed = true
-
+        
         if var value = lastValue {
-            go_close_channel(channel, &value, strideof(T))
+            mill_chdone(channel, &value, strideof(T))
         }
     }
 
     /// Receives a value.
     public func receive(var value: T) {
         if closed {
-            go_panic("send on closed channel")
+            mill_panic("send on closed channel")
         }
         lastValue = value
-        go_send_to_channel(channel, &value, strideof(T))
+        mill_chs(channel, &value, strideof(T))
 
         if bufferSize <= 0 || valuesInBuffer < bufferSize {
             valuesInBuffer++
@@ -91,7 +91,7 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
 
     /// Sends a value.
     public func send() -> T? {
-        let pointer = go_receive_from_channel(channel, strideof(T))
+        let pointer = mill_chr(channel, strideof(T))
         return valueFromPointer(pointer)
     }
     

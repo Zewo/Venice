@@ -66,8 +66,6 @@
 		B06CEBA81BAE026200A88073 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E241B7E63BA004CBD6E /* Select.swift */; };
 		B06CEBA91BAE026200A88073 /* Ticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E451B7EA641004CBD6E /* Ticker.swift */; };
 		B06CEBAA1BAE026200A88073 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E431B7E8B03004CBD6E /* Timer.swift */; };
-		B06CEBDC1BAE09CD00A88073 /* SwiftGo.h in Headers */ = {isa = PBXBuildFile; fileRef = B06CEBDB1BAE09A500A88073 /* SwiftGo.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B06CEBDD1BAE09D600A88073 /* SwiftGo.h in Headers */ = {isa = PBXBuildFile; fileRef = B06CEBDB1BAE09A500A88073 /* SwiftGo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B0E8CE811B82EC6F007F6857 /* Go.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E201B7E6353004CBD6E /* Go.swift */; };
 		B0E8CE821B82EC6F007F6857 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E221B7E6380004CBD6E /* Channel.swift */; };
 		B0E8CE831B82EC6F007F6857 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E241B7E63BA004CBD6E /* Select.swift */; };
@@ -105,7 +103,6 @@
 		B004C8AA1BAF08A300C0919E /* utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utils.c; sourceTree = "<group>"; };
 		B004C8AB1BAF08A300C0919E /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		B06CEB961BAE020600A88073 /* SwiftGo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftGo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B06CEBDB1BAE09A500A88073 /* SwiftGo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwiftGo.h; path = SwiftGo/SwiftGo.h; sourceTree = "<group>"; };
 		B0E27E201B7E6353004CBD6E /* Go.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Go.swift; path = SwiftGo/Go.swift; sourceTree = "<group>"; };
 		B0E27E221B7E6380004CBD6E /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Channel.swift; path = SwiftGo/Channel.swift; sourceTree = "<group>"; };
 		B0E27E241B7E63BA004CBD6E /* Select.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = Select.swift; path = SwiftGo/Select.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -189,7 +186,6 @@
 		B06CEBAB1BAE029C00A88073 /* SwiftGo */ = {
 			isa = PBXGroup;
 			children = (
-				B06CEBDB1BAE09A500A88073 /* SwiftGo.h */,
 				B0E27E201B7E6353004CBD6E /* Go.swift */,
 				B003AD821BAF84F700AAD51E /* Operators.swift */,
 				B0E27E221B7E6380004CBD6E /* Channel.swift */,
@@ -231,7 +227,6 @@
 				B004C8BD1BAF08A300C0919E /* poller.h in Headers */,
 				B004C8C51BAF08A300C0919E /* stack.h in Headers */,
 				B004C8AF1BAF08A300C0919E /* chan.h in Headers */,
-				B06CEBDD1BAE09D600A88073 /* SwiftGo.h in Headers */,
 				B004C8B31BAF08A300C0919E /* cr.h in Headers */,
 				B004C8C11BAF08A300C0919E /* slist.h in Headers */,
 				B004C8C91BAF08A300C0919E /* SwiftGo.h in Headers */,
@@ -248,7 +243,6 @@
 				B004C8BC1BAF08A300C0919E /* poller.h in Headers */,
 				B004C8C41BAF08A300C0919E /* stack.h in Headers */,
 				B004C8AE1BAF08A300C0919E /* chan.h in Headers */,
-				B06CEBDC1BAE09CD00A88073 /* SwiftGo.h in Headers */,
 				B004C8B21BAF08A300C0919E /* cr.h in Headers */,
 				B004C8C01BAF08A300C0919E /* slist.h in Headers */,
 				B004C8C81BAF08A300C0919E /* SwiftGo.h in Headers */,

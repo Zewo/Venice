@@ -48,7 +48,7 @@ struct mill_chan *mill_getchan(struct mill_ep *ep) {
     }
 }
 
-chan mill_chmake(size_t sz, size_t bufsz, const char *created) {
+chan mill_chmake(size_t sz, size_t bufsz) {
     /* We are allocating 1 additional element after the channel buffer to
        store the done-with value. It can't be stored in the regular buffer
        because that would mean chdone() would block when buffer is full. */
@@ -71,14 +71,14 @@ chan mill_chmake(size_t sz, size_t bufsz, const char *created) {
     return ch;
 }
 
-chan mill_chdup(chan ch, const char *current) {
+chan mill_chdup(chan ch) {
     if(mill_slow(!ch))
         mill_panic("null channel used");
     ++ch->refcount;
     return ch;
 }
 
-void mill_chclose(chan ch, const char *current) {
+void mill_chclose(chan ch) {
     if(mill_slow(!ch))
         mill_panic("null channel used");
     assert(ch->refcount > 0);
@@ -106,16 +106,16 @@ static void mill_choose_unblock(struct mill_clause *cl) {
     mill_resume(cl->cr, cl->idx);
 }
 
-static void mill_choose_init_(const char *current) {
+static void mill_choose_init_() {
     mill_slist_init(&mill_running->u_choose.clauses);
     mill_running->u_choose.othws = 0;
     mill_running->u_choose.available = 0;
     ++mill_choose_seqnum;
 }
 
-void mill_choose_init(const char *current) {
+void mill_choose_init() {
     mill_running->state = MILL_CHOOSE;
-    mill_choose_init_(current);
+    mill_choose_init_();
 }
 
 void mill_choose_in(void *clause, chan ch, size_t sz, int idx) {
@@ -240,7 +240,7 @@ static void mill_dequeue(chan ch, void *val) {
 int mill_choose_wait(void) {
     struct mill_choose *uc = &mill_running->u_choose;
     struct mill_slist_item *it;
-    struct mill_clause *cl;
+    struct mill_clause *cl = NULL;
 
     /* If there are clauses that are immediately available
        randomly choose one of them. */
@@ -298,28 +298,28 @@ void *mill_choose_val(size_t sz) {
     return mill_valbuf(mill_running, sz);
 }
 
-void mill_chs(chan ch, void *val, size_t sz, const char *current) {
+void mill_chs(chan ch, void *val, size_t sz) {
     if(mill_slow(!ch))
         mill_panic("null channel used");
-    mill_choose_init_(current);
+    mill_choose_init_();
     mill_running->state = MILL_CHS;
     struct mill_clause cl;
     mill_choose_out(&cl, ch, val, sz, 0);
     mill_choose_wait();
 }
 
-void *mill_chr(chan ch, size_t sz, const char *current) {
+void *mill_chr(chan ch, size_t sz) {
     if(mill_slow(!ch))
         mill_panic("null channel used");
     mill_running->state = MILL_CHR;
-    mill_choose_init_(current);
+    mill_choose_init_();
     struct mill_clause cl;
     mill_choose_in(&cl, ch, sz, 0);
     mill_choose_wait();
     return mill_choose_val(sz);
 }
 
-void mill_chdone(chan ch, void *val, size_t sz, const char *current) {
+void mill_chdone(chan ch, void *val, size_t sz) {
     if(mill_slow(!ch))
         mill_panic("null channel used");
     if(mill_slow(ch->done))

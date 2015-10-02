@@ -26,25 +26,9 @@
 #define Go_h
 
 #include <stdlib.h>
-typedef struct mill_chan *chan;
+#include "libmill.h"
 
-int64_t go_now();
-void go_sleep(int64_t deadline);
-void go_routine(void (^routine)(void));
-void go_yield();
-chan go_make_channel(size_t sz, size_t bufsz);
-chan go_copy_channel(chan ch);
-void go_send_to_channel(chan ch, void *val, size_t sz);
-void *go_receive_from_channel(chan ch, size_t sz);
-void go_close_channel(chan ch, void *val, size_t sz);
-void go_free_channel(chan ch);
-void go_select_init();
-size_t go_clause_length();
-void go_select_in(void *clause, chan ch, size_t sz, int idx);
-void *go_select_value(size_t sz);
-void go_select_out(void *clause, chan ch, void *val, size_t sz, int idx);
-void go_select_otherwise();
-int go_select_wait();
-void go_panic(const char *text);
+void go(void (^routine)(void));
+size_t mill_clauselen();
 
 #endif /* defined(Go_h) */

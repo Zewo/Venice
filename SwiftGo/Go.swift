@@ -26,7 +26,7 @@ import Libmill
 
 /// Current time
 public var now: Int {
-    return Int(go_now())
+    return Int(Libmill.now())
 }
 
 public let hour = 3600000
@@ -36,25 +36,25 @@ public let millisecond = 1
 
 /// Runs the expression in a lightweight coroutine
 public func go(@autoclosure(escaping) routine: Void -> Void) {
-    go_routine(routine)
+    Libmill.go(routine)
 }
 
 /// Runs the expression in a lightweight coroutine
 public func go(routine: Void -> Void) {
-    go_routine(routine)
+    Libmill.go(routine)
 }
 
 /// Sleeps for duration
 public func nap(duration: Int) {
-    go_sleep(Int64(now + duration))
+    mill_msleep(Int64(now + duration))
 }
 
 /// Wakes up at deadline
 public func wakeUp(deadline: Int) {
-    go_sleep(Int64(deadline))
+    mill_msleep(Int64(deadline))
 }
 
 /// Passes control to other coroutines
 public var yield: Void {
-    go_yield()
+    mill_yield()
 }

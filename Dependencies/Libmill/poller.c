@@ -38,8 +38,8 @@
 static struct mill_list mill_timers = {0};
 
 /* Pause current coroutine for a specified time interval. */
-void mill_msleep(int64_t deadline, const char *current) {
-    mill_fdwait(-1, 0, deadline, current);
+void mill_msleep(int64_t deadline) {
+    mill_fdwait(-1, 0, deadline);
 }
 
 /* Pollset used for waiting for file descriptors. */
@@ -68,7 +68,7 @@ static int mill_find_pollset(int fd) {
 }
 
 /* Wait for events from a file descriptor, with an optional timeout. */
-int mill_fdwait(int fd, int events, int64_t deadline, const char *current) {
+int mill_fdwait(int fd, int events, int64_t deadline) {
     /* If required, start waiting for the timeout. */
     if(deadline >= 0) {
         mill_running->u_fdwait.expiry = deadline;

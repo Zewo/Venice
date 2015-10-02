@@ -63,12 +63,12 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
     }
 
     public init(bufferSize: Int) {
-        self.channel = go_make_channel(strideof(ChannelValue<T>), bufferSize)
+        self.channel = mill_chmake(strideof(ChannelValue<T>), bufferSize)
         self.bufferSize = bufferSize
     }
 
     deinit {
-        go_free_channel(channel)
+        mill_chclose(channel)
     }
 
     /// Reference that can only send values.
@@ -84,17 +84,21 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
 
     /// Closes the channel. When a channel is closed it cannot receive values anymore.
     public func close() {
+        if closed {
+            mill_panic("tried to close an already closed channel")
+        }
+        
         closed = true
-
+        
         if var value = lastValue {
-            go_close_channel(channel, &value, strideof(ChannelValue<T>))
+            mill_chdone(channel, &value, strideof(T))
         }
     }
 
     /// Receives a value.
     public func receive(value: T) {
         lastValue = ChannelValue.Value(value)
-        go_send_to_channel(channel, &lastValue, strideof(ChannelValue<T>))
+        mill_chs(channel, &lastValue, strideof(ChannelValue<T>))
         
         if bufferSize <= 0 || valuesInBuffer < bufferSize {
             valuesInBuffer++
@@ -104,7 +108,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
     /// Receives an error.
     public func receiveError(error: ErrorType) {
         lastValue = ChannelValue.Error(error)
-        go_send_to_channel(channel, &lastValue, strideof(ChannelValue<T>))
+        mill_chs(channel, &lastValue, strideof(ChannelValue<T>))
 
         if bufferSize <= 0 || valuesInBuffer < bufferSize {
             valuesInBuffer++
@@ -113,7 +117,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
 
     /// Sends a value.
     public func send() throws -> T? {
-        let pointer = go_receive_from_channel(channel, strideof(ChannelValue<T>))
+        let pointer = mill_chr(channel, strideof(ChannelValue<T>))
         if let value = valueFromPointer(pointer) {
             switch value {
             case .Value(let value): return value

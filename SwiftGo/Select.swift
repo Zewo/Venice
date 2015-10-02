@@ -34,11 +34,11 @@ struct ChannelReceiveCase<T> : SelectCase {
     let closure: T -> Void
 
     mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        go_select_in(clause, channel.channel, strideof(T), Int32(index))
+        mill_choose_in(clause, channel.channel, strideof(T), Int32(index))
     }
 
     func execute() {
-        let pointer = go_select_value(strideof(T))
+        let pointer = mill_choose_val(strideof(T))
         let value = channel.valueFromPointer(pointer)
         if let value = value {
             closure(value)
@@ -51,11 +51,11 @@ struct SendingChannelReceiveCase<T> : SelectCase {
     let closure: T -> Void
     
     mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        go_select_in(clause, channel.channel, strideof(T), Int32(index))
+        mill_choose_in(clause, channel.channel, strideof(T), Int32(index))
     }
     
     func execute() {
-        let pointer = go_select_value(strideof(T))
+        let pointer = mill_choose_val(strideof(T))
         let value = channel.valueFromPointer(pointer)
         if let value = value {
             closure(value)
@@ -68,11 +68,11 @@ struct FallibleChannelReceiveCase<T> : SelectCase {
     var closure: ChannelValue<T> -> Void
 
     func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        go_select_in(clause, channel.channel, strideof(ChannelValue<T>), Int32(index))
+        mill_choose_in(clause, channel.channel, strideof(ChannelValue<T>), Int32(index))
     }
 
     func execute() {
-        let pointer = go_select_value(strideof(ChannelValue<T>))
+        let pointer = mill_choose_val(strideof(ChannelValue<T>))
         let result = channel.valueFromPointer(pointer)
         if let result = result {
             closure(result)
@@ -85,11 +85,11 @@ struct FallibleSendingChannelReceiveCase<T> : SelectCase {
     var closure: ChannelValue<T> -> Void
     
     func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        go_select_in(clause, channel.channel, strideof(ChannelValue<T>), Int32(index))
+        mill_choose_in(clause, channel.channel, strideof(ChannelValue<T>), Int32(index))
     }
     
     func execute() {
-        let pointer = go_select_value(strideof(ChannelValue<T>))
+        let pointer = mill_choose_val(strideof(ChannelValue<T>))
         let result = channel.valueFromPointer(pointer)
         if let result = result {
             closure(result)
@@ -103,7 +103,7 @@ struct ChannelSendCase<T> : SelectCase {
     let closure: Void -> Void
 
     mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        go_select_out(clause, channel.channel, &value, strideof(T), Int32(index))
+        mill_choose_out(clause, channel.channel, &value, strideof(T), Int32(index))
     }
 
     func execute() {
@@ -117,7 +117,7 @@ struct ReceivingChannelSendCase<T> : SelectCase {
     let closure: Void -> Void
     
     mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        go_select_out(clause, channel.channel, &value, strideof(T), Int32(index))
+        mill_choose_out(clause, channel.channel, &value, strideof(T), Int32(index))
     }
     
     func execute() {
@@ -132,7 +132,7 @@ struct FallibleChannelSendCase<T> : SelectCase {
 
     mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
         var channelValue = ChannelValue<T>.Value(self.value)
-        go_select_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
+        mill_choose_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
     }
 
     func execute() {
@@ -147,7 +147,7 @@ struct FallibleReceivingChannelSendCase<T> : SelectCase {
     
     mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
         var channelValue = ChannelValue<T>.Value(self.value)
-        go_select_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
+        mill_choose_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
     }
     
     func execute() {
@@ -162,7 +162,7 @@ struct FallibleChannelSendErrorCase<T> : SelectCase {
 
     mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
         var channelValue = ChannelValue<T>.Error(self.error)
-        go_select_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
+        mill_choose_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
     }
 
     func execute() {
@@ -177,7 +177,7 @@ struct FallibleReceivingChannelSendErrorCase<T> : SelectCase {
     
     mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
         var channelValue = ChannelValue<T>.Error(self.error)
-        go_select_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
+        mill_choose_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
     }
     
     func execute() {
@@ -190,7 +190,7 @@ struct TimeoutCase<T> : SelectCase {
     let closure: Void -> Void
 
     mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        go_select_in(clause, channel.channel, strideof(T), Int32(index))
+        mill_choose_in(clause, channel.channel, strideof(T), Int32(index))
     }
 
     func execute() {
@@ -292,22 +292,21 @@ public class SelectCaseBuilder {
 public func select(build: SelectCaseBuilder -> Void) {
     let builder = SelectCaseBuilder()
     build(builder)
-
-    go_select_init()
+    mill_choose_init()
 
     var clausePointers: [UnsafeMutablePointer<Void>] = []
 
     for (index, var pattern) in builder.cases.enumerate() {
-        let clausePointer = malloc(go_clause_length())
+        let clausePointer = malloc(mill_clauselen())
         clausePointers.append(clausePointer)
         pattern.register(clausePointer, index: index)
     }
 
     if builder.otherwise != nil {
-        go_select_otherwise()
+        mill_choose_otherwise()
     }
 
-    let index = go_select_wait()
+    let index = mill_choose_wait()
     
     if index == -1 {
         builder.otherwise?()

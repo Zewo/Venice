@@ -119,7 +119,7 @@ void mill_resume(struct mill_cr *cr, int result) {
 
 /* The intial part of go(). Starts the new coroutine.
    Returns the pointer to the top of its stack. */
-void *mill_go_prologue(const char *created) {
+void *mill_go_prologue() {
     /* Allocate and initialise new stack. */
     struct mill_cr *cr = ((struct mill_cr*)mill_allocstack()) - 1;
     cr->valbuf = NULL;
@@ -146,7 +146,7 @@ void mill_go_epilogue(void) {
     mill_suspend();
 }
 
-void mill_yield(const char *current) {
+void mill_yield() {
     /* This looks fishy, but yes, we can resume the coroutine even before
        suspending it. */
     mill_resume(mill_running, 0);
