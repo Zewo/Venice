@@ -14,7 +14,7 @@ SwiftGo
 - [x] Goroutines
 - [x] Preallocate Goroutines
 - [x] Channels
-- [x] FallibleChannels
+- [x] Fallible Channels
 - [x] Receive-only Channels
 - [x] Send-only Channels
 - [x] Select
