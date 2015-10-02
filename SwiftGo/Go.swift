@@ -44,6 +44,11 @@ public func go(routine: Void -> Void) {
     Libmill.go(routine)
 }
 
+/// Preallocates coroutine stacks. Returns the number of stacks that it actually managed to allocate.
+public func preallocateCoroutineStacks(stackCount stackCount: Int, stackSize: Int, channelValueMaxSize: Int) -> Int {
+    return Int(goprepare(Int32(stackCount), stackSize, channelValueMaxSize))
+}
+
 /// Sleeps for duration
 public func nap(duration: Int) {
     mill_msleep(Int64(now + duration))
