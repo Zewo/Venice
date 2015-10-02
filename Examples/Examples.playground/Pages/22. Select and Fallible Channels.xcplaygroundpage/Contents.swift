@@ -7,7 +7,7 @@ func flipCoin(result: FallibleChannel<String>) {
     if arc4random_uniform(2) == 0 {
         result <- "Success"
     } else {
-        result <- Error(description: "Something went wrong.")
+        result <- Error(description: "Something went wrong")
     }
 }
 

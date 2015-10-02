@@ -1,9 +1,8 @@
 import SwiftGo
 import Darwin
 
-struct Error : ErrorType, CustomStringConvertible { let description: String }
-
 func flipCoin(result: FallibleChannel<String>) {
+    struct Error : ErrorType, CustomStringConvertible { let description: String }
     if arc4random_uniform(2) == 0 {
         result <- "Success"
     } else {

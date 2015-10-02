@@ -12,8 +12,11 @@ SwiftGo
 
 - [x] No `Foundation` depency (**Linux ready**)
 - [x] Goroutines
+- [x] Preallocate Goroutines
 - [x] Channels
 - [x] FallibleChannels
+- [x] Receive-only Channels
+- [x] Send-only Channels
 - [x] Select
 - [x] Timer
 - [x] Ticker
@@ -78,6 +81,178 @@ $ git submodule add https://github.com/Zewo/SwiftGo.git
 > The `SwiftGo.framework` is automagically added as a target dependency, linked framework and embedded framework in a copy files build phase which is all you need to build on the simulator and a device.
 
 ---
+
+Usage
+=====
+
+`go`
+----
+
+```swift
+func doSomething() {
+    print("did something")
+}
+
+// call sync
+doSomething()
+
+// call async
+go(doSomething())
+
+// async closure
+go {
+    print("did something else")
+}
+```
+
+`nap` and `wakeUp`
+------------------
+
+```swift
+go {
+    // wakes up 1 second from now
+    wakeUp(now + 1 * second)
+    print("yawn")
+}
+
+// nap for two seconds so the program
+// doesn't terminate before the print
+nap(2 * second)
+```
+
+`Channel<Type>`
+---------------
+
+Channels are typed and return optionals wrapping the value or nil if the channel is closed and doesn't have any values left in the buffer.
+
+```swift
+let messages = Channel<String>()
+go(messages <- "ping")
+let message = <-messages
+print(message!)
+
+// without operators
+
+let messages = Channel<String>()
+go(messages.receive("ping"))
+let message = messages.send()
+print(message!)
+
+// buffered channels
+
+let messages = Channel<String>(bufferSize: 2)
+
+messages <- "buffered"
+messages <- "channel"
+
+print(!<-messages)
+print(!<-messages)
+```
+
+`ReceivingChannel<Type>` and `SendingChannel<Type>`
+---------------------------------------------------
+
+You can get a reference to a channel with receive or send only capabilities.
+
+```swift
+func receiveOnly(channel: ReceivingChannel<String>) {
+    // can only receive
+    channel <- "yo"
+}
+
+func sendOnly(channel: SendingChannel<String>) {
+    // can only send
+    <-channel
+}
+
+let channel = Channel<String>(bufferSize: 1)
+receiveOnly(channel.receivingChannel)
+sendOnly(channel.sendingChannel)
+```
+
+`FallibleChannel<Type>`
+-----------------------
+
+Fallible channels accept values and errors as well.
+
+```swift
+struct Error : ErrorType {}
+
+let channel = FallibleChannel<String>(bufferSize: 2)
+
+channel <- "yo"
+channel <- Error()
+
+do {
+    let yo = try <-channel
+    try <-channel // will throw
+} catch {
+    print("error")
+}
+
+```
+
+`select`
+--------
+
+```swift
+let channel = Channel<String>()
+let fallibleChannel = FallibleChannel<String>()
+
+select { when in
+    when.receiveFrom(channel) { value in
+        print("received \(value)")
+    }
+    when.receiveFrom(fallibleChannel) { result in
+        result.success { value in
+            print(value)
+        }
+        result.failure { error in
+            print(error)
+        }
+    }
+    when.send("value", to: channel) {
+        print("sent value")
+    }
+    when.send("value", to: fallibleChannel) {
+        print("sent value")
+    }
+    when.throwError(Error(), into: fallibleChannel) {
+        print("threw error")
+    }
+    when.timeout(now + 1 * second) {
+        print("timeout")
+    }
+    when.otherwise {
+        print("default case")
+    }
+}
+
+// you can disable a channel selection by turning it to nil
+
+var channelA: Channel<String>? = Channel<String>()
+var channelB: Channel<String>? = Channel<String>()
+
+if arc4random_uniform(2) == 0 {
+    channelA = nil
+    print("disabled channel a")
+} else {
+    channelB = nil
+    print("disabled channel b")
+}
+
+go(channelA <- "a")
+go(channelB <- "b")
+
+select { when in
+    when.receiveFrom(channelA) { value in
+        print("received \(value) from channel a")
+    }
+    when.receiveFrom(channelB) { value in
+        print("received \(value) from channel b")
+    }
+}
+```
 
 Examples
 ========
@@ -1084,6 +1259,260 @@ print(!<-leftmost)
 
 ```
 1001
+```
+
+Ping Pong
+---------
+
+```swift
+final class Ball { var hits: Int = 0 }
+
+func player(name: String, table: Channel<Ball>) {
+    while true {
+        let ball = !<-table
+        ball.hits++
+        print("\(name) \(ball.hits)")
+        nap(100 * millisecond)
+        table <- ball
+    }
+}
+
+let table = Channel<Ball>()
+
+go(player("ping", table: table))
+go(player("pong", table: table))
+
+table <- Ball()
+nap(1 * second)
+<-table
+```
+
+###Output
+
+```
+ping 1
+pong 2
+ping 3
+pong 4
+ping 5
+pong 6
+ping 7
+pong 8
+ping 9
+pong 10
+ping 11
+```
+
+Disabling Channel Select
+------------------------
+
+```swift
+var channelA: Channel<String>? = Channel<String>()
+var channelB: Channel<String>? = Channel<String>()
+
+if arc4random_uniform(2) == 0 {
+    channelA = nil
+    print("disabled channel a")
+} else {
+    channelB = nil
+    print("disabled channel b")
+}
+
+go(channelA <- "a")
+go(channelB <- "b")
+
+select { when in
+    when.receiveFrom(channelA) { value in
+        print("received \(value) from channel a")
+    }
+    when.receiveFrom(channelB) { value in
+        print("received \(value) from channel b")
+    }
+}
+```
+
+###Output
+
+```
+disabled channel b
+received a from channel a
+```
+
+Fibonacci
+---------
+
+```swift
+func fibonacci(channel: Channel<Int>, quit: Channel<Void>) {
+    var x = 0
+    var y = 1
+    var done = false
+    while !done {
+        select { when in
+            when.send(x, to: channel) {
+                x = y
+                y = x + y
+            }
+            when.receiveFrom(quit) { _ in
+                print("quit")
+                done = true
+            }
+        }
+    }
+}
+
+let channel = Channel<Int>()
+let quit =  Channel<Void>()
+
+go {
+    for _ in 0 ..< 10 {
+        print(!<-channel)
+    }
+    quit <- Void()
+}
+
+fibonacci(channel, quit: quit)
+```
+
+###Output
+
+```
+0
+1
+2
+4
+8
+16
+32
+64
+128
+256
+```
+
+Bomb
+----
+
+```swift
+let tick = Ticker(period: 100 * millisecond).channel
+let boom = Timer(deadline: now + 500 * millisecond).channel
+
+var done = false
+while !done {
+    select { when in
+        when.receiveFrom(tick) { _ in
+            print("tick")
+        }
+        when.receiveFrom(boom) { _ in
+            print("BOOM!")
+            done = true
+        }
+        when.otherwise {
+            print("    .")
+            nap(50 * millisecond)
+        }
+    }
+}
+```
+
+###Output
+
+```
+    .
+    .
+tick
+    .
+    .
+tick
+    .
+    .
+tick
+    .
+    .
+tick
+    .
+BOOM!
+```
+
+Fallible Channels
+-----------------
+
+```swift
+func flipCoin(result: FallibleChannel<String>) {
+    struct Error : ErrorType, CustomStringConvertible { let description: String }
+    if arc4random_uniform(2) == 0 {
+        result <- "Success"
+    } else {
+        result <- Error(description: "Something went wrong.")
+    }
+}
+
+let results = FallibleChannel<String>()
+var done = false
+
+go(flipCoin(results))
+
+while !done {
+    do {
+        let value = try !<-results
+        print(value)
+        done = true
+    } catch {
+        print("\(error) Retrying...")
+        go(flipCoin(results))
+    }
+}
+```
+
+###Output
+
+```
+Something went wrong. Retrying...
+Something went wrong. Retrying...
+Something went wrong. Retrying...
+Something went wrong. Retrying...
+Something went wrong. Retrying...
+Success
+```
+
+Select and Fallible Channels
+----------------------------
+
+```swift
+struct Error : ErrorType, CustomStringConvertible { let description: String }
+
+func flipCoin(result: FallibleChannel<String>) {
+    if arc4random_uniform(2) == 0 {
+        result <- "Success"
+    } else {
+        result <- Error(description: "Something went wrong")
+    }
+}
+
+let results = FallibleChannel<String>()
+
+go(flipCoin(results))
+
+select { when in
+    when.receiveFrom(results) { result in
+        result.success { value in
+            print(value)
+        }
+        result.failure { error in
+            print(error)
+        }
+    }
+}
+```
+
+###Output
+
+```
+Success
+```
+
+or
+
+```
+Something went wrong
 ```
 
 License

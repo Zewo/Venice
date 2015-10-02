@@ -18,7 +18,7 @@
         <page name='15. Stateful Goroutines'/>
         <page name='16. Chinese Whispers'/>
         <page name='17. Ping Pong'/>
-        <page name='18. Fliping Coins'/>
+        <page name='18. Disabling Channel Select'/>
         <page name='19. Fibonacci'/>
         <page name='20. Bomb'/>
         <page name='21. Fallible Channels'/>
