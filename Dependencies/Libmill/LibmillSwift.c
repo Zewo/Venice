@@ -1,4 +1,4 @@
-// Go.c
+// LibmillSwift.c
 //
 // The MIT License (MIT)
 //
@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "SwiftGo.h"
+#include "LibmillSwift.h"
 
 void go(void (^routine)(void)) {
     void *mill_sp = mill_go_prologue();

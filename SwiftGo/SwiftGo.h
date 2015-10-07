@@ -1,4 +1,4 @@
-// Go.h
+// SwiftgGo.h
 //
 // The MIT License (MIT)
 //
@@ -21,14 +21,3 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-
-#ifndef Go_h
-#define Go_h
-
-#include <stdlib.h>
-#include "libmill.h"
-
-void go(void (^routine)(void));
-size_t mill_clauselen();
-
-#endif /* defined(Go_h) */

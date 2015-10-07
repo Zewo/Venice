@@ -7,6 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A36C9F01BC5384200B02006 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A36C9EF1BC5384200B02006 /* main.swift */; };
+		3A36C9F71BC538C200B02006 /* SwiftGo.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A36C9F61BC538C200B02006 /* SwiftGo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A36C9F81BC538E600B02006 /* SwiftGo.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A36C9F61BC538C200B02006 /* SwiftGo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A36C9F91BC539CF00B02006 /* chan.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89A1BAF08A300C0919E /* chan.c */; settings = {ASSET_TAGS = (); }; };
+		3A36C9FA1BC539CF00B02006 /* cr.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89C1BAF08A300C0919E /* cr.c */; settings = {ASSET_TAGS = (); }; };
+		3A36C9FB1BC539CF00B02006 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89F1BAF08A300C0919E /* list.c */; settings = {ASSET_TAGS = (); }; };
+		3A36C9FC1BC539CF00B02006 /* poller.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A21BAF08A300C0919E /* poller.c */; settings = {ASSET_TAGS = (); }; };
+		3A36C9FD1BC539CF00B02006 /* slist.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A41BAF08A300C0919E /* slist.c */; settings = {ASSET_TAGS = (); }; };
+		3A36C9FE1BC539CF00B02006 /* stack.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A61BAF08A300C0919E /* stack.c */; settings = {ASSET_TAGS = (); }; };
+		3A36C9FF1BC539CF00B02006 /* LibmillSwift.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A81BAF08A300C0919E /* LibmillSwift.c */; settings = {ASSET_TAGS = (); }; };
+		3A36CA001BC539CF00B02006 /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8AA1BAF08A300C0919E /* utils.c */; settings = {ASSET_TAGS = (); }; };
+		3A36CA011BC539CF00B02006 /* Go.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E201B7E6353004CBD6E /* Go.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA021BC539CF00B02006 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003AD821BAF84F700AAD51E /* Operators.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA031BC539CF00B02006 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E221B7E6380004CBD6E /* Channel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA041BC539CF00B02006 /* Receivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC11BB1814700548E11 /* Receivable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA051BC539CF00B02006 /* Sendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC41BB1819D00548E11 /* Sendable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA061BC539CF00B02006 /* ReceivingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BBB1BB1806E00548E11 /* ReceivingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA071BC539CF00B02006 /* SendingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BBE1BB180AF00548E11 /* SendingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA081BC539CF00B02006 /* FallibleChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003AD7F1BAF838B00AAD51E /* FallibleChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA091BC539CF00B02006 /* FallibleReceivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BCA1BB1834E00548E11 /* FallibleReceivable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA0A1BC539CF00B02006 /* FallibleSendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC71BB182FB00548E11 /* FallibleSendable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA0B1BC539CF00B02006 /* FallibleReceivingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BCD1BB183D400548E11 /* FallibleReceivingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA0C1BC539CF00B02006 /* FallibleSendingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BD01BB1840900548E11 /* FallibleSendingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA0D1BC539CF00B02006 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E241B7E63BA004CBD6E /* Select.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA0E1BC539CF00B02006 /* Ticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E451B7EA641004CBD6E /* Ticker.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA0F1BC539CF00B02006 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E431B7E8B03004CBD6E /* Timer.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA171BC53AE300B02006 /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A36CA161BC53AE300B02006 /* PerformanceTests.swift */; };
+		3A36CA191BC53AE300B02006 /* SwiftGo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0E8CE601B82C255007F6857 /* SwiftGo.framework */; settings = {ASSET_TAGS = (); }; };
 		3A568BBC1BB1806E00548E11 /* ReceivingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BBB1BB1806E00548E11 /* ReceivingChannel.swift */; settings = {ASSET_TAGS = (); }; };
 		3A568BBD1BB1807000548E11 /* ReceivingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BBB1BB1806E00548E11 /* ReceivingChannel.swift */; settings = {ASSET_TAGS = (); }; };
 		3A568BBF1BB180AF00548E11 /* SendingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BBE1BB180AF00548E11 /* SendingChannel.swift */; settings = {ASSET_TAGS = (); }; };
@@ -53,10 +81,10 @@
 		B004C8C31BAF08A300C0919E /* stack.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A61BAF08A300C0919E /* stack.c */; };
 		B004C8C41BAF08A300C0919E /* stack.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A71BAF08A300C0919E /* stack.h */; };
 		B004C8C51BAF08A300C0919E /* stack.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A71BAF08A300C0919E /* stack.h */; };
-		B004C8C61BAF08A300C0919E /* SwiftGo.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A81BAF08A300C0919E /* SwiftGo.c */; };
-		B004C8C71BAF08A300C0919E /* SwiftGo.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A81BAF08A300C0919E /* SwiftGo.c */; };
-		B004C8C81BAF08A300C0919E /* SwiftGo.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A91BAF08A300C0919E /* SwiftGo.h */; };
-		B004C8C91BAF08A300C0919E /* SwiftGo.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A91BAF08A300C0919E /* SwiftGo.h */; };
+		B004C8C61BAF08A300C0919E /* LibmillSwift.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A81BAF08A300C0919E /* LibmillSwift.c */; };
+		B004C8C71BAF08A300C0919E /* LibmillSwift.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A81BAF08A300C0919E /* LibmillSwift.c */; };
+		B004C8C81BAF08A300C0919E /* LibmillSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A91BAF08A300C0919E /* LibmillSwift.h */; };
+		B004C8C91BAF08A300C0919E /* LibmillSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A91BAF08A300C0919E /* LibmillSwift.h */; };
 		B004C8CA1BAF08A300C0919E /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8AA1BAF08A300C0919E /* utils.c */; };
 		B004C8CB1BAF08A300C0919E /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8AA1BAF08A300C0919E /* utils.c */; };
 		B004C8CC1BAF08A300C0919E /* utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8AB1BAF08A300C0919E /* utils.h */; };
@@ -73,7 +101,42 @@
 		B0E8CE851B82EC6F007F6857 /* Ticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E451B7EA641004CBD6E /* Ticker.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		3A36C9F41BC5386100B02006 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B06A144B1B7D16800095BA12 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B0E8CE5F1B82C255007F6857;
+			remoteInfo = "SwiftGo OSX";
+		};
+		3A36CA1A1BC53AE300B02006 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B06A144B1B7D16800095BA12 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B0E8CE5F1B82C255007F6857;
+			remoteInfo = "SwiftGo OSX";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3A36C9EB1BC5384200B02006 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		3A36C9ED1BC5384200B02006 /* SwiftGo Command Line */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "SwiftGo Command Line"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A36C9EF1BC5384200B02006 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		3A36C9F61BC538C200B02006 /* SwiftGo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwiftGo.h; path = SwiftGo/SwiftGo.h; sourceTree = "<group>"; };
+		3A36CA141BC53AE300B02006 /* SwiftGo Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftGo Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A36CA161BC53AE300B02006 /* PerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTests.swift; sourceTree = "<group>"; };
+		3A36CA181BC53AE300B02006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A568BBB1BB1806E00548E11 /* ReceivingChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReceivingChannel.swift; path = SwiftGo/ReceivingChannel.swift; sourceTree = "<group>"; };
 		3A568BBE1BB180AF00548E11 /* SendingChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SendingChannel.swift; path = SwiftGo/SendingChannel.swift; sourceTree = "<group>"; };
 		3A568BC11BB1814700548E11 /* Receivable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Receivable.swift; path = SwiftGo/Receivable.swift; sourceTree = "<group>"; };
@@ -98,8 +161,8 @@
 		B004C8A51BAF08A300C0919E /* slist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slist.h; sourceTree = "<group>"; };
 		B004C8A61BAF08A300C0919E /* stack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stack.c; sourceTree = "<group>"; };
 		B004C8A71BAF08A300C0919E /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
-		B004C8A81BAF08A300C0919E /* SwiftGo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SwiftGo.c; sourceTree = "<group>"; };
-		B004C8A91BAF08A300C0919E /* SwiftGo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftGo.h; sourceTree = "<group>"; };
+		B004C8A81BAF08A300C0919E /* LibmillSwift.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = LibmillSwift.c; sourceTree = "<group>"; };
+		B004C8A91BAF08A300C0919E /* LibmillSwift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibmillSwift.h; sourceTree = "<group>"; };
 		B004C8AA1BAF08A300C0919E /* utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utils.c; sourceTree = "<group>"; };
 		B004C8AB1BAF08A300C0919E /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		B06CEB961BAE020600A88073 /* SwiftGo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftGo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -114,6 +177,21 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		3A36C9EA1BC5384200B02006 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3A36CA111BC53AE300B02006 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A36CA191BC53AE300B02006 /* SwiftGo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B06CEB921BAE020600A88073 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -131,6 +209,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3A36C9EE1BC5384200B02006 /* SwiftGo Command Line */ = {
+			isa = PBXGroup;
+			children = (
+				3A36C9EF1BC5384200B02006 /* main.swift */,
+			);
+			name = "SwiftGo Command Line";
+			path = "SwiftGo CLI";
+			sourceTree = "<group>";
+		};
+		3A36CA151BC53AE300B02006 /* SwiftGo Tests */ = {
+			isa = PBXGroup;
+			children = (
+				3A36CA161BC53AE300B02006 /* PerformanceTests.swift */,
+				3A36CA181BC53AE300B02006 /* Info.plist */,
+			);
+			path = "SwiftGo Tests";
+			sourceTree = "<group>";
+		};
 		B004C8981BAF08A300C0919E /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
@@ -156,8 +252,8 @@
 				B004C8A51BAF08A300C0919E /* slist.h */,
 				B004C8A61BAF08A300C0919E /* stack.c */,
 				B004C8A71BAF08A300C0919E /* stack.h */,
-				B004C8A81BAF08A300C0919E /* SwiftGo.c */,
-				B004C8A91BAF08A300C0919E /* SwiftGo.h */,
+				B004C8A81BAF08A300C0919E /* LibmillSwift.c */,
+				B004C8A91BAF08A300C0919E /* LibmillSwift.h */,
 				B004C8AA1BAF08A300C0919E /* utils.c */,
 				B004C8AB1BAF08A300C0919E /* utils.h */,
 			);
@@ -170,6 +266,8 @@
 				B004C8981BAF08A300C0919E /* Dependencies */,
 				B06CEBAB1BAE029C00A88073 /* SwiftGo */,
 				B0E8CE781B82EC4E007F6857 /* Examples */,
+				3A36C9EE1BC5384200B02006 /* SwiftGo Command Line */,
+				3A36CA151BC53AE300B02006 /* SwiftGo Tests */,
 				B06A14541B7D16800095BA12 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -179,6 +277,8 @@
 			children = (
 				B0E8CE601B82C255007F6857 /* SwiftGo.framework */,
 				B06CEB961BAE020600A88073 /* SwiftGo.framework */,
+				3A36C9ED1BC5384200B02006 /* SwiftGo Command Line */,
+				3A36CA141BC53AE300B02006 /* SwiftGo Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -186,6 +286,7 @@
 		B06CEBAB1BAE029C00A88073 /* SwiftGo */ = {
 			isa = PBXGroup;
 			children = (
+				3A36C9F61BC538C200B02006 /* SwiftGo.h */,
 				B0E27E201B7E6353004CBD6E /* Go.swift */,
 				B003AD821BAF84F700AAD51E /* Operators.swift */,
 				B0E27E221B7E6380004CBD6E /* Channel.swift */,
@@ -221,6 +322,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A36C9F81BC538E600B02006 /* SwiftGo.h in Headers */,
 				B004C8CD1BAF08A300C0919E /* utils.h in Headers */,
 				B004C8B91BAF08A300C0919E /* list.h in Headers */,
 				B004C8B51BAF08A300C0919E /* libmill.h in Headers */,
@@ -229,7 +331,7 @@
 				B004C8AF1BAF08A300C0919E /* chan.h in Headers */,
 				B004C8B31BAF08A300C0919E /* cr.h in Headers */,
 				B004C8C11BAF08A300C0919E /* slist.h in Headers */,
-				B004C8C91BAF08A300C0919E /* SwiftGo.h in Headers */,
+				B004C8C91BAF08A300C0919E /* LibmillSwift.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,6 +339,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A36C9F71BC538C200B02006 /* SwiftGo.h in Headers */,
 				B004C8CC1BAF08A300C0919E /* utils.h in Headers */,
 				B004C8B81BAF08A300C0919E /* list.h in Headers */,
 				B004C8B41BAF08A300C0919E /* libmill.h in Headers */,
@@ -245,13 +348,49 @@
 				B004C8AE1BAF08A300C0919E /* chan.h in Headers */,
 				B004C8B21BAF08A300C0919E /* cr.h in Headers */,
 				B004C8C01BAF08A300C0919E /* slist.h in Headers */,
-				B004C8C81BAF08A300C0919E /* SwiftGo.h in Headers */,
+				B004C8C81BAF08A300C0919E /* LibmillSwift.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		3A36C9EC1BC5384200B02006 /* SwiftGo Command Line */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3A36C9F31BC5384200B02006 /* Build configuration list for PBXNativeTarget "SwiftGo Command Line" */;
+			buildPhases = (
+				3A36C9E91BC5384200B02006 /* Sources */,
+				3A36C9EA1BC5384200B02006 /* Frameworks */,
+				3A36C9EB1BC5384200B02006 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3A36C9F51BC5386100B02006 /* PBXTargetDependency */,
+			);
+			name = "SwiftGo Command Line";
+			productName = "SwiftGo CLI";
+			productReference = 3A36C9ED1BC5384200B02006 /* SwiftGo Command Line */;
+			productType = "com.apple.product-type.tool";
+		};
+		3A36CA131BC53AE300B02006 /* SwiftGo Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3A36CA1C1BC53AE300B02006 /* Build configuration list for PBXNativeTarget "SwiftGo Tests" */;
+			buildPhases = (
+				3A36CA101BC53AE300B02006 /* Sources */,
+				3A36CA111BC53AE300B02006 /* Frameworks */,
+				3A36CA121BC53AE300B02006 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3A36CA1B1BC53AE300B02006 /* PBXTargetDependency */,
+			);
+			name = "SwiftGo Tests";
+			productName = "SwiftGo Tests";
+			productReference = 3A36CA141BC53AE300B02006 /* SwiftGo Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		B06CEB951BAE020600A88073 /* SwiftGo iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B06CEB9B1BAE020600A88073 /* Build configuration list for PBXNativeTarget "SwiftGo iOS" */;
@@ -299,6 +438,12 @@
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Zewo;
 				TargetAttributes = {
+					3A36C9EC1BC5384200B02006 = {
+						CreatedOnToolsVersion = 7.0.1;
+					};
+					3A36CA131BC53AE300B02006 = {
+						CreatedOnToolsVersion = 7.0.1;
+					};
 					B06CEB951BAE020600A88073 = {
 						CreatedOnToolsVersion = 7.0;
 					};
@@ -321,11 +466,20 @@
 			targets = (
 				B0E8CE5F1B82C255007F6857 /* SwiftGo OSX */,
 				B06CEB951BAE020600A88073 /* SwiftGo iOS */,
+				3A36C9EC1BC5384200B02006 /* SwiftGo Command Line */,
+				3A36CA131BC53AE300B02006 /* SwiftGo Tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		3A36CA121BC53AE300B02006 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B06CEB941BAE020600A88073 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -343,6 +497,45 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		3A36C9E91BC5384200B02006 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A36CA071BC539CF00B02006 /* SendingChannel.swift in Sources */,
+				3A36C9F01BC5384200B02006 /* main.swift in Sources */,
+				3A36CA091BC539CF00B02006 /* FallibleReceivable.swift in Sources */,
+				3A36CA0D1BC539CF00B02006 /* Select.swift in Sources */,
+				3A36CA051BC539CF00B02006 /* Sendable.swift in Sources */,
+				3A36CA081BC539CF00B02006 /* FallibleChannel.swift in Sources */,
+				3A36CA031BC539CF00B02006 /* Channel.swift in Sources */,
+				3A36C9FA1BC539CF00B02006 /* cr.c in Sources */,
+				3A36CA061BC539CF00B02006 /* ReceivingChannel.swift in Sources */,
+				3A36CA0A1BC539CF00B02006 /* FallibleSendable.swift in Sources */,
+				3A36CA0E1BC539CF00B02006 /* Ticker.swift in Sources */,
+				3A36CA0C1BC539CF00B02006 /* FallibleSendingChannel.swift in Sources */,
+				3A36C9F91BC539CF00B02006 /* chan.c in Sources */,
+				3A36CA041BC539CF00B02006 /* Receivable.swift in Sources */,
+				3A36CA011BC539CF00B02006 /* Go.swift in Sources */,
+				3A36CA0F1BC539CF00B02006 /* Timer.swift in Sources */,
+				3A36CA001BC539CF00B02006 /* utils.c in Sources */,
+				3A36C9FD1BC539CF00B02006 /* slist.c in Sources */,
+				3A36CA021BC539CF00B02006 /* Operators.swift in Sources */,
+				3A36C9FE1BC539CF00B02006 /* stack.c in Sources */,
+				3A36C9FF1BC539CF00B02006 /* LibmillSwift.c in Sources */,
+				3A36CA0B1BC539CF00B02006 /* FallibleReceivingChannel.swift in Sources */,
+				3A36C9FC1BC539CF00B02006 /* poller.c in Sources */,
+				3A36C9FB1BC539CF00B02006 /* list.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3A36CA101BC53AE300B02006 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A36CA171BC53AE300B02006 /* PerformanceTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B06CEB911BAE020600A88073 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -356,7 +549,7 @@
 				B004C8B71BAF08A300C0919E /* list.c in Sources */,
 				3A568BC91BB182FB00548E11 /* FallibleSendable.swift in Sources */,
 				B004C8BB1BAF08A300C0919E /* poller.c in Sources */,
-				B004C8C71BAF08A300C0919E /* SwiftGo.c in Sources */,
+				B004C8C71BAF08A300C0919E /* LibmillSwift.c in Sources */,
 				3A568BBD1BB1807000548E11 /* ReceivingChannel.swift in Sources */,
 				B06CEBAA1BAE026200A88073 /* Timer.swift in Sources */,
 				B004C8CB1BAF08A300C0919E /* utils.c in Sources */,
@@ -386,7 +579,7 @@
 				B004C8B61BAF08A300C0919E /* list.c in Sources */,
 				3A568BC81BB182FB00548E11 /* FallibleSendable.swift in Sources */,
 				B004C8BA1BAF08A300C0919E /* poller.c in Sources */,
-				B004C8C61BAF08A300C0919E /* SwiftGo.c in Sources */,
+				B004C8C61BAF08A300C0919E /* LibmillSwift.c in Sources */,
 				3A568BBC1BB1806E00548E11 /* ReceivingChannel.swift in Sources */,
 				B0E8CE841B82EC6F007F6857 /* Timer.swift in Sources */,
 				B004C8CA1BAF08A300C0919E /* utils.c in Sources */,
@@ -405,7 +598,64 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		3A36C9F51BC5386100B02006 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B0E8CE5F1B82C255007F6857 /* SwiftGo OSX */;
+			targetProxy = 3A36C9F41BC5386100B02006 /* PBXContainerItemProxy */;
+		};
+		3A36CA1B1BC53AE300B02006 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B0E8CE5F1B82C255007F6857 /* SwiftGo OSX */;
+			targetProxy = 3A36CA1A1BC53AE300B02006 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		3A36C9F11BC5384200B02006 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies";
+			};
+			name = Debug;
+		};
+		3A36C9F21BC5384200B02006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies";
+			};
+			name = Release;
+		};
+		3A36CA1D1BC53AE300B02006 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "SwiftGo Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Zewo.SwiftGo-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies";
+			};
+			name = Debug;
+		};
+		3A36CA1E1BC53AE300B02006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "SwiftGo Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Zewo.SwiftGo-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies";
+			};
+			name = Release;
+		};
 		B06A14581B7D16800095BA12 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -591,6 +841,22 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		3A36C9F31BC5384200B02006 /* Build configuration list for PBXNativeTarget "SwiftGo Command Line" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3A36C9F11BC5384200B02006 /* Debug */,
+				3A36C9F21BC5384200B02006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		3A36CA1C1BC53AE300B02006 /* Build configuration list for PBXNativeTarget "SwiftGo Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3A36CA1D1BC53AE300B02006 /* Debug */,
+				3A36CA1E1BC53AE300B02006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		B06A144E1B7D16800095BA12 /* Build configuration list for PBXProject "SwiftGo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

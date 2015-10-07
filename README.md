@@ -23,64 +23,12 @@ SwiftGo
 
 **SwiftGo** wraps a modified version of the C library [libmill](https://github.com/sustrik/libmill).
 
-## Installation
+Performance
+===========
 
-### Carthage
+**SwiftGo** is usually 2 to 3 times faster than **Grand Central Dispatch**. It's faster because the goroutines are light coroutines managed by *libmill* instead of the threads in **GCD**, which call to the OS. The **Chinese Whispers** example in the command line application shows how you can create up to 100.000 concurrent goroutines (tested in a 8 GB macbook MacBook Pro early 2015).
 
-[Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that automates the process of adding frameworks to your Cocoa application.
-
-You can install Carthage with [Homebrew](http://brew.sh/) using the following command:
-
-```bash
-$ brew update
-$ brew install carthage
-```
-
-To integrate **SwiftGo** into your Xcode project using Carthage, specify it in your `Cartfile`:
-
-```ogdl
-github "Zewo/SwiftGo" ~> 0.2
-```
-
-### Manually
-
-If you prefer not to use a dependency manager, you can integrate **SwiftGo** into your project manually.
-
-#### Embedded Framework
-
-- Open up Terminal, `cd` into your top-level project directory, and run the following command "if" your project is not initialized as a git repository:
-
-```bash
-$ git init
-```
-
-- Add **SwiftGo** as a git [submodule](http://git-scm.com/docs/git-submodule) by running the following command:
-
-```bash
-$ git submodule add https://github.com/Zewo/SwiftGo.git
-```
-
-- Open the new `SwiftGo` folder, and drag the `SwiftGo.xcodeproj` into the Project Navigator of your application's Xcode project.
-
-    > It should appear nested underneath your application's blue project icon. Whether it is above or below all the other Xcode groups does not matter.
-
-- Select the `SwiftGo.xcodeproj` in the Project Navigator and verify the deployment target matches that of your application target.
-- Next, select your application project in the Project Navigator (blue project icon) to navigate to the target configuration window and select the application target under the "Targets" heading in the sidebar.
-- In the tab bar at the top of that window, open the "General" panel.
-- Click on the `+` button under the "Embedded Binaries" section.
-- You will see two different `SwiftGo.xcodeproj` folders each with two different versions of the `SwiftGo.framework` nested inside a `Products` folder.
-
-    > It does not matter which `Products` folder you choose from, but it does matter whether you choose the top or bottom `SwiftGo.framework`. 
-    
-- Select the top `SwiftGo.framework` for OS X and the bottom one for iOS.
-
-    > You can verify which one you selected by inspecting the build log for your project. The build target for `SwiftGo` will be listed as either `SwiftGo iOS` or `SwiftGo OSX`.
-
-- And that's it!
-
-> The `SwiftGo.framework` is automagically added as a target dependency, linked framework and embedded framework in a copy files build phase which is all you need to build on the simulator and a device.
-
----
+You can run the performance tests in your machine and see for yourself. Just run the tests in `PerformanceTests.swift`.
 
 Usage
 =====
@@ -253,6 +201,74 @@ select { when in
     }
 }
 ```
+
+## Installation
+
+### Carthage
+
+[Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that automates the process of adding frameworks to your Cocoa application.
+
+You can install Carthage with [Homebrew](http://brew.sh/) using the following command:
+
+```bash
+$ brew update
+$ brew install carthage
+```
+
+To integrate **SwiftGo** into your Xcode project using Carthage, specify it in your `Cartfile`:
+
+```ogdl
+github "Zewo/SwiftGo" ~> 0.2
+```
+
+### Manually
+
+If you prefer not to use a dependency manager, you can integrate **SwiftGo** into your project manually.
+
+#### Embedded Framework
+
+- Open up Terminal, `cd` into your top-level project directory, and run the following command "if" your project is not initialized as a git repository:
+
+```bash
+$ git init
+```
+
+- Add **SwiftGo** as a git [submodule](http://git-scm.com/docs/git-submodule) by running the following command:
+
+```bash
+$ git submodule add https://github.com/Zewo/SwiftGo.git
+```
+
+- Open the new `SwiftGo` folder, and drag the `SwiftGo.xcodeproj` into the Project Navigator of your application's Xcode project.
+
+    > It should appear nested underneath your application's blue project icon. Whether it is above or below all the other Xcode groups does not matter.
+
+- Select the `SwiftGo.xcodeproj` in the Project Navigator and verify the deployment target matches that of your application target.
+- Next, select your application project in the Project Navigator (blue project icon) to navigate to the target configuration window and select the application target under the "Targets" heading in the sidebar.
+- In the tab bar at the top of that window, open the "General" panel.
+- Click on the `+` button under the "Embedded Binaries" section.
+- You will see two different `SwiftGo.xcodeproj` folders each with two different versions of the `SwiftGo.framework` nested inside a `Products` folder.
+
+    > It does not matter which `Products` folder you choose from, but it does matter whether you choose the top or bottom `SwiftGo.framework`. 
+    
+- Select the top `SwiftGo.framework` for OS X and the bottom one for iOS.
+
+    > You can verify which one you selected by inspecting the build log for your project. The build target for `SwiftGo` will be listed as either `SwiftGo iOS` or `SwiftGo OSX`.
+
+- And that's it!
+
+> The `SwiftGo.framework` is automagically added as a target dependency, linked framework and embedded framework in a copy files build phase which is all you need to build on the simulator and a device.
+
+###Command Line Application
+
+Unfortunately swift does not support importing **Swift Frameworks** in command line applications. To use **SwiftGo** in a command line application you'll have to:
+
+- add all .swift and .c files from **SwiftGo** and *libmill* to the command line application target
+- add `$(SRCROOT)/Dependencies` to **Import Paths** at **Swift Compiler - Serach Paths** in the **Build Settings**
+
+![Import Paths](http://s30.postimg.org/72kkgqpa9/Screen_Shot_2015_10_07_at_10_11_11.png)
+
+There's an example of a command line application target in the Xcode project.
 
 Examples
 ========

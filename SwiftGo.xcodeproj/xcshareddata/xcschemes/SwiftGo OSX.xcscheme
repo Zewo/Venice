@@ -32,7 +32,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B0E8CE681B82C256007F6857"
+               BlueprintIdentifier = "3A36CA131BC53AE300B02006"
                BuildableName = "SwiftGo Tests.xctest"
                BlueprintName = "SwiftGo Tests"
                ReferencedContainer = "container:SwiftGo.xcodeproj">
