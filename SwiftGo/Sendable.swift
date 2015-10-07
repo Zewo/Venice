@@ -35,3 +35,11 @@ public prefix func <-<S: Sendable>(sender: S) -> S.T? {
 public prefix func !<-<S: Sendable>(sender: S) -> S.T! {
     return sender.send()
 }
+
+public prefix func <-<S: Sendable>(sender: S?) -> S.T? {
+    return sender?.send()
+}
+
+public prefix func !<-<S: Sendable>(sender: S?) -> S.T! {
+    return sender?.send()
+}
