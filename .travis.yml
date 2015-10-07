@@ -1,0 +1,4 @@
+language: objective-c
+xcode_project: SwiftGo.xcodeproj
+xcode_scheme: "SwiftGo OSX"
+osx_image: xcode7
