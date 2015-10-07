@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B07C3D1B1BC5E098008564C3"
+               BuildableName = "SwiftGo iOS Tests.xctest"
+               BlueprintName = "SwiftGo iOS Tests"
+               ReferencedContainer = "container:SwiftGo.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "B06CEB951BAE020600A88073"
+            BuildableName = "SwiftGo.framework"
+            BlueprintName = "SwiftGo iOS"
+            ReferencedContainer = "container:SwiftGo.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

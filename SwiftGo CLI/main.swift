@@ -26,7 +26,7 @@ func whisper(left: ReceivingChannel<Int>, _ right: SendingChannel<Int>) {
     left <- 1 + !<-right
 }
 
-let numberOfWhispers = 100000
+let numberOfWhispers = 10000
 
 let leftmost = Channel<Int>()
 var right = leftmost

@@ -94,6 +94,8 @@
 		B06CEBA81BAE026200A88073 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E241B7E63BA004CBD6E /* Select.swift */; };
 		B06CEBA91BAE026200A88073 /* Ticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E451B7EA641004CBD6E /* Ticker.swift */; };
 		B06CEBAA1BAE026200A88073 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E431B7E8B03004CBD6E /* Timer.swift */; };
+		B07C3D211BC5E098008564C3 /* SwiftGo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B06CEB961BAE020600A88073 /* SwiftGo.framework */; settings = {ASSET_TAGS = (); }; };
+		B07C3D271BC5E0D3008564C3 /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A36CA161BC53AE300B02006 /* PerformanceTests.swift */; settings = {ASSET_TAGS = (); }; };
 		B0E8CE811B82EC6F007F6857 /* Go.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E201B7E6353004CBD6E /* Go.swift */; };
 		B0E8CE821B82EC6F007F6857 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E221B7E6380004CBD6E /* Channel.swift */; };
 		B0E8CE831B82EC6F007F6857 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E241B7E63BA004CBD6E /* Select.swift */; };
@@ -116,6 +118,13 @@
 			remoteGlobalIDString = B0E8CE5F1B82C255007F6857;
 			remoteInfo = "SwiftGo OSX";
 		};
+		B07C3D221BC5E098008564C3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B06A144B1B7D16800095BA12 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B06CEB951BAE020600A88073;
+			remoteInfo = "SwiftGo iOS";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -134,7 +143,7 @@
 		3A36C9ED1BC5384200B02006 /* SwiftGo Command Line */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "SwiftGo Command Line"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A36C9EF1BC5384200B02006 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		3A36C9F61BC538C200B02006 /* SwiftGo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwiftGo.h; path = SwiftGo/SwiftGo.h; sourceTree = "<group>"; };
-		3A36CA141BC53AE300B02006 /* SwiftGo Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftGo Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A36CA141BC53AE300B02006 /* SwiftGo OSX Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftGo OSX Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A36CA161BC53AE300B02006 /* PerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTests.swift; sourceTree = "<group>"; };
 		3A36CA181BC53AE300B02006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A568BBB1BB1806E00548E11 /* ReceivingChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReceivingChannel.swift; path = SwiftGo/ReceivingChannel.swift; sourceTree = "<group>"; };
@@ -166,6 +175,7 @@
 		B004C8AA1BAF08A300C0919E /* utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utils.c; sourceTree = "<group>"; };
 		B004C8AB1BAF08A300C0919E /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		B06CEB961BAE020600A88073 /* SwiftGo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftGo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B07C3D1C1BC5E098008564C3 /* SwiftGo iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftGo iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0E27E201B7E6353004CBD6E /* Go.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Go.swift; path = SwiftGo/Go.swift; sourceTree = "<group>"; };
 		B0E27E221B7E6380004CBD6E /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Channel.swift; path = SwiftGo/Channel.swift; sourceTree = "<group>"; };
 		B0E27E241B7E63BA004CBD6E /* Select.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = Select.swift; path = SwiftGo/Select.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -196,6 +206,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B07C3D191BC5E098008564C3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B07C3D211BC5E098008564C3 /* SwiftGo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,9 +283,9 @@
 			children = (
 				B004C8981BAF08A300C0919E /* Dependencies */,
 				B06CEBAB1BAE029C00A88073 /* SwiftGo */,
-				B0E8CE781B82EC4E007F6857 /* Examples */,
-				3A36C9EE1BC5384200B02006 /* SwiftGo Command Line */,
 				3A36CA151BC53AE300B02006 /* SwiftGo Tests */,
+				3A36C9EE1BC5384200B02006 /* SwiftGo Command Line */,
+				B0E8CE781B82EC4E007F6857 /* Examples */,
 				B06A14541B7D16800095BA12 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -278,7 +296,8 @@
 				B0E8CE601B82C255007F6857 /* SwiftGo.framework */,
 				B06CEB961BAE020600A88073 /* SwiftGo.framework */,
 				3A36C9ED1BC5384200B02006 /* SwiftGo Command Line */,
-				3A36CA141BC53AE300B02006 /* SwiftGo Tests.xctest */,
+				3A36CA141BC53AE300B02006 /* SwiftGo OSX Tests.xctest */,
+				B07C3D1C1BC5E098008564C3 /* SwiftGo iOS Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -373,9 +392,9 @@
 			productReference = 3A36C9ED1BC5384200B02006 /* SwiftGo Command Line */;
 			productType = "com.apple.product-type.tool";
 		};
-		3A36CA131BC53AE300B02006 /* SwiftGo Tests */ = {
+		3A36CA131BC53AE300B02006 /* SwiftGo OSX Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3A36CA1C1BC53AE300B02006 /* Build configuration list for PBXNativeTarget "SwiftGo Tests" */;
+			buildConfigurationList = 3A36CA1C1BC53AE300B02006 /* Build configuration list for PBXNativeTarget "SwiftGo OSX Tests" */;
 			buildPhases = (
 				3A36CA101BC53AE300B02006 /* Sources */,
 				3A36CA111BC53AE300B02006 /* Frameworks */,
@@ -386,9 +405,9 @@
 			dependencies = (
 				3A36CA1B1BC53AE300B02006 /* PBXTargetDependency */,
 			);
-			name = "SwiftGo Tests";
+			name = "SwiftGo OSX Tests";
 			productName = "SwiftGo Tests";
-			productReference = 3A36CA141BC53AE300B02006 /* SwiftGo Tests.xctest */;
+			productReference = 3A36CA141BC53AE300B02006 /* SwiftGo OSX Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		B06CEB951BAE020600A88073 /* SwiftGo iOS */ = {
@@ -408,6 +427,24 @@
 			productName = "SwiftGo iOS";
 			productReference = B06CEB961BAE020600A88073 /* SwiftGo.framework */;
 			productType = "com.apple.product-type.framework";
+		};
+		B07C3D1B1BC5E098008564C3 /* SwiftGo iOS Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B07C3D241BC5E098008564C3 /* Build configuration list for PBXNativeTarget "SwiftGo iOS Tests" */;
+			buildPhases = (
+				B07C3D181BC5E098008564C3 /* Sources */,
+				B07C3D191BC5E098008564C3 /* Frameworks */,
+				B07C3D1A1BC5E098008564C3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B07C3D231BC5E098008564C3 /* PBXTargetDependency */,
+			);
+			name = "SwiftGo iOS Tests";
+			productName = "SwiftGo iOS Tests";
+			productReference = B07C3D1C1BC5E098008564C3 /* SwiftGo iOS Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		B0E8CE5F1B82C255007F6857 /* SwiftGo OSX */ = {
 			isa = PBXNativeTarget;
@@ -447,6 +484,9 @@
 					B06CEB951BAE020600A88073 = {
 						CreatedOnToolsVersion = 7.0;
 					};
+					B07C3D1B1BC5E098008564C3 = {
+						CreatedOnToolsVersion = 7.0;
+					};
 					B0E8CE5F1B82C255007F6857 = {
 						CreatedOnToolsVersion = 7.0;
 					};
@@ -466,8 +506,9 @@
 			targets = (
 				B0E8CE5F1B82C255007F6857 /* SwiftGo OSX */,
 				B06CEB951BAE020600A88073 /* SwiftGo iOS */,
+				3A36CA131BC53AE300B02006 /* SwiftGo OSX Tests */,
+				B07C3D1B1BC5E098008564C3 /* SwiftGo iOS Tests */,
 				3A36C9EC1BC5384200B02006 /* SwiftGo Command Line */,
-				3A36CA131BC53AE300B02006 /* SwiftGo Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -481,6 +522,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B06CEB941BAE020600A88073 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B07C3D1A1BC5E098008564C3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -566,6 +614,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B07C3D181BC5E098008564C3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B07C3D271BC5E0D3008564C3 /* PerformanceTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B0E8CE5B1B82C255007F6857 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -609,13 +665,18 @@
 			target = B0E8CE5F1B82C255007F6857 /* SwiftGo OSX */;
 			targetProxy = 3A36CA1A1BC53AE300B02006 /* PBXContainerItemProxy */;
 		};
+		B07C3D231BC5E098008564C3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B06CEB951BAE020600A88073 /* SwiftGo iOS */;
+			targetProxy = B07C3D221BC5E098008564C3 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		3A36C9F11BC5384200B02006 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies";
 			};
@@ -624,7 +685,7 @@
 		3A36C9F21BC5384200B02006 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies";
 			};
@@ -786,6 +847,31 @@
 			};
 			name = Release;
 		};
+		B07C3D251BC5E098008564C3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "SwiftGo Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zewo.SwiftGo-iOS-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		B07C3D261BC5E098008564C3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "SwiftGo Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zewo.SwiftGo-iOS-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		B0E8CE721B82C256007F6857 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -848,14 +934,16 @@
 				3A36C9F21BC5384200B02006 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
-		3A36CA1C1BC53AE300B02006 /* Build configuration list for PBXNativeTarget "SwiftGo Tests" */ = {
+		3A36CA1C1BC53AE300B02006 /* Build configuration list for PBXNativeTarget "SwiftGo OSX Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3A36CA1D1BC53AE300B02006 /* Debug */,
 				3A36CA1E1BC53AE300B02006 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B06A144E1B7D16800095BA12 /* Build configuration list for PBXProject "SwiftGo" */ = {
 			isa = XCConfigurationList;
@@ -874,6 +962,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		B07C3D241BC5E098008564C3 /* Build configuration list for PBXNativeTarget "SwiftGo iOS Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B07C3D251BC5E098008564C3 /* Debug */,
+				B07C3D261BC5E098008564C3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		B0E8CE711B82C256007F6857 /* Build configuration list for PBXNativeTarget "SwiftGo OSX" */ = {
 			isa = XCConfigurationList;

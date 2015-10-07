@@ -33,8 +33,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3A36CA131BC53AE300B02006"
-               BuildableName = "SwiftGo Tests.xctest"
-               BlueprintName = "SwiftGo Tests"
+               BuildableName = "SwiftGo OSX Tests.xctest"
+               BlueprintName = "SwiftGo OSX Tests"
                ReferencedContainer = "container:SwiftGo.xcodeproj">
             </BuildableReference>
          </TestableReference>
