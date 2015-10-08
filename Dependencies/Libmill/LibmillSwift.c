@@ -39,3 +39,7 @@ void go(void (^routine)(void)) {
 size_t mill_clauselen() {
     return MILL_CLAUSELEN;
 }
+
+pid_t mill_fork() {
+    return fork();
+}

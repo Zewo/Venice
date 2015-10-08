@@ -22,13 +22,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef Go_h
-#define Go_h
+#ifndef LibmillSwift_h
+#define LibmillSwift_h
 
 #include <stdlib.h>
+#include <unistd.h>
 #include "libmill.h"
 
 void go(void (^routine)(void));
 size_t mill_clauselen();
+pid_t mill_fork();
 
-#endif /* defined(Go_h) */
+#endif /* defined(LibmillSwift_h) */

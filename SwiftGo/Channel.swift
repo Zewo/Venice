@@ -73,6 +73,8 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
         
         if var value = lastValue {
             mill_chdone(channel, &value, strideof(T))
+        } else {
+            mill_chdone(channel, nil, strideof(T))
         }
     }
 
@@ -91,6 +93,9 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
 
     /// Sends a value.
     public func send() -> T? {
+        if closed && valuesInBuffer <= 0 {
+            return nil
+        }
         let pointer = mill_chr(channel, strideof(T))
         return valueFromPointer(pointer)
     }

@@ -332,12 +332,16 @@ void mill_chdone(chan ch, void *val, size_t sz) {
     /* Put the channel into done-with mode. */
     ch->done = 1;
     /* Store the terminal value into a special position in the channel. */
-    memcpy(((char*)(ch + 1)) + (ch->bufsz * ch->sz) , val, ch->sz);
+    if (val != NULL) {
+        memcpy(((char*)(ch + 1)) + (ch->bufsz * ch->sz) , val, ch->sz); // TODO: revisit this
+    }
     /* Resume all the receivers currently waiting on the channel. */
     while(!mill_list_empty(&ch->receiver.clauses)) {
         struct mill_clause *cl = mill_cont(
             mill_list_begin(&ch->receiver.clauses), struct mill_clause, epitem);
-        memcpy(mill_valbuf(cl->cr, ch->sz), val, ch->sz);
+        if (val != NULL) {
+            memcpy(mill_valbuf(cl->cr, ch->sz), val, ch->sz); // TODO: revisit this
+        }
         mill_choose_unblock(cl);
     }
 }

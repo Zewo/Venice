@@ -96,6 +96,10 @@
 		B06CEBAA1BAE026200A88073 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E431B7E8B03004CBD6E /* Timer.swift */; };
 		B07C3D211BC5E098008564C3 /* SwiftGo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B06CEB961BAE020600A88073 /* SwiftGo.framework */; settings = {ASSET_TAGS = (); }; };
 		B07C3D271BC5E0D3008564C3 /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A36CA161BC53AE300B02006 /* PerformanceTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B07C3D291BC60A32008564C3 /* GoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07C3D281BC60A32008564C3 /* GoTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B07C3D2A1BC60A32008564C3 /* GoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07C3D281BC60A32008564C3 /* GoTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B07C3D2C1BC60D3C008564C3 /* ChannelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07C3D2B1BC60D3C008564C3 /* ChannelTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B07C3D2D1BC60D3C008564C3 /* ChannelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07C3D2B1BC60D3C008564C3 /* ChannelTests.swift */; settings = {ASSET_TAGS = (); }; };
 		B0E8CE811B82EC6F007F6857 /* Go.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E201B7E6353004CBD6E /* Go.swift */; };
 		B0E8CE821B82EC6F007F6857 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E221B7E6380004CBD6E /* Channel.swift */; };
 		B0E8CE831B82EC6F007F6857 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E241B7E63BA004CBD6E /* Select.swift */; };
@@ -176,6 +180,8 @@
 		B004C8AB1BAF08A300C0919E /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		B06CEB961BAE020600A88073 /* SwiftGo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftGo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B07C3D1C1BC5E098008564C3 /* SwiftGo iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftGo iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B07C3D281BC60A32008564C3 /* GoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoTests.swift; sourceTree = "<group>"; };
+		B07C3D2B1BC60D3C008564C3 /* ChannelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelTests.swift; sourceTree = "<group>"; };
 		B0E27E201B7E6353004CBD6E /* Go.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Go.swift; path = SwiftGo/Go.swift; sourceTree = "<group>"; };
 		B0E27E221B7E6380004CBD6E /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Channel.swift; path = SwiftGo/Channel.swift; sourceTree = "<group>"; };
 		B0E27E241B7E63BA004CBD6E /* Select.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = Select.swift; path = SwiftGo/Select.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -239,6 +245,8 @@
 		3A36CA151BC53AE300B02006 /* SwiftGo Tests */ = {
 			isa = PBXGroup;
 			children = (
+				B07C3D281BC60A32008564C3 /* GoTests.swift */,
+				B07C3D2B1BC60D3C008564C3 /* ChannelTests.swift */,
 				3A36CA161BC53AE300B02006 /* PerformanceTests.swift */,
 				3A36CA181BC53AE300B02006 /* Info.plist */,
 			);
@@ -581,6 +589,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A36CA171BC53AE300B02006 /* PerformanceTests.swift in Sources */,
+				B07C3D2C1BC60D3C008564C3 /* ChannelTests.swift in Sources */,
+				B07C3D291BC60A32008564C3 /* GoTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -619,6 +629,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B07C3D271BC5E0D3008564C3 /* PerformanceTests.swift in Sources */,
+				B07C3D2D1BC60D3C008564C3 /* ChannelTests.swift in Sources */,
+				B07C3D2A1BC60A32008564C3 /* GoTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
