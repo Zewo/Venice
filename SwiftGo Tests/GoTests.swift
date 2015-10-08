@@ -59,7 +59,6 @@ class GoTests: XCTestCase {
         let deadline = now + 100 * millisecond
         wakeUp(deadline)
         let diff = now - deadline
-        print(diff)
         XCTAssert(diff > -150 && diff < 150)
     }
 

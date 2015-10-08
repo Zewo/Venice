@@ -200,40 +200,4 @@ class ChannelTests: XCTestCase {
         XCTAssert(exitCode == 0)
     }
 
-    func testPanicWhenSendingToClosedChannel() {
-        let pid = mill_fork()
-        XCTAssert(pid >= 0)
-        if pid == 0 {
-            alarm(1)
-            let channel = Channel<Int>()
-            channel.close()
-            signal(SIGABRT) { _ in
-                _exit(0)
-            }
-            channel <- 42
-            XCTFail()
-        }
-        var exitCode: Int32 = 0
-        XCTAssert(waitpid(pid, &exitCode, 0) != 0)
-        XCTAssert(exitCode == 0)
-    }
-
-    func testPanicWhenReceivingFromClosedChannel() {
-        let pid = mill_fork()
-        XCTAssert(pid >= 0)
-        if pid == 0 {
-            alarm(1)
-            let channel = Channel<Int>()
-            channel.close()
-            signal(SIGABRT) { _ in
-                _exit(0)
-            }
-            <-channel
-            XCTFail()
-        }
-        var exitCode: Int32 = 0
-        XCTAssert(waitpid(pid, &exitCode, 0) != 0)
-        XCTAssert(exitCode == 0)
-    }
-
 }
