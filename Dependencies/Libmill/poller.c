@@ -175,7 +175,7 @@ void mill_wait(int block) {
                 int64_t nw = now();
                 int64_t expiry = mill_cont(mill_list_begin(&mill_timers),
                     struct mill_fdwait, item)->expiry;
-                timeout = nw >= expiry ? 0 : expiry - nw;
+                timeout = nw >= expiry ? 0 : (int) (expiry - nw);
             }
             else {
                 timeout = -1;
