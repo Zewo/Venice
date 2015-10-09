@@ -25,15 +25,20 @@
 import Libmill
 
 protocol SelectCase {
-    mutating func register(clause: UnsafeMutablePointer<Void>, index: Int)
+    func register(clause: UnsafeMutablePointer<Void>, index: Int)
     func execute()
 }
 
-struct ChannelReceiveCase<T> : SelectCase {
+final class ChannelReceiveCase<T> : SelectCase {
     let channel: Channel<T>
     let closure: T -> Void
 
-    mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    init(channel: Channel<T>, closure: T -> Void) {
+        self.channel = channel
+        self.closure = closure
+    }
+
+    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
         mill_choose_in(clause, channel.channel, strideof(T), Int32(index))
     }
 
@@ -46,11 +51,16 @@ struct ChannelReceiveCase<T> : SelectCase {
     }
 }
 
-struct SendingChannelReceiveCase<T> : SelectCase {
+final class SendingChannelReceiveCase<T> : SelectCase {
     let channel: SendingChannel<T>
     let closure: T -> Void
+
+    init(channel: SendingChannel<T>, closure: T -> Void) {
+        self.channel = channel
+        self.closure = closure
+    }
     
-    mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
         mill_choose_in(clause, channel.channel, strideof(T), Int32(index))
     }
     
@@ -63,10 +73,15 @@ struct SendingChannelReceiveCase<T> : SelectCase {
     }
 }
 
-struct FallibleChannelReceiveCase<T> : SelectCase {
+final class FallibleChannelReceiveCase<T> : SelectCase {
     let channel: FallibleChannel<T>
     var closure: ChannelValue<T> -> Void
 
+    init(channel: FallibleChannel<T>, closure: ChannelValue<T> -> Void) {
+        self.channel = channel
+        self.closure = closure
+    }
+
     func register(clause: UnsafeMutablePointer<Void>, index: Int) {
         mill_choose_in(clause, channel.channel, strideof(ChannelValue<T>), Int32(index))
     }
@@ -80,9 +95,14 @@ struct FallibleChannelReceiveCase<T> : SelectCase {
     }
 }
 
-struct FallibleSendingChannelReceiveCase<T> : SelectCase {
+final class FallibleSendingChannelReceiveCase<T> : SelectCase {
     let channel: FallibleSendingChannel<T>
     var closure: ChannelValue<T> -> Void
+
+    init(channel: FallibleSendingChannel<T>, closure: ChannelValue<T> -> Void) {
+        self.channel = channel
+        self.closure = closure
+    }
     
     func register(clause: UnsafeMutablePointer<Void>, index: Int) {
         mill_choose_in(clause, channel.channel, strideof(ChannelValue<T>), Int32(index))
@@ -97,7 +117,7 @@ struct FallibleSendingChannelReceiveCase<T> : SelectCase {
     }
 }
 
-struct ChannelSendCase<T> : SelectCase {
+final class ChannelSendCase<T> : SelectCase {
     let channel: Channel<T>
     var value: T
     let closure: Void -> Void
@@ -108,7 +128,7 @@ struct ChannelSendCase<T> : SelectCase {
         self.closure = closure
     }
 
-    mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
         mill_choose_out(clause, channel.channel, &value, strideof(T), Int32(index))
     }
 
@@ -117,12 +137,18 @@ struct ChannelSendCase<T> : SelectCase {
     }
 }
 
-struct ReceivingChannelSendCase<T> : SelectCase {
+final class ReceivingChannelSendCase<T> : SelectCase {
     let channel: ReceivingChannel<T>
     var value: T
     let closure: Void -> Void
+
+    init(channel: ReceivingChannel<T>, value: T, closure: Void -> Void) {
+        self.channel = channel
+        self.value = value
+        self.closure = closure
+    }
     
-    mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
         mill_choose_out(clause, channel.channel, &value, strideof(T), Int32(index))
     }
     
@@ -131,12 +157,18 @@ struct ReceivingChannelSendCase<T> : SelectCase {
     }
 }
 
-struct FallibleChannelSendCase<T> : SelectCase {
+final class FallibleChannelSendCase<T> : SelectCase {
     let channel: FallibleChannel<T>
     let value: T
     let closure: Void -> Void
 
-    mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    init(channel: FallibleChannel<T>, value: T, closure: Void -> Void) {
+        self.channel = channel
+        self.value = value
+        self.closure = closure
+    }
+
+    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
         var channelValue = ChannelValue<T>.Value(self.value)
         mill_choose_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
     }
@@ -146,12 +178,18 @@ struct FallibleChannelSendCase<T> : SelectCase {
     }
 }
 
-struct FallibleReceivingChannelSendCase<T> : SelectCase {
+final class FallibleReceivingChannelSendCase<T> : SelectCase {
     let channel: FallibleReceivingChannel<T>
     let value: T
     let closure: Void -> Void
+
+    init(channel: FallibleReceivingChannel<T>, value: T, closure: Void -> Void) {
+        self.channel = channel
+        self.value = value
+        self.closure = closure
+    }
     
-    mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
         var channelValue = ChannelValue<T>.Value(self.value)
         mill_choose_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
     }
@@ -161,12 +199,18 @@ struct FallibleReceivingChannelSendCase<T> : SelectCase {
     }
 }
 
-struct FallibleChannelSendErrorCase<T> : SelectCase {
+final class FallibleChannelSendErrorCase<T> : SelectCase {
     let channel: FallibleChannel<T>
     let error: ErrorType
     let closure: Void -> Void
 
-    mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    init(channel: FallibleChannel<T>, error: ErrorType, closure: Void -> Void) {
+        self.channel = channel
+        self.error = error
+        self.closure = closure
+    }
+
+    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
         var channelValue = ChannelValue<T>.Error(self.error)
         mill_choose_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
     }
@@ -176,12 +220,18 @@ struct FallibleChannelSendErrorCase<T> : SelectCase {
     }
 }
 
-struct FallibleReceivingChannelSendErrorCase<T> : SelectCase {
+final class FallibleReceivingChannelSendErrorCase<T> : SelectCase {
     let channel: FallibleReceivingChannel<T>
     let error: ErrorType
     let closure: Void -> Void
+
+    init(channel: FallibleReceivingChannel<T>, error: ErrorType, closure: Void -> Void) {
+        self.channel = channel
+        self.error = error
+        self.closure = closure
+    }
     
-    mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
         var channelValue = ChannelValue<T>.Error(self.error)
         mill_choose_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
     }
@@ -191,11 +241,16 @@ struct FallibleReceivingChannelSendErrorCase<T> : SelectCase {
     }
 }
 
-struct TimeoutCase<T> : SelectCase {
+final class TimeoutCase<T> : SelectCase {
     let channel: Channel<T>
     let closure: Void -> Void
 
-    mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    init(channel: Channel<T>, closure: Void -> Void) {
+        self.channel = channel
+        self.closure = closure
+    }
+
+    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
         mill_choose_in(clause, channel.channel, strideof(T), Int32(index))
     }
 
@@ -302,7 +357,7 @@ public func select(build: SelectCaseBuilder -> Void) {
 
     var clausePointers: [UnsafeMutablePointer<Void>] = []
 
-    for (index, var pattern) in builder.cases.enumerate() {
+    for (index, pattern) in builder.cases.enumerate() {
         let clausePointer = malloc(mill_clauselen())
         clausePointers.append(clausePointer)
         pattern.register(clausePointer, index: index)

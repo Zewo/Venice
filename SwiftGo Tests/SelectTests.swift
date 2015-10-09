@@ -53,6 +53,28 @@ class SelectTests: XCTestCase {
         }
     }
 
+    func testNonBlockingSender() {
+        let channel = Channel<Int>()
+        go {
+            let value = <-channel
+            XCTAssert(value == 777)
+        }
+        sel { when in
+            when.send(777, to: channel) {}
+        }
+    }
+
+    func testBlockingSender() {
+        let channel = Channel<Int>()
+        go {
+            yield
+            XCTAssert(<-channel == 888)
+        }
+        sel { when in
+            when.send(888, to: channel) {}
+        }
+    }
+
     func testTwoChannels() {
         let channel1 = Channel<Int>()
         let channel2 = Channel<Int>()
@@ -81,7 +103,7 @@ class SelectTests: XCTestCase {
         }
     }
 
-    func testRandomChannelSelection() {
+    func testReceiveRandomChannelSelection() {
         let channel1 = Channel<Int>()
         let channel2 = Channel<Int>()
         go {
@@ -112,6 +134,184 @@ class SelectTests: XCTestCase {
             yield
         }
         XCTAssert(first > 1 && second > 1)
+    }
+
+    func testSendRandomChannelSelection() {
+        let channel = Channel<Int>()
+        go {
+            while true {
+                sel { when in
+                    when.send(666, to: channel) {}
+                    when.send(777, to: channel) {}
+                }
+            }
+        }
+        var first = 0
+        var second = 0
+        for _ in 0 ..< 100 {
+            let value = <-channel
+            if value == 666 {
+                ++first
+            } else if value == 777 {
+                ++second
+            } else {
+                XCTAssert(false)
+            }
+
+        }
+        XCTAssert(first > 1 && second > 1)
+    }
+
+    func testOtherwise() {
+        let channel = Channel<Int>()
+        var test = 0
+        sel { when in
+            when.receiveFrom(channel) { value in
+                XCTAssert(false)
+            }
+            when.otherwise {
+                test = 1
+            }
+        }
+        XCTAssert(test == 1)
+        test = 0
+        sel { when in
+            when.otherwise {
+                test = 1
+            }
+        }
+        XCTAssert(test == 1)
+    }
+
+    func testTwoSimultaneousSenders() {
+        let channel = Channel<Int>()
+        go {
+            channel <- 888
+        }
+        go {
+            channel <- 999
+        }
+        var value = 0
+        sel { when in
+            when.receiveFrom(channel) { v in
+                value = v
+            }
+        }
+        XCTAssert(value == 888)
+        value = 0
+        sel { when in
+            when.receiveFrom(channel) { v in
+                value = v
+            }
+        }
+        XCTAssert(value == 999)
+    }
+
+    func testTwoSimultaneousReceivers() {
+        let channel = Channel<Int>()
+        go {
+            XCTAssert(<-channel == 333)
+        }
+        go {
+            XCTAssert(<-channel == 444)
+        }
+        sel { when in
+            when.send(333, to: channel) {}
+        }
+        sel { when in
+            when.send(444, to: channel) {}
+        }
+    }
+
+    func testSelectWithSelect() {
+        let channel = Channel<Int>()
+        go {
+            sel { when in
+                when.send(111, to: channel) {}
+            }
+        }
+        sel { when in
+            when.receiveFrom(channel) { value in
+                XCTAssert(value == 111)
+            }
+        }
+    }
+
+    func testSelectWithBufferedChannels() {
+        let channel = Channel<Int>(bufferSize: 1)
+        sel { when in
+            when.send(999, to: channel) {}
+        }
+        sel { when in
+            when.receiveFrom(channel) { value in
+                XCTAssert(value == 999)
+            }
+        }
+    }
+
+    func testReceiveSelectFromClosedChannel() {
+        let channel = Channel<Int>()
+        channel.close()
+        sel { when in
+            when.receiveFrom(channel) { value in
+                XCTAssert(false)
+            }
+        }
+    }
+
+    func testRandomReceiveSelectionWhenNothingImmediatelyAvailable() {
+        let channel = Channel<Int>()
+        go {
+            while true {
+                nap(10 * millisecond)
+                channel <- 333
+            }
+        }
+        var first = 0
+        var second = 0
+        var third = 0
+        for _ in 0 ..< 100 {
+            sel { when in
+                when.receiveFrom(channel) { value in
+                    ++first
+                }
+                when.receiveFrom(channel) { value in
+                    ++second
+                }
+                when.receiveFrom(channel) { value in
+                    ++third
+                }
+            }
+        }
+        XCTAssert(first > 1 && second > 1 && third > 1)
+    }
+
+    func testRandomSendSelectionWhenNothingImmediatelyAvailable() {
+        let channel = Channel<Int>()
+        go {
+            while true {
+                sel { when in
+                    when.send(1, to: channel) {}
+                    when.send(2, to: channel) {}
+                    when.send(3, to: channel) {}
+                }
+            }
+        }
+        var first = 0
+        var second = 0
+        var third = 0
+        for _ in 0 ..< 100 {
+            nap(10 * millisecond)
+            let value = !<-channel
+            switch value {
+            case 1: ++first
+            case 2: ++second
+            case 3: ++third
+            default: XCTAssert(false)
+            }
+
+        }
+        XCTAssert(first > 1 && second > 1 && third > 1)
     }
     
 }
