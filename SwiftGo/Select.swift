@@ -102,6 +102,12 @@ struct ChannelSendCase<T> : SelectCase {
     var value: T
     let closure: Void -> Void
 
+    init(channel: Channel<T>, value: T, closure: Void -> Void) {
+        self.channel = channel
+        self.value = value
+        self.closure = closure
+    }
+
     mutating func register(clause: UnsafeMutablePointer<Void>, index: Int) {
         mill_choose_out(clause, channel.channel, &value, strideof(T), Int32(index))
     }
@@ -318,4 +324,8 @@ public func select(build: SelectCaseBuilder -> Void) {
     for pointer in clausePointers {
         free(pointer)
     }
+}
+
+public func sel(build: SelectCaseBuilder -> Void) {
+    select(build)
 }
