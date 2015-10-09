@@ -53,17 +53,6 @@ class SelectTests: XCTestCase {
         }
     }
 
-    func testBlockingSender() {
-        let channel = Channel<Int>()
-        go {
-            yield
-            XCTAssert(<-channel == 888)
-        }
-        sel { when in
-            when.send(888, to: channel) {}
-        }
-    }
-
     func testTwoChannels() {
         let channel1 = Channel<Int>()
         let channel2 = Channel<Int>()
