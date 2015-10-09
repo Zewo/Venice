@@ -27,7 +27,7 @@ SwiftGo
 
 ##Performance
 
-**SwiftGo** is usually **2** to **3** times faster than **Grand Central Dispatch**. It's faster because the goroutines are light coroutines managed by *libmill* instead of the threads in **GCD**, which call to the OS. The **Chinese Whispers** example in the command line application shows how you can create up to 100.000 concurrent goroutines (tested in a 8 GB MacBook Pro early 2015).
+**SwiftGo** is usually faster than **Grand Central Dispatch**. It's faster because the goroutines are light coroutines managed by *libmill* instead of the threads in **GCD**, which call to the OS. The **Chinese Whispers** example in the command line application shows how you can create up to 100.000 concurrent goroutines (tested in a 8 GB MacBook Pro early 2015).
 
 You can run the performance tests in your machine and see for yourself. Just run the tests in `PerformanceTests.swift`.
 
