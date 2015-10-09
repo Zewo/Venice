@@ -25,8 +25,11 @@
 import XCTest
 import SwiftGo
 
+let thousand = 1000
+let million = 1000000
+
 class PerformanceTests: XCTestCase {
-    
+
     func testCoroutinePerformanceSwiftGo() {
         self.measureMetrics(XCTestCase.defaultPerformanceMetrics(), automaticallyStartMeasuring: false) {
             let channel = Channel<Void>()
@@ -70,6 +73,85 @@ class PerformanceTests: XCTestCase {
                 dispatch_semaphore_signal(semaphore)
             }
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+        }
+    }
+
+    func testMillionCoroutines() {
+        self.measureBlock {
+            let numberOfCoroutines = million
+            for _ in 0 ..< numberOfCoroutines { go {} }
+        }
+    }
+
+    func testThousandWhispers() {
+        self.measureBlock {
+            func whisper(left: ReceivingChannel<Int>, _ right: SendingChannel<Int>) {
+                left <- 1 + !<-right
+            }
+
+            let numberOfWhispers = thousand
+
+            let leftmost = Channel<Int>()
+            var right = leftmost
+            var left = leftmost
+
+            for _ in 0 ..< numberOfWhispers {
+                right = Channel<Int>()
+                go(whisper(left.receivingChannel, right.sendingChannel))
+                left = right
+            }
+            
+            go(right <- 1)
+            XCTAssert(!<-leftmost == numberOfWhispers + 1)
+        }
+    }
+
+    func testMillionContextSwitches() {
+        self.measureBlock {
+            let numberOfContextSwitches = million
+            let count = numberOfContextSwitches / 2
+            go {
+                for _ in 0 ..< count {
+                    yield
+                }
+            }
+            for _ in 0 ..< count {
+                yield
+            }
+        }
+    }
+
+    func testSendReceiveMillionMessages() {
+        self.measureBlock {
+            let numberOfMessages = million
+            let channel = Channel<Int>(bufferSize: numberOfMessages)
+            for _ in 0 ..< numberOfMessages {
+                channel <- 0
+            }
+            for _ in 0 ..< numberOfMessages {
+                <-channel
+            }
+        }
+    }
+
+    func testMillionRoundTrips() {
+        self.measureBlock {
+            let numberOfRoundTrips = million
+            let input = Channel<Int>()
+            let output = Channel<Int>()
+            let initiaValue = 1969
+            var value = initiaValue
+            go {
+                while true {
+                    let value = !<-output
+                    input <- value
+                }
+            }
+            for _ in 0 ..< numberOfRoundTrips {
+                output <- value
+                value = !<-input
+            }
+            XCTAssert(value == initiaValue)
         }
     }
     
