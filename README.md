@@ -143,6 +143,8 @@ do {
 `select`
 --------
 
+Sometimes `select` can clash with the system libraries function with the same name `select`. To solve this you can call SwiftGo's select with `SwiftGo.select`or with the terser alias `sel`.
+
 ```swift
 let channel = Channel<String>()
 let fallibleChannel = FallibleChannel<String>()
@@ -192,7 +194,7 @@ if arc4random_uniform(2) == 0 {
 go(channelA <- "a")
 go(channelB <- "b")
 
-select { when in
+sel { when in
     when.receiveFrom(channelA) { value in
         print("received \(value) from channel a")
     }
