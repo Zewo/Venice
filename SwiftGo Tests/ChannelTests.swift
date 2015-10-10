@@ -34,8 +34,7 @@ class ChannelTests: XCTestCase {
             yield
             channel <- 333
         }
-        let value = <-channel
-        XCTAssert(value == 333)
+        XCTAssert(<-channel == 333)
     }
 
     func testSenderWaitsForReceiver() {
@@ -43,8 +42,7 @@ class ChannelTests: XCTestCase {
         go {
             channel <- 444
         }
-        let value = <-channel
-        XCTAssert(value == 444)
+        XCTAssert(<-channel == 444)
     }
 
     func testReceivingChannel() {
@@ -53,15 +51,13 @@ class ChannelTests: XCTestCase {
             channel <- 888
         }
         go(receive(channel.receivingChannel))
-        let value = <-channel
-        XCTAssert(value == 888)
+        XCTAssert(<-channel == 888)
     }
 
     func testSendingChannel() {
         let channel = Channel<Int>()
         func send(channel: SendingChannel<Int>) {
-            let value = <-channel
-            XCTAssert(value == 999)
+            XCTAssert(<-channel == 999)
         }
         go{
             channel <- 999
@@ -77,45 +73,18 @@ class ChannelTests: XCTestCase {
         go {
             channel <- 999
         }
-        let value1 = <-channel
-        XCTAssert(value1 == 888)
+        XCTAssert(<-channel == 888)
         yield
-        let value2 = <-channel
-        XCTAssert(value2 == 999)
-    }
-
-    func testChannelIteration() {
-        let channel =  Channel<Int>(bufferSize: 2)
-        channel <- 555
-        channel <- 555
-        channel.close()
-        for value in channel {
-            XCTAssert(value == 555)
-        }
-    }
-
-    func testSendingChannelIteration() {
-        let channel =  Channel<Int>(bufferSize: 2)
-        channel <- 444
-        channel <- 444
-        func receive(channel: SendingChannel<Int>) {
-            channel.close()
-            for value in channel {
-                XCTAssert(value == 444)
-            }
-        }
-        receive(channel.sendingChannel)
+        XCTAssert(<-channel == 999)
     }
 
     func testTwoSimultaneousReceivers() {
         let channel = Channel<Int>()
         go {
-            let value = <-channel
-            XCTAssert(value == 333)
+            XCTAssert(<-channel == 333)
         }
         go {
-            let value = <-channel
-            XCTAssert(value == 444)
+            XCTAssert(<-channel == 444)
         }
         channel <- 333
         channel <- 444
@@ -126,8 +95,7 @@ class ChannelTests: XCTestCase {
         go {
             stringChannel <- "yo"
         }
-        let string = <-stringChannel
-        XCTAssert(string == "yo")
+        XCTAssert(<-stringChannel == "yo")
 
         struct Foo { let bar: Int; let baz: Int }
 
@@ -243,6 +211,43 @@ class ChannelTests: XCTestCase {
         var exitCode: Int32 = 0
         XCTAssert(waitpid(pid, &exitCode, 0) != 0)
         XCTAssert(exitCode == 0)
+    }
+
+    func testChannelIteration() {
+        let channel =  Channel<Int>(bufferSize: 2)
+        channel <- 555
+        channel <- 555
+        channel.close()
+        for value in channel {
+            XCTAssert(value == 555)
+        }
+    }
+
+    func testSendingChannelIteration() {
+        let channel =  Channel<Int>(bufferSize: 2)
+        channel <- 444
+        channel <- 444
+        func receive(channel: SendingChannel<Int>) {
+            channel.close()
+            for value in channel {
+                XCTAssert(value == 444)
+            }
+        }
+        receive(channel.sendingChannel)
+    }
+
+    func testFanIn() {
+        let channel1 = Channel<Int>(bufferSize: 1)
+        let channel2 = Channel<Int>(bufferSize: 1)
+        let channel3 = Channel<Int>.fanIn(channel1, channel2)
+        go {
+            channel1 <- 111
+        }
+        go {
+            channel2 <- 222
+        }
+        XCTAssert(!<-channel3 == 111)
+        XCTAssert(!<-channel3 == 222)
     }
 
 }

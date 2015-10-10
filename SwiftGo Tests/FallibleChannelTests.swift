@@ -34,8 +34,7 @@ class FallibleChannelTests: XCTestCase {
             yield
             channel <- 333
         }
-        let value = try! <-channel
-        XCTAssert(value == 333)
+        XCTAssert(try! <-channel == 333)
     }
 
     func testSenderWaitsForReceiver() {
@@ -43,8 +42,7 @@ class FallibleChannelTests: XCTestCase {
         go {
             channel <- 444
         }
-        let value = try! <-channel
-        XCTAssert(value == 444)
+        XCTAssert(try! <-channel == 444)
     }
 
     func testReceivingChannel() {
@@ -53,15 +51,13 @@ class FallibleChannelTests: XCTestCase {
             channel <- 888
         }
         go(receive(channel.receivingChannel))
-        let value = try! <-channel
-        XCTAssert(value == 888)
+        XCTAssert(try! <-channel == 888)
     }
 
     func testSendingChannel() {
         let channel = FallibleChannel<Int>()
         func send(channel: FallibleSendingChannel<Int>) {
-            let value = try! <-channel
-            XCTAssert(value == 999)
+            XCTAssert(try! <-channel == 999)
         }
         go{
             channel <- 999
@@ -77,45 +73,18 @@ class FallibleChannelTests: XCTestCase {
         go {
             channel <- 999
         }
-        let value1 = try! <-channel
-        XCTAssert(value1 == 999) // TODO: check this
+        XCTAssert(try! <-channel == 888)
         yield
-        let value2 = try! <-channel
-        XCTAssert(value2 == 999)
-    }
-
-    func testChannelIteration() {
-        let channel =  FallibleChannel<Int>(bufferSize: 2)
-        channel <- 555
-        channel <- 555
-        channel.close()
-        for value in channel {
-            XCTAssert(value == 555)
-        }
-    }
-
-    func testSendingChannelIteration() {
-        let channel =  FallibleChannel<Int>(bufferSize: 2)
-        channel <- 444
-        channel <- 444
-        func receive(channel: FallibleSendingChannel<Int>) {
-            channel.close()
-            for value in channel {
-                XCTAssert(value == 444)
-            }
-        }
-        receive(channel.sendingChannel)
+        XCTAssert(try! <-channel == 999)
     }
 
     func testTwoSimultaneousReceivers() {
         let channel = FallibleChannel<Int>()
         go {
-            let value = try! <-channel
-            XCTAssert(value == 333)
+            XCTAssert(try! <-channel == 333)
         }
         go {
-            let value = try! <-channel
-            XCTAssert(value == 444)
+            XCTAssert(try! <-channel == 444)
         }
         channel <- 333
         channel <- 444
@@ -126,8 +95,7 @@ class FallibleChannelTests: XCTestCase {
         go {
             stringChannel <- "yo"
         }
-        let string = try! <-stringChannel
-        XCTAssert(string == "yo")
+        XCTAssert(try! <-stringChannel == "yo")
 
         struct Foo { let bar: Int; let baz: Int }
 
@@ -243,6 +211,43 @@ class FallibleChannelTests: XCTestCase {
         var exitCode: Int32 = 0
         XCTAssert(waitpid(pid, &exitCode, 0) != 0)
         XCTAssert(exitCode == 0)
+    }
+
+    func testChannelIteration() {
+        let channel =  FallibleChannel<Int>(bufferSize: 2)
+        channel <- 555
+        channel <- 555
+        channel.close()
+        for value in channel {
+            XCTAssert(value == 555)
+        }
+    }
+
+    func testSendingChannelIteration() {
+        let channel =  FallibleChannel<Int>(bufferSize: 2)
+        channel <- 444
+        channel <- 444
+        func receive(channel: FallibleSendingChannel<Int>) {
+            channel.close()
+            for value in channel {
+                XCTAssert(value == 444)
+            }
+        }
+        receive(channel.sendingChannel)
+    }
+
+    func testFanIn() {
+        let channel1 = FallibleChannel<Int>(bufferSize: 1)
+        let channel2 = FallibleChannel<Int>(bufferSize: 1)
+        let channel3 = FallibleChannel<Int>.fanIn(channel1, channel2)
+        go {
+            channel1 <- 111
+        }
+        go {
+            channel2 <- 222
+        }
+        XCTAssert(try! <-channel3 == 111)
+        XCTAssert(try! <-channel3 == 222)
     }
 
 }

@@ -99,8 +99,12 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
 
     /// Receives a value.
     public func receive(value: T) {
-        lastValue = ChannelValue.Value(value)
-        mill_chs(channel, &lastValue, strideof(ChannelValue<T>))
+        if closed {
+            mill_panic("send on closed channel")
+        }
+        var wrappedValue = ChannelValue.Value(value)
+        lastValue = wrappedValue
+        mill_chs(channel, &wrappedValue, strideof(ChannelValue<T>))
         
         if bufferSize <= 0 || valuesInBuffer < bufferSize {
             valuesInBuffer++
@@ -125,8 +129,8 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
         let pointer = mill_chr(channel, strideof(ChannelValue<T>))
         if let value = valueFromPointer(pointer) {
             switch value {
-            case .Value(let value): return value
-            case .Error(let error): throw error
+            case .Value(let v): return v
+            case .Error(let e): throw e
             }
         } else {
             return nil
@@ -145,8 +149,12 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
     }
 }
 
-func fanIn<T>(channels: FallibleChannel<T>...) -> FallibleSendingChannel<T> {
-    let fanInChannel = FallibleChannel<T>()
-    for channel in channels { go { for element in channel { fanInChannel <- element } } }
-    return fanInChannel.sendingChannel
+extension FallibleChannel {
+
+    public class func fanIn<T>(channels: FallibleChannel<T>...) -> FallibleSendingChannel<T> {
+        let fanInChannel = FallibleChannel<T>()
+        for channel in channels { go { for element in channel { fanInChannel <- element } } }
+        return fanInChannel.sendingChannel
+    }
+
 }
