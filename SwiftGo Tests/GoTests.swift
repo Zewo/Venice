@@ -59,7 +59,7 @@ class GoTests: XCTestCase {
         let deadline = now + 100 * millisecond
         wakeUp(deadline)
         let diff = now - deadline
-        XCTAssert(diff > -150 && diff < 150)
+        XCTAssert(diff > -200 && diff < 200)
     }
 
     func testNap() {
