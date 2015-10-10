@@ -87,11 +87,13 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
         if closed {
             mill_panic("tried to close an already closed channel")
         }
-        
+
         closed = true
-        
+
         if var value = lastValue {
-            mill_chdone(channel, &value, strideof(T))
+            mill_chdone(channel, &value, strideof(ChannelValue<T>))
+        } else {
+            mill_chdone(channel, nil, strideof(ChannelValue<T>))
         }
     }
 
@@ -117,6 +119,9 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
 
     /// Sends a value.
     public func send() throws -> T? {
+        if closed && valuesInBuffer <= 0 {
+            return nil
+        }
         let pointer = mill_chr(channel, strideof(ChannelValue<T>))
         if let value = valueFromPointer(pointer) {
             switch value {

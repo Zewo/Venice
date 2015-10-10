@@ -91,6 +91,8 @@
 		B004C8CD1BAF08A300C0919E /* utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8AB1BAF08A300C0919E /* utils.h */; };
 		B016B46B1BC6D4FC00488CD8 /* SelectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */; settings = {ASSET_TAGS = (); }; };
 		B016B46C1BC6D4FC00488CD8 /* SelectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B05B23501BC899CA00567BD8 /* FallibleChannelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B05B23511BC899CB00567BD8 /* FallibleChannelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */; settings = {ASSET_TAGS = (); }; };
 		B06CEBA61BAE026200A88073 /* Go.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E201B7E6353004CBD6E /* Go.swift */; };
 		B06CEBA71BAE026200A88073 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E221B7E6380004CBD6E /* Channel.swift */; };
 		B06CEBA81BAE026200A88073 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E241B7E63BA004CBD6E /* Select.swift */; };
@@ -181,6 +183,7 @@
 		B004C8AA1BAF08A300C0919E /* utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utils.c; sourceTree = "<group>"; };
 		B004C8AB1BAF08A300C0919E /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectTests.swift; sourceTree = "<group>"; };
+		B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FallibleChannelTests.swift; sourceTree = "<group>"; };
 		B06CEB961BAE020600A88073 /* SwiftGo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftGo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B07C3D1C1BC5E098008564C3 /* SwiftGo iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftGo iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B07C3D281BC60A32008564C3 /* GoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoTests.swift; sourceTree = "<group>"; };
@@ -250,6 +253,7 @@
 			children = (
 				B07C3D281BC60A32008564C3 /* GoTests.swift */,
 				B07C3D2B1BC60D3C008564C3 /* ChannelTests.swift */,
+				B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */,
 				B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */,
 				3A36CA161BC53AE300B02006 /* PerformanceTests.swift */,
 				3A36CA181BC53AE300B02006 /* Info.plist */,
@@ -596,6 +600,7 @@
 				B07C3D2C1BC60D3C008564C3 /* ChannelTests.swift in Sources */,
 				B07C3D291BC60A32008564C3 /* GoTests.swift in Sources */,
 				B016B46B1BC6D4FC00488CD8 /* SelectTests.swift in Sources */,
+				B05B23501BC899CA00567BD8 /* FallibleChannelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -637,6 +642,7 @@
 				B07C3D2D1BC60D3C008564C3 /* ChannelTests.swift in Sources */,
 				B07C3D2A1BC60A32008564C3 /* GoTests.swift in Sources */,
 				B016B46C1BC6D4FC00488CD8 /* SelectTests.swift in Sources */,
+				B05B23511BC899CB00567BD8 /* FallibleChannelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
