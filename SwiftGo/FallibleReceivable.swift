@@ -32,10 +32,6 @@ public func <-<W: FallibleReceivable>(channel: W, value: W.T) {
     channel.receive(value)
 }
 
-public func <-<W: FallibleReceivable>(channel: W?, value: W.T) {
-    channel?.receive(value)
-}
-
 public func <-<W: FallibleReceivable>(channel: W, error: ErrorType) {
     channel.receiveError(error)
 }

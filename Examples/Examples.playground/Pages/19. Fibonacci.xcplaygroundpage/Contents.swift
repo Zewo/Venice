@@ -19,7 +19,7 @@ func fibonacci(channel: Channel<Int>, quit: Channel<Void>) {
 }
 
 let channel = Channel<Int>()
-let quit =  Channel<Void>()
+let quit = Channel<Void>()
 
 go {
     for _ in 0 ..< 10 {
