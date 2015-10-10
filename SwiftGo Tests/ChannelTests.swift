@@ -98,8 +98,8 @@ class ChannelTests: XCTestCase {
         let channel =  Channel<Int>(bufferSize: 2)
         channel <- 444
         channel <- 444
-        channel.close()
         func receive(channel: SendingChannel<Int>) {
+            channel.close()
             for value in channel {
                 XCTAssert(value == 444)
             }
