@@ -99,9 +99,6 @@ MILL_EXPORT void mill_msleep(int64_t deadline);
 
 MILL_EXPORT int mill_fdwait(int fd, int events, int64_t deadline);
 
-MILL_EXPORT void *cls(void);
-MILL_EXPORT void setcls(void *val);
-
 /******************************************************************************/
 /*  Channels                                                                  */
 /******************************************************************************/

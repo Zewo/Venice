@@ -159,12 +159,3 @@ void *mill_valbuf(struct mill_cr *cr, size_t size) {
         mill_panic("not enough memory to receive from channel");
     return ptr;
 }
-
-void *cls(void) {
-    return mill_running->cls;
-}
-
-void setcls(void *val) {
-    mill_running->cls = val;
-}
-
