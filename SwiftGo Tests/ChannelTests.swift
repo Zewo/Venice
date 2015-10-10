@@ -47,6 +47,28 @@ class ChannelTests: XCTestCase {
         XCTAssert(value == 444)
     }
 
+    func testReceivingChannel() {
+        let channel = Channel<Int>()
+        func receive(channel: ReceivingChannel<Int>) {
+            channel <- 888
+        }
+        go(receive(channel.receivingChannel))
+        let value = <-channel
+        XCTAssert(value == 888)
+    }
+
+    func testSendingChannel() {
+        let channel = Channel<Int>()
+        func send(channel: SendingChannel<Int>) {
+            let value = <-channel
+            XCTAssert(value == 999)
+        }
+        go{
+            channel <- 999
+        }
+        send(channel.sendingChannel)
+    }
+
     func testTwoSimultaneousSenders() {
         let channel = Channel<Int>()
         go {
