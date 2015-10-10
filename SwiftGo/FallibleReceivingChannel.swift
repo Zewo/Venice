@@ -51,10 +51,6 @@ public final class FallibleReceivingChannel<T> : FallibleReceivable {
         return referenceChannel.receive(error, clause: clause, index: index)
     }
     
-    var channel: chan {
-        return referenceChannel.channel
-    }
-    
     var closed: Bool {
         return referenceChannel.closed
     }

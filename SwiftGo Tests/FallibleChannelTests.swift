@@ -448,8 +448,8 @@ class FallibleChannelTests: XCTestCase {
         go {
             channel2 <- 222
         }
-        XCTAssert(try! <-channel3 == 111)
-        XCTAssert(try! <-channel3 == 222)
+        XCTAssert(try! !<-channel3 == 111)
+        XCTAssert(try! !<-channel3 == 222)
     }
 
     func testFanInError() {

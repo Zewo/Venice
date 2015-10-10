@@ -443,6 +443,16 @@ class SelectTests: XCTestCase {
         }
     }
 
+    func testTimeout() {
+        var timedout = false
+        sel { when in
+            when.timeout(now + 10 * millisecond) {
+                timedout = true
+            }
+        }
+        XCTAssert(timedout)
+    }
+
 }
 
 extension SelectTests {
