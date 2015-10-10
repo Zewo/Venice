@@ -85,13 +85,26 @@ class ChannelTests: XCTestCase {
     }
 
     func testChannelIteration() {
-        let queue =  Channel<Int>(bufferSize: 2)
-        queue <- 555
-        queue <- 555
-        queue.close()
-        for element in queue {
-            XCTAssert(element == 555)
+        let channel =  Channel<Int>(bufferSize: 2)
+        channel <- 555
+        channel <- 555
+        channel.close()
+        for value in channel {
+            XCTAssert(value == 555)
         }
+    }
+
+    func testSendingChannelIteration() {
+        let channel =  Channel<Int>(bufferSize: 2)
+        channel <- 444
+        channel <- 444
+        channel.close()
+        func receive(channel: SendingChannel<Int>) {
+            for value in channel {
+                XCTAssert(value == 444)
+            }
+        }
+        receive(channel.sendingChannel)
     }
 
     func testTwoSimultaneousReceivers() {
