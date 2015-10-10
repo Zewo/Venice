@@ -466,6 +466,14 @@ class FallibleChannelTests: XCTestCase {
         assertChannel(channel3, catchesErrorOfType: NastyError.self)
     }
 
+    func testReceiveResult() {
+        let channel = FallibleChannel<Int>(bufferSize: 1)
+        go {
+            channel.receivingChannel.receiveResult(Result<Int>.Value(333))
+        }
+        XCTAssert(try! <-channel == 333)
+    }
+
 }
 
 extension FallibleChannelTests {

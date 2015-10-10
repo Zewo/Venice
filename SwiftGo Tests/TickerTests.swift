@@ -28,12 +28,13 @@ import SwiftGo
 class TickerTests: XCTestCase {
 
     func testTicker() {
-        let period = 100
-        let ticker = Ticker(period: period * millisecond)
+        let ticker = Ticker(period: 10 * millisecond)
         go {
-            for _ in ticker.channel { }
+            for _ in ticker.channel {}
         }
+        nap(100 * millisecond)
         ticker.stop()
+        nap(20 * millisecond)
     }
 
 }
