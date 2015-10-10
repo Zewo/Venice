@@ -83,7 +83,7 @@ final class FallibleChannelReceiveCase<T> : SelectCase {
     }
 
     func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        mill_choose_in(clause, channel.channel, strideof(Result<T>), Int32(index))
+        mill_choose_in(clause, channel.channel, strideof(Box<Result<T>>), Int32(index))
     }
 
     func execute() {
@@ -105,7 +105,7 @@ final class FallibleSendingChannelReceiveCase<T> : SelectCase {
     }
     
     func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        mill_choose_in(clause, channel.channel, strideof(Result<T>), Int32(index))
+        mill_choose_in(clause, channel.channel, strideof(Box<Result<T>>), Int32(index))
     }
     
     func execute() {
@@ -169,8 +169,7 @@ final class FallibleChannelSendCase<T> : SelectCase {
     }
 
     func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        var result = Result<T>.Value(self.value)
-        mill_choose_out(clause, channel.channel, &result, strideof(Result<T>), Int32(index))
+        channel.receive(value, clause: clause, index: index)
     }
 
     func execute() {
@@ -190,8 +189,7 @@ final class FallibleReceivingChannelSendCase<T> : SelectCase {
     }
     
     func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        var result = Result<T>.Value(self.value)
-        mill_choose_out(clause, channel.channel, &result, strideof(Result<T>), Int32(index))
+        channel.receive(value, clause: clause, index: index)
     }
     
     func execute() {
@@ -211,8 +209,7 @@ final class FallibleChannelSendErrorCase<T> : SelectCase {
     }
 
     func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        var result = Result<T>.Error(self.error)
-        mill_choose_out(clause, channel.channel, &result, strideof(Result<T>), Int32(index))
+        channel.receive(error, clause: clause, index: index)
     }
 
     func execute() {
@@ -232,8 +229,7 @@ final class FallibleReceivingChannelSendErrorCase<T> : SelectCase {
     }
     
     func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        var result = Result<T>.Error(self.error)
-        mill_choose_out(clause, channel.channel, &result, strideof(Result<T>), Int32(index))
+        channel.receive(error, clause: clause, index: index)
     }
     
     func execute() {

@@ -313,5 +313,148 @@ class SelectTests: XCTestCase {
         }
         XCTAssert(first > 1 && second > 1 && third > 1)
     }
+
+    func testReceivingFromSendingChannel() {
+        let channel = Channel<Int>()
+        go {
+            channel <- 555
+        }
+        sel { when in
+            when.receiveFrom(channel.sendingChannel) { value in
+                XCTAssert(value == 555)
+            }
+        }
+    }
+
+    func testReceivingFromFallibleChannel() {
+        let channel = FallibleChannel<Int>()
+        go {
+            channel <- 555
+        }
+        sel { when in
+            when.receiveFrom(channel) { result in
+                var value = 0
+                result.success { v in
+                    value = v
+                }
+                XCTAssert(value == 555)
+            }
+        }
+    }
+
+    func testReceivingErrorFromFallibleChannel() {
+        let channel = FallibleChannel<Int>()
+        go {
+            channel <- Error()
+        }
+        sel { when in
+            when.receiveFrom(channel) { result in
+                var error: ErrorType? = nil
+                result.failure { e in
+                    error = e
+                }
+                XCTAssert(error is Error)
+            }
+        }
+    }
+
+    func testReceivingFromFallibleSendingChannel() {
+        let channel = FallibleChannel<Int>()
+        go {
+            channel <- 555
+        }
+        sel { when in
+            when.receiveFrom(channel.sendingChannel) { result in
+                var value = 0
+                result.success { v in
+                    value = v
+                }
+                XCTAssert(value == 555)
+            }
+        }
+    }
+
+    func testReceivingErrorFromFallibleSendingChannel() {
+        let channel = FallibleChannel<Int>()
+        go {
+            channel <- Error()
+        }
+        sel { when in
+            when.receiveFrom(channel.sendingChannel) { result in
+                var error: ErrorType? = nil
+                result.failure { e in
+                    error = e
+                }
+                XCTAssert(error is Error)
+            }
+        }
+    }
+
+    func testSendingToReceivingChannel() {
+        let channel = Channel<Int>()
+        go {
+            let value = <-channel
+            XCTAssert(value == 777)
+        }
+        sel { when in
+            when.send(777, to: channel.receivingChannel) {}
+        }
+    }
+
+    func testSendingToFallibleChannel() {
+        let channel = FallibleChannel<Int>()
+        go {
+            let value = try! <-channel
+            XCTAssert(value == 777)
+        }
+        sel { when in
+            when.send(777, to: channel) {}
+        }
+    }
+
+    func testThrowingErrorIntoFallibleChannel() {
+        let channel = FallibleChannel<Int>()
+        go {
+            self.assertChannel(channel, catchesErrorOfType: Error.self)
+        }
+        sel { when in
+            when.throwError(Error(), into: channel) {}
+        }
+    }
+
+    func testSendingToFallibleReceivingChannel() {
+        let channel = FallibleChannel<Int>()
+        go {
+            let value = try! <-channel
+            XCTAssert(value == 777)
+        }
+        sel { when in
+            when.send(777, to: channel.receivingChannel) {}
+        }
+    }
+
+    func testThrowingErrorIntoFallibleReceivingChannel() {
+        let channel = FallibleChannel<Int>()
+        go {
+            self.assertChannel(channel, catchesErrorOfType: Error.self)
+        }
+        sel { when in
+            when.throwError(Error(), into: channel.receivingChannel) {}
+        }
+    }
+
+}
+
+extension SelectTests {
+
+    private func assertChannel<T : FallibleSendable, E>(channel: T, catchesErrorOfType type: E.Type) {
+        var thrown = false
+        do {
+            try <-channel
+        } catch _ as E {
+            thrown = true
+        } catch {}
+        XCTAssert(thrown)
+    }
     
 }

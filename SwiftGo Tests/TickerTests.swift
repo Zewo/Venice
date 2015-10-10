@@ -29,7 +29,7 @@ class TickerTests: XCTestCase {
 
     func testTicker() {
         let period = 100
-        let looseness = 150
+        let looseness = 200
         let ticker = Ticker(period: period * millisecond)
         let start = now
         var index = 1

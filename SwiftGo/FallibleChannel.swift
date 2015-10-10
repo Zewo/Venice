@@ -58,7 +58,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
     public var closed: Bool = false
     private var lastResult: Result<T>?
 
-    private var boxes: [Box<Result<T>>] = []
+    var boxes: [Box<Result<T>>] = []
 
     public convenience init() {
         self.init(bufferSize: 0)
@@ -130,6 +130,22 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
         }
     }
 
+    /// Receives a value from select.
+    func receive(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
+        if closed {
+            mill_panic("send on closed channel")
+        }
+        let result = Result<T>.Value(value)
+        lastResult = result
+        var box = Box(result)
+        boxes.append(box)
+        mill_choose_out(clause, channel, &box, strideof(Box<Result<T>>), Int32(index))
+
+        if bufferSize <= 0 || valuesInBuffer < bufferSize {
+            valuesInBuffer++
+        }
+    }
+
     /// Receives an error.
     public func receiveError(error: ErrorType) {
         if closed {
@@ -140,6 +156,22 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
         var box = Box(wrappedError)
         boxes.append(box)
         mill_chs(channel, &box, strideof(Box<Result<T>>))
+
+        if bufferSize <= 0 || valuesInBuffer < bufferSize {
+            valuesInBuffer++
+        }
+    }
+
+    /// Receives an error from select.
+    func receive(error: ErrorType, clause: UnsafeMutablePointer<Void>, index: Int) {
+        if closed {
+            mill_panic("send on closed channel")
+        }
+        let wrappedError = Result<T>.Error(error)
+        lastResult = wrappedError
+        var box = Box(wrappedError)
+        boxes.append(box)
+        mill_choose_out(clause, channel, &box, strideof(Box<Result<T>>), Int32(index))
 
         if bufferSize <= 0 || valuesInBuffer < bufferSize {
             valuesInBuffer++
@@ -176,19 +208,14 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
             return nil
         } else {
             valuesInBuffer--
-            let box = UnsafeMutablePointer<Box<Result<T>>>(pointer).memory
-            removeFromBoxes(box)
+//            let box = UnsafeMutablePointer<Box<Result<T>>>(pointer).memory
+            let box = boxes.removeFirst()
             let value = box.value
             lastResult = value
             return value
         }
     }
 
-    private func removeFromBoxes(box: Box<Result<T>>) {
-        if let index = boxes.indexOf({ $0 === box }) {
-            boxes.removeAtIndex(index)
-        }
-    }
 }
 
 extension FallibleChannel {

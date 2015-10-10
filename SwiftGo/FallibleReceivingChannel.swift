@@ -38,9 +38,17 @@ public final class FallibleReceivingChannel<T> : FallibleReceivable {
     public func receive(value: T) {
         return referenceChannel.receive(value)
     }
+
+    func receive(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
+        return referenceChannel.receive(value, clause: clause, index: index)
+    }
     
     public func receiveError(error: ErrorType) {
         return referenceChannel.receiveError(error)
+    }
+
+    func receive(error: ErrorType, clause: UnsafeMutablePointer<Void>, index: Int) {
+        return referenceChannel.receive(error, clause: clause, index: index)
     }
     
     var channel: chan {
