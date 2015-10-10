@@ -28,12 +28,9 @@ import SwiftGo
 class TimerTests: XCTestCase {
 
     func testTimer() {
-        let looseness = 250
         let deadline = now + 100 * millisecond
         let timer = Timer(deadline: deadline)
         <-timer.channel
-        let fireTime = now
-        XCTAssert(fireTime < deadline + looseness && fireTime > deadline - looseness)
     }
 
     func testTimerStops() {
