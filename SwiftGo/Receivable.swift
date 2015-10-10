@@ -30,7 +30,3 @@ public protocol Receivable {
 public func <-<R: Receivable>(receiver: R, value: R.T) {
     receiver.receive(value)
 }
-
-public func <-<R: Receivable>(receiver: R?, value: R.T) {
-    receiver?.receive(value)
-}

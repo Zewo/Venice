@@ -12,8 +12,8 @@ if arc4random_uniform(2) == 0 {
     print("disabled channel b")
 }
 
-go(channelA <- "a")
-go(channelB <- "b")
+go { channelA?.receive("a") }
+go { channelB?.receive("b") }
 
 select { when in
     when.receiveFrom(channelA) { value in
