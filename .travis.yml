@@ -23,5 +23,4 @@ script:
     -configuration Release ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES
     GCC_GENERATE_TEST_COVERAGE_FILES=YES test | xcpretty -c
 after_success:
-  
   - bash <(curl -s https://raw.githubusercontent.com/codecov/codecov-bash/master/codecov)
