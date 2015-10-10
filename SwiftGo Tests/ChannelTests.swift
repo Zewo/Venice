@@ -175,10 +175,6 @@ class ChannelTests: XCTestCase {
         XCTAssert(<-channel == 2)
     }
 
-    func expectedAbort(signo: Int) {
-
-    }
-
     func testPanicWhenSendingToChannelDeadlocks() {
         let pid = mill_fork()
         XCTAssert(pid >= 0)

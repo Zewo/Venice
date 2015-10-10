@@ -75,19 +75,19 @@ final class SendingChannelReceiveCase<T> : SelectCase {
 
 final class FallibleChannelReceiveCase<T> : SelectCase {
     let channel: FallibleChannel<T>
-    var closure: ChannelValue<T> -> Void
+    var closure: Result<T> -> Void
 
-    init(channel: FallibleChannel<T>, closure: ChannelValue<T> -> Void) {
+    init(channel: FallibleChannel<T>, closure: Result<T> -> Void) {
         self.channel = channel
         self.closure = closure
     }
 
     func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        mill_choose_in(clause, channel.channel, strideof(ChannelValue<T>), Int32(index))
+        mill_choose_in(clause, channel.channel, strideof(Result<T>), Int32(index))
     }
 
     func execute() {
-        let pointer = mill_choose_val(strideof(ChannelValue<T>))
+        let pointer = mill_choose_val(strideof(Result<T>))
         let result = channel.valueFromPointer(pointer)
         if let result = result {
             closure(result)
@@ -97,19 +97,19 @@ final class FallibleChannelReceiveCase<T> : SelectCase {
 
 final class FallibleSendingChannelReceiveCase<T> : SelectCase {
     let channel: FallibleSendingChannel<T>
-    var closure: ChannelValue<T> -> Void
+    var closure: Result<T> -> Void
 
-    init(channel: FallibleSendingChannel<T>, closure: ChannelValue<T> -> Void) {
+    init(channel: FallibleSendingChannel<T>, closure: Result<T> -> Void) {
         self.channel = channel
         self.closure = closure
     }
     
     func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        mill_choose_in(clause, channel.channel, strideof(ChannelValue<T>), Int32(index))
+        mill_choose_in(clause, channel.channel, strideof(Result<T>), Int32(index))
     }
     
     func execute() {
-        let pointer = mill_choose_val(strideof(ChannelValue<T>))
+        let pointer = mill_choose_val(strideof(Result<T>))
         let result = channel.valueFromPointer(pointer)
         if let result = result {
             closure(result)
@@ -169,8 +169,8 @@ final class FallibleChannelSendCase<T> : SelectCase {
     }
 
     func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        var channelValue = ChannelValue<T>.Value(self.value)
-        mill_choose_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
+        var result = Result<T>.Value(self.value)
+        mill_choose_out(clause, channel.channel, &result, strideof(Result<T>), Int32(index))
     }
 
     func execute() {
@@ -190,8 +190,8 @@ final class FallibleReceivingChannelSendCase<T> : SelectCase {
     }
     
     func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        var channelValue = ChannelValue<T>.Value(self.value)
-        mill_choose_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
+        var result = Result<T>.Value(self.value)
+        mill_choose_out(clause, channel.channel, &result, strideof(Result<T>), Int32(index))
     }
     
     func execute() {
@@ -211,8 +211,8 @@ final class FallibleChannelSendErrorCase<T> : SelectCase {
     }
 
     func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        var channelValue = ChannelValue<T>.Error(self.error)
-        mill_choose_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
+        var result = Result<T>.Error(self.error)
+        mill_choose_out(clause, channel.channel, &result, strideof(Result<T>), Int32(index))
     }
 
     func execute() {
@@ -232,8 +232,8 @@ final class FallibleReceivingChannelSendErrorCase<T> : SelectCase {
     }
     
     func register(clause: UnsafeMutablePointer<Void>, index: Int) {
-        var channelValue = ChannelValue<T>.Error(self.error)
-        mill_choose_out(clause, channel.channel, &channelValue, strideof(ChannelValue<T>), Int32(index))
+        var result = Result<T>.Error(self.error)
+        mill_choose_out(clause, channel.channel, &result, strideof(Result<T>), Int32(index))
     }
     
     func execute() {
@@ -277,14 +277,14 @@ public class SelectCaseBuilder {
         }
     }
 
-    public func receiveFrom<T>(channel: FallibleChannel<T>?, closure: ChannelValue<T> -> Void) {
+    public func receiveFrom<T>(channel: FallibleChannel<T>?, closure: Result<T> -> Void) {
         if let channel = channel {
             let patternCase = FallibleChannelReceiveCase(channel: channel, closure: closure)
             cases.append(patternCase)
         }
     }
     
-    public func receiveFrom<T>(channel: FallibleSendingChannel<T>?, closure: ChannelValue<T> -> Void) {
+    public func receiveFrom<T>(channel: FallibleSendingChannel<T>?, closure: Result<T> -> Void) {
         if let channel = channel {
             let patternCase = FallibleSendingChannelReceiveCase(channel: channel, closure: closure)
             cases.append(patternCase)

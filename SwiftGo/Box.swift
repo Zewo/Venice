@@ -1,4 +1,4 @@
-// FallibleReceivingChannel.swift
+// Box.swift
 //
 // The MIT License (MIT)
 //
@@ -22,32 +22,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Libmill
+final class Box<T> {
+    let value: T
 
-public final class FallibleReceivingChannel<T> : FallibleReceivable {
-    private let referenceChannel: FallibleChannel<T>
-    
-    init(_ channel: FallibleChannel<T>) {
-        self.referenceChannel = channel
+    init(_ value: T) {
+        self.value = value
     }
 
-    public func receiveResult(result: Result<T>) {
-        return referenceChannel.receiveResult(result)
-    }
-    
-    public func receive(value: T) {
-        return referenceChannel.receive(value)
-    }
-    
-    public func receiveError(error: ErrorType) {
-        return referenceChannel.receiveError(error)
-    }
-    
-    var channel: chan {
-        return referenceChannel.channel
-    }
-    
-    var closed: Bool {
-        return referenceChannel.closed
-    }
 }

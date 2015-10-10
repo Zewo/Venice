@@ -34,6 +34,10 @@ public final class FallibleSendingChannel<T> : FallibleSendable, SequenceType {
     public func send() throws -> T? {
         return try referenceChannel.send()
     }
+
+    public func sendResult() -> Result<T>? {
+        return referenceChannel.sendResult()
+    }
     
     public func generate() -> FallibleChannelGenerator<T> {
         return FallibleChannelGenerator(channel: self)
@@ -47,7 +51,7 @@ public final class FallibleSendingChannel<T> : FallibleSendable, SequenceType {
         return referenceChannel.channel
     }
     
-    func valueFromPointer(pointer: UnsafeMutablePointer<Void>) -> ChannelValue<T>? {
+    func valueFromPointer(pointer: UnsafeMutablePointer<Void>) -> Result<T>? {
         return referenceChannel.valueFromPointer(pointer)
     }
 }
