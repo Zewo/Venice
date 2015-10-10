@@ -71,13 +71,6 @@ chan mill_chmake(size_t sz, size_t bufsz) {
     return ch;
 }
 
-chan mill_chdup(chan ch) {
-    if(mill_slow(!ch))
-        mill_panic("null channel used");
-    ++ch->refcount;
-    return ch;
-}
-
 void mill_chclose(chan ch) {
     if(mill_slow(!ch))
         mill_panic("null channel used");

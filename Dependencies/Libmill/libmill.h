@@ -112,7 +112,6 @@ typedef struct mill_chan *chan;
     void *f5; void *f6; int f7; int f8; int f9;}))
 
 MILL_EXPORT chan mill_chmake(size_t sz, size_t bufsz);
-MILL_EXPORT chan mill_chdup(chan ch);
 MILL_EXPORT void mill_chs(chan ch, void *val, size_t sz);
 MILL_EXPORT void *mill_chr(chan ch, size_t sz);
 MILL_EXPORT void mill_chdone(chan ch, void *val, size_t sz);
