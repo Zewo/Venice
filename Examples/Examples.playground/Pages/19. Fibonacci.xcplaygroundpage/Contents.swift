@@ -1,31 +1,22 @@
 import SwiftGo
 
-func fibonacci(channel: Channel<Int>, quit: Channel<Void>) {
+func fibonacci(n: Int, channel: Channel<Int>) {
     var x = 0
     var y = 1
-    var done = false
-    while !done {
-        select { when in
-            when.send(x, to: channel) {
-                x = y
-                y = x + y
-            }
-            when.receiveFrom(quit) { _ in
-                print("quit")
-                done = true
-            }
-        }
+    var z = 0
+    for _ in 0 ..< n {
+        channel <- x
+        z = x
+        x = y
+        y = z + y
     }
+    channel.close()
 }
 
-let channel = Channel<Int>()
-let quit = Channel<Void>()
+let fibonacciChannel = Channel<Int>(bufferSize: 10)
 
-go {
-    for _ in 0 ..< 10 {
-        print(!<-channel)
-    }
-    quit <- Void()
+go(fibonacci(fibonacciChannel.bufferSize, channel: fibonacciChannel))
+
+for n in fibonacciChannel {
+    print(n)
 }
-
-fibonacci(channel, quit: quit)
