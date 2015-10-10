@@ -84,6 +84,16 @@ class ChannelTests: XCTestCase {
         XCTAssert(value2 == 999)
     }
 
+    func testChannelIteration() {
+        let queue =  Channel<Int>(bufferSize: 2)
+        queue <- 555
+        queue <- 555
+        queue.close()
+        for element in queue {
+            XCTAssert(element == 555)
+        }
+    }
+
     func testTwoSimultaneousReceivers() {
         let channel = Channel<Int>()
         go {
