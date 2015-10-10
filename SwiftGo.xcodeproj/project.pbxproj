@@ -95,6 +95,10 @@
 		B05B23511BC899CB00567BD8 /* FallibleChannelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */; settings = {ASSET_TAGS = (); }; };
 		B05B23531BC94C9700567BD8 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B23521BC94C9700567BD8 /* Box.swift */; settings = {ASSET_TAGS = (); }; };
 		B05B23541BC94C9700567BD8 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B23521BC94C9700567BD8 /* Box.swift */; settings = {ASSET_TAGS = (); }; };
+		B05B23561BC99AD900567BD8 /* TickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B23551BC99AD900567BD8 /* TickerTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B05B23571BC99AD900567BD8 /* TickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B23551BC99AD900567BD8 /* TickerTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B05B23591BC99F2500567BD8 /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B23581BC99F2500567BD8 /* TimerTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B05B235A1BC99F2500567BD8 /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B23581BC99F2500567BD8 /* TimerTests.swift */; settings = {ASSET_TAGS = (); }; };
 		B06CEBA61BAE026200A88073 /* Go.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E201B7E6353004CBD6E /* Go.swift */; };
 		B06CEBA71BAE026200A88073 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E221B7E6380004CBD6E /* Channel.swift */; };
 		B06CEBA81BAE026200A88073 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E241B7E63BA004CBD6E /* Select.swift */; };
@@ -187,6 +191,8 @@
 		B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectTests.swift; sourceTree = "<group>"; };
 		B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FallibleChannelTests.swift; sourceTree = "<group>"; };
 		B05B23521BC94C9700567BD8 /* Box.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Box.swift; path = SwiftGo/Box.swift; sourceTree = "<group>"; };
+		B05B23551BC99AD900567BD8 /* TickerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TickerTests.swift; sourceTree = "<group>"; };
+		B05B23581BC99F2500567BD8 /* TimerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerTests.swift; sourceTree = "<group>"; };
 		B06CEB961BAE020600A88073 /* SwiftGo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftGo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B07C3D1C1BC5E098008564C3 /* SwiftGo iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftGo iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B07C3D281BC60A32008564C3 /* GoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoTests.swift; sourceTree = "<group>"; };
@@ -259,6 +265,8 @@
 				B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */,
 				B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */,
 				3A36CA161BC53AE300B02006 /* PerformanceTests.swift */,
+				B05B23581BC99F2500567BD8 /* TimerTests.swift */,
+				B05B23551BC99AD900567BD8 /* TickerTests.swift */,
 				3A36CA181BC53AE300B02006 /* Info.plist */,
 			);
 			path = "SwiftGo Tests";
@@ -601,10 +609,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A36CA171BC53AE300B02006 /* PerformanceTests.swift in Sources */,
+				B05B23591BC99F2500567BD8 /* TimerTests.swift in Sources */,
 				B07C3D2C1BC60D3C008564C3 /* ChannelTests.swift in Sources */,
 				B07C3D291BC60A32008564C3 /* GoTests.swift in Sources */,
 				B016B46B1BC6D4FC00488CD8 /* SelectTests.swift in Sources */,
 				B05B23501BC899CA00567BD8 /* FallibleChannelTests.swift in Sources */,
+				B05B23561BC99AD900567BD8 /* TickerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -644,10 +654,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				B07C3D271BC5E0D3008564C3 /* PerformanceTests.swift in Sources */,
+				B05B235A1BC99F2500567BD8 /* TimerTests.swift in Sources */,
 				B07C3D2D1BC60D3C008564C3 /* ChannelTests.swift in Sources */,
 				B07C3D2A1BC60A32008564C3 /* GoTests.swift in Sources */,
 				B016B46C1BC6D4FC00488CD8 /* SelectTests.swift in Sources */,
 				B05B23511BC899CB00567BD8 /* FallibleChannelTests.swift in Sources */,
+				B05B23571BC99AD900567BD8 /* TickerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
