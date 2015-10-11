@@ -43,8 +43,6 @@ struct mill_chan *mill_getchan(struct mill_ep *ep) {
         return mill_cont(ep, struct mill_chan, sender);
     case MILL_RECEIVER:
         return mill_cont(ep, struct mill_chan, receiver);
-    default:
-        assert(0);
     }
 }
 
@@ -69,8 +67,6 @@ chan mill_chmake(size_t bufsz) {
 }
 
 void mill_chclose(chan ch) {
-    if(mill_slow(!ch))
-        mill_panic("null channel used");
     assert(ch->refcount > 0);
     --ch->refcount;
     if(ch->refcount)
@@ -109,8 +105,6 @@ void mill_choose_init() {
 }
 
 void mill_choose_in(void *clause, chan ch, int idx) {
-    if(mill_slow(!ch))
-        mill_panic("null channel used");
     /* Find out whether the clause is immediately available. */
     int available = ch->done || !mill_list_empty(&ch->sender.clauses) ||
         ch->items ? 1 : 0;
@@ -137,10 +131,6 @@ void mill_choose_in(void *clause, chan ch, int idx) {
 }
 
 void mill_choose_out(void *clause, chan ch, int idx) {
-    if(mill_slow(!ch))
-        mill_panic("null channel used");
-    if(mill_slow(ch->done))
-        mill_panic("send to done-with channel");
     /* Find out whether the clause is immediately available. */
     int available = !mill_list_empty(&ch->receiver.clauses) ||
         ch->items < ch->bufsz ? 1 : 0;
@@ -167,8 +157,6 @@ void mill_choose_out(void *clause, chan ch, int idx) {
 }
 
 void mill_choose_otherwise(void) {
-    if(mill_slow(mill_running->u_choose.othws != 0))
-        mill_panic("multiple 'otherwise' clauses in a choose statement");
     mill_running->u_choose.othws = 1;
 }
 
@@ -265,8 +253,6 @@ int mill_choose_wait(void) {
 }
 
 void mill_chs(chan ch) {
-    if(mill_slow(!ch))
-        mill_panic("null channel used");
     mill_choose_init_();
     mill_running->state = MILL_CHS;
     struct mill_clause cl;
@@ -275,8 +261,6 @@ void mill_chs(chan ch) {
 }
 
 void mill_chr(chan ch) {
-    if(mill_slow(!ch))
-        mill_panic("null channel used");
     mill_running->state = MILL_CHR;
     mill_choose_init_();
     struct mill_clause cl;
@@ -285,10 +269,6 @@ void mill_chr(chan ch) {
 }
 
 void mill_chdone(chan ch) {
-    if(mill_slow(!ch))
-        mill_panic("null channel used");
-    if(mill_slow(ch->done))
-        mill_panic("chdone on already done-with channel");
     /* Panic if there are other senders on the same channel. */
     if(mill_slow(!mill_list_empty(&ch->sender.clauses)))
         mill_panic("send to done-with channel");
