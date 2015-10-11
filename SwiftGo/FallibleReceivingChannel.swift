@@ -25,33 +25,33 @@
 import Libmill
 
 public final class FallibleReceivingChannel<T> : FallibleReceivable {
-    private let referenceChannel: FallibleChannel<T>
+    private let channel: FallibleChannel<T>
     
     init(_ channel: FallibleChannel<T>) {
-        self.referenceChannel = channel
+        self.channel = channel
     }
 
     public func receiveResult(result: Result<T>) {
-        return referenceChannel.receiveResult(result)
+        return channel.receiveResult(result)
     }
     
     public func receive(value: T) {
-        return referenceChannel.receive(value)
+        return channel.receive(value)
     }
 
     func receive(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
-        return referenceChannel.receive(value, clause: clause, index: index)
+        return channel.receive(value, clause: clause, index: index)
     }
     
     public func receiveError(error: ErrorType) {
-        return referenceChannel.receiveError(error)
+        return channel.receiveError(error)
     }
 
     func receive(error: ErrorType, clause: UnsafeMutablePointer<Void>, index: Int) {
-        return referenceChannel.receive(error, clause: clause, index: index)
+        return channel.receive(error, clause: clause, index: index)
     }
     
     var closed: Bool {
-        return referenceChannel.closed
+        return channel.closed
     }
 }

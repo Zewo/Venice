@@ -25,14 +25,14 @@
 import Libmill
 
 public final class SendingChannel<T> : Sendable, SequenceType {
-    private let referenceChannel: Channel<T>
+    private let channel: Channel<T>
     
     init(_ channel: Channel<T>) {
-        self.referenceChannel = channel
+        self.channel = channel
     }
     
     public func send() -> T? {
-        return referenceChannel.send()
+        return channel.send()
     }
     
     public func generate() -> ChannelGenerator<T> {
@@ -40,14 +40,14 @@ public final class SendingChannel<T> : Sendable, SequenceType {
     }
     
     public func close() {
-        referenceChannel.close()
+        channel.close()
     }
     
-    var channel: chan {
-        return referenceChannel.channel
+    public func registerSend(clause: UnsafeMutablePointer<Void>, index: Int) {
+        return channel.registerSend(clause, index: index)
     }
     
-    func valueFromPointer(pointer: UnsafeMutablePointer<Void>) -> T? {
-        return referenceChannel.valueFromPointer(pointer)
+    func getValueFromBuffer() -> T? {
+        return channel.getValueFromBuffer()
     }
 }

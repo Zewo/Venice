@@ -25,18 +25,18 @@
 import Libmill
 
 public final class FallibleSendingChannel<T> : FallibleSendable, SequenceType {
-    private let referenceChannel: FallibleChannel<T>
+    private let channel: FallibleChannel<T>
     
     init(_ channel: FallibleChannel<T>) {
-        self.referenceChannel = channel
+        self.channel = channel
     }
     
     public func send() throws -> T? {
-        return try referenceChannel.send()
+        return try channel.send()
     }
 
     public func sendResult() -> Result<T>? {
-        return referenceChannel.sendResult()
+        return channel.sendResult()
     }
     
     public func generate() -> FallibleChannelGenerator<T> {
@@ -44,14 +44,15 @@ public final class FallibleSendingChannel<T> : FallibleSendable, SequenceType {
     }
     
     public func close() {
-        referenceChannel.close()
+        channel.close()
     }
-    
-    var channel: chan {
-        return referenceChannel.channel
+
+    func registerSend(clause: UnsafeMutablePointer<Void>, index: Int) {
+        return channel.registerSend(clause, index: index)
     }
-    
-    func valueFromPointer(pointer: UnsafeMutablePointer<Void>) -> Result<T>? {
-        return referenceChannel.valueFromPointer(pointer)
+
+    func getResultFromBuffer() -> Result<T>? {
+        return channel.getResultFromBuffer()
     }
+
 }

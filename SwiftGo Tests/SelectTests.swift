@@ -263,7 +263,7 @@ class SelectTests: XCTestCase {
         let channel = Channel<Int>()
         go {
             while true {
-                nap(10 * millisecond)
+                nap(1 * millisecond)
                 channel <- 333
             }
         }
@@ -301,7 +301,7 @@ class SelectTests: XCTestCase {
         var second = 0
         var third = 0
         for _ in 0 ..< 100 {
-            nap(10 * millisecond)
+            nap(1 * millisecond)
             let value = !<-channel
             switch value {
             case 1: ++first

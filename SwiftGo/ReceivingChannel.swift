@@ -25,21 +25,21 @@
 import Libmill
 
 public final class ReceivingChannel<T> : Receivable {
-    private let referenceChannel: Channel<T>
+    private let channel: Channel<T>
     
     init(_ channel: Channel<T>) {
-        self.referenceChannel = channel
+        self.channel = channel
     }
     
     public func receive(value: T) {
-        return referenceChannel.receive(value)
+        return channel.receive(value)
     }
     
-    var channel: chan {
-        return referenceChannel.channel
+    func receive(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
+        return channel.receive(value, clause: clause, index: index)
     }
-    
+
     var closed: Bool {
-        return referenceChannel.closed
+        return channel.closed
     }
 }

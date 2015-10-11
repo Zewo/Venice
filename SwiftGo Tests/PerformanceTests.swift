@@ -25,61 +25,47 @@
 import XCTest
 import SwiftGo
 
-let thousand = 1000
-let million = 1000000
-
 class PerformanceTests: XCTestCase {
 
-    func testCoroutinePerformanceSwiftGo() {
-        self.measureMetrics(XCTestCase.defaultPerformanceMetrics(), automaticallyStartMeasuring: false) {
-            let channel = Channel<Void>()
-            self.startMeasuring()
-            go {
-                self.stopMeasuring()
-                channel <- Void()
-            }
-            <-channel
-        }
-    }
-    
-    func testThreadPerformanceGCD() {
-        self.measureMetrics(XCTestCase.defaultPerformanceMetrics(), automaticallyStartMeasuring: false) {
-            let semaphore = dispatch_semaphore_create(0)
-            let queue =  dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-            self.startMeasuring()
-            dispatch_async(queue) {
-                self.stopMeasuring()
-                dispatch_semaphore_signal(semaphore)
-            }
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-        }
-    }
-    
     func testSyncPerformanceSwiftGo() {
         self.measureBlock {
+            let numberOfSyncs = 10000
             let channel = Channel<Void>()
-            go {
-                channel <- Void()
+            for _ in 0 ..< numberOfSyncs {
+                go {
+                    channel <- Void()
+                }
+                <-channel
             }
-            <-channel
-        }
-    }
-    
-    func testSyncPerformanceGCD() {
-        self.measureBlock {
-            let semaphore = dispatch_semaphore_create(0)
-            let queue =  dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-            dispatch_async(queue) {
-                dispatch_semaphore_signal(semaphore)
-            }
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
         }
     }
 
-    func testMillionCoroutines() {
+    func testSyncPerformanceGCD() {
         self.measureBlock {
-            let numberOfCoroutines = million
+            let numberOfSyncs = 10000
+            let semaphore = dispatch_semaphore_create(0)
+            let queue =  dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+            for _ in 0 ..< numberOfSyncs {
+                dispatch_async(queue) {
+                    dispatch_semaphore_signal(semaphore)
+                }
+                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+            }
+        }
+    }
+
+    func testManyCoroutines() {
+        self.measureBlock {
+            let numberOfCoroutines = 10000
             for _ in 0 ..< numberOfCoroutines { go {} }
+        }
+    }
+
+    func testManyThreads() {
+        self.measureBlock {
+            let numberOfThreads = 10000
+            let queue =  dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+            for _ in 0 ..< numberOfThreads { dispatch_async(queue) {} }
         }
     }
 
@@ -89,7 +75,7 @@ class PerformanceTests: XCTestCase {
                 left <- 1 + !<-right
             }
 
-            let numberOfWhispers = thousand
+            let numberOfWhispers = 10000
 
             let leftmost = Channel<Int>()
             var right = leftmost
@@ -100,15 +86,15 @@ class PerformanceTests: XCTestCase {
                 go(whisper(left.receivingChannel, right.sendingChannel))
                 left = right
             }
-            
+
             go(right <- 1)
             XCTAssert(!<-leftmost == numberOfWhispers + 1)
         }
     }
 
-    func testMillionContextSwitches() {
+    func testManyContextSwitches() {
         self.measureBlock {
-            let numberOfContextSwitches = million
+            let numberOfContextSwitches = 10000
             let count = numberOfContextSwitches / 2
             go {
                 for _ in 0 ..< count {
@@ -121,9 +107,9 @@ class PerformanceTests: XCTestCase {
         }
     }
 
-    func testSendReceiveMillionMessages() {
+    func testSendReceiveManyMessages() {
         self.measureBlock {
-            let numberOfMessages = million
+            let numberOfMessages = 10000
             let channel = Channel<Int>(bufferSize: numberOfMessages)
             for _ in 0 ..< numberOfMessages {
                 channel <- 0
@@ -134,9 +120,9 @@ class PerformanceTests: XCTestCase {
         }
     }
 
-    func testMillionRoundTrips() {
+    func testManyRoundTrips() {
         self.measureBlock {
-            let numberOfRoundTrips = million
+            let numberOfRoundTrips = 10000
             let input = Channel<Int>()
             let output = Channel<Int>()
             let initiaValue = 1969

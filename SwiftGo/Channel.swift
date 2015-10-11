@@ -33,10 +33,9 @@ public struct ChannelGenerator<T> : GeneratorType {
 }
 
 public final class Channel<T> : SequenceType, Sendable, Receivable {
-    let channel: chan
-    public let bufferSize: Int
+    private let channel: chan
     public var closed: Bool = false
-    private var values: [T] = []
+    private var buffer: [T] = []
 
     public convenience init() {
         self.init(bufferSize: 0)
@@ -44,7 +43,6 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
 
     public init(bufferSize: Int) {
         self.channel = mill_chmake(strideof(T), bufferSize)
-        self.bufferSize = bufferSize
     }
 
     deinit {
@@ -67,7 +65,6 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
         if closed {
             mill_panic("tried to close an already closed channel")
         }
-        
         closed = true
         mill_chdone(channel, nil, strideof(T))
     }
@@ -77,25 +74,37 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
         if closed {
             mill_panic("send on closed channel")
         }
-        values.append(value)
+        buffer.append(value)
         mill_chs(channel, &value, strideof(T))
+    }
+
+    /// Receives a value from select.
+    func receive(var value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
+        if closed {
+            mill_panic("send on closed channel")
+        }
+        buffer.append(value)
+        mill_choose_out(clause, channel, &value, strideof(T), Int32(index))
     }
 
     /// Sends a value.
     public func send() -> T? {
-        if closed && values.count <= 0 {
+        if closed && buffer.count <= 0 {
             return nil
         }
-        let pointer = mill_chr(channel, strideof(T))
-        return valueFromPointer(pointer)
+        mill_chr(channel, strideof(T))
+        return getValueFromBuffer()
+    }
+
+    func registerSend(clause: UnsafeMutablePointer<Void>, index: Int) {
+        mill_choose_in(clause, channel, strideof(T), Int32(index))
     }
     
-    func valueFromPointer(pointer: UnsafeMutablePointer<Void>) -> T? {
-        if closed && values.count <= 0 {
+    func getValueFromBuffer() -> T? {
+        if closed && buffer.count <= 0 {
             return nil
-        } else {
-            return values.removeFirst()
         }
+        return buffer.removeFirst()
     }
 }
 
