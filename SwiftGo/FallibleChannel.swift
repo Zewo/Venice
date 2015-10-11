@@ -81,60 +81,54 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
 
     /// Closes the channel. When a channel is closed it cannot receive values anymore.
     public func close() {
-        if closed {
-            mill_panic("tried to close an already closed channel")
+        if !closed {
+            closed = true
+            mill_chdone(channel)
         }
-        closed = true
-        mill_chdone(channel)
     }
 
     /// Receives a result.
     public func receiveResult(result: Result<T>) {
-        if closed {
-            mill_panic("send on closed channel")
+        if !closed {
+            buffer.append(result)
+            mill_chs(channel)
         }
-        buffer.append(result)
-        mill_chs(channel)
     }
 
     /// Receives a value.
     public func receive(value: T) {
-        if closed {
-            mill_panic("send on closed channel")
+        if !closed {
+            let result = Result<T>.Value(value)
+            buffer.append(result)
+            mill_chs(channel)
         }
-        let result = Result<T>.Value(value)
-        buffer.append(result)
-        mill_chs(channel)
     }
 
     /// Receives a value from select.
     func receive(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
-        if closed {
-            mill_panic("send on closed channel")
+        if !closed {
+            let result = Result<T>.Value(value)
+            buffer.append(result)
+            mill_choose_out(clause, channel, Int32(index))
         }
-        let result = Result<T>.Value(value)
-        buffer.append(result)
-        mill_choose_out(clause, channel, Int32(index))
     }
 
     /// Receives an error.
     public func receiveError(error: ErrorType) {
-        if closed {
-            mill_panic("send on closed channel")
+        if !closed {
+            let result = Result<T>.Error(error)
+            buffer.append(result)
+            mill_chs(channel)
         }
-        let result = Result<T>.Error(error)
-        buffer.append(result)
-        mill_chs(channel)
     }
 
     /// Receives an error from select.
     func receive(error: ErrorType, clause: UnsafeMutablePointer<Void>, index: Int) {
-        if closed {
-            mill_panic("send on closed channel")
+        if !closed {
+            let result = Result<T>.Error(error)
+            buffer.append(result)
+            mill_choose_out(clause, channel, Int32(index))
         }
-        let result = Result<T>.Error(error)
-        buffer.append(result)
-        mill_choose_out(clause, channel, Int32(index))
     }
 
     /// Sends a value.

@@ -62,29 +62,26 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
 
     /// Closes the channel. When a channel is closed it cannot receive values anymore.
     public func close() {
-        if closed {
-            mill_panic("tried to close an already closed channel")
+        if !closed {
+            closed = true
+            mill_chdone(channel)
         }
-        closed = true
-        mill_chdone(channel)
     }
 
     /// Receives a value.
     public func receive(value: T) {
-        if closed {
-            mill_panic("send on closed channel")
+        if !closed {
+            buffer.append(value)
+            mill_chs(channel)
         }
-        buffer.append(value)
-        mill_chs(channel)
     }
 
     /// Receives a value from select.
     func receive(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
-        if closed {
-            mill_panic("send on closed channel")
+        if !closed {
+            buffer.append(value)
+            mill_choose_out(clause, channel, Int32(index))
         }
-        buffer.append(value)
-        mill_choose_out(clause, channel, Int32(index))
     }
 
     /// Sends a value.
