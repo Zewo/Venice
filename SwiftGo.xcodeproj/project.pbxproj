@@ -93,8 +93,6 @@
 		B016B46C1BC6D4FC00488CD8 /* SelectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */; settings = {ASSET_TAGS = (); }; };
 		B05B23501BC899CA00567BD8 /* FallibleChannelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */; settings = {ASSET_TAGS = (); }; };
 		B05B23511BC899CB00567BD8 /* FallibleChannelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */; settings = {ASSET_TAGS = (); }; };
-		B05B23531BC94C9700567BD8 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B23521BC94C9700567BD8 /* Box.swift */; settings = {ASSET_TAGS = (); }; };
-		B05B23541BC94C9700567BD8 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B23521BC94C9700567BD8 /* Box.swift */; settings = {ASSET_TAGS = (); }; };
 		B05B23561BC99AD900567BD8 /* TickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B23551BC99AD900567BD8 /* TickerTests.swift */; settings = {ASSET_TAGS = (); }; };
 		B05B23571BC99AD900567BD8 /* TickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B23551BC99AD900567BD8 /* TickerTests.swift */; settings = {ASSET_TAGS = (); }; };
 		B05B23591BC99F2500567BD8 /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B23581BC99F2500567BD8 /* TimerTests.swift */; settings = {ASSET_TAGS = (); }; };
@@ -190,7 +188,6 @@
 		B004C8AB1BAF08A300C0919E /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectTests.swift; sourceTree = "<group>"; };
 		B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FallibleChannelTests.swift; sourceTree = "<group>"; };
-		B05B23521BC94C9700567BD8 /* Box.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Box.swift; path = SwiftGo/Box.swift; sourceTree = "<group>"; };
 		B05B23551BC99AD900567BD8 /* TickerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TickerTests.swift; sourceTree = "<group>"; };
 		B05B23581BC99F2500567BD8 /* TimerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerTests.swift; sourceTree = "<group>"; };
 		B06CEB961BAE020600A88073 /* SwiftGo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftGo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -335,7 +332,6 @@
 				3A36C9F61BC538C200B02006 /* SwiftGo.h */,
 				B0E27E201B7E6353004CBD6E /* Go.swift */,
 				B003AD821BAF84F700AAD51E /* Operators.swift */,
-				B05B23521BC94C9700567BD8 /* Box.swift */,
 				B0E27E221B7E6380004CBD6E /* Channel.swift */,
 				3A568BC11BB1814700548E11 /* Receivable.swift */,
 				3A568BC41BB1819D00548E11 /* Sendable.swift */,
@@ -643,7 +639,6 @@
 				3A568BC01BB180AF00548E11 /* SendingChannel.swift in Sources */,
 				B06CEBA61BAE026200A88073 /* Go.swift in Sources */,
 				B004C8BF1BAF08A300C0919E /* slist.c in Sources */,
-				B05B23541BC94C9700567BD8 /* Box.swift in Sources */,
 				B003AD811BAF838B00AAD51E /* FallibleChannel.swift in Sources */,
 				3A568BCF1BB183D400548E11 /* FallibleReceivingChannel.swift in Sources */,
 			);
@@ -688,7 +683,6 @@
 				3A568BBF1BB180AF00548E11 /* SendingChannel.swift in Sources */,
 				B0E8CE811B82EC6F007F6857 /* Go.swift in Sources */,
 				B004C8BE1BAF08A300C0919E /* slist.c in Sources */,
-				B05B23531BC94C9700567BD8 /* Box.swift in Sources */,
 				B003AD801BAF838B00AAD51E /* FallibleChannel.swift in Sources */,
 				3A568BCE1BB183D400548E11 /* FallibleReceivingChannel.swift in Sources */,
 			);

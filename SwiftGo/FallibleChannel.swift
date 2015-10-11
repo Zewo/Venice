@@ -54,7 +54,7 @@ public enum Result<T> {
 public final class FallibleChannel<T> : SequenceType, FallibleSendable, FallibleReceivable {
     private let channel: chan
     public var closed: Bool = false
-    private var buffer: [Box<Result<T>>] = []
+    private var buffer: [Result<T>] = []
 
     public convenience init() {
         self.init(bufferSize: 0)
@@ -93,8 +93,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
         if closed {
             mill_panic("send on closed channel")
         }
-        let box = Box(result)
-        buffer.append(box)
+        buffer.append(result)
         mill_chs(channel)
     }
 
@@ -104,8 +103,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
             mill_panic("send on closed channel")
         }
         let result = Result<T>.Value(value)
-        let box = Box(result)
-        buffer.append(box)
+        buffer.append(result)
         mill_chs(channel)
     }
 
@@ -115,8 +113,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
             mill_panic("send on closed channel")
         }
         let result = Result<T>.Value(value)
-        let box = Box(result)
-        buffer.append(box)
+        buffer.append(result)
         mill_choose_out(clause, channel, Int32(index))
     }
 
@@ -126,8 +123,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
             mill_panic("send on closed channel")
         }
         let result = Result<T>.Error(error)
-        let box = Box(result)
-        buffer.append(box)
+        buffer.append(result)
         mill_chs(channel)
     }
 
@@ -137,8 +133,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
             mill_panic("send on closed channel")
         }
         let result = Result<T>.Error(error)
-        let box = Box(result)
-        buffer.append(box)
+        buffer.append(result)
         mill_choose_out(clause, channel, Int32(index))
     }
 
@@ -175,8 +170,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
         if closed && buffer.count <= 0 {
             return nil
         }
-        let box = buffer.removeFirst()
-        return box.value
+        return buffer.removeFirst()
     }
 
 }
