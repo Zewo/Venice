@@ -269,9 +269,6 @@ void mill_chr(chan ch) {
 }
 
 void mill_chdone(chan ch) {
-    /* Panic if there are other senders on the same channel. */
-    if(mill_slow(!mill_list_empty(&ch->sender.clauses)))
-        mill_panic("send to done-with channel");
     /* Put the channel into done-with mode. */
     ch->done = 1;
     /* Resume all the receivers currently waiting on the channel. */
