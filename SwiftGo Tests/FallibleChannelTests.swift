@@ -386,6 +386,9 @@ class FallibleChannelTests: XCTestCase {
             result.success { v in
                 value = v
             }
+            result.failure { _ in
+                XCTAssert(false)
+            }
             XCTAssert(value == 555)
         }
     }
@@ -399,6 +402,9 @@ class FallibleChannelTests: XCTestCase {
             var error: ErrorType? = nil
             result.failure { e in
                 error = e
+            }
+            result.success { _ in
+                XCTAssert(false)
             }
             XCTAssert(error is Error)
         }
