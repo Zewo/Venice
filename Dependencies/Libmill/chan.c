@@ -48,15 +48,13 @@ struct mill_chan *mill_getchan(struct mill_ep *ep) {
     }
 }
 
-chan mill_chmake(size_t sz, size_t bufsz) {
+chan mill_chmake(size_t bufsz) {
     /* We are allocating 1 additional element after the channel buffer to
        store the done-with value. It can't be stored in the regular buffer
        because that would mean chdone() would block when buffer is full. */
-    struct mill_chan *ch = (struct mill_chan*)
-        malloc(sizeof(struct mill_chan) + (sz * (bufsz + 1)));
+    struct mill_chan *ch = (struct mill_chan*) malloc(sizeof(struct mill_chan));
     if(!ch)
         return NULL;
-    ch->sz = sz;
     ch->sender.type = MILL_SENDER;
     ch->sender.seqnum = mill_choose_seqnum;
     mill_list_init(&ch->sender.clauses);
@@ -67,7 +65,6 @@ chan mill_chmake(size_t sz, size_t bufsz) {
     ch->done = 0;
     ch->bufsz = bufsz;
     ch->items = 0;
-    ch->first = 0;
     return ch;
 }
 
@@ -111,11 +108,9 @@ void mill_choose_init() {
     mill_choose_init_();
 }
 
-void mill_choose_in(void *clause, chan ch, size_t sz, int idx) {
+void mill_choose_in(void *clause, chan ch, int idx) {
     if(mill_slow(!ch))
         mill_panic("null channel used");
-    if(mill_slow(ch->sz != sz))
-        mill_panic("receive of a type not matching the channel");
     /* Find out whether the clause is immediately available. */
     int available = ch->done || !mill_list_empty(&ch->sender.clauses) ||
         ch->items ? 1 : 0;
@@ -128,7 +123,6 @@ void mill_choose_in(void *clause, chan ch, size_t sz, int idx) {
     struct mill_clause *cl = (struct mill_clause*) clause;
     cl->cr = mill_running;
     cl->ep = &ch->receiver;
-    cl->val = NULL;
     cl->idx = idx;
     cl->available = available;
     cl->used = 1;
@@ -142,13 +136,11 @@ void mill_choose_in(void *clause, chan ch, size_t sz, int idx) {
     cl->ep->tmp = -1;
 }
 
-void mill_choose_out(void *clause, chan ch, void *val, size_t sz, int idx) {
+void mill_choose_out(void *clause, chan ch, int idx) {
     if(mill_slow(!ch))
         mill_panic("null channel used");
     if(mill_slow(ch->done))
         mill_panic("send to done-with channel");
-    if(mill_slow(ch->sz != sz))
-        mill_panic("send of a type not matching the channel");
     /* Find out whether the clause is immediately available. */
     int available = !mill_list_empty(&ch->receiver.clauses) ||
         ch->items < ch->bufsz ? 1 : 0;
@@ -161,7 +153,6 @@ void mill_choose_out(void *clause, chan ch, void *val, size_t sz, int idx) {
     struct mill_clause *cl = (struct mill_clause*) clause;
     cl->cr = mill_running;
     cl->ep = &ch->sender;
-    cl->val = val;
     cl->available = available;
     cl->idx = idx;
     cl->used = 1;
@@ -182,24 +173,20 @@ void mill_choose_otherwise(void) {
 }
 
 /* Push new item to the channel. */
-static void mill_enqueue(chan ch, void *val) {
+static void mill_enqueue(chan ch) {
     /* If there's a receiver already waiting, let's resume it. */
     if(!mill_list_empty(&ch->receiver.clauses)) {
-        struct mill_clause *cl = mill_cont(
-            mill_list_begin(&ch->receiver.clauses), struct mill_clause, epitem);
-        memcpy(mill_valbuf(cl->cr, ch->sz), val, ch->sz);
+        struct mill_clause *cl = mill_cont(mill_list_begin(&ch->receiver.clauses), struct mill_clause, epitem);
         mill_choose_unblock(cl);
         return;
     }
     /* Write the value to the buffer. */
     assert(ch->items < ch->bufsz);
-    size_t pos = (ch->first + ch->items) % ch->bufsz;
-    memcpy(((char*)(ch + 1)) + (pos * ch->sz) , val, ch->sz);
     ++ch->items;
 }
 
 /* Pop one value from the channel. */
-static void mill_dequeue(chan ch, void *val) {
+static void mill_dequeue(chan ch) {
     /* Get a blocked sender, if any. */
     struct mill_clause *cl = mill_cont(mill_list_begin(&ch->sender.clauses), struct mill_clause, epitem);
     if(!ch->items) {
@@ -207,24 +194,17 @@ static void mill_dequeue(chan ch, void *val) {
          There are no senders waiting to send. */
         if(mill_slow(ch->done)) {
             mill_assert(!cl);
-            memcpy(val, ((char*)(ch + 1)) + (ch->bufsz * ch->sz), ch->sz);
             return;
         }
         /* Otherwise there must be a sender waiting to send. */
         mill_assert(cl);
-        memcpy(val, cl->val, ch->sz);
         mill_choose_unblock(cl);
         return;
     }
-    /* If there's a value in the buffer start by retrieving it. */
-    memcpy(val, ((char*)(ch + 1)) + (ch->first * ch->sz), ch->sz);
-    ch->first = (ch->first + 1) % ch->bufsz;
     --ch->items;
     /* And if there was a sender waiting, unblock it. */
     if(cl) {
         assert(ch->items < ch->bufsz);
-        size_t pos = (ch->first + ch->items) % ch->bufsz;
-        memcpy(((char*)(ch + 1)) + (pos * ch->sz) , cl->val, ch->sz);
         ++ch->items;
         mill_choose_unblock(cl);
     }
@@ -249,9 +229,9 @@ int mill_choose_wait(void) {
         }
         struct mill_chan *ch = mill_getchan(cl->ep);
         if(cl->ep->type == MILL_SENDER)
-            mill_enqueue(ch, cl->val);
+            mill_enqueue(ch);
         else
-            mill_dequeue(ch, mill_valbuf(cl->cr, ch->sz));
+            mill_dequeue(ch);
         mill_resume(mill_running, cl->idx);
         return mill_suspend();
     }
@@ -284,57 +264,40 @@ int mill_choose_wait(void) {
     return mill_suspend();
 }
 
-void *mill_choose_val(size_t sz) {
-    /* The assumption here is that by supplying the same size as before
-       we are going to get the same buffer which already has the data
-       written into it. */
-    return mill_valbuf(mill_running, sz);
-}
-
-void mill_chs(chan ch, void *val, size_t sz) {
+void mill_chs(chan ch) {
     if(mill_slow(!ch))
         mill_panic("null channel used");
     mill_choose_init_();
     mill_running->state = MILL_CHS;
     struct mill_clause cl;
-    mill_choose_out(&cl, ch, val, sz, 0);
+    mill_choose_out(&cl, ch, 0);
     mill_choose_wait();
 }
 
-void *mill_chr(chan ch, size_t sz) {
+void mill_chr(chan ch) {
     if(mill_slow(!ch))
         mill_panic("null channel used");
     mill_running->state = MILL_CHR;
     mill_choose_init_();
     struct mill_clause cl;
-    mill_choose_in(&cl, ch, sz, 0);
+    mill_choose_in(&cl, ch, 0);
     mill_choose_wait();
-    return mill_choose_val(sz);
 }
 
-void mill_chdone(chan ch, void *val, size_t sz) {
+void mill_chdone(chan ch) {
     if(mill_slow(!ch))
         mill_panic("null channel used");
     if(mill_slow(ch->done))
         mill_panic("chdone on already done-with channel");
-    if(mill_slow(ch->sz != sz))
-        mill_panic("send of a type not matching the channel");
     /* Panic if there are other senders on the same channel. */
     if(mill_slow(!mill_list_empty(&ch->sender.clauses)))
         mill_panic("send to done-with channel");
     /* Put the channel into done-with mode. */
     ch->done = 1;
-    /* Store the terminal value into a special position in the channel. */
-    if (val != NULL) {
-        memcpy(((char*)(ch + 1)) + (ch->bufsz * ch->sz) , val, ch->sz); // TODO: revisit this
-    }
     /* Resume all the receivers currently waiting on the channel. */
     while(!mill_list_empty(&ch->receiver.clauses)) {
         struct mill_clause *cl = mill_cont(
             mill_list_begin(&ch->receiver.clauses), struct mill_clause, epitem);
-        if (val != NULL) {
-            memcpy(mill_valbuf(cl->cr, ch->sz), val, ch->sz); // TODO: revisit this
-        }
         mill_choose_unblock(cl);
     }
 }

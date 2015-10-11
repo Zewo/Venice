@@ -42,7 +42,7 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
     }
 
     public init(bufferSize: Int) {
-        self.channel = mill_chmake(strideof(T), bufferSize)
+        self.channel = mill_chmake(bufferSize)
     }
 
     deinit {
@@ -66,25 +66,25 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
             mill_panic("tried to close an already closed channel")
         }
         closed = true
-        mill_chdone(channel, nil, strideof(T))
+        mill_chdone(channel)
     }
 
     /// Receives a value.
-    public func receive(var value: T) {
+    public func receive(value: T) {
         if closed {
             mill_panic("send on closed channel")
         }
         buffer.append(value)
-        mill_chs(channel, &value, strideof(T))
+        mill_chs(channel)
     }
 
     /// Receives a value from select.
-    func receive(var value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
+    func receive(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
         if closed {
             mill_panic("send on closed channel")
         }
         buffer.append(value)
-        mill_choose_out(clause, channel, &value, strideof(T), Int32(index))
+        mill_choose_out(clause, channel, Int32(index))
     }
 
     /// Sends a value.
@@ -92,12 +92,12 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
         if closed && buffer.count <= 0 {
             return nil
         }
-        mill_chr(channel, strideof(T))
+        mill_chr(channel)
         return getValueFromBuffer()
     }
 
     func registerSend(clause: UnsafeMutablePointer<Void>, index: Int) {
-        mill_choose_in(clause, channel, strideof(T), Int32(index))
+        mill_choose_in(clause, channel, Int32(index))
     }
     
     func getValueFromBuffer() -> T? {

@@ -106,20 +106,19 @@ MILL_EXPORT int mill_fdwait(int fd, int events, int64_t deadline);
 typedef struct mill_chan *chan;
 
 #define MILL_CLAUSELEN (sizeof(struct{void *f1; void *f2; void *f3; void *f4; \
-    void *f5; void *f6; int f7; int f8; int f9;}))
+    void *f5; int f6; int f7; int f8;}))
 
-MILL_EXPORT chan mill_chmake(size_t sz, size_t bufsz);
-MILL_EXPORT void mill_chs(chan ch, void *val, size_t sz);
-MILL_EXPORT void *mill_chr(chan ch, size_t sz);
-MILL_EXPORT void mill_chdone(chan ch, void *val, size_t sz);
+MILL_EXPORT chan mill_chmake(size_t bufsz);
+MILL_EXPORT void mill_chs(chan ch);
+MILL_EXPORT void mill_chr(chan ch);
+MILL_EXPORT void mill_chdone(chan ch);
 MILL_EXPORT void mill_chclose(chan ch);
 
 MILL_EXPORT void mill_choose_init(void);
-MILL_EXPORT void mill_choose_in(void *clause, chan ch, size_t sz, int idx);
-MILL_EXPORT void mill_choose_out(void *clause, chan ch, void *val, size_t sz, int idx);
+MILL_EXPORT void mill_choose_in(void *clause, chan ch, int idx);
+MILL_EXPORT void mill_choose_out(void *clause, chan ch, int idx);
 MILL_EXPORT void mill_choose_otherwise(void);
 MILL_EXPORT int mill_choose_wait(void);
-MILL_EXPORT void *mill_choose_val(size_t sz);
 
 MILL_EXPORT void mill_panic(const char *text);
 

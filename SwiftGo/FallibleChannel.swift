@@ -61,7 +61,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
     }
 
     public init(bufferSize: Int) {
-        self.channel = mill_chmake(strideof(Box<Result<T>>), bufferSize)
+        self.channel = mill_chmake(bufferSize)
     }
 
     deinit {
@@ -85,7 +85,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
             mill_panic("tried to close an already closed channel")
         }
         closed = true
-        mill_chdone(channel, nil, strideof(Box<Result<T>>))
+        mill_chdone(channel)
     }
 
     /// Receives a result.
@@ -93,9 +93,9 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
         if closed {
             mill_panic("send on closed channel")
         }
-        var box = Box(result)
+        let box = Box(result)
         buffer.append(box)
-        mill_chs(channel, &box, strideof(Box<Result<T>>))
+        mill_chs(channel)
     }
 
     /// Receives a value.
@@ -104,9 +104,9 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
             mill_panic("send on closed channel")
         }
         let result = Result<T>.Value(value)
-        var box = Box(result)
+        let box = Box(result)
         buffer.append(box)
-        mill_chs(channel, &box, strideof(Box<Result<T>>))
+        mill_chs(channel)
     }
 
     /// Receives a value from select.
@@ -115,9 +115,9 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
             mill_panic("send on closed channel")
         }
         let result = Result<T>.Value(value)
-        var box = Box(result)
+        let box = Box(result)
         buffer.append(box)
-        mill_choose_out(clause, channel, &box, strideof(Box<Result<T>>), Int32(index))
+        mill_choose_out(clause, channel, Int32(index))
     }
 
     /// Receives an error.
@@ -126,9 +126,9 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
             mill_panic("send on closed channel")
         }
         let result = Result<T>.Error(error)
-        var box = Box(result)
+        let box = Box(result)
         buffer.append(box)
-        mill_chs(channel, &box, strideof(Box<Result<T>>))
+        mill_chs(channel)
     }
 
     /// Receives an error from select.
@@ -137,9 +137,9 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
             mill_panic("send on closed channel")
         }
         let result = Result<T>.Error(error)
-        var box = Box(result)
+        let box = Box(result)
         buffer.append(box)
-        mill_choose_out(clause, channel, &box, strideof(Box<Result<T>>), Int32(index))
+        mill_choose_out(clause, channel, Int32(index))
     }
 
     /// Sends a value.
@@ -147,7 +147,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
         if closed && buffer.count <= 0 {
             return nil
         }
-        mill_chr(channel, strideof(Box<Result<T>>))
+        mill_chr(channel)
         if let value = getResultFromBuffer() {
             switch value {
             case .Value(let v): return v
@@ -163,12 +163,12 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
         if closed && buffer.count <= 0 {
             return nil
         }
-        mill_chr(channel, strideof(Box<Result<T>>))
+        mill_chr(channel)
         return getResultFromBuffer()
     }
 
     func registerSend(clause: UnsafeMutablePointer<Void>, index: Int) {
-        mill_choose_in(clause, channel, strideof(Box<Result<T>>), Int32(index))
+        mill_choose_in(clause, channel, Int32(index))
     }
 
     func getResultFromBuffer() -> Result<T>? {

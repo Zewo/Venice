@@ -47,8 +47,6 @@ struct mill_ep {
 
 /* Channel. */
 struct mill_chan {
-    /* The size of the elements stored in the channel, in bytes. */
-    size_t sz;
     /* Channel holds two lists, the list of clauses waiting to send and list
        of clauses waiting to receive. */
     struct mill_ep sender;
@@ -65,10 +63,6 @@ struct mill_chan {
        the buffer used to store the message supplied by chdone() function. */
     size_t bufsz;
     size_t items;
-    size_t first;
-
-    /* Debugging info. */
-//    struct mill_debug_chan debug;
 };
 
 /* This structure represents a single clause in a choose statement.
@@ -82,8 +76,6 @@ struct mill_clause {
     struct mill_cr *cr;
     /* Channel endpoint the clause is waiting for. */
     struct mill_ep *ep;
-    /* For out clauses, pointer to the value to send. NULL for in clauses. */
-    void *val;
     /* The index to jump to when the clause is executed. */
     int idx;
     /* If 0, there's no peer waiting for the clause at the moment.
