@@ -35,9 +35,8 @@ public struct ChannelGenerator<T> : GeneratorType {
 public final class Channel<T> : SequenceType, Sendable, Receivable {
     let channel: chan
     public let bufferSize: Int
-    var valuesInBuffer: Int = 0
     public var closed: Bool = false
-    private var lastValue: T?
+    private var values: [T] = []
 
     public convenience init() {
         self.init(bufferSize: 0)
@@ -70,12 +69,7 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
         }
         
         closed = true
-        
-        if var value = lastValue {
-            mill_chdone(channel, &value, strideof(T))
-        } else {
-            mill_chdone(channel, nil, strideof(T))
-        }
+        mill_chdone(channel, nil, strideof(T))
     }
 
     /// Receives a value.
@@ -83,17 +77,13 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
         if closed {
             mill_panic("send on closed channel")
         }
-        lastValue = value
+        values.append(value)
         mill_chs(channel, &value, strideof(T))
-
-        if bufferSize <= 0 || valuesInBuffer < bufferSize {
-            valuesInBuffer++
-        }
     }
 
     /// Sends a value.
     public func send() -> T? {
-        if closed && valuesInBuffer <= 0 {
+        if closed && values.count <= 0 {
             return nil
         }
         let pointer = mill_chr(channel, strideof(T))
@@ -101,13 +91,10 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
     }
     
     func valueFromPointer(pointer: UnsafeMutablePointer<Void>) -> T? {
-        if closed && valuesInBuffer <= 0 {
+        if closed && values.count <= 0 {
             return nil
         } else {
-            valuesInBuffer--
-            let value = UnsafeMutablePointer<T>(pointer).memory
-            lastValue = value
-            return value
+            return values.removeFirst()
         }
     }
 }

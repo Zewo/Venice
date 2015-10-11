@@ -54,11 +54,8 @@ public enum Result<T> {
 public final class FallibleChannel<T> : SequenceType, FallibleSendable, FallibleReceivable {
     let channel: chan
     public let bufferSize: Int
-    private var valuesInBuffer: Int = 0
     public var closed: Bool = false
-    private var lastResult: Result<T>?
-
-    var boxes: [Box<Result<T>>] = []
+    private var boxes: [Box<Result<T>>] = []
 
     public convenience init() {
         self.init(bufferSize: 0)
@@ -91,12 +88,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
         }
 
         closed = true
-
-        if var value = lastResult {
-            mill_chdone(channel, &value, strideof(Box<Result<T>>))
-        } else {
-            mill_chdone(channel, nil, strideof(Box<Result<T>>))
-        }
+        mill_chdone(channel, nil, strideof(Box<Result<T>>))
     }
 
     /// Receives a result.
@@ -104,14 +96,9 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
         if closed {
             mill_panic("send on closed channel")
         }
-        lastResult = result
         var box = Box(result)
         boxes.append(box)
         mill_chs(channel, &box, strideof(Box<Result<T>>))
-
-        if bufferSize <= 0 || valuesInBuffer < bufferSize {
-            valuesInBuffer++
-        }
     }
 
     /// Receives a value.
@@ -120,14 +107,9 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
             mill_panic("send on closed channel")
         }
         let result = Result<T>.Value(value)
-        lastResult = result
         var box = Box(result)
         boxes.append(box)
         mill_chs(channel, &box, strideof(Box<Result<T>>))
-        
-        if bufferSize <= 0 || valuesInBuffer < bufferSize {
-            valuesInBuffer++
-        }
     }
 
     /// Receives a value from select.
@@ -136,14 +118,9 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
             mill_panic("send on closed channel")
         }
         let result = Result<T>.Value(value)
-        lastResult = result
         var box = Box(result)
         boxes.append(box)
         mill_choose_out(clause, channel, &box, strideof(Box<Result<T>>), Int32(index))
-
-        if bufferSize <= 0 || valuesInBuffer < bufferSize {
-            valuesInBuffer++
-        }
     }
 
     /// Receives an error.
@@ -152,14 +129,9 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
             mill_panic("send on closed channel")
         }
         let wrappedError = Result<T>.Error(error)
-        lastResult = wrappedError
         var box = Box(wrappedError)
         boxes.append(box)
         mill_chs(channel, &box, strideof(Box<Result<T>>))
-
-        if bufferSize <= 0 || valuesInBuffer < bufferSize {
-            valuesInBuffer++
-        }
     }
 
     /// Receives an error from select.
@@ -168,19 +140,14 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
             mill_panic("send on closed channel")
         }
         let wrappedError = Result<T>.Error(error)
-        lastResult = wrappedError
         var box = Box(wrappedError)
         boxes.append(box)
         mill_choose_out(clause, channel, &box, strideof(Box<Result<T>>), Int32(index))
-
-        if bufferSize <= 0 || valuesInBuffer < bufferSize {
-            valuesInBuffer++
-        }
     }
 
     /// Sends a value.
     public func send() throws -> T? {
-        if closed && valuesInBuffer <= 0 {
+        if closed && boxes.count <= 0 {
             return nil
         }
         let pointer = mill_chr(channel, strideof(Box<Result<T>>))
@@ -196,7 +163,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
 
     /// Sends a result.
     public func sendResult() -> Result<T>? {
-        if closed && valuesInBuffer <= 0 {
+        if closed && boxes.count <= 0 {
             return nil
         }
         let pointer = mill_chr(channel, strideof(Box<Result<T>>))
@@ -204,14 +171,11 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
     }
     
     func valueFromPointer(pointer: UnsafeMutablePointer<Void>) -> Result<T>? {
-        if closed && valuesInBuffer <= 0 {
+        if closed && boxes.count <= 0 {
             return nil
         } else {
-            valuesInBuffer--
-//            let box = UnsafeMutablePointer<Box<Result<T>>>(pointer).memory
             let box = boxes.removeFirst()
             let value = box.value
-            lastResult = value
             return value
         }
     }
