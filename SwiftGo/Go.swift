@@ -89,6 +89,7 @@ public struct PollResult : OptionSetType {
     public static let Error   = PollResult(rawValue: 4)
 }
 
+/// Polls file descriptor for events
 public func pollFileDescriptor(fileDescriptor: Int32, events: PollEvent, deadline: Int = -1) -> PollResult {
     let event = mill_fdwait(fileDescriptor, events.rawValue, Int64(deadline))
     return PollResult(rawValue: event)
