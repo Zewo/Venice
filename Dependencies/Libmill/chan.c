@@ -59,7 +59,6 @@ chan mill_chmake(size_t bufsz) {
     ch->receiver.type = MILL_RECEIVER;
     ch->receiver.seqnum = mill_choose_seqnum;
     mill_list_init(&ch->receiver.clauses);
-    ch->refcount = 1;
     ch->done = 0;
     ch->bufsz = bufsz;
     ch->items = 0;
@@ -67,10 +66,6 @@ chan mill_chmake(size_t bufsz) {
 }
 
 void mill_chclose(chan ch) {
-    assert(ch->refcount > 0);
-    --ch->refcount;
-    if(ch->refcount)
-        return;
     if(!mill_list_empty(&ch->sender.clauses) ||
           !mill_list_empty(&ch->receiver.clauses))
         mill_panic("attempt to close a channel while it is still being used");

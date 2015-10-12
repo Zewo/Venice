@@ -51,8 +51,6 @@ struct mill_chan {
        of clauses waiting to receive. */
     struct mill_ep sender;
     struct mill_ep receiver;
-    /* Number of open handles to this channel. */
-    int refcount;
     /* 1 is chdone() was already called. 0 otherwise. */
     int done;
 
