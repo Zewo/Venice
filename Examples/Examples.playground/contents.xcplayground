@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<playground version='6.0' target-platform='osx' auto-termination-delay='31' requires-full-environment='true' display-mode='rendered'>
+<playground version='6.0' target-platform='osx' auto-termination-delay='31' requires-full-environment='true' display-mode='raw'>
     <pages>
         <page name='1. Goroutines'/>
         <page name='2. Channels'/>
@@ -23,5 +23,6 @@
         <page name='20. Bomb'/>
         <page name='21. Fallible Channels'/>
         <page name='22. Select and Fallible Channels'/>
+        <page name='23. Trees'/>
     </pages>
 </playground>
