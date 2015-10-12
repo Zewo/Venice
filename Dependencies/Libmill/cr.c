@@ -84,15 +84,12 @@ void mill_resume(struct mill_cr *cr, int result) {
 void *mill_go_prologue() {
     /* Allocate and initialise new stack. */
     struct mill_cr *cr = ((struct mill_cr*)mill_allocstack()) - 1;
-    cr->cls = NULL;
     /* Suspend the parent coroutine and make the new one running. */
     if(mill_setjmp(&mill_running->ctx))
         return NULL;
     mill_resume(mill_running, 0);    
     mill_running = cr;
-    /* Return pointer to the top of the stack. There's valbuf interposed
-       between the mill_cr structure and the stack itself. */
-    return (void*)(((char*)cr));
+    return (void*)(cr);
 }
 
 /* The final part of go(). Cleans up after the coroutine is finished. */

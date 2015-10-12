@@ -86,8 +86,6 @@ struct mill_cr {
     /* Argument to resume() call being passed to the blocked suspend() call. */
     int result;
 
-    /* Coroutine-local storage. */
-    void *cls;
 };
 
 /* Fake coroutine corresponding to the main thread of execution. */
