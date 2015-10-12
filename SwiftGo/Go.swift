@@ -73,7 +73,6 @@ public struct PollEvent : OptionSetType {
 
     public static let Read  = PollEvent(rawValue: 1)
     public static let Write = PollEvent(rawValue: 2)
-    public static let Error = PollEvent(rawValue: 4)
 }
 
 public struct PollResult : OptionSetType {
