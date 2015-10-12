@@ -78,4 +78,35 @@ class GoTests: XCTestCase {
         XCTAssert(<-channel == 40)
     }
 
+    func testPollFileDescriptor() {
+        var pollResult: PollResult
+        var size: Int
+        let fds = UnsafeMutablePointer<Int32>.alloc(2)
+        let result = socketpair(AF_UNIX, SOCK_STREAM, 0, fds)
+        XCTAssert(result == 0)
+
+        pollResult = pollFileDescriptor(fds[0], events: [.Write])
+        XCTAssert(pollResult == .Write)
+
+        pollResult = pollFileDescriptor(fds[0], events: [.Write], deadline: now + 100 * millisecond)
+        XCTAssert(pollResult == .Write)
+
+        let deadline = now + 100 * millisecond
+        pollResult = pollFileDescriptor(fds[0], events: [.Read], deadline: deadline)
+        XCTAssert(pollResult == .Timeout)
+
+        size = send(fds[1], "A", 1, 0)
+        XCTAssert(size == 1)
+        pollResult = pollFileDescriptor(fds[0], events: [.Write])
+        XCTAssert(pollResult == .Write)
+
+        pollResult = pollFileDescriptor(fds[0], events: [.Read, .Write])
+        XCTAssert(pollResult == [.Read, .Write])
+
+        var c: Int8 = 0
+        size = recv(fds[0], &c, 1, 0)
+        XCTAssert(size == 1)
+        XCTAssert(c == 65)
+    }
+
 }

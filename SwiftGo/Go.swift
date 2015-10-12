@@ -63,3 +63,33 @@ public func wakeUp(deadline: Int) {
 public var yield: Void {
     mill_yield()
 }
+
+public struct PollEvent : OptionSetType {
+    public let rawValue: Int32
+
+    public init(rawValue: Int32) {
+        self.rawValue = rawValue
+    }
+
+    public static let Read  = PollEvent(rawValue: 1)
+    public static let Write = PollEvent(rawValue: 2)
+    public static let Error = PollEvent(rawValue: 4)
+}
+
+public struct PollResult : OptionSetType {
+    public let rawValue: Int32
+
+    public init(rawValue: Int32) {
+        self.rawValue = rawValue
+    }
+
+    public static let Timeout = PollResult(rawValue: 0)
+    public static let Read    = PollResult(rawValue: 1)
+    public static let Write   = PollResult(rawValue: 2)
+    public static let Error   = PollResult(rawValue: 4)
+}
+
+public func pollFileDescriptor(fileDescriptor: Int32, events: PollEvent, deadline: Int = -1) -> PollResult {
+    let event = mill_fdwait(fileDescriptor, events.rawValue, Int64(deadline))
+    return PollResult(rawValue: event)
+}
