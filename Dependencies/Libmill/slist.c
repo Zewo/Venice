@@ -31,13 +31,6 @@ void mill_slist_init(struct mill_slist *self) {
     self->last = NULL;
 }
 
-void mill_slist_push(struct mill_slist *self, struct mill_slist_item *item) {
-    item->next = self->first;
-    self->first = item;
-    if(!self->last)
-        self->last = item;
-}
-
 void mill_slist_push_back(struct mill_slist *self,
       struct mill_slist_item *item) {
     item->next = NULL;

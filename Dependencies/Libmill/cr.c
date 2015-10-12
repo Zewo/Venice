@@ -31,56 +31,18 @@
 #include "stack.h"
 #include "utils.h"
 
-/* Size of the buffer for temporary storage of values received from channels.
-   It should be properly aligned and never change if there are any stacks
-   allocated at the moment. */
-size_t mill_valbuf_size = 128;
-
-/* Valbuf for tha main coroutine. */
-char mill_main_valbuf[128];
-
 volatile int mill_unoptimisable1 = 1;
 volatile void *mill_unoptimisable2 = NULL;
 
 struct mill_cr mill_main = {0};
-
 struct mill_cr *mill_running = &mill_main;
 
 /* Queue of coroutines scheduled for execution. */
 static struct mill_slist mill_ready = {0};
 
-static void *mill_getvalbuf(struct mill_cr *cr, size_t size) {
-    /* Small valbufs don't require dynamic allocation. Also note that main
-       coroutine doesn't have a stack allocated on the heap like other
-       coroutines, so we have to handle valbuf in a special way. */
-    if(mill_fast(cr != &mill_main)) {
-        if(mill_fast(size <= mill_valbuf_size))
-            return (void*)(((char*)cr) - mill_valbuf_size);
-    }
-    else {
-        if(mill_fast(size <= sizeof(mill_main_valbuf)))
-            return (void*)mill_main_valbuf;
-    }
-    /* Large valbufs are simply allocated on heap. */
-    if(mill_fast(cr->valbuf && cr->valbuf_sz <= size))
-        return cr->valbuf;
-    void *ptr = realloc(cr->valbuf, size);
-    if(!ptr)
-        return NULL;
-    cr->valbuf = ptr;
-    cr->valbuf_sz = size;
-    return cr->valbuf;
-}
-
 int goprepare(int count, size_t stack_size, size_t val_size) {
-    /* If needed, make val size slightly bigger to align properly. */
-    mill_valbuf_size = (val_size + 15) & ~((size_t)0xf);
-    /* Preallocate the valbuf for the main coroutine. */
-    if(!mill_getvalbuf(&mill_main, mill_valbuf_size))
-        return 0;
     /* Allocate the stacks. */
-    return mill_preparestacks(count, stack_size + mill_valbuf_size +
-        sizeof(struct mill_cr));
+    return mill_preparestacks(count, stack_size + sizeof(struct mill_cr));
 }
 
 int mill_suspend(void) {
@@ -122,8 +84,6 @@ void mill_resume(struct mill_cr *cr, int result) {
 void *mill_go_prologue() {
     /* Allocate and initialise new stack. */
     struct mill_cr *cr = ((struct mill_cr*)mill_allocstack()) - 1;
-    cr->valbuf = NULL;
-    cr->valbuf_sz = 0;
     cr->cls = NULL;
     /* Suspend the parent coroutine and make the new one running. */
     if(mill_setjmp(&mill_running->ctx))
@@ -132,13 +92,11 @@ void *mill_go_prologue() {
     mill_running = cr;
     /* Return pointer to the top of the stack. There's valbuf interposed
        between the mill_cr structure and the stack itself. */
-    return (void*)(((char*)cr) - mill_valbuf_size);
+    return (void*)(((char*)cr));
 }
 
 /* The final part of go(). Cleans up after the coroutine is finished. */
 void mill_go_epilogue(void) {
-    if(mill_running->valbuf)
-        free(mill_running->valbuf);
     mill_freestack(mill_running + 1);
     mill_running = NULL;
     /* Given that there's no running coroutine at this point
@@ -151,11 +109,4 @@ void mill_yield() {
        suspending it. */
     mill_resume(mill_running, 0);
     mill_suspend();
-}
-
-void *mill_valbuf(struct mill_cr *cr, size_t size) {
-    void *ptr = mill_getvalbuf(cr, size);
-    if(!ptr)
-        mill_panic("not enough memory to receive from channel");
-    return ptr;
 }

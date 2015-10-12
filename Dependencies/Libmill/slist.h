@@ -51,9 +51,6 @@ void mill_slist_init(struct mill_slist *self);
    If there are no more items returns NULL. */
 #define mill_slist_next(it) ((it)->next)
 
-/* Push the item to the beginning of the list. */
-void mill_slist_push(struct mill_slist *self, struct mill_slist_item *item);
-
 /* Push the item to the end of the list. */
 void mill_slist_push_back(struct mill_slist *self,
     struct mill_slist_item *item);
