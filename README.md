@@ -27,7 +27,7 @@ SwiftGo
 
 ##Performance
 
-**SwiftGo** is usually faster than **Grand Central Dispatch**. It's faster because the goroutines are light coroutines managed by *libmill* instead of the threads in **GCD**, which call to the OS. The **Chinese Whispers** example in the command line application shows how you can create up to 100.000 concurrent goroutines (tested in a 8 GB MacBook Pro early 2015).
+**SwiftGo** is fast because the goroutines are light coroutines managed by *libmill* instead of threads managed by the os. The **Chinese Whispers** example in the command line application shows how you can create up to 100.000 concurrent goroutines (tested in a 8 GB MacBook Pro early 2015).
 
 You can run the performance tests in your machine and see for yourself. Just run the tests in `PerformanceTests.swift`.
 
@@ -251,8 +251,8 @@ $ git submodule add https://github.com/Zewo/SwiftGo.git
 - Click on the `+` button under the "Embedded Binaries" section.
 - You will see two different `SwiftGo.xcodeproj` folders each with two different versions of the `SwiftGo.framework` nested inside a `Products` folder.
 
-    > It does not matter which `Products` folder you choose from, but it does matter whether you choose the top or bottom `SwiftGo.framework`. 
-    
+    > It does not matter which `Products` folder you choose from, but it does matter whether you choose the top or bottom `SwiftGo.framework`.
+
 - Select the top `SwiftGo.framework` for OS X and the bottom one for iOS.
 
     > You can verify which one you selected by inspecting the build log for your project. The build target for `SwiftGo` will be listed as either `SwiftGo iOS` or `SwiftGo OSX`.
@@ -298,7 +298,7 @@ that in the usual way, running it synchronously.
 f("direct")
 ```
 
-To invoke this function in a goroutine, use `go(f(s))`. This new 
+To invoke this function in a goroutine, use `go(f(s))`. This new
 goroutine will execute concurrently with the calling one.
 
 ```
@@ -313,8 +313,8 @@ go {
 }
 ```
 
-Our two function calls are running asynchronously in separate 
-goroutines now, so execution falls through to here. We wait 1 second 
+Our two function calls are running asynchronously in separate
+goroutines now, so execution falls through to here. We wait 1 second
 before the program exits
 
 ```swift
@@ -322,8 +322,8 @@ nap(1 * second)
 print("done")
 ```
 
-When we run this program, we see the output of the blocking call 
-first, then the interleaved output of the two gouroutines. This 
+When we run this program, we see the output of the blocking call
+first, then the interleaved output of the two gouroutines. This
 interleaving reflects the goroutines being run concurrently by the
 runtime.
 
@@ -374,7 +374,7 @@ let message = <-messages
 print(message!)
 ```
 
-When we run the program the "ping" message is successfully passed from 
+When we run the program the "ping" message is successfully passed from
 one goroutine to another via our channel. By default sends and receives block until both the sender and receiver are ready. This property allowed us to wait at the end of our program for the "ping" message without having to use any other synchronization.
 
 Values received from channels are `Optional`s. If you try to get a value from a closed channel with no values left in the buffer, it'll return `nil`. If you are sure that there is a value wraped in the `Optional`, you can use the `!<-` operator, which returns an implictly unwraped optional.
@@ -631,8 +631,8 @@ select { when in
 
 Running this program shows the first operation timing out and the second succeeding.
 
-Using this select timeout pattern requires communicating results over channels. This is a 
-good idea in general because other important features are based on channels and select. 
+Using this select timeout pattern requires communicating results over channels. This is a
+good idea in general because other important features are based on channels and select.
 We’ll look at two examples of this next: timers and tickers.
 
 ###Output
@@ -813,7 +813,7 @@ for element in queue {
 }
 ```
 
-This example also showed that it’s possible to close a non-empty channel but still have the 
+This example also showed that it’s possible to close a non-empty channel but still have the
 remaining values be received.
 
 ###Output
@@ -870,7 +870,7 @@ if stop2 {
 }
 ```
 
-The first timer will expire ~2s after we start the program, but the second should be stopped 
+The first timer will expire ~2s after we start the program, but the second should be stopped
 before it has a chance to expire.
 
 ###Output
@@ -984,8 +984,8 @@ for _ in 1 ... 9 {
 }
 ```
 
-Our running program shows the 9 jobs being executed by various workers. The program only 
-takes about 3 seconds despite doing about 9 seconds of total work because there are 3 
+Our running program shows the 9 jobs being executed by various workers. The program only
+takes about 3 seconds despite doing about 9 seconds of total work because there are 3
 workers operating concurrently.
 
 ###Output
@@ -1095,10 +1095,10 @@ for request in burstyRequests {
 }
 ```
 
-Running our program we see the first batch of requests handled once every ~200 milliseconds 
+Running our program we see the first batch of requests handled once every ~200 milliseconds
 as desired.
 
-For the second batch of requests we serve the first 3 immediately because of the burstable 
+For the second batch of requests we serve the first 3 immediately because of the burstable
 rate limiting, then serve the remaining 2 with ~200ms delays each.
 
 ###Output
