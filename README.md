@@ -19,6 +19,7 @@ SwiftGo
 - [x] Fallible Channels
 - [x] Receive-only Channels
 - [x] Send-only Channels
+- [x] Channel Iteration
 - [x] Select
 - [x] Timer
 - [x] Ticker
