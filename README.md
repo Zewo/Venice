@@ -277,6 +277,7 @@ forSelect { when, done in
         }
         result.failure { error in
         	  print("\(error). Retrying...")
+        	  go(flipCoin(results))
         }
     }
 }
