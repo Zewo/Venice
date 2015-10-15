@@ -444,38 +444,10 @@ class FallibleChannelTests: XCTestCase {
         receive(channel.sendingChannel)
     }
 
-    func testFanIn() {
-        let channel1 = FallibleChannel<Int>(bufferSize: 1)
-        let channel2 = FallibleChannel<Int>(bufferSize: 1)
-        let channel3 = FallibleChannel<Int>.fanIn(channel1, channel2)
-        go {
-            channel1 <- 111
-        }
-        go {
-            channel2 <- 222
-        }
-        XCTAssert(try! !<-channel3 == 111)
-        XCTAssert(try! !<-channel3 == 222)
-    }
-
-    func testFanInError() {
-        let channel1 = FallibleChannel<Int>(bufferSize: 1)
-        let channel2 = FallibleChannel<Int>(bufferSize: 1)
-        let channel3 = FallibleChannel<Int>.fanIn(channel1, channel2)
-        go {
-            channel1 <- Error()
-        }
-        go {
-            channel2 <- NastyError()
-        }
-        assertChannel(channel3, catchesErrorOfType: Error.self)
-        assertChannel(channel3, catchesErrorOfType: NastyError.self)
-    }
-
     func testReceiveResult() {
         let channel = FallibleChannel<Int>(bufferSize: 1)
         go {
-            channel.receivingChannel.receiveResult(Result<Int>.Value(333))
+            channel.receivingChannel <- Result<Int>.Value(333)
         }
         XCTAssert(try! <-channel == 333)
     }
@@ -487,7 +459,7 @@ extension FallibleChannelTests {
     private func assertChannel<T : FallibleSendable, E>(channel: T, catchesErrorOfType type: E.Type) {
         var thrown = false
         do {
-            try <-channel
+            try !<-channel
         } catch _ as E {
             thrown = true
         } catch {}

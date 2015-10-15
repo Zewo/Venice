@@ -104,13 +104,3 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
         return buffer.removeFirst()
     }
 }
-
-extension Channel {
-
-    public class func fanIn<T>(channels: Channel<T>...) -> SendingChannel<T> {
-        let fanInChannel = Channel<T>()
-        for channel in channels { go { for element in channel { fanInChannel <- element } } }
-        return fanInChannel.sendingChannel
-    }
-
-}

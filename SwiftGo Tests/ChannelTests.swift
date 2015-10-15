@@ -232,18 +232,4 @@ class ChannelTests: XCTestCase {
         receive(channel.sendingChannel)
     }
 
-    func testFanIn() {
-        let channel1 = Channel<Int>(bufferSize: 1)
-        let channel2 = Channel<Int>(bufferSize: 1)
-        let channel3 = Channel<Int>.fanIn(channel1, channel2)
-        go {
-            channel1 <- 111
-        }
-        go {
-            channel2 <- 222
-        }
-        XCTAssert(!<-channel3 == 111)
-        XCTAssert(!<-channel3 == 222)
-    }
-
 }

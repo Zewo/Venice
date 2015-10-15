@@ -44,6 +44,14 @@ public func go(routine: Void -> Void) {
     Libmill.go(routine)
 }
 
+/// Runs the expression in a lightweight coroutine
+public func goAfter(napDuration: Int, routine: Void -> Void) {
+    Libmill.go {
+        nap(napDuration)
+        routine()
+    }
+}
+
 /// Preallocates coroutine stacks. Returns the number of stacks that it actually managed to allocate.
 public func preallocateCoroutineStacks(stackCount stackCount: Int, stackSize: Int, channelValueMaxSize: Int) -> Int {
     return Int(goprepare(Int32(stackCount), stackSize, channelValueMaxSize))

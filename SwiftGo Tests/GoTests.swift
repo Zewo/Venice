@@ -50,7 +50,7 @@ class GoTests: XCTestCase {
 
     func testStackdeallocationWorks() {
         for _ in 0 ..< 20 {
-            go(nap(50 * millisecond))
+            goAfter(50 * millisecond) {}
         }
         nap(100)
     }
@@ -108,5 +108,4 @@ class GoTests: XCTestCase {
         XCTAssert(size == 1)
         XCTAssert(c == 65)
     }
-
 }

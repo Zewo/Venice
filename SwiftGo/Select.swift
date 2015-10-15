@@ -336,9 +336,7 @@ public class SelectCaseBuilder {
     }
 }
 
-public func select(build: SelectCaseBuilder -> Void) {
-    let builder = SelectCaseBuilder()
-    build(builder)
+private func select(builder: SelectCaseBuilder) {
     mill_choose_init()
 
     var clauses: [UnsafeMutablePointer<Void>] = []
@@ -354,16 +352,39 @@ public func select(build: SelectCaseBuilder -> Void) {
     }
 
     let index = mill_choose_wait()
-    
+
     if index == -1 {
         builder.otherwise?()
     } else {
         builder.cases[Int(index)].execute()
     }
-
+    
     clauses.forEach(free)
 }
 
-public func sel(build: SelectCaseBuilder -> Void) {
+public func select(@noescape build: (when: SelectCaseBuilder) -> Void) {
+    let builder = SelectCaseBuilder()
+    build(when: builder)
+    select(builder)
+}
+
+public func sel(@noescape build: (when: SelectCaseBuilder) -> Void) {
     select(build)
+}
+
+public func forSelect(@noescape build: (when: SelectCaseBuilder, done: Void -> Void) -> Void) {
+    let builder = SelectCaseBuilder()
+    var keepRunning = true
+    func done() {
+        keepRunning = false
+    }
+    while keepRunning {
+        let builder = SelectCaseBuilder()
+        build(when: builder, done: done)
+        select(builder)
+    }
+}
+
+public func forSel(@noescape build: (when: SelectCaseBuilder, done: Void -> Void) -> Void) {
+    forSelect(build)
 }

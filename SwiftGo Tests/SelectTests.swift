@@ -453,6 +453,26 @@ class SelectTests: XCTestCase {
         XCTAssert(timedout)
     }
 
+    func testForSelect() {
+        let channel = Channel<Int>()
+        goAfter(10 * millisecond) {
+            channel <- 444
+        }
+        goAfter(20 * millisecond) {
+            channel <- 444
+        }
+        var count = 0
+        forSel { when, done in
+            when.receiveFrom(channel) { value in
+                XCTAssert(value == 444)
+                ++count
+                if count == 2 {
+                    done()
+                }
+            }
+        }
+    }
+
 }
 
 extension SelectTests {

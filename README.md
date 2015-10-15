@@ -69,6 +69,24 @@ go {
 nap(2 * second)
 ```
 
+`goAfter`
+------------------
+
+`goAfter` runs the coroutine after the specified duration.
+
+```swift
+goAfter(1 * second) {
+    print("yoo")
+}
+
+// same as
+
+go {
+	nap(1 * second)
+	print("yoo")
+}
+```
+
 `Channel<Type>`
 ---------------
 
@@ -178,8 +196,11 @@ select { when in
         print("default case")
     }
 }
+```
 
-// you can disable a channel selection by turning it to nil
+You can disable a channel selection by turning it to nil
+
+```swift
 
 var channelA: Channel<String>? = Channel<String>()
 var channelB: Channel<String>? = Channel<String>()
@@ -201,6 +222,62 @@ sel { when in
     }
     when.receiveFrom(channelB) { value in
         print("received \(value) from channel b")
+    }
+}
+```
+
+Another way to disable a channel selection is to simply put it's case inside an if.
+
+```swift
+let channelA = Channel<String>()
+let channelB = Channel<String>()
+
+go(channelA <- "a")
+go(channelB <- "b")
+
+select { when in
+    if arc4random_uniform(2) == 0 {
+        print("disabled channel b")
+        when.receiveFrom(channelA) { value in
+            print("received \(value) from channel a")
+        }
+    } else {
+        print("disabled channel a")
+        when.receiveFrom(channelB) { value in
+            print("received \(value) from channel b")
+        }
+    }
+}
+
+```
+
+`forSelect`
+-----------
+
+A lot of times we need to wrap our select inside a while loop. To make it easier to work with this pattern we can use `forSelect`. `forSelect` will loop until you call `done()`.
+
+```swift
+func flipCoin(result: FallibleChannel<String>) {
+    if arc4random_uniform(2) == 0 {
+        result <- "Success"
+    } else {
+        result <- Error(description: "Something went wrong")
+    }
+}
+
+let results = FallibleChannel<String>()
+
+go(flipCoin(results))
+
+forSelect { when, done in
+    when.receiveFrom(results) { result in
+        result.success { value in
+            print(value)
+            done()
+        }
+        result.failure { error in
+        	  print("\(error). Retrying...")
+        }
     }
 }
 ```
@@ -278,8 +355,8 @@ Examples
 
 The examples were taken from [gobyexample](http://gobyexample.com) and translated from Go to Swift using **SwiftGo**. The Xcode project contains a playground with all the examples below. Compile the framework at least once and then you're free to play with the playground examples.
 
-Goroutines
-----------
+01 - Goroutines
+---------------
 
 A *goroutine* is a lightweight thread of execution.
 
@@ -343,8 +420,8 @@ goroutine: 3
 done
 ```
 
-Channels
---------
+02 - Channels
+-------------
 
 *Channels* are the pipes that connect concurrent
 goroutines. You can send values into channels from one
@@ -386,8 +463,8 @@ Values received from channels are `Optional`s. If you try to get a value from a 
 ping
 ```
 
-Channel Buffering
------------------
+03 - Channel Buffering
+----------------------
 
 By default channels are *unbuffered*, meaning that they
 will only accept receiving values (`channel <- value`) if there is a
@@ -426,8 +503,8 @@ buffered
 channel
 ```
 
-Channel Synchronization
------------------------
+04 - Channel Synchronization
+----------------------------
 
 We can use channels to synchronize execution
 across goroutines. Here's an example of using a
@@ -471,8 +548,8 @@ working...
 done
 ```
 
-Channel Directions
-------------------
+05 - Channel Directions
+-----------------------
 
 When using channels as function parameters, you can
 specify if a channel is meant to only send or receive
@@ -513,8 +590,8 @@ print(!<-pongs)
 passed message
 ```
 
-Select
-------
+06 - Select
+-----------
 
 _Select_ lets you wait on multiple channel
 operations. Combining goroutines and channels with
@@ -570,8 +647,8 @@ received one
 received two
 ```
 
-Timeouts
---------
+07 - Timeouts
+-------------
 
 _Timeouts_ are important for programs that connect to
 external resources or that otherwise need to bound
@@ -643,8 +720,8 @@ timeout 1
 result 2
 ```
 
-Non-Blocking Channel Operations
--------------------------------
+08 - Non-Blocking Channel Operations
+------------------------------------
 
 Basic sends and receives on channels are blocking.
 However, we can use `select` with a `otherwise` clause to
@@ -714,8 +791,8 @@ no message sent
 no activity
 ```
 
-Closing Channels
-----------------
+09 - Closing Channels
+---------------------
 
 _Closing_ a channel indicates that no more values
 can be sent to it. This can be useful to communicate
@@ -787,8 +864,8 @@ received job 3
 received all jobs
 ```
 
-Iterating Over Channels
------------------------
+10 - Iterating Over Channels
+----------------------------
 
 We can use `for in` to iterate over
 values received from a channel.
@@ -824,8 +901,8 @@ one
 two
 ```
 
-Timers
-------
+11 - Timers
+-----------
 
 We often want to execute code at some point in the
 future, or repeatedly at some interval. _Timer_ and
@@ -881,8 +958,8 @@ Timer 1 expired
 Timer 2 stopped
 ```
 
-Tickers
--------
+12 - Tickers
+------------
 
 Timers are for when you want to do
 something once in the future - _tickers_ are for when
@@ -926,8 +1003,8 @@ Tick at 37025105
 Ticker stopped
 ```
 
-Worker Pools
-------------
+13 - Worker Pools
+-----------------
 
 In this example we'll look at how to implement
 a _worker pool_ using goroutines and channels.
@@ -1003,8 +1080,8 @@ worker 2 processing job 8
 worker 3 processing job 9
 ```
 
-Rate Limiting
--------------
+14 - Rate Limiting
+------------------
 
 _[Rate limiting](http://en.wikipedia.org/wiki/Rate_limiting)_
 is an important mechanism for controlling resource
@@ -1118,8 +1195,8 @@ request 4 37222064
 request 5 37222265
 ```
 
-Stateful Goroutines
--------------------
+15 - Stateful Goroutines
+------------------------
 
 In this example our state will be owned by a single
 goroutine. This will guarantee that the data is never
@@ -1245,8 +1322,8 @@ print("operations: \(operations)")
 operations: 55798
 ```
 
-Chinese Whispers
-----------------
+16 - Chinese Whispers
+---------------------
 
 ![!Gophers Chinese Whisper](https://talks.golang.org/2012/concurrency/images/gophereartrumpet.jpg)
 
@@ -1280,8 +1357,8 @@ print(!<-leftmost)
 1001
 ```
 
-Ping Pong
----------
+17 - Ping Pong
+--------------
 
 ```swift
 final class Ball { var hits: Int = 0 }
@@ -1322,8 +1399,8 @@ pong 10
 ping 11
 ```
 
-Disabling Channel Select
-------------------------
+18 - Disabling Channel Select
+-----------------------------
 
 ```swift
 var channelA: Channel<String>? = Channel<String>()
@@ -1357,8 +1434,15 @@ disabled channel b
 received a from channel a
 ```
 
-Fibonacci
----------
+or
+
+```
+disabled channel a
+received b from channel b
+```
+
+19 - Fibonacci
+--------------
 
 ```swift
 func fibonacci(n: Int, channel: Channel<Int>) {
@@ -1398,8 +1482,8 @@ for n in fibonacciChannel {
 34
 ```
 
-Bomb
-----
+20 - Bomb
+---------
 
 ```swift
 let tick = Ticker(period: 100 * millisecond).channel
@@ -1442,8 +1526,8 @@ tick
 BOOM!
 ```
 
-Fallible Channels
------------------
+21 - Fallible Channels
+----------------------
 
 ```swift
 func flipCoin(result: FallibleChannel<String>) {
@@ -1483,8 +1567,8 @@ Something went wrong. Retrying...
 Success
 ```
 
-Select and Fallible Channels
-----------------------------
+22 - Select and Fallible Channels
+---------------------------------
 
 ```swift
 struct Error : ErrorType, CustomStringConvertible { let description: String }
@@ -1525,8 +1609,8 @@ or
 Something went wrong
 ```
 
-Tree
-----
+23 - Tree
+---------
 
 ```swift
 extension CollectionType where Index == Int {
@@ -1656,6 +1740,201 @@ Same contents true
 Differing sizes false
 Differing values false
 Dissimilar false
+```
+
+24 - Disabling Channel Select ||
+--------------------------------
+
+```swift
+let channelA = Channel<String>()
+let channelB = Channel<String>()
+
+go(channelA <- "a")
+go(channelB <- "b")
+
+select { when in
+    if arc4random_uniform(2) == 0 {
+        print("disabled channel b")
+        when.receiveFrom(channelA) { value in
+            print("received \(value) from channel a")
+        }
+    } else {
+        print("disabled channel a")
+        when.receiveFrom(channelB) { value in
+            print("received \(value) from channel b")
+        }
+    }
+}
+```
+
+###Output
+
+```
+disabled channel b
+received a from channel a
+```
+
+or
+
+```
+disabled channel a
+received b from channel b
+```
+
+25 - Fake RSS Client
+--------------------
+
+```swift
+struct Item : Equatable {
+    let domain: String
+    let title: String
+    let GUID: String
+}
+
+func ==(lhs: Item, rhs: Item) -> Bool {
+    return lhs.GUID == rhs.GUID
+}
+
+struct FetchResponse {
+    let items: [Item]
+    let nextFetchTime: Int
+}
+
+protocol FetcherType {
+    func fetch() -> Result<FetchResponse>
+}
+
+struct Fetcher : FetcherType {
+    let domain: String
+
+    func randomItems() -> [Item] {
+        let items = [
+            Item(domain: domain, title: "Swift 2.0", GUID: "1"),
+            Item(domain: domain, title: "Strings in Swift 2", GUID: "2"),
+            Item(domain: domain, title: "Swift-er SDK", GUID: "3"),
+            Item(domain: domain, title: "Swift 2 Apps in the App Store", GUID: "4"),
+            Item(domain: domain, title: "Literals in Playgrounds", GUID: "5"),
+            Item(domain: domain, title: "Swift Open Source", GUID: "6")
+        ]
+        return [Item](items[0..<Int(arc4random_uniform(UInt32(items.count)))])
+    }
+
+    func fetch() -> Result<FetchResponse> {
+        if arc4random_uniform(2) == 0 {
+            let fetchResponse = FetchResponse(
+                items: randomItems(),
+                nextFetchTime: now + 300 * millisecond
+            )
+            return Result.Value(fetchResponse)
+        } else {
+            struct Error : ErrorType, CustomStringConvertible { let description: String }
+            return Result.Error(Error(description: "Network Error"))
+        }
+    }
+}
+
+protocol SubscriptionType {
+    var updates: SendingChannel<Item> { get }
+    func close() -> ErrorType?
+}
+
+struct Subscription : SubscriptionType {
+    let fetcher: FetcherType
+    let items = Channel<Item>()
+    let closing = Channel<Channel<ErrorType?>>()
+
+    init(fetcher: FetcherType) {
+        self.fetcher = fetcher
+        go(self.getUpdates())
+    }
+
+    var updates: SendingChannel<Item> {
+        return self.items.sendingChannel
+    }
+
+    func getUpdates() {
+        let maxPendingItems = 10
+        let fetchDone = Channel<Result<FetchResponse>>(bufferSize: 1)
+
+        var lastError: ErrorType?
+        var pendingItems: [Item] = []
+        var seenItems: [Item] = []
+        var nextFetchTime = now
+        var fetching = false
+
+        forSelect { when, done in
+            when.receiveFrom(closing) { errorChannel in
+                errorChannel <- lastError
+                self.items.close()
+                done()
+            }
+
+            if !fetching && pendingItems.count < maxPendingItems {
+                when.timeout(nextFetchTime) {
+                    fetching = true
+                    go {
+                        fetchDone <- self.fetcher.fetch()
+                    }
+                }
+            }
+
+            when.receiveFrom(fetchDone) { fetchResult in
+                fetching = false
+                fetchResult.success { response in
+                    for item in response.items {
+                        if !seenItems.contains(item) {
+                            pendingItems.append(item)
+                            seenItems.append(item)
+                        }
+                    }
+                    lastError = nil
+                    nextFetchTime = response.nextFetchTime
+                }
+                fetchResult.failure { error in
+                    lastError = error
+                    nextFetchTime = now + 1 * second
+                }
+            }
+
+            if let item = pendingItems.first {
+                when.send(item, to: items) {
+                    pendingItems.removeFirst()
+                }
+            }
+        }
+    }
+
+    func close() -> ErrorType? {
+        let errorChannel = Channel<ErrorType?>()
+        closing <- errorChannel
+        return !<-errorChannel
+    }
+}
+
+let fetcher = Fetcher(domain: "developer.apple.com/swift/blog/")
+let subscription = Subscription(fetcher: fetcher)
+
+goAfter(5 * second) {
+    if let lastError = subscription.close() {
+        print("Closed with last error: \(lastError)")
+    } else {
+        print("Closed with no last error")
+    }
+}
+
+for item in subscription.updates {
+    print("\(item.domain): \(item.title)")
+}
+```
+
+###Output
+
+```
+developer.apple.com/swift/blog/: Swift 2.0
+developer.apple.com/swift/blog/: Strings in Swift 2
+developer.apple.com/swift/blog/: Swift-er SDK
+developer.apple.com/swift/blog/: Swift 2 Apps in the App Store
+Closed with last error: Network Error
 ```
 
 License

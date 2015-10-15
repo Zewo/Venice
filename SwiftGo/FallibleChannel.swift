@@ -168,13 +168,3 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
     }
 
 }
-
-extension FallibleChannel {
-
-    public class func fanIn<T>(channels: FallibleChannel<T>...) -> FallibleSendingChannel<T> {
-        let fanInChannel = FallibleChannel<T>()
-        for channel in channels { go { for element in channel { fanInChannel <- element } } }
-        return fanInChannel.sendingChannel
-    }
-
-}
