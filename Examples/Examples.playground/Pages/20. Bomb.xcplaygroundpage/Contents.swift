@@ -1,4 +1,4 @@
-import SwiftGo
+import Venice
 
 let tick = Ticker(period: 100 * millisecond).channel
 let boom = Timer(deadline: now + 500 * millisecond).channel

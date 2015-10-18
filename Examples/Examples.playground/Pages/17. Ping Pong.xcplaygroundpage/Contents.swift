@@ -1,4 +1,4 @@
-import SwiftGo
+import Venice
 
 final class Ball { var hits: Int = 0 }
 
@@ -14,8 +14,8 @@ func player(name: String, table: Channel<Ball>) {
 
 let table = Channel<Ball>()
 
-go(player("ping", table: table))
-go(player("pong", table: table))
+co(player("ping", table: table))
+co(player("pong", table: table))
 
 table <- Ball()
 nap(1 * second)

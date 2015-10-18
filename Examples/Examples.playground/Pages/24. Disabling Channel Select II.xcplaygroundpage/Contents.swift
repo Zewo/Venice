@@ -1,11 +1,11 @@
-import SwiftGo
+import Venice
 import Darwin
 
 let channelA = Channel<String>()
 let channelB = Channel<String>()
 
-go(channelA <- "a")
-go(channelB <- "b")
+co(channelA <- "a")
+co(channelB <- "b")
 
 select { when in
     if arc4random_uniform(2) == 0 {

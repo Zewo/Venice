@@ -1,26 +1,26 @@
-import SwiftGo
+import Venice
 //: Channels
 //: --------
 //:
 //: *Channels* are the pipes that connect concurrent
-//: goroutines. You can send values into channels from one
-//: goroutine and receive those values into another
-//: goroutine.
+//: coroutines. You can send values into channels from one
+//: coroutine and receive those values into another
+//: coroutine.
 //:
 //: Create a new channel with `Channel<Type>()`.
 //: Channels are typed by the values they convey.
 let messages = Channel<String>()
 //: _Send_ a value into a channel using the `channel <- value`
 //: syntax. Here we send `"ping"`  to the `messages`
-//: channel we made above, from a new goroutine.
-go(messages <- "ping")
+//: channel we made above, from a new coroutine.
+co(messages <- "ping")
 //: The `<-channel` syntax _receives_ a value from the
 //: channel. Here we'll receive the `"ping"` message
 //: we sent above and print it out.
 let message = <-messages
 print(message!)
 //: When we run the program the "ping" message is successfully passed from 
-//: one goroutine to another via our channel.
+//: one coroutine to another via our channel.
 //:
 //: By default sends and receives block until both the sender and receiver 
 //: are ready. This property allowed us to wait at the end of our program 

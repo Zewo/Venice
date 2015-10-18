@@ -1,9 +1,9 @@
-import SwiftGo
+import Venice
 //: Worker Pools
 //: ------------
 //:
 //: In this example we'll look at how to implement
-//: a _worker pool_ using goroutines and channels.
+//: a _worker pool_ using coroutines and channels.
 //:
 //: Here's the worker, of which we'll run several
 //: concurrent instances. These workers will receive
@@ -25,7 +25,7 @@ let results = Channel<Int>(bufferSize: 100)
 //: This starts up 3 workers, initially blocked
 //: because there are no jobs yet.
 for workerId in 1 ... 3 {
-    go(worker(workerId, jobs: jobs, results: results))
+    co(worker(workerId, jobs: jobs, results: results))
 }
 //: Here we send 9 `jobs` and then `close` that
 //: channel to indicate that's all the work we have.

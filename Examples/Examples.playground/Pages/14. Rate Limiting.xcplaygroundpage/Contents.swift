@@ -1,11 +1,11 @@
-import SwiftGo
+import Venice
 //: Rate Limiting
 //: -------------
 //:
 //: _[Rate limiting](http://en.wikipedia.org/wiki/Rate_limiting)_
 //: is an important mechanism for controlling resource
-//: utilization and maintaining quality of service. SwiftGo
-//: elegantly supports rate limiting with goroutines,
+//: utilization and maintaining quality of service. Venice
+//: elegantly supports rate limiting with coroutines,
 //: channels, and [tickers](12.%20Tickers).
 //:
 //: First we'll look at basic rate limiting. Suppose
@@ -44,7 +44,7 @@ for _ in 0 ..< 3 {
 }
 //: Every 200 milliseconds we'll try to add a new
 //: value to `burstyLimiter`, up to its limit of 3.
-go {
+co {
     for time in Ticker(period: 200 * millisecond).channel {
         burstyLimiter <- time
     }
@@ -70,4 +70,4 @@ for request in burstyRequests {
 //: For the second batch of requests we serve the first 3 immediately because of the burstable 
 //: rate limiting, then serve the remaining 2 with ~200ms delays each.
 //:
-//: Next example: [Stateful Goroutines](@next)
+//: Next example: [Stateful coroutines](@next)

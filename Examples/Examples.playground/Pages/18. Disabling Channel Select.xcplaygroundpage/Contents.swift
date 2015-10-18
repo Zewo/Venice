@@ -1,4 +1,4 @@
-import SwiftGo
+import Venice
 import Darwin
 
 var channelA: Channel<String>? = Channel<String>()
@@ -12,8 +12,8 @@ if arc4random_uniform(2) == 0 {
     print("disabled channel b")
 }
 
-go { channelA?.receive("a") }
-go { channelB?.receive("b") }
+co { channelA?.receive("a") }
+co { channelB?.receive("b") }
 
 select { when in
     when.receiveFrom(channelA) { value in

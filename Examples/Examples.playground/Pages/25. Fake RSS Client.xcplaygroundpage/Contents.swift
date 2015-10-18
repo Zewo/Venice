@@ -1,4 +1,4 @@
-import SwiftGo
+import Venice
 import Darwin
 
 struct Item : Equatable {
@@ -61,7 +61,7 @@ struct Subscription : SubscriptionType {
 
     init(fetcher: FetcherType) {
         self.fetcher = fetcher
-        go(self.getUpdates())
+        co(self.getUpdates())
     }
 
     var updates: SendingChannel<Item> {
@@ -88,7 +88,7 @@ struct Subscription : SubscriptionType {
             if !fetching && pendingItems.count < maxPendingItems {
                 when.timeout(nextFetchTime) {
                     fetching = true
-                    go {
+                    co {
                         fetchDone <- self.fetcher.fetch()
                     }
                 }
@@ -130,7 +130,7 @@ struct Subscription : SubscriptionType {
 let fetcher = Fetcher(domain: "developer.apple.com/swift/blog/")
 let subscription = Subscription(fetcher: fetcher)
 
-goAfter(5 * second) {
+after(5 * second) {
     if let lastError = subscription.close() {
         print("Closed with last error: \(lastError)")
     } else {

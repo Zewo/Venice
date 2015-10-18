@@ -1,0 +1,1061 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 47;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3A36C9F01BC5384200B02006 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A36C9EF1BC5384200B02006 /* main.swift */; };
+		3A36C9F71BC538C200B02006 /* Venice.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A36C9F61BC538C200B02006 /* Venice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A36C9F81BC538E600B02006 /* Venice.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A36C9F61BC538C200B02006 /* Venice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A36C9F91BC539CF00B02006 /* chan.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89A1BAF08A300C0919E /* chan.c */; settings = {ASSET_TAGS = (); }; };
+		3A36C9FA1BC539CF00B02006 /* cr.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89C1BAF08A300C0919E /* cr.c */; settings = {ASSET_TAGS = (); }; };
+		3A36C9FB1BC539CF00B02006 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89F1BAF08A300C0919E /* list.c */; settings = {ASSET_TAGS = (); }; };
+		3A36C9FC1BC539CF00B02006 /* poller.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A21BAF08A300C0919E /* poller.c */; settings = {ASSET_TAGS = (); }; };
+		3A36C9FD1BC539CF00B02006 /* slist.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A41BAF08A300C0919E /* slist.c */; settings = {ASSET_TAGS = (); }; };
+		3A36C9FE1BC539CF00B02006 /* stack.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A61BAF08A300C0919E /* stack.c */; settings = {ASSET_TAGS = (); }; };
+		3A36C9FF1BC539CF00B02006 /* libmill_swift.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A81BAF08A300C0919E /* libmill_swift.c */; settings = {ASSET_TAGS = (); }; };
+		3A36CA001BC539CF00B02006 /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8AA1BAF08A300C0919E /* utils.c */; settings = {ASSET_TAGS = (); }; };
+		3A36CA011BC539CF00B02006 /* Co.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E201B7E6353004CBD6E /* Co.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA021BC539CF00B02006 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003AD821BAF84F700AAD51E /* Operators.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA031BC539CF00B02006 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E221B7E6380004CBD6E /* Channel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA041BC539CF00B02006 /* Receivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC11BB1814700548E11 /* Receivable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA051BC539CF00B02006 /* Sendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC41BB1819D00548E11 /* Sendable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA061BC539CF00B02006 /* ReceivingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BBB1BB1806E00548E11 /* ReceivingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA071BC539CF00B02006 /* SendingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BBE1BB180AF00548E11 /* SendingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA081BC539CF00B02006 /* FallibleChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003AD7F1BAF838B00AAD51E /* FallibleChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA091BC539CF00B02006 /* FallibleReceivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BCA1BB1834E00548E11 /* FallibleReceivable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA0A1BC539CF00B02006 /* FallibleSendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC71BB182FB00548E11 /* FallibleSendable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA0B1BC539CF00B02006 /* FallibleReceivingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BCD1BB183D400548E11 /* FallibleReceivingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA0C1BC539CF00B02006 /* FallibleSendingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BD01BB1840900548E11 /* FallibleSendingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA0D1BC539CF00B02006 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E241B7E63BA004CBD6E /* Select.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA0E1BC539CF00B02006 /* Ticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E451B7EA641004CBD6E /* Ticker.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA0F1BC539CF00B02006 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E431B7E8B03004CBD6E /* Timer.swift */; settings = {ASSET_TAGS = (); }; };
+		3A36CA171BC53AE300B02006 /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A36CA161BC53AE300B02006 /* PerformanceTests.swift */; };
+		3A568BBC1BB1806E00548E11 /* ReceivingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BBB1BB1806E00548E11 /* ReceivingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BBD1BB1807000548E11 /* ReceivingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BBB1BB1806E00548E11 /* ReceivingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BBF1BB180AF00548E11 /* SendingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BBE1BB180AF00548E11 /* SendingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BC01BB180AF00548E11 /* SendingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BBE1BB180AF00548E11 /* SendingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BC21BB1814700548E11 /* Receivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC11BB1814700548E11 /* Receivable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BC31BB1814700548E11 /* Receivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC11BB1814700548E11 /* Receivable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BC51BB1819D00548E11 /* Sendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC41BB1819D00548E11 /* Sendable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BC61BB1819D00548E11 /* Sendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC41BB1819D00548E11 /* Sendable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BC81BB182FB00548E11 /* FallibleSendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC71BB182FB00548E11 /* FallibleSendable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BC91BB182FB00548E11 /* FallibleSendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC71BB182FB00548E11 /* FallibleSendable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BCB1BB1834E00548E11 /* FallibleReceivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BCA1BB1834E00548E11 /* FallibleReceivable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BCC1BB1834E00548E11 /* FallibleReceivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BCA1BB1834E00548E11 /* FallibleReceivable.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BCE1BB183D400548E11 /* FallibleReceivingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BCD1BB183D400548E11 /* FallibleReceivingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BCF1BB183D400548E11 /* FallibleReceivingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BCD1BB183D400548E11 /* FallibleReceivingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BD11BB1840900548E11 /* FallibleSendingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BD01BB1840900548E11 /* FallibleSendingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		3A568BD21BB1840900548E11 /* FallibleSendingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BD01BB1840900548E11 /* FallibleSendingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		B003AD801BAF838B00AAD51E /* FallibleChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003AD7F1BAF838B00AAD51E /* FallibleChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		B003AD811BAF838B00AAD51E /* FallibleChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003AD7F1BAF838B00AAD51E /* FallibleChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		B003AD831BAF84F700AAD51E /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003AD821BAF84F700AAD51E /* Operators.swift */; settings = {ASSET_TAGS = (); }; };
+		B003AD841BAF84F700AAD51E /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003AD821BAF84F700AAD51E /* Operators.swift */; settings = {ASSET_TAGS = (); }; };
+		B004C8AC1BAF08A300C0919E /* chan.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89A1BAF08A300C0919E /* chan.c */; };
+		B004C8AD1BAF08A300C0919E /* chan.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89A1BAF08A300C0919E /* chan.c */; };
+		B004C8AE1BAF08A300C0919E /* chan.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C89B1BAF08A300C0919E /* chan.h */; };
+		B004C8AF1BAF08A300C0919E /* chan.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C89B1BAF08A300C0919E /* chan.h */; };
+		B004C8B01BAF08A300C0919E /* cr.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89C1BAF08A300C0919E /* cr.c */; };
+		B004C8B11BAF08A300C0919E /* cr.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89C1BAF08A300C0919E /* cr.c */; };
+		B004C8B21BAF08A300C0919E /* cr.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C89D1BAF08A300C0919E /* cr.h */; };
+		B004C8B31BAF08A300C0919E /* cr.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C89D1BAF08A300C0919E /* cr.h */; };
+		B004C8B41BAF08A300C0919E /* libmill.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C89E1BAF08A300C0919E /* libmill.h */; };
+		B004C8B51BAF08A300C0919E /* libmill.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C89E1BAF08A300C0919E /* libmill.h */; };
+		B004C8B61BAF08A300C0919E /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89F1BAF08A300C0919E /* list.c */; };
+		B004C8B71BAF08A300C0919E /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89F1BAF08A300C0919E /* list.c */; };
+		B004C8B81BAF08A300C0919E /* list.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A01BAF08A300C0919E /* list.h */; };
+		B004C8B91BAF08A300C0919E /* list.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A01BAF08A300C0919E /* list.h */; };
+		B004C8BA1BAF08A300C0919E /* poller.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A21BAF08A300C0919E /* poller.c */; };
+		B004C8BB1BAF08A300C0919E /* poller.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A21BAF08A300C0919E /* poller.c */; };
+		B004C8BC1BAF08A300C0919E /* poller.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A31BAF08A300C0919E /* poller.h */; };
+		B004C8BD1BAF08A300C0919E /* poller.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A31BAF08A300C0919E /* poller.h */; };
+		B004C8BE1BAF08A300C0919E /* slist.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A41BAF08A300C0919E /* slist.c */; };
+		B004C8BF1BAF08A300C0919E /* slist.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A41BAF08A300C0919E /* slist.c */; };
+		B004C8C01BAF08A300C0919E /* slist.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A51BAF08A300C0919E /* slist.h */; };
+		B004C8C11BAF08A300C0919E /* slist.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A51BAF08A300C0919E /* slist.h */; };
+		B004C8C21BAF08A300C0919E /* stack.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A61BAF08A300C0919E /* stack.c */; };
+		B004C8C31BAF08A300C0919E /* stack.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A61BAF08A300C0919E /* stack.c */; };
+		B004C8C41BAF08A300C0919E /* stack.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A71BAF08A300C0919E /* stack.h */; };
+		B004C8C51BAF08A300C0919E /* stack.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A71BAF08A300C0919E /* stack.h */; };
+		B004C8C61BAF08A300C0919E /* libmill_swift.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A81BAF08A300C0919E /* libmill_swift.c */; };
+		B004C8C71BAF08A300C0919E /* libmill_swift.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A81BAF08A300C0919E /* libmill_swift.c */; };
+		B004C8C81BAF08A300C0919E /* libmill_swift.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A91BAF08A300C0919E /* libmill_swift.h */; };
+		B004C8C91BAF08A300C0919E /* libmill_swift.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8A91BAF08A300C0919E /* libmill_swift.h */; };
+		B004C8CA1BAF08A300C0919E /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8AA1BAF08A300C0919E /* utils.c */; };
+		B004C8CB1BAF08A300C0919E /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8AA1BAF08A300C0919E /* utils.c */; };
+		B004C8CC1BAF08A300C0919E /* utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8AB1BAF08A300C0919E /* utils.h */; };
+		B004C8CD1BAF08A300C0919E /* utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8AB1BAF08A300C0919E /* utils.h */; };
+		B016B46B1BC6D4FC00488CD8 /* SelectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B016B46C1BC6D4FC00488CD8 /* SelectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B05B23501BC899CA00567BD8 /* FallibleChannelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B05B23511BC899CB00567BD8 /* FallibleChannelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B05B23561BC99AD900567BD8 /* TickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B23551BC99AD900567BD8 /* TickerTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B05B23571BC99AD900567BD8 /* TickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B23551BC99AD900567BD8 /* TickerTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B05B23591BC99F2500567BD8 /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B23581BC99F2500567BD8 /* TimerTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B05B235A1BC99F2500567BD8 /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B23581BC99F2500567BD8 /* TimerTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B06CEBA61BAE026200A88073 /* Co.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E201B7E6353004CBD6E /* Co.swift */; };
+		B06CEBA71BAE026200A88073 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E221B7E6380004CBD6E /* Channel.swift */; };
+		B06CEBA81BAE026200A88073 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E241B7E63BA004CBD6E /* Select.swift */; };
+		B06CEBA91BAE026200A88073 /* Ticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E451B7EA641004CBD6E /* Ticker.swift */; };
+		B06CEBAA1BAE026200A88073 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E431B7E8B03004CBD6E /* Timer.swift */; };
+		B07C3D271BC5E0D3008564C3 /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A36CA161BC53AE300B02006 /* PerformanceTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B07C3D291BC60A32008564C3 /* CoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07C3D281BC60A32008564C3 /* CoTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B07C3D2A1BC60A32008564C3 /* CoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07C3D281BC60A32008564C3 /* CoTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B07C3D2C1BC60D3C008564C3 /* ChannelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07C3D2B1BC60D3C008564C3 /* ChannelTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B07C3D2D1BC60D3C008564C3 /* ChannelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07C3D2B1BC60D3C008564C3 /* ChannelTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B0E8CE811B82EC6F007F6857 /* Co.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E201B7E6353004CBD6E /* Co.swift */; };
+		B0E8CE821B82EC6F007F6857 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E221B7E6380004CBD6E /* Channel.swift */; };
+		B0E8CE831B82EC6F007F6857 /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E241B7E63BA004CBD6E /* Select.swift */; };
+		B0E8CE841B82EC6F007F6857 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E431B7E8B03004CBD6E /* Timer.swift */; };
+		B0E8CE851B82EC6F007F6857 /* Ticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E451B7EA641004CBD6E /* Ticker.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3A36C9F41BC5386100B02006 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B06A144B1B7D16800095BA12 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B0E8CE5F1B82C255007F6857;
+			remoteInfo = "SwiftGo OSX";
+		};
+		3A36CA1A1BC53AE300B02006 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B06A144B1B7D16800095BA12 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B0E8CE5F1B82C255007F6857;
+			remoteInfo = "SwiftGo OSX";
+		};
+		B07C3D221BC5E098008564C3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B06A144B1B7D16800095BA12 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B06CEB951BAE020600A88073;
+			remoteInfo = "SwiftGo iOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3A36C9EB1BC5384200B02006 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		3A36C9ED1BC5384200B02006 /* Venice */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = Venice; path = /Users/paulofaria/Development/Venice/build/Debug/Venice; sourceTree = "<absolute>"; };
+		3A36C9EF1BC5384200B02006 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = main.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		3A36C9F61BC538C200B02006 /* Venice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Venice.h; sourceTree = "<group>"; };
+		3A36CA141BC53AE300B02006 /* Venice iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "Venice iOS Tests.xctest"; path = "/Users/paulofaria/Development/Venice/build/Debug/Venice iOS Tests.xctest"; sourceTree = "<absolute>"; };
+		3A36CA161BC53AE300B02006 /* PerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PerformanceTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		3A36CA181BC53AE300B02006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3A568BBB1BB1806E00548E11 /* ReceivingChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReceivingChannel.swift; sourceTree = "<group>"; };
+		3A568BBE1BB180AF00548E11 /* SendingChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendingChannel.swift; sourceTree = "<group>"; };
+		3A568BC11BB1814700548E11 /* Receivable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Receivable.swift; sourceTree = "<group>"; };
+		3A568BC41BB1819D00548E11 /* Sendable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sendable.swift; sourceTree = "<group>"; };
+		3A568BC71BB182FB00548E11 /* FallibleSendable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FallibleSendable.swift; sourceTree = "<group>"; };
+		3A568BCA1BB1834E00548E11 /* FallibleReceivable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FallibleReceivable.swift; sourceTree = "<group>"; };
+		3A568BCD1BB183D400548E11 /* FallibleReceivingChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FallibleReceivingChannel.swift; sourceTree = "<group>"; };
+		3A568BD01BB1840900548E11 /* FallibleSendingChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FallibleSendingChannel.swift; sourceTree = "<group>"; };
+		B003AD7F1BAF838B00AAD51E /* FallibleChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = FallibleChannel.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B003AD821BAF84F700AAD51E /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
+		B004C89A1BAF08A300C0919E /* chan.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = chan.c; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
+		B004C89B1BAF08A300C0919E /* chan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chan.h; sourceTree = "<group>"; };
+		B004C89C1BAF08A300C0919E /* cr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = cr.c; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
+		B004C89D1BAF08A300C0919E /* cr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cr.h; sourceTree = "<group>"; };
+		B004C89E1BAF08A300C0919E /* libmill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = libmill.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		B004C89F1BAF08A300C0919E /* list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = list.c; sourceTree = "<group>"; };
+		B004C8A01BAF08A300C0919E /* list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = list.h; sourceTree = "<group>"; };
+		B004C8A11BAF08A300C0919E /* module.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.map; sourceTree = "<group>"; };
+		B004C8A21BAF08A300C0919E /* poller.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = poller.c; sourceTree = "<group>"; };
+		B004C8A31BAF08A300C0919E /* poller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = poller.h; sourceTree = "<group>"; };
+		B004C8A41BAF08A300C0919E /* slist.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = slist.c; sourceTree = "<group>"; };
+		B004C8A51BAF08A300C0919E /* slist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slist.h; sourceTree = "<group>"; };
+		B004C8A61BAF08A300C0919E /* stack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stack.c; sourceTree = "<group>"; };
+		B004C8A71BAF08A300C0919E /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
+		B004C8A81BAF08A300C0919E /* libmill_swift.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = libmill_swift.c; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
+		B004C8A91BAF08A300C0919E /* libmill_swift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = libmill_swift.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		B004C8AA1BAF08A300C0919E /* utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utils.c; sourceTree = "<group>"; };
+		B004C8AB1BAF08A300C0919E /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SelectTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = FallibleChannelTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B05B23551BC99AD900567BD8 /* TickerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TickerTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B05B23581BC99F2500567BD8 /* TimerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TimerTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B06CEB961BAE020600A88073 /* Venice.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Venice.framework; path = "/Users/paulofaria/Development/Venice/build/Debug-iphoneos/Venice.framework"; sourceTree = "<absolute>"; };
+		B07C3D1C1BC5E098008564C3 /* Venice iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "Venice iOS Tests.xctest"; path = "/Users/paulofaria/Development/Venice/build/Debug-iphoneos/Venice iOS Tests.xctest"; sourceTree = "<absolute>"; };
+		B07C3D281BC60A32008564C3 /* CoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CoTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B07C3D2B1BC60D3C008564C3 /* ChannelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChannelTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B0E27E201B7E6353004CBD6E /* Co.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Co.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B0E27E221B7E6380004CBD6E /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
+		B0E27E241B7E63BA004CBD6E /* Select.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Select.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B0E27E431B7E8B03004CBD6E /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
+		B0E27E451B7EA641004CBD6E /* Ticker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ticker.swift; sourceTree = "<group>"; };
+		B0E8CE601B82C255007F6857 /* Venice.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Venice.framework; path = /Users/paulofaria/Development/Venice/build/Release/Venice.framework; sourceTree = "<absolute>"; };
+		B0E8CE641B82C255007F6857 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B0E8CE771B82EC39007F6857 /* Examples.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Examples.playground; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3A36C9EA1BC5384200B02006 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3A36CA111BC53AE300B02006 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B06CEB921BAE020600A88073 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B07C3D191BC5E098008564C3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0E8CE5C1B82C255007F6857 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3A36C9EE1BC5384200B02006 /* Venice Command Line */ = {
+			isa = PBXGroup;
+			children = (
+				3A36C9EF1BC5384200B02006 /* main.swift */,
+			);
+			path = "Venice Command Line";
+			sourceTree = "<group>";
+		};
+		3A36CA151BC53AE300B02006 /* Venice Tests */ = {
+			isa = PBXGroup;
+			children = (
+				3A36CA181BC53AE300B02006 /* Info.plist */,
+				B07C3D2B1BC60D3C008564C3 /* ChannelTests.swift */,
+				B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */,
+				B07C3D281BC60A32008564C3 /* CoTests.swift */,
+				3A36CA161BC53AE300B02006 /* PerformanceTests.swift */,
+				B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */,
+				B05B23551BC99AD900567BD8 /* TickerTests.swift */,
+				B05B23581BC99F2500567BD8 /* TimerTests.swift */,
+			);
+			path = "Venice Tests";
+			sourceTree = "<group>";
+		};
+		B004C8981BAF08A300C0919E /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				B004C8991BAF08A300C0919E /* libmill */,
+			);
+			path = Dependencies;
+			sourceTree = "<group>";
+		};
+		B004C8991BAF08A300C0919E /* libmill */ = {
+			isa = PBXGroup;
+			children = (
+				B004C8A11BAF08A300C0919E /* module.map */,
+				B004C8A91BAF08A300C0919E /* libmill_swift.h */,
+				B004C8A81BAF08A300C0919E /* libmill_swift.c */,
+				B004C89A1BAF08A300C0919E /* chan.c */,
+				B004C89B1BAF08A300C0919E /* chan.h */,
+				B004C89C1BAF08A300C0919E /* cr.c */,
+				B004C89D1BAF08A300C0919E /* cr.h */,
+				B004C89E1BAF08A300C0919E /* libmill.h */,
+				B004C89F1BAF08A300C0919E /* list.c */,
+				B004C8A01BAF08A300C0919E /* list.h */,
+				B004C8A21BAF08A300C0919E /* poller.c */,
+				B004C8A31BAF08A300C0919E /* poller.h */,
+				B004C8A41BAF08A300C0919E /* slist.c */,
+				B004C8A51BAF08A300C0919E /* slist.h */,
+				B004C8A61BAF08A300C0919E /* stack.c */,
+				B004C8A71BAF08A300C0919E /* stack.h */,
+				B004C8AA1BAF08A300C0919E /* utils.c */,
+				B004C8AB1BAF08A300C0919E /* utils.h */,
+			);
+			path = libmill;
+			sourceTree = "<group>";
+		};
+		B06A144A1B7D16800095BA12 = {
+			isa = PBXGroup;
+			children = (
+				B004C8981BAF08A300C0919E /* Dependencies */,
+				B06CEBAB1BAE029C00A88073 /* Venice */,
+				3A36CA151BC53AE300B02006 /* Venice Tests */,
+				3A36C9EE1BC5384200B02006 /* Venice Command Line */,
+				B0E8CE781B82EC4E007F6857 /* Examples */,
+			);
+			sourceTree = "<group>";
+		};
+		B06CEBAB1BAE029C00A88073 /* Venice */ = {
+			isa = PBXGroup;
+			children = (
+				3A36C9F61BC538C200B02006 /* Venice.h */,
+				B0E8CE641B82C255007F6857 /* Info.plist */,
+				B097D6071BD463440093407B /* Channel */,
+				B097D6081BD463490093407B /* Co */,
+				B097D60A1BD463530093407B /* Fallible Channel */,
+				B097D6091BD4634D0093407B /* Operators */,
+				B097D60B1BD4635D0093407B /* Select */,
+				B097D60C1BD463630093407B /* Ticker */,
+				B097D60D1BD463680093407B /* Timer */,
+			);
+			path = Venice;
+			sourceTree = "<group>";
+		};
+		B097D6071BD463440093407B /* Channel */ = {
+			isa = PBXGroup;
+			children = (
+				B0E27E221B7E6380004CBD6E /* Channel.swift */,
+				3A568BC11BB1814700548E11 /* Receivable.swift */,
+				3A568BBB1BB1806E00548E11 /* ReceivingChannel.swift */,
+				3A568BC41BB1819D00548E11 /* Sendable.swift */,
+				3A568BBE1BB180AF00548E11 /* SendingChannel.swift */,
+			);
+			path = Channel;
+			sourceTree = "<group>";
+		};
+		B097D6081BD463490093407B /* Co */ = {
+			isa = PBXGroup;
+			children = (
+				B0E27E201B7E6353004CBD6E /* Co.swift */,
+			);
+			path = Co;
+			sourceTree = "<group>";
+		};
+		B097D6091BD4634D0093407B /* Operators */ = {
+			isa = PBXGroup;
+			children = (
+				B003AD821BAF84F700AAD51E /* Operators.swift */,
+			);
+			path = Operators;
+			sourceTree = "<group>";
+		};
+		B097D60A1BD463530093407B /* Fallible Channel */ = {
+			isa = PBXGroup;
+			children = (
+				B003AD7F1BAF838B00AAD51E /* FallibleChannel.swift */,
+				3A568BCA1BB1834E00548E11 /* FallibleReceivable.swift */,
+				3A568BCD1BB183D400548E11 /* FallibleReceivingChannel.swift */,
+				3A568BC71BB182FB00548E11 /* FallibleSendable.swift */,
+				3A568BD01BB1840900548E11 /* FallibleSendingChannel.swift */,
+			);
+			path = "Fallible Channel";
+			sourceTree = "<group>";
+		};
+		B097D60B1BD4635D0093407B /* Select */ = {
+			isa = PBXGroup;
+			children = (
+				B0E27E241B7E63BA004CBD6E /* Select.swift */,
+			);
+			path = Select;
+			sourceTree = "<group>";
+		};
+		B097D60C1BD463630093407B /* Ticker */ = {
+			isa = PBXGroup;
+			children = (
+				B0E27E451B7EA641004CBD6E /* Ticker.swift */,
+			);
+			path = Ticker;
+			sourceTree = "<group>";
+		};
+		B097D60D1BD463680093407B /* Timer */ = {
+			isa = PBXGroup;
+			children = (
+				B0E27E431B7E8B03004CBD6E /* Timer.swift */,
+			);
+			path = Timer;
+			sourceTree = "<group>";
+		};
+		B0E8CE781B82EC4E007F6857 /* Examples */ = {
+			isa = PBXGroup;
+			children = (
+				B0E8CE771B82EC39007F6857 /* Examples.playground */,
+			);
+			path = Examples;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		B06CEB931BAE020600A88073 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A36C9F81BC538E600B02006 /* Venice.h in Headers */,
+				B004C8CD1BAF08A300C0919E /* utils.h in Headers */,
+				B004C8B91BAF08A300C0919E /* list.h in Headers */,
+				B004C8B51BAF08A300C0919E /* libmill.h in Headers */,
+				B004C8BD1BAF08A300C0919E /* poller.h in Headers */,
+				B004C8C51BAF08A300C0919E /* stack.h in Headers */,
+				B004C8AF1BAF08A300C0919E /* chan.h in Headers */,
+				B004C8B31BAF08A300C0919E /* cr.h in Headers */,
+				B004C8C11BAF08A300C0919E /* slist.h in Headers */,
+				B004C8C91BAF08A300C0919E /* libmill_swift.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0E8CE5D1B82C255007F6857 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A36C9F71BC538C200B02006 /* Venice.h in Headers */,
+				B004C8CC1BAF08A300C0919E /* utils.h in Headers */,
+				B004C8B81BAF08A300C0919E /* list.h in Headers */,
+				B004C8B41BAF08A300C0919E /* libmill.h in Headers */,
+				B004C8BC1BAF08A300C0919E /* poller.h in Headers */,
+				B004C8C41BAF08A300C0919E /* stack.h in Headers */,
+				B004C8AE1BAF08A300C0919E /* chan.h in Headers */,
+				B004C8B21BAF08A300C0919E /* cr.h in Headers */,
+				B004C8C01BAF08A300C0919E /* slist.h in Headers */,
+				B004C8C81BAF08A300C0919E /* libmill_swift.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		3A36C9EC1BC5384200B02006 /* Venice Command Line */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3A36C9F31BC5384200B02006 /* Build configuration list for PBXNativeTarget "Venice Command Line" */;
+			buildPhases = (
+				3A36C9E91BC5384200B02006 /* Sources */,
+				3A36C9EA1BC5384200B02006 /* Frameworks */,
+				3A36C9EB1BC5384200B02006 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3A36C9F51BC5386100B02006 /* PBXTargetDependency */,
+			);
+			name = "Venice Command Line";
+			productName = "SwiftGo CLI";
+			productReference = 3A36C9ED1BC5384200B02006 /* Venice */;
+			productType = "com.apple.product-type.tool";
+		};
+		3A36CA131BC53AE300B02006 /* Venice OSX Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3A36CA1C1BC53AE300B02006 /* Build configuration list for PBXNativeTarget "Venice OSX Tests" */;
+			buildPhases = (
+				3A36CA101BC53AE300B02006 /* Sources */,
+				3A36CA111BC53AE300B02006 /* Frameworks */,
+				3A36CA121BC53AE300B02006 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3A36CA1B1BC53AE300B02006 /* PBXTargetDependency */,
+			);
+			name = "Venice OSX Tests";
+			productName = "SwiftGo Tests";
+			productReference = 3A36CA141BC53AE300B02006 /* Venice iOS Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B06CEB951BAE020600A88073 /* Venice iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B06CEB9B1BAE020600A88073 /* Build configuration list for PBXNativeTarget "Venice iOS" */;
+			buildPhases = (
+				B06CEB911BAE020600A88073 /* Sources */,
+				B06CEB921BAE020600A88073 /* Frameworks */,
+				B06CEB931BAE020600A88073 /* Headers */,
+				B06CEB941BAE020600A88073 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Venice iOS";
+			productName = "SwiftGo iOS";
+			productReference = B06CEB961BAE020600A88073 /* Venice.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		B07C3D1B1BC5E098008564C3 /* Venice iOS Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B07C3D241BC5E098008564C3 /* Build configuration list for PBXNativeTarget "Venice iOS Tests" */;
+			buildPhases = (
+				B07C3D181BC5E098008564C3 /* Sources */,
+				B07C3D191BC5E098008564C3 /* Frameworks */,
+				B07C3D1A1BC5E098008564C3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B07C3D231BC5E098008564C3 /* PBXTargetDependency */,
+			);
+			name = "Venice iOS Tests";
+			productName = "SwiftGo iOS Tests";
+			productReference = B07C3D1C1BC5E098008564C3 /* Venice iOS Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B0E8CE5F1B82C255007F6857 /* Venice OSX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B0E8CE711B82C256007F6857 /* Build configuration list for PBXNativeTarget "Venice OSX" */;
+			buildPhases = (
+				B0E8CE5B1B82C255007F6857 /* Sources */,
+				B0E8CE5C1B82C255007F6857 /* Frameworks */,
+				B0E8CE5D1B82C255007F6857 /* Headers */,
+				B0E8CE5E1B82C255007F6857 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Venice OSX";
+			productName = Go;
+			productReference = B0E8CE601B82C255007F6857 /* Venice.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B06A144B1B7D16800095BA12 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = Zewo;
+				TargetAttributes = {
+					3A36C9EC1BC5384200B02006 = {
+						CreatedOnToolsVersion = 7.0.1;
+					};
+					3A36CA131BC53AE300B02006 = {
+						CreatedOnToolsVersion = 7.0.1;
+					};
+					B06CEB951BAE020600A88073 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					B07C3D1B1BC5E098008564C3 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					B0E8CE5F1B82C255007F6857 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+				};
+			};
+			buildConfigurationList = B06A144E1B7D16800095BA12 /* Build configuration list for PBXProject "Venice" */;
+			compatibilityVersion = "Xcode 6.3";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = B06A144A1B7D16800095BA12;
+			productRefGroup = B06A144A1B7D16800095BA12;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B0E8CE5F1B82C255007F6857 /* Venice OSX */,
+				B06CEB951BAE020600A88073 /* Venice iOS */,
+				3A36CA131BC53AE300B02006 /* Venice OSX Tests */,
+				B07C3D1B1BC5E098008564C3 /* Venice iOS Tests */,
+				3A36C9EC1BC5384200B02006 /* Venice Command Line */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3A36CA121BC53AE300B02006 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B06CEB941BAE020600A88073 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B07C3D1A1BC5E098008564C3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0E8CE5E1B82C255007F6857 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3A36C9E91BC5384200B02006 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A36CA071BC539CF00B02006 /* SendingChannel.swift in Sources */,
+				3A36C9F01BC5384200B02006 /* main.swift in Sources */,
+				3A36CA091BC539CF00B02006 /* FallibleReceivable.swift in Sources */,
+				3A36CA0D1BC539CF00B02006 /* Select.swift in Sources */,
+				3A36CA051BC539CF00B02006 /* Sendable.swift in Sources */,
+				3A36CA081BC539CF00B02006 /* FallibleChannel.swift in Sources */,
+				3A36CA031BC539CF00B02006 /* Channel.swift in Sources */,
+				3A36C9FA1BC539CF00B02006 /* cr.c in Sources */,
+				3A36CA061BC539CF00B02006 /* ReceivingChannel.swift in Sources */,
+				3A36CA0A1BC539CF00B02006 /* FallibleSendable.swift in Sources */,
+				3A36CA0E1BC539CF00B02006 /* Ticker.swift in Sources */,
+				3A36CA0C1BC539CF00B02006 /* FallibleSendingChannel.swift in Sources */,
+				3A36C9F91BC539CF00B02006 /* chan.c in Sources */,
+				3A36CA041BC539CF00B02006 /* Receivable.swift in Sources */,
+				3A36CA011BC539CF00B02006 /* Co.swift in Sources */,
+				3A36CA0F1BC539CF00B02006 /* Timer.swift in Sources */,
+				3A36CA001BC539CF00B02006 /* utils.c in Sources */,
+				3A36C9FD1BC539CF00B02006 /* slist.c in Sources */,
+				3A36CA021BC539CF00B02006 /* Operators.swift in Sources */,
+				3A36C9FE1BC539CF00B02006 /* stack.c in Sources */,
+				3A36C9FF1BC539CF00B02006 /* libmill_swift.c in Sources */,
+				3A36CA0B1BC539CF00B02006 /* FallibleReceivingChannel.swift in Sources */,
+				3A36C9FC1BC539CF00B02006 /* poller.c in Sources */,
+				3A36C9FB1BC539CF00B02006 /* list.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3A36CA101BC53AE300B02006 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A36CA171BC53AE300B02006 /* PerformanceTests.swift in Sources */,
+				B05B23591BC99F2500567BD8 /* TimerTests.swift in Sources */,
+				B07C3D2C1BC60D3C008564C3 /* ChannelTests.swift in Sources */,
+				B07C3D291BC60A32008564C3 /* CoTests.swift in Sources */,
+				B016B46B1BC6D4FC00488CD8 /* SelectTests.swift in Sources */,
+				B05B23501BC899CA00567BD8 /* FallibleChannelTests.swift in Sources */,
+				B05B23561BC99AD900567BD8 /* TickerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B06CEB911BAE020600A88073 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B06CEBA91BAE026200A88073 /* Ticker.swift in Sources */,
+				B004C8AD1BAF08A300C0919E /* chan.c in Sources */,
+				B06CEBA71BAE026200A88073 /* Channel.swift in Sources */,
+				3A568BC31BB1814700548E11 /* Receivable.swift in Sources */,
+				3A568BC61BB1819D00548E11 /* Sendable.swift in Sources */,
+				3A568BCC1BB1834E00548E11 /* FallibleReceivable.swift in Sources */,
+				B004C8B71BAF08A300C0919E /* list.c in Sources */,
+				3A568BC91BB182FB00548E11 /* FallibleSendable.swift in Sources */,
+				B004C8BB1BAF08A300C0919E /* poller.c in Sources */,
+				B004C8C71BAF08A300C0919E /* libmill_swift.c in Sources */,
+				3A568BBD1BB1807000548E11 /* ReceivingChannel.swift in Sources */,
+				B06CEBAA1BAE026200A88073 /* Timer.swift in Sources */,
+				B004C8CB1BAF08A300C0919E /* utils.c in Sources */,
+				B004C8B11BAF08A300C0919E /* cr.c in Sources */,
+				B004C8C31BAF08A300C0919E /* stack.c in Sources */,
+				3A568BD21BB1840900548E11 /* FallibleSendingChannel.swift in Sources */,
+				B06CEBA81BAE026200A88073 /* Select.swift in Sources */,
+				B003AD841BAF84F700AAD51E /* Operators.swift in Sources */,
+				3A568BC01BB180AF00548E11 /* SendingChannel.swift in Sources */,
+				B06CEBA61BAE026200A88073 /* Co.swift in Sources */,
+				B004C8BF1BAF08A300C0919E /* slist.c in Sources */,
+				B003AD811BAF838B00AAD51E /* FallibleChannel.swift in Sources */,
+				3A568BCF1BB183D400548E11 /* FallibleReceivingChannel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B07C3D181BC5E098008564C3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B07C3D271BC5E0D3008564C3 /* PerformanceTests.swift in Sources */,
+				B05B235A1BC99F2500567BD8 /* TimerTests.swift in Sources */,
+				B07C3D2D1BC60D3C008564C3 /* ChannelTests.swift in Sources */,
+				B07C3D2A1BC60A32008564C3 /* CoTests.swift in Sources */,
+				B016B46C1BC6D4FC00488CD8 /* SelectTests.swift in Sources */,
+				B05B23511BC899CB00567BD8 /* FallibleChannelTests.swift in Sources */,
+				B05B23571BC99AD900567BD8 /* TickerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0E8CE5B1B82C255007F6857 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0E8CE851B82EC6F007F6857 /* Ticker.swift in Sources */,
+				B004C8AC1BAF08A300C0919E /* chan.c in Sources */,
+				B0E8CE821B82EC6F007F6857 /* Channel.swift in Sources */,
+				3A568BC21BB1814700548E11 /* Receivable.swift in Sources */,
+				3A568BC51BB1819D00548E11 /* Sendable.swift in Sources */,
+				3A568BCB1BB1834E00548E11 /* FallibleReceivable.swift in Sources */,
+				B004C8B61BAF08A300C0919E /* list.c in Sources */,
+				3A568BC81BB182FB00548E11 /* FallibleSendable.swift in Sources */,
+				B004C8BA1BAF08A300C0919E /* poller.c in Sources */,
+				B004C8C61BAF08A300C0919E /* libmill_swift.c in Sources */,
+				3A568BBC1BB1806E00548E11 /* ReceivingChannel.swift in Sources */,
+				B0E8CE841B82EC6F007F6857 /* Timer.swift in Sources */,
+				B004C8CA1BAF08A300C0919E /* utils.c in Sources */,
+				B004C8B01BAF08A300C0919E /* cr.c in Sources */,
+				B004C8C21BAF08A300C0919E /* stack.c in Sources */,
+				3A568BD11BB1840900548E11 /* FallibleSendingChannel.swift in Sources */,
+				B0E8CE831B82EC6F007F6857 /* Select.swift in Sources */,
+				B003AD831BAF84F700AAD51E /* Operators.swift in Sources */,
+				3A568BBF1BB180AF00548E11 /* SendingChannel.swift in Sources */,
+				B0E8CE811B82EC6F007F6857 /* Co.swift in Sources */,
+				B004C8BE1BAF08A300C0919E /* slist.c in Sources */,
+				B003AD801BAF838B00AAD51E /* FallibleChannel.swift in Sources */,
+				3A568BCE1BB183D400548E11 /* FallibleReceivingChannel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3A36C9F51BC5386100B02006 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B0E8CE5F1B82C255007F6857 /* Venice OSX */;
+			targetProxy = 3A36C9F41BC5386100B02006 /* PBXContainerItemProxy */;
+		};
+		3A36CA1B1BC53AE300B02006 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B0E8CE5F1B82C255007F6857 /* Venice OSX */;
+			targetProxy = 3A36CA1A1BC53AE300B02006 /* PBXContainerItemProxy */;
+		};
+		B07C3D231BC5E098008564C3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B06CEB951BAE020600A88073 /* Venice iOS */;
+			targetProxy = B07C3D221BC5E098008564C3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		3A36C9F11BC5384200B02006 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = Venice;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies";
+			};
+			name = Debug;
+		};
+		3A36C9F21BC5384200B02006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = Venice;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies";
+			};
+			name = Release;
+		};
+		3A36CA1D1BC53AE300B02006 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Venice Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Zewo.Venice-Tests";
+				PRODUCT_NAME = "Venice iOS Tests";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies";
+			};
+			name = Debug;
+		};
+		3A36CA1E1BC53AE300B02006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Venice Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Zewo.Venice-Tests";
+				PRODUCT_NAME = "Venice iOS Tests";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies";
+			};
+			name = Release;
+		};
+		B06A14581B7D16800095BA12 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B06A14591B7D16800095BA12 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		B06CEB9C1BAE020600A88073 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Venice/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zewo.Venice;
+				PRODUCT_NAME = Venice;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies/**";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		B06CEB9D1BAE020600A88073 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Venice/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zewo.Venice;
+				PRODUCT_NAME = Venice;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies/**";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		B07C3D251BC5E098008564C3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "Venice Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zewo.Venice-iOS-Tests";
+				PRODUCT_NAME = "Venice iOS Tests";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		B07C3D261BC5E098008564C3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "Venice Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zewo.Venice-iOS-Tests";
+				PRODUCT_NAME = "Venice iOS Tests";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B0E8CE721B82C256007F6857 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = Venice/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zewo.Venice;
+				PRODUCT_MODULE_NAME = Venice;
+				PRODUCT_NAME = Venice;
+				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies/**";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		B0E8CE731B82C256007F6857 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_OPTIMIZATION_LEVEL = fast;
+				INFOPLIST_FILE = Venice/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zewo.Venice;
+				PRODUCT_MODULE_NAME = Venice;
+				PRODUCT_NAME = Venice;
+				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies/**";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3A36C9F31BC5384200B02006 /* Build configuration list for PBXNativeTarget "Venice Command Line" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3A36C9F11BC5384200B02006 /* Debug */,
+				3A36C9F21BC5384200B02006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3A36CA1C1BC53AE300B02006 /* Build configuration list for PBXNativeTarget "Venice OSX Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3A36CA1D1BC53AE300B02006 /* Debug */,
+				3A36CA1E1BC53AE300B02006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B06A144E1B7D16800095BA12 /* Build configuration list for PBXProject "Venice" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B06A14581B7D16800095BA12 /* Debug */,
+				B06A14591B7D16800095BA12 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B06CEB9B1BAE020600A88073 /* Build configuration list for PBXNativeTarget "Venice iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B06CEB9C1BAE020600A88073 /* Debug */,
+				B06CEB9D1BAE020600A88073 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B07C3D241BC5E098008564C3 /* Build configuration list for PBXNativeTarget "Venice iOS Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B07C3D251BC5E098008564C3 /* Debug */,
+				B07C3D261BC5E098008564C3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B0E8CE711B82C256007F6857 /* Build configuration list for PBXNativeTarget "Venice OSX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0E8CE721B82C256007F6857 /* Debug */,
+				B0E8CE731B82C256007F6857 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B06A144B1B7D16800095BA12 /* Project object */;
+}

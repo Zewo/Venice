@@ -1,9 +1,9 @@
-import SwiftGo
+import Venice
 //: Select
 //: ------
 //:
 //: _Select_ lets you wait on multiple channel
-//: operations. Combining goroutines and channels with
+//: operations. Combining coroutines and channels with
 //: select is an extremely powerful feature.
 //:
 //: For our example we'll select across two channels.
@@ -11,13 +11,13 @@ let channel1 = Channel<String>()
 let channel2 = Channel<String>()
 //: Each channel will receive a value after some amount
 //: of time, to simulate e.g. blocking RPC operations
-//: executing in concurrent goroutines.
-go {
+//: executing in concurrent coroutines.
+co {
     nap(1 * second)
     channel1 <- "one"
 }
 
-go {
+co {
     nap(2 * second)
     channel2 <- "two"
 }

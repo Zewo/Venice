@@ -1,4 +1,4 @@
-import SwiftGo
+import Venice
 
 func fibonacci(n: Int, channel: Channel<Int>) {
     var x = 0
@@ -15,7 +15,7 @@ func fibonacci(n: Int, channel: Channel<Int>) {
 
 let fibonacciChannel = Channel<Int>(bufferSize: 10)
 
-go(fibonacci(fibonacciChannel.bufferSize, channel: fibonacciChannel))
+co(fibonacci(fibonacciChannel.bufferSize, channel: fibonacciChannel))
 
 for n in fibonacciChannel {
     print(n)

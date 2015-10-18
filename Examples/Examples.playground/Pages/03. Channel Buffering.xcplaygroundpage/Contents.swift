@@ -1,4 +1,4 @@
-import SwiftGo
+import Venice
 //: Channel Buffering
 //: -----------------
 //:

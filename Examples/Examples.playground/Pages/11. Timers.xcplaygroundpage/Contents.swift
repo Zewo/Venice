@@ -1,4 +1,4 @@
-import SwiftGo
+import Venice
 //: Timers
 //: ------
 //:
@@ -24,7 +24,7 @@ print("Timer 1 expired")
 //: Here's an example of that.
 let timer2 = Timer(deadline: now + 1 * second)
 
-go {
+co {
     <-timer2.channel
     print("Timer 2 expired")
 }

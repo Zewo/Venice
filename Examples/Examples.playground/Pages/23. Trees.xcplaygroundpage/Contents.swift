@@ -1,4 +1,4 @@
-import SwiftGo
+import Venice
 import Darwin
 
 extension CollectionType where Index == Int {
@@ -41,11 +41,11 @@ func walk<T>(tree: Tree<T>?, channel: Channel<T>) {
         walk(tree.right, channel: channel)
     }
 }
-//: Launches a walk in a new goroutine,
+//: Launches a walk in a new coroutine,
 //: and returns a read-only channel of values.
 func walker<T>(tree: Tree<T>?) -> SendingChannel<T> {
     let channel = Channel<T>()
-    go {
+    co {
         walk(tree, channel: channel)
         channel.close()
     }

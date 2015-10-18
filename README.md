@@ -1,20 +1,20 @@
-SwiftGo
+Venice
 =======
 
 [![Swift 2.0](https://img.shields.io/badge/Swift-2.0-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![Platforms OS X | iOS](https://img.shields.io/badge/Platforms-OS%20X%20%7C%20iOS-lightgray.svg?style=flat)](https://developer.apple.com/swift/)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-Compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Travis](https://img.shields.io/badge/Build-Passing-4BC51D.svg?style=flat)](https://travis-ci.org/Zewo/SwiftGo)
-[![codecov.io](http://codecov.io/github/Zewo/SwiftGo/coverage.svg?branch=master)](http://codecov.io/github/Zewo/SwiftGo?branch=master)
+[![Travis](https://img.shields.io/badge/Build-Passing-4BC51D.svg?style=flat)](https://travis-ci.org/Zewo/Venice)
+[![codecov.io](http://codecov.io/github/Zewo/Venice/coverage.svg?branch=master)](http://codecov.io/github/Zewo/Venice?branch=master)
 
-**SwiftGo** is a pure Swift/C library that allows you to use *Go*'s concurrency features in **Swift 2**.
+**Venice** is a pure Swift/C library that provides [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) for **Swift 2**.
 
 ## Features
 
 - [x] No `Foundation` depency (**Linux ready**)
-- [x] Goroutines
-- [x] Preallocate Goroutines
+- [x] Coroutines
+- [x] Preallocate Coroutines
 - [x] Channels
 - [x] Fallible Channels
 - [x] Receive-only Channels
@@ -24,17 +24,17 @@ SwiftGo
 - [x] Timer
 - [x] Ticker
 
-**SwiftGo** wraps a modified version of the C library [libmill](https://github.com/sustrik/libmill).
+**Venice** wraps a modified version of the C library [libmill](https://github.com/sustrik/libmill).
 
 ##Performance
 
-**SwiftGo** is fast because the goroutines are light coroutines managed by *libmill* instead of threads managed by the OS. The **Chinese Whispers** example in the command line application shows how you can create up to 100.000 concurrent goroutines (tested in a 8 GB MacBook Pro early 2015).
+**Venice** is fast because the coroutines are light coroutines managed by *libmill* instead of threads managed by the OS. The **Chinese Whispers** example in the command line application shows how you can create up to 100.000 concurrent coroutines (tested in a 8 GB MacBook Pro early 2015).
 
 You can run the performance tests in your machine and see for yourself. Just run the tests in `PerformanceTests.swift`.
 
 ##Usage
 
-`go`
+`co`
 ----
 
 ```swift
@@ -46,10 +46,10 @@ func doSomething() {
 doSomething()
 
 // call async
-go(doSomething())
+co(doSomething())
 
 // async closure
-go {
+co {
     print("did something else")
 }
 ```
@@ -58,7 +58,7 @@ go {
 ------------------
 
 ```swift
-go {
+co {
     // wakes up 1 second from now
     wakeUp(now + 1 * second)
     print("yawn")
@@ -69,19 +69,19 @@ go {
 nap(2 * second)
 ```
 
-`goAfter`
+`after`
 ------------------
 
-`goAfter` runs the coroutine after the specified duration.
+`after` runs the coroutine after the specified duration.
 
 ```swift
-goAfter(1 * second) {
+after(1 * second) {
     print("yoo")
 }
 
 // same as
 
-go {
+co {
 	nap(1 * second)
 	print("yoo")
 }
@@ -94,14 +94,14 @@ Channels are typed and return optionals wrapping the value or nil if the channel
 
 ```swift
 let messages = Channel<String>()
-go(messages <- "ping")
+co(messages <- "ping")
 let message = <-messages
 print(message!)
 
 // without operators
 
 let messages = Channel<String>()
-go(messages.receive("ping"))
+co(messages.receive("ping"))
 let message = messages.send()
 print(message!)
 
@@ -162,7 +162,7 @@ do {
 `select`
 --------
 
-Sometimes `select` can clash with the system libraries function with the same name `select`. To solve this you can call SwiftGo's select with `SwiftGo.select`or with the terser alias `sel`.
+Sometimes `select` can clash with the system libraries function with the same name `select`. To solve this you can call Venice's select with `Venice.select`or with the terser alias `sel`.
 
 ```swift
 let channel = Channel<String>()
@@ -213,8 +213,8 @@ if arc4random_uniform(2) == 0 {
     print("disabled channel b")
 }
 
-go { channelA?.receive("a") }
-go { channelB?.receive("b") }
+co { channelA?.receive("a") }
+co { channelB?.receive("b") }
 
 sel { when in
     when.receiveFrom(channelA) { value in
@@ -232,8 +232,8 @@ Another way to disable a channel selection is to simply put it's case inside an 
 let channelA = Channel<String>()
 let channelB = Channel<String>()
 
-go(channelA <- "a")
-go(channelB <- "b")
+co(channelA <- "a")
+co(channelB <- "b")
 
 select { when in
     if arc4random_uniform(2) == 0 {
@@ -267,7 +267,7 @@ func flipCoin(result: FallibleChannel<String>) {
 
 let results = FallibleChannel<String>()
 
-go(flipCoin(results))
+co(flipCoin(results))
 
 forSelect { when, done in
     when.receiveFrom(results) { result in
@@ -277,7 +277,7 @@ forSelect { when, done in
         }
         result.failure { error in
         	  print("\(error). Retrying...")
-        	  go(flipCoin(results))
+        	  co(flipCoin(results))
         }
     }
 }
@@ -296,15 +296,15 @@ $ brew update
 $ brew install carthage
 ```
 
-To integrate **SwiftGo** into your Xcode project using Carthage, specify it in your `Cartfile`:
+To integrate **Venice** into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "Zewo/SwiftGo"
+github "Zewo/Venice"
 ```
 
 ### Manually
 
-If you prefer not to use a dependency manager, you can integrate **SwiftGo** into your project manually.
+If you prefer not to use a dependency manager, you can integrate **Venice** into your project manually.
 
 #### Embedded Framework
 
@@ -314,37 +314,37 @@ If you prefer not to use a dependency manager, you can integrate **SwiftGo** int
 $ git init
 ```
 
-- Add **SwiftGo** as a git [submodule](http://git-scm.com/docs/git-submodule) by running the following command:
+- Add **Venice** as a git [submodule](http://git-scm.com/docs/git-submodule) by running the following command:
 
 ```bash
-$ git submodule add https://github.com/Zewo/SwiftGo.git
+$ git submodule add https://github.com/Zewo/Venice.git
 ```
 
-- Open the new `SwiftGo` folder, and drag the `SwiftGo.xcodeproj` into the Project Navigator of your application's Xcode project.
+- Open the new `Venice` folder, and drag the `Venice.xcodeproj` into the Project Navigator of your application's Xcode project.
 
     > It should appear nested underneath your application's blue project icon. Whether it is above or below all the other Xcode groups does not matter.
 
-- Select the `SwiftGo.xcodeproj` in the Project Navigator and verify the deployment target matches that of your application target.
+- Select the `Venice.xcodeproj` in the Project Navigator and verify the deployment target matches that of your application target.
 - Next, select your application project in the Project Navigator (blue project icon) to navigate to the target configuration window and select the application target under the "Targets" heading in the sidebar.
 - In the tab bar at the top of that window, open the "General" panel.
 - Click on the `+` button under the "Embedded Binaries" section.
-- You will see two different `SwiftGo.xcodeproj` folders each with two different versions of the `SwiftGo.framework` nested inside a `Products` folder.
+- You will see two different `Venice.xcodeproj` folders each with two different versions of the `Venice.framework` nested inside a `Products` folder.
 
-    > It does not matter which `Products` folder you choose from, but it does matter whether you choose the top or bottom `SwiftGo.framework`.
+    > It does not matter which `Products` folder you choose from, but it does matter whether you choose the top or bottom `Venice.framework`.
 
-- Select the top `SwiftGo.framework` for OS X and the bottom one for iOS.
+- Select the top `Venice.framework` for OS X and the bottom one for iOS.
 
-    > You can verify which one you selected by inspecting the build log for your project. The build target for `SwiftGo` will be listed as either `SwiftGo iOS` or `SwiftGo OSX`.
+    > You can verify which one you selected by inspecting the build log for your project. The build target for `Venice` will be listed as either `Venice iOS` or `Venice OSX`.
 
 - And that's it!
 
-> The `SwiftGo.framework` is automagically added as a target dependency, linked framework and embedded framework in a copy files build phase which is all you need to build on the simulator and a device.
+> The `Venice.framework` is automagically added as a target dependency, linked framework and embedded framework in a copy files build phase which is all you need to build on the simulator and a device.
 
 ###Command Line Application
 
-Unfortunately swift does not support importing **Swift Frameworks** in command line applications. To use **SwiftGo** in a command line application you'll have to:
+Unfortunately swift does not support importing **Swift Frameworks** in command line applications. To use **Venice** in a command line application you'll have to:
 
-- add all .swift and .c files from **SwiftGo** and *libmill* to the command line application target
+- add all .swift and .c files from **Venice** and *libmill* to the command line application target
 - add `$(SRCROOT)/Dependencies` to **Import Paths** at **Swift Compiler - Serach Paths** in the **Build Settings**
 
 ![Import Paths](http://s30.postimg.org/72kkgqpa9/Screen_Shot_2015_10_07_at_10_11_11.png)
@@ -354,12 +354,12 @@ There's an example of a command line application target in the Xcode project.
 Examples
 ========
 
-The examples were taken from [gobyexample](http://gobyexample.com) and translated from Go to Swift using **SwiftGo**. The Xcode project contains a playground with all the examples below. Compile the framework at least once and then you're free to play with the playground examples.
+The examples were taken from [gobyexample](http://gobyexample.com) and translated from Go to Swift using **Venice**. The Xcode project contains a playground with all the examples below. Compile the framework at least once and then you're free to play with the playground examples.
 
-01 - Goroutines
+01 - Coroutines
 ---------------
 
-A *goroutine* is a lightweight thread of execution.
+A *coroutine* is a lightweight thread of execution.
 
 ```swift
 func f(from: String) {
@@ -377,23 +377,23 @@ that in the usual way, running it synchronously.
 f("direct")
 ```
 
-To invoke this function in a goroutine, use `go(f(s))`. This new
-goroutine will execute concurrently with the calling one.
+To invoke this function in a coroutine, use `co(f(s))`. This new
+coroutine will execute concurrently with the calling one.
 
 ```
-go(f("goroutine"))
+co(f("coroutine"))
 ```
 
-You can also start a goroutine with a closure.
+You can also start a coroutine with a closure.
 
 ```
-go {
+co {
     print("going")
 }
 ```
 
 Our two function calls are running asynchronously in separate
-goroutines now, so execution falls through to here. We wait 1 second
+coroutines now, so execution falls through to here. We wait 1 second
 before the program exits
 
 ```swift
@@ -402,8 +402,8 @@ print("done")
 ```
 
 When we run this program, we see the output of the blocking call
-first, then the interleaved output of the two gouroutines. This
-interleaving reflects the goroutines being run concurrently by the
+first, then the interleaved output of the two coroutines. This
+interleaving reflects the coroutines being run concurrently by the
 runtime.
 
 ###Output
@@ -413,11 +413,11 @@ direct: 0
 direct: 1
 direct: 2
 direct: 3
-goroutine: 0
+coroutine: 0
 going
-goroutine: 1
-goroutine: 2
-goroutine: 3
+coroutine: 1
+coroutine: 2
+coroutine: 3
 done
 ```
 
@@ -425,9 +425,9 @@ done
 -------------
 
 *Channels* are the pipes that connect concurrent
-goroutines. You can send values into channels from one
-goroutine and receive those values into another
-goroutine.
+coroutines. You can send values into channels from one
+coroutine and receive those values into another
+coroutine.
 
 Create a new channel with `Channel<Type>()`.
 Channels are typed by the values they convey.
@@ -438,10 +438,10 @@ let messages = Channel<String>()
 
 _Send_ a value into a channel using the `channel <- value`
 syntax. Here we send `"ping"`  to the `messages`
-channel we made above, from a new goroutine.
+channel we made above, from a new coroutine.
 
 ```swift
-go(messages <- "ping")
+co(messages <- "ping")
 ```
 
 The `<-channel` syntax _receives_ a value from the
@@ -454,7 +454,7 @@ print(message!)
 ```
 
 When we run the program the "ping" message is successfully passed from
-one goroutine to another via our channel. By default sends and receives block until both the sender and receiver are ready. This property allowed us to wait at the end of our program for the "ping" message without having to use any other synchronization.
+one coroutine to another via our channel. By default sends and receives block until both the sender and receiver are ready. This property allowed us to wait at the end of our program for the "ping" message without having to use any other synchronization.
 
 Values received from channels are `Optional`s. If you try to get a value from a closed channel with no values left in the buffer, it'll return `nil`. If you are sure that there is a value wraped in the `Optional`, you can use the `!<-` operator, which returns an implictly unwraped optional.
 
@@ -508,12 +508,12 @@ channel
 ----------------------------
 
 We can use channels to synchronize execution
-across goroutines. Here's an example of using a
-blocking receive to wait for a goroutine to finish.
+across coroutines. Here's an example of using a
+blocking receive to wait for a coroutine to finish.
 
-This is the function we'll run in a goroutine. The
+This is the function we'll run in a coroutine. The
 `done` channel will be used to notify another
-goroutine that this function's work is done.
+coroutine that this function's work is done.
 
 ```swift
 func worker(done: Channel<Bool>) {
@@ -524,12 +524,12 @@ func worker(done: Channel<Bool>) {
 }
 ```
 
-Start a worker goroutine, giving it the channel to
+Start a worker coroutine, giving it the channel to
 notify on.
 
 ```swift
 let done = Channel<Bool>(bufferSize: 1)
-go(worker(done))
+co(worker(done))
 ```
 
 Block until we receive a notification from the
@@ -595,7 +595,7 @@ passed message
 -----------
 
 _Select_ lets you wait on multiple channel
-operations. Combining goroutines and channels with
+operations. Combining coroutines and channels with
 select is an extremely powerful feature.
 
 For our example we'll select across two channels.
@@ -607,15 +607,15 @@ let channel2 = Channel<String>()
 
 Each channel will receive a value after some amount
 of time, to simulate e.g. blocking RPC operations
-executing in concurrent goroutines.
+executing in concurrent coroutines.
 
 ```swift
-go {
+co {
     nap(1 * second)
     channel1 <- "one"
 }
 
-go {
+co {
     nap(2 * second)
     channel2 <- "two"
 }
@@ -663,7 +663,7 @@ after 2s.
 ```swift
 let channel1 = Channel<String>(bufferSize: 1)
 
-go {
+co {
     nap(2 * second)
     channel1 <- "result 1"
 }
@@ -693,7 +693,7 @@ from `channel2` will succeed and we'll print the result.
 ```swift
 let channel2 = Channel<String>(bufferSize: 1)
 
-go {
+co {
     nap(2 * second)
     channel2 <- "result 2"
 }
@@ -800,7 +800,7 @@ can be sent to it. This can be useful to communicate
 completion to the channel's receivers.
 
 In this example we'll use a `jobs` channel to
-communicate work to be done to a worker goroutine. When we have no more jobs for
+communicate work to be done to a worker coroutine. When we have no more jobs for
 the worker we'll `close` the `jobs` channel.
 
 ```swift
@@ -808,7 +808,7 @@ let jobs = Channel<Int>(bufferSize: 5)
 let done = Channel<Bool>()
 ```
 
-Here's the worker goroutine. It repeatedly receives
+Here's the worker coroutine. It repeatedly receives
 from `jobs` with `j = <-jobs`. The return value
 will be `nil` if `jobs` has been `close`d and all
 values in the channel have already been received.
@@ -816,7 +816,7 @@ We use this to notify on `done` when we've worked
 all our jobs.
 
 ```swift
-go {
+co {
     while true {
         if let job = <-jobs {
             print("received job \(job)")
@@ -937,7 +937,7 @@ Here's an example of that.
 ```swift
 let timer2 = Timer(deadline: now + 1 * second)
 
-go {
+co {
     <-timer2.channel
     print("Timer 2 expired")
 }
@@ -976,7 +976,7 @@ the values as they arrive every 500ms.
 ```swift
 let ticker = Ticker(period: 500 * millisecond)
 
-go {
+co {
     for time in ticker.channel {
         print("Tick at \(time)")
     }
@@ -1008,7 +1008,7 @@ Ticker stopped
 -----------------
 
 In this example we'll look at how to implement
-a _worker pool_ using goroutines and channels.
+a _worker pool_ using coroutines and channels.
 
 Here's the worker, of which we'll run several
 concurrent instances. These workers will receive
@@ -1040,7 +1040,7 @@ because there are no jobs yet.
 
 ```swift
 for workerId in 1 ... 3 {
-    go(worker(workerId, jobs: jobs, results: results))
+    co(worker(workerId, jobs: jobs, results: results))
 }
 ```
 
@@ -1086,8 +1086,8 @@ worker 3 processing job 9
 
 _[Rate limiting](http://en.wikipedia.org/wiki/Rate_limiting)_
 is an important mechanism for controlling resource
-utilization and maintaining quality of service. SwiftGo
-elegantly supports rate limiting with goroutines,
+utilization and maintaining quality of service. Venice
+elegantly supports rate limiting with coroutines,
 channels, and tickers.
 
 First we'll look at basic rate limiting. Suppose
@@ -1148,7 +1148,7 @@ Every 200 milliseconds we'll try to add a new
 value to `burstyLimiter`, up to its limit of 3.
 
 ```swift
-go {
+co {
     for time in Ticker(period: 200 * millisecond).channel {
         burstyLimiter <- time
     }
@@ -1196,17 +1196,17 @@ request 4 37222064
 request 5 37222265
 ```
 
-15 - Stateful Goroutines
+15 - Stateful Coroutines
 ------------------------
 
 In this example our state will be owned by a single
-goroutine. This will guarantee that the data is never
+coroutine. This will guarantee that the data is never
 corrupted with concurrent access. In order to read or
-write that state, other goroutines will send messages
-to the owning goroutine and receive corresponding
+write that state, other coroutines will send messages
+to the owning coroutine and receive corresponding
 replies. These `ReadOperation` and `WriteOperation` `struct`s
 encapsulate those requests and a way for the owning
-goroutine to respond.
+coroutine to respond.
 
 ```swift
 struct ReadOperation {
@@ -1228,7 +1228,7 @@ var operations = 0
 ```
 
 The `reads` and `writes` channels will be used by
-other goroutines to issue read and write requests,
+other coroutines to issue read and write requests,
 respectively.
 
 ```swift
@@ -1236,9 +1236,9 @@ let reads = Channel<ReadOperation>()
 let writes = Channel<WriteOperation>()
 ```
 
-Here is the goroutine that owns the `state`, which
+Here is the coroutine that owns the `state`, which
 is a dictionary private
-to the stateful goroutine. This goroutine repeatedly
+to the stateful coroutine. This coroutine repeatedly
 selects on the `reads` and `writes` channels,
 responding to requests as they arrive. A response
 is executed by first performing the requested
@@ -1247,7 +1247,7 @@ channel `responses` to indicate success (and the desired
 value in the case of `reads`).
 
 ```swift
-go {
+co {
     var state: [Int: Int] = [:]
     while true {
         select { when in
@@ -1263,15 +1263,15 @@ go {
 }
 ```
 
-This starts 100 goroutines to issue reads to the
-state-owning goroutine via the `reads` channel.
+This starts 100 coroutines to issue reads to the
+state-owning coroutine via the `reads` channel.
 Each read requires constructing a `ReadOperation`, sending
 it over the `reads` channel, and then receiving the
 result over the provided `responses` channel.
 
 ```swift
 for _ in 0 ..< 100 {
-    go {
+    co {
         while true {
             let read = ReadOperation(
                 key: Int(arc4random_uniform(5)),
@@ -1290,7 +1290,7 @@ approach.
 
 ```swift
 for _ in 0 ..< 10 {
-    go {
+    co {
         while true {
             let write = WriteOperation(
                 key: Int(arc4random_uniform(5)),
@@ -1305,7 +1305,7 @@ for _ in 0 ..< 10 {
 }
 ```
 
-Let the goroutines work for a second.
+Let the coroutines work for a second.
 
 ```swift
 nap(1 * second)
@@ -1326,8 +1326,6 @@ operations: 55798
 16 - Chinese Whispers
 ---------------------
 
-![!Gophers Chinese Whisper](https://talks.golang.org/2012/concurrency/images/gophereartrumpet.jpg)
-
 ```swift
 func whisper(left: ReceivingChannel<Int>, _ right: SendingChannel<Int>) {
     left <- 1 + !<-right
@@ -1341,11 +1339,11 @@ var left = leftmost
 
 for _ in 0 ..< n {
     right = Channel<Int>()
-    go(whisper(left.receivingChannel, right.sendingChannel))
+    co(whisper(left.receivingChannel, right.sendingChannel))
     left = right
 }
 
-go {
+co {
     right <- 1
 }
 
@@ -1376,8 +1374,8 @@ func player(name: String, table: Channel<Ball>) {
 
 let table = Channel<Ball>()
 
-go(player("ping", table: table))
-go(player("pong", table: table))
+co(player("ping", table: table))
+co(player("pong", table: table))
 
 table <- Ball()
 nap(1 * second)
@@ -1415,8 +1413,8 @@ if arc4random_uniform(2) == 0 {
     print("disabled channel b")
 }
 
-go { channelA?.receive("a") }
-go { channelB?.receive("b") }
+co { channelA?.receive("a") }
+co { channelB?.receive("b") }
 
 select { when in
     when.receiveFrom(channelA) { value in
@@ -1461,7 +1459,7 @@ func fibonacci(n: Int, channel: Channel<Int>) {
 
 let fibonacciChannel = Channel<Int>(bufferSize: 10)
 
-go(fibonacci(fibonacciChannel.bufferSize, channel: fibonacciChannel))
+co(fibonacci(fibonacciChannel.bufferSize, channel: fibonacciChannel))
 
 for n in fibonacciChannel {
     print(n)
@@ -1543,7 +1541,7 @@ func flipCoin(result: FallibleChannel<String>) {
 let results = FallibleChannel<String>()
 var done = false
 
-go(flipCoin(results))
+co(flipCoin(results))
 
 while !done {
     do {
@@ -1552,7 +1550,7 @@ while !done {
         done = true
     } catch {
         print("\(error) Retrying...")
-        go(flipCoin(results))
+        co(flipCoin(results))
     }
 }
 ```
@@ -1584,7 +1582,7 @@ func flipCoin(result: FallibleChannel<String>) {
 
 let results = FallibleChannel<String>()
 
-go(flipCoin(results))
+co(flipCoin(results))
 
 select { when in
     when.receiveFrom(results) { result in
@@ -1660,13 +1658,13 @@ func walk<T>(tree: Tree<T>?, channel: Channel<T>) {
 }
 ```
 
-Launches a walk in a new goroutine,
+Launches a walk in a new coroutine,
 and returns a read-only channel of values.
 
 ```swift
 func walker<T>(tree: Tree<T>?) -> SendingChannel<T> {
     let channel = Channel<T>()
-    go {
+    co {
         walk(tree, channel: channel)
         channel.close()
     }
@@ -1750,8 +1748,8 @@ Dissimilar false
 let channelA = Channel<String>()
 let channelB = Channel<String>()
 
-go(channelA <- "a")
-go(channelB <- "b")
+co(channelA <- "a")
+co(channelB <- "b")
 
 select { when in
     if arc4random_uniform(2) == 0 {
@@ -1846,7 +1844,7 @@ struct Subscription : SubscriptionType {
 
     init(fetcher: FetcherType) {
         self.fetcher = fetcher
-        go(self.getUpdates())
+        co(self.getUpdates())
     }
 
     var updates: SendingChannel<Item> {
@@ -1873,7 +1871,7 @@ struct Subscription : SubscriptionType {
             if !fetching && pendingItems.count < maxPendingItems {
                 when.timeout(nextFetchTime) {
                     fetching = true
-                    go {
+                    co {
                         fetchDone <- self.fetcher.fetch()
                     }
                 }
@@ -1915,7 +1913,7 @@ struct Subscription : SubscriptionType {
 let fetcher = Fetcher(domain: "developer.apple.com/swift/blog/")
 let subscription = Subscription(fetcher: fetcher)
 
-goAfter(5 * second) {
+after(5 * second) {
     if let lastError = subscription.close() {
         print("Closed with last error: \(lastError)")
     } else {
@@ -1938,7 +1936,11 @@ developer.apple.com/swift/blog/: Swift 2 Apps in the App Store
 Closed with last error: Network Error
 ```
 
+## Renaming
+
+**Venice** was once named **SwiftGo**. The name was changed to allow more freedom and to focus on [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) in general.
+
 License
 -------
 
-**SwiftGo** is released under the MIT license. See LICENSE for details.
+**Venice** is released under the MIT license. See LICENSE for details.

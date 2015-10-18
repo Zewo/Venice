@@ -1,4 +1,4 @@
-module Libmill [system] {
-    header "LibmillSwift.h"
+module libmill [system] {
+    header "libmill_swift.h"
     export *
 }

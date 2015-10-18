@@ -1,4 +1,4 @@
-import SwiftGo
+import Venice
 import Darwin
 
 func flipCoin(result: FallibleChannel<String>) {
@@ -13,7 +13,7 @@ func flipCoin(result: FallibleChannel<String>) {
 let results = FallibleChannel<String>()
 var done = false
 
-go(flipCoin(results))
+co(flipCoin(results))
 
 while !done {
     do {
@@ -22,6 +22,6 @@ while !done {
         done = true
     } catch {
         print("\(error) Retrying...")
-        go(flipCoin(results))
+        co(flipCoin(results))
     }
 }

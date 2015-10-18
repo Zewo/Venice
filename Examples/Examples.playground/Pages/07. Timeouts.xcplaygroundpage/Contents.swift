@@ -1,4 +1,4 @@
-import SwiftGo
+import Venice
 //: Timeouts
 //: --------
 //:
@@ -12,7 +12,7 @@ import SwiftGo
 //: after 2s.
 let channel1 = Channel<String>(bufferSize: 1)
 
-go {
+co {
     nap(2 * second)
     channel1 <- "result 1"
 }
@@ -34,7 +34,7 @@ select { when in
 //: from `channel2` will succeed and we'll print the result.
 let channel2 = Channel<String>(bufferSize: 1)
 
-go {
+co {
     nap(2 * second)
     channel2 <- "result 2"
 }

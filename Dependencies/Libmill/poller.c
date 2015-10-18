@@ -158,7 +158,7 @@ int mill_fdwait(int fd, int events, int64_t deadline) {
 void mill_wait(int block) {
     /* The execution of the entire process would block. Let's panic. */
     if(block && mill_slow(mill_list_empty(&mill_timers) && !mill_pollset_size))
-        mill_panic("all goroutines are asleep - deadlock!");
+        mill_panic("all coroutines are asleep - deadlock!");
 
     int fired = 0;
     int rc;

@@ -1,4 +1,4 @@
-import SwiftGo
+import Venice
 //: Tickers
 //: -------
 //:
@@ -14,7 +14,7 @@ import SwiftGo
 //: the values as they arrive every 500ms.
 let ticker = Ticker(period: 500 * millisecond)
 
-go {
+co {
     for time in ticker.channel {
         print("Tick at \(time)")
     }

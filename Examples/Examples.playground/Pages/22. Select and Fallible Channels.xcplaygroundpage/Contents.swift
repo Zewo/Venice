@@ -1,4 +1,4 @@
-import SwiftGo
+import Venice
 import Darwin
 
 struct Error : ErrorType, CustomStringConvertible { let description: String }
@@ -13,7 +13,7 @@ func flipCoin(result: FallibleChannel<String>) {
 
 let results = FallibleChannel<String>()
 
-go(flipCoin(results))
+co(flipCoin(results))
 
 select { when in
     when.receiveFrom(results) { result in

@@ -1,4 +1,4 @@
-import SwiftGo
+import Venice
 //: Closing Channels
 //: ----------------
 //:
@@ -7,17 +7,17 @@ import SwiftGo
 //: completion to the channel's receivers.
 //:
 //: In this example we'll use a `jobs` channel to
-//: communicate work to be done to a worker goroutine. When we have no more jobs for
+//: communicate work to be done to a worker coroutine. When we have no more jobs for
 //: the worker we'll `close` the `jobs` channel.
 let jobs = Channel<Int>(bufferSize: 5)
 let done = Channel<Bool>()
-//: Here's the worker goroutine. It repeatedly receives
+//: Here's the worker coroutine. It repeatedly receives
 //: from `jobs` with `j = <-jobs`. The return value
 //: will be `nil` if `jobs` has been `close`d and all
 //: values in the channel have already been received.
 //: We use this to notify on `done` when we've worked
 //: all our jobs.
-go {
+co {
     while true {
         if let job = <-jobs {
             print("received job \(job)")
