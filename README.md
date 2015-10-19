@@ -276,8 +276,8 @@ forSelect { when, done in
             done()
         }
         result.failure { error in
-        	  print("\(error). Retrying...")
-        	  co(flipCoin(results))
+            print("\(error). Retrying...")
+            co(flipCoin(results))
         }
     }
 }
