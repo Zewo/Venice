@@ -26,6 +26,10 @@ Venice
 
 **Venice** wraps a modified version of the C library [libmill](https://github.com/sustrik/libmill).
 
+## Renaming
+
+**Venice** was previously called **SwiftGo**. The name was changed to allow more freedom and to focus on [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) in general.
+
 ##Performance
 
 **Venice** is fast because the coroutines are light coroutines managed by *libmill* instead of threads managed by the OS. The **Chinese Whispers** example in the command line application shows how you can create up to 100.000 concurrent coroutines (tested in a 8 GB MacBook Pro early 2015).
@@ -1935,10 +1939,6 @@ developer.apple.com/swift/blog/: Swift-er SDK
 developer.apple.com/swift/blog/: Swift 2 Apps in the App Store
 Closed with last error: Network Error
 ```
-
-## Renaming
-
-**Venice** was once named **SwiftGo**. The name was changed to allow more freedom and to focus on [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) in general.
 
 License
 -------
