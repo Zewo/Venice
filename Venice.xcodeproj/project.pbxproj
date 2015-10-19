@@ -150,10 +150,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3A36C9ED1BC5384200B02006 /* Venice */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = Venice; path = /Users/paulofaria/Development/Venice/build/Debug/Venice; sourceTree = "<absolute>"; };
 		3A36C9EF1BC5384200B02006 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = main.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		3A36C9F61BC538C200B02006 /* Venice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Venice.h; sourceTree = "<group>"; };
-		3A36CA141BC53AE300B02006 /* Venice iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "Venice iOS Tests.xctest"; path = "/Users/paulofaria/Development/Venice/build/Debug/Venice iOS Tests.xctest"; sourceTree = "<absolute>"; };
 		3A36CA161BC53AE300B02006 /* PerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PerformanceTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		3A36CA181BC53AE300B02006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A568BBB1BB1806E00548E11 /* ReceivingChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReceivingChannel.swift; sourceTree = "<group>"; };
@@ -164,6 +162,11 @@
 		3A568BCA1BB1834E00548E11 /* FallibleReceivable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FallibleReceivable.swift; sourceTree = "<group>"; };
 		3A568BCD1BB183D400548E11 /* FallibleReceivingChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FallibleReceivingChannel.swift; sourceTree = "<group>"; };
 		3A568BD01BB1840900548E11 /* FallibleSendingChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FallibleSendingChannel.swift; sourceTree = "<group>"; };
+		3A7ADE691BD5015D00675E77 /* Venice.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Venice.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A7ADE6A1BD5015D00675E77 /* Venice.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Venice.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A7ADE6B1BD5015D00675E77 /* Venice iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Venice iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A7ADE6C1BD5015D00675E77 /* Venice iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Venice iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A7ADE6D1BD5015D00675E77 /* Venice */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Venice; sourceTree = BUILT_PRODUCTS_DIR; };
 		B003AD7F1BAF838B00AAD51E /* FallibleChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = FallibleChannel.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B003AD821BAF84F700AAD51E /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		B004C89A1BAF08A300C0919E /* chan.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = chan.c; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
@@ -188,8 +191,6 @@
 		B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = FallibleChannelTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B05B23551BC99AD900567BD8 /* TickerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TickerTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B05B23581BC99F2500567BD8 /* TimerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TimerTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		B06CEB961BAE020600A88073 /* Venice.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Venice.framework; path = "/Users/paulofaria/Development/Venice/build/Debug-iphoneos/Venice.framework"; sourceTree = "<absolute>"; };
-		B07C3D1C1BC5E098008564C3 /* Venice iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "Venice iOS Tests.xctest"; path = "/Users/paulofaria/Development/Venice/build/Debug-iphoneos/Venice iOS Tests.xctest"; sourceTree = "<absolute>"; };
 		B07C3D281BC60A32008564C3 /* CoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CoTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B07C3D2B1BC60D3C008564C3 /* ChannelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChannelTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B0E27E201B7E6353004CBD6E /* Co.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Co.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -197,7 +198,6 @@
 		B0E27E241B7E63BA004CBD6E /* Select.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Select.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B0E27E431B7E8B03004CBD6E /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		B0E27E451B7EA641004CBD6E /* Ticker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ticker.swift; sourceTree = "<group>"; };
-		B0E8CE601B82C255007F6857 /* Venice.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Venice.framework; path = /Users/paulofaria/Development/Venice/build/Release/Venice.framework; sourceTree = "<absolute>"; };
 		B0E8CE641B82C255007F6857 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B0E8CE771B82EC39007F6857 /* Examples.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Examples.playground; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -264,6 +264,18 @@
 			path = "Venice Tests";
 			sourceTree = "<group>";
 		};
+		3A7ADE6E1BD5016E00675E77 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3A7ADE691BD5015D00675E77 /* Venice.framework */,
+				3A7ADE6A1BD5015D00675E77 /* Venice.framework */,
+				3A7ADE6B1BD5015D00675E77 /* Venice iOS Tests.xctest */,
+				3A7ADE6C1BD5015D00675E77 /* Venice iOS Tests.xctest */,
+				3A7ADE6D1BD5015D00675E77 /* Venice */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		B004C8981BAF08A300C0919E /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
@@ -305,6 +317,7 @@
 				3A36CA151BC53AE300B02006 /* Venice Tests */,
 				3A36C9EE1BC5384200B02006 /* Venice Command Line */,
 				B0E8CE781B82EC4E007F6857 /* Examples */,
+				3A7ADE6E1BD5016E00675E77 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -451,7 +464,7 @@
 			);
 			name = "Venice Command Line";
 			productName = "SwiftGo CLI";
-			productReference = 3A36C9ED1BC5384200B02006 /* Venice */;
+			productReference = 3A7ADE6D1BD5015D00675E77 /* Venice */;
 			productType = "com.apple.product-type.tool";
 		};
 		3A36CA131BC53AE300B02006 /* Venice OSX Tests */ = {
@@ -469,7 +482,7 @@
 			);
 			name = "Venice OSX Tests";
 			productName = "SwiftGo Tests";
-			productReference = 3A36CA141BC53AE300B02006 /* Venice iOS Tests.xctest */;
+			productReference = 3A7ADE6B1BD5015D00675E77 /* Venice iOS Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		B06CEB951BAE020600A88073 /* Venice iOS */ = {
@@ -487,7 +500,7 @@
 			);
 			name = "Venice iOS";
 			productName = "SwiftGo iOS";
-			productReference = B06CEB961BAE020600A88073 /* Venice.framework */;
+			productReference = 3A7ADE6A1BD5015D00675E77 /* Venice.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		B07C3D1B1BC5E098008564C3 /* Venice iOS Tests */ = {
@@ -505,7 +518,7 @@
 			);
 			name = "Venice iOS Tests";
 			productName = "SwiftGo iOS Tests";
-			productReference = B07C3D1C1BC5E098008564C3 /* Venice iOS Tests.xctest */;
+			productReference = 3A7ADE6C1BD5015D00675E77 /* Venice iOS Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		B0E8CE5F1B82C255007F6857 /* Venice OSX */ = {
@@ -523,7 +536,7 @@
 			);
 			name = "Venice OSX";
 			productName = Go;
-			productReference = B0E8CE601B82C255007F6857 /* Venice.framework */;
+			productReference = 3A7ADE691BD5015D00675E77 /* Venice.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */

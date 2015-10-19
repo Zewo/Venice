@@ -55,12 +55,14 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
     private let channel: chan
     public var closed: Bool = false
     private var buffer: [Result<T>] = []
+    public let  bufferSize: Int
 
     public convenience init() {
         self.init(bufferSize: 0)
     }
 
     public init(bufferSize: Int) {
+        self.bufferSize = bufferSize
         self.channel = mill_chmake(bufferSize)
     }
 
