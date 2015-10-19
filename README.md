@@ -354,7 +354,7 @@ There's an example of a command line application target in the Xcode project.
 Examples
 ========
 
-The examples were taken from [gobyexample](http://gobyexample.com) and translated from Go to Swift using **Venice**. The Xcode project contains a playground with all the examples below. Compile the framework at least once and then you're free to play with the playground examples.
+The examples 01-15 were taken from [gobyexample](http://gobyexample.com) and translated from Go to Swift using **Venice**. The Xcode project contains a playground with all the examples below. Compile the **Venice OSX** target at least once and then you're free to play with the playground examples.
 
 01 - Coroutines
 ---------------
