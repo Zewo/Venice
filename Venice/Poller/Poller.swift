@@ -1,4 +1,4 @@
-// Timer.swift
+// Poller.swift
 //
 // The MIT License (MIT)
 //
@@ -22,29 +22,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class Timer {
-    private var internalChannel = Channel<Void>()
-    private var stopped: Bool = false
+import libmill
 
-    public var channel: SendingChannel<Void> {
-        return internalChannel.sendingChannel
+public struct PollEvent : OptionSetType {
+    public let rawValue: Int
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
     }
 
-    public init(deadline: Deadline) {
-        co {
-            wakeUp(deadline)
-            if !self.stopped {
-                self.stopped = true
-                self.internalChannel <- Void()
-            }
-        }
+    public static let Read  = PollEvent(rawValue: 1)
+    public static let Write = PollEvent(rawValue: 2)
+}
+
+public struct PollResult : OptionSetType {
+    public let rawValue: Int
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
     }
 
-    public func stop() -> Bool {
-        if !stopped {
-            self.stopped = true
-            return true
-        }
-        return false
-    }
+    public static let Timeout = PollResult(rawValue: 0)
+    public static let Read    = PollResult(rawValue: 1)
+    public static let Write   = PollResult(rawValue: 2)
+    public static let Error   = PollResult(rawValue: 4)
+}
+
+/// Polls file descriptor for events
+public func pollFileDescriptor(fileDescriptor: Int32, events: PollEvent, deadline: Deadline = NoDeadline) -> PollResult {
+    let event = mill_fdwait(fileDescriptor, Int32(events.rawValue), deadline)
+    return PollResult(rawValue: Int(event))
 }

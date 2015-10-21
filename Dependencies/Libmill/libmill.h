@@ -104,5 +104,37 @@ MILL_EXPORT int mill_choose_wait(void);
 
 MILL_EXPORT void mill_panic(const char *text);
 
+/******************************************************************************/
+/*  IP address library                                                        */
+/******************************************************************************/
+
+#define IPADDR_IPV4 1
+#define IPADDR_IPV6 2
+#define IPADDR_PREF_IPV4 3
+#define IPADDR_PREF_IPV6 4
+
+typedef struct {char data[32];} ipaddr;
+
+MILL_EXPORT ipaddr iplocal(const char *name, int port, int mode);
+MILL_EXPORT ipaddr ipremote(const char *name, int port, int mode, int64_t deadline);
+
+/******************************************************************************/
+/*  TCP library                                                               */
+/******************************************************************************/
+
+typedef struct mill_tcpsock *tcpsock;
+
+MILL_EXPORT tcpsock tcplisten(ipaddr addr, int backlog);
+MILL_EXPORT int tcpport(tcpsock s);
+MILL_EXPORT tcpsock tcpaccept(tcpsock s, int64_t deadline);
+MILL_EXPORT tcpsock tcpconnect(ipaddr addr, int64_t deadline);
+MILL_EXPORT size_t tcpsend(tcpsock s, const void *buf, size_t len, int64_t deadline);
+MILL_EXPORT void tcpflush(tcpsock s, int64_t deadline);
+MILL_EXPORT size_t tcprecv(tcpsock s, void *buf, size_t len, int64_t deadline);
+MILL_EXPORT size_t tcprecvuntil(tcpsock s, void *buf, size_t len, const char *delims, size_t delimcount, int64_t deadline);
+MILL_EXPORT void tcpclose(tcpsock s);
+MILL_EXPORT tcpsock tcpattach(int fd, int listening);
+MILL_EXPORT int tcpdetach(tcpsock s);
+
 #endif
 

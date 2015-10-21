@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3A36C9F01BC5384200B02006 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A36C9EF1BC5384200B02006 /* main.swift */; };
 		3A36C9F71BC538C200B02006 /* Venice.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A36C9F61BC538C200B02006 /* Venice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A36C9F81BC538E600B02006 /* Venice.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A36C9F61BC538C200B02006 /* Venice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A36C9F91BC539CF00B02006 /* chan.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89A1BAF08A300C0919E /* chan.c */; settings = {ASSET_TAGS = (); }; };
@@ -88,6 +87,65 @@
 		B004C8CB1BAF08A300C0919E /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8AA1BAF08A300C0919E /* utils.c */; };
 		B004C8CC1BAF08A300C0919E /* utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8AB1BAF08A300C0919E /* utils.h */; };
 		B004C8CD1BAF08A300C0919E /* utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B004C8AB1BAF08A300C0919E /* utils.h */; };
+		B00ED9611BD6E56400BBBBAE /* tcp.c in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9601BD6E56400BBBBAE /* tcp.c */; settings = {ASSET_TAGS = (); }; };
+		B00ED9621BD6E56400BBBBAE /* tcp.c in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9601BD6E56400BBBBAE /* tcp.c */; settings = {ASSET_TAGS = (); }; };
+		B00ED9631BD6E56400BBBBAE /* tcp.c in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9601BD6E56400BBBBAE /* tcp.c */; settings = {ASSET_TAGS = (); }; };
+		B00ED9661BD6E5D800BBBBAE /* ip.c in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9641BD6E5D800BBBBAE /* ip.c */; settings = {ASSET_TAGS = (); }; };
+		B00ED9671BD6E5D800BBBBAE /* ip.c in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9641BD6E5D800BBBBAE /* ip.c */; settings = {ASSET_TAGS = (); }; };
+		B00ED9681BD6E5D800BBBBAE /* ip.c in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9641BD6E5D800BBBBAE /* ip.c */; settings = {ASSET_TAGS = (); }; };
+		B00ED9691BD6E5D800BBBBAE /* ip.h in Headers */ = {isa = PBXBuildFile; fileRef = B00ED9651BD6E5D800BBBBAE /* ip.h */; settings = {ASSET_TAGS = (); }; };
+		B00ED96A1BD6E5D800BBBBAE /* ip.h in Headers */ = {isa = PBXBuildFile; fileRef = B00ED9651BD6E5D800BBBBAE /* ip.h */; settings = {ASSET_TAGS = (); }; };
+		B00ED96D1BD6EF0100BBBBAE /* IP.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED96C1BD6EF0100BBBBAE /* IP.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED96E1BD6EF0100BBBBAE /* IP.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED96C1BD6EF0100BBBBAE /* IP.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED96F1BD6EF0100BBBBAE /* IP.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED96C1BD6EF0100BBBBAE /* IP.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9721BD6EF4D00BBBBAE /* Poller.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9711BD6EF4D00BBBBAE /* Poller.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9731BD6EF4D00BBBBAE /* Poller.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9711BD6EF4D00BBBBAE /* Poller.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9741BD6EF4D00BBBBAE /* Poller.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9711BD6EF4D00BBBBAE /* Poller.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9771BD6EFB200BBBBAE /* TCPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9761BD6EFB200BBBBAE /* TCPError.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9781BD6EFB200BBBBAE /* TCPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9761BD6EFB200BBBBAE /* TCPError.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9791BD6EFB200BBBBAE /* TCPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9761BD6EFB200BBBBAE /* TCPError.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9831BD7B3B400BBBBAE /* TCPClientSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9821BD7B3B400BBBBAE /* TCPClientSocket.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9841BD7B3B400BBBBAE /* TCPClientSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9821BD7B3B400BBBBAE /* TCPClientSocket.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9851BD7B3B400BBBBAE /* TCPClientSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9821BD7B3B400BBBBAE /* TCPClientSocket.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9871BD7B3C400BBBBAE /* TCPListeningSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9861BD7B3C400BBBBAE /* TCPListeningSocket.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9881BD7B3C400BBBBAE /* TCPListeningSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9861BD7B3C400BBBBAE /* TCPListeningSocket.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9891BD7B3C400BBBBAE /* TCPListeningSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9861BD7B3C400BBBBAE /* TCPListeningSocket.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9911BD7C0BA00BBBBAE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED98E1BD7C0BA00BBBBAE /* main.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9971BD7C10600BBBBAE /* SendingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BBE1BB180AF00548E11 /* SendingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9981BD7C10600BBBBAE /* FallibleReceivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BCA1BB1834E00548E11 /* FallibleReceivable.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9991BD7C10600BBBBAE /* Select.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E241B7E63BA004CBD6E /* Select.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED99A1BD7C10600BBBBAE /* Sendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC41BB1819D00548E11 /* Sendable.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED99B1BD7C10600BBBBAE /* FallibleChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003AD7F1BAF838B00AAD51E /* FallibleChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED99C1BD7C10600BBBBAE /* ip.c in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9641BD6E5D800BBBBAE /* ip.c */; settings = {ASSET_TAGS = (); }; };
+		B00ED99D1BD7C10600BBBBAE /* tcp.c in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9601BD6E56400BBBBAE /* tcp.c */; settings = {ASSET_TAGS = (); }; };
+		B00ED99E1BD7C10600BBBBAE /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E221B7E6380004CBD6E /* Channel.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED99F1BD7C10600BBBBAE /* cr.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89C1BAF08A300C0919E /* cr.c */; settings = {ASSET_TAGS = (); }; };
+		B00ED9A01BD7C10600BBBBAE /* ReceivingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BBB1BB1806E00548E11 /* ReceivingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9A11BD7C10600BBBBAE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9901BD7C0BA00BBBBAE /* main.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9A21BD7C10600BBBBAE /* FallibleSendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC71BB182FB00548E11 /* FallibleSendable.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9A31BD7C10600BBBBAE /* Ticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E451B7EA641004CBD6E /* Ticker.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9A51BD7C10600BBBBAE /* FallibleSendingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BD01BB1840900548E11 /* FallibleSendingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9A61BD7C10600BBBBAE /* chan.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89A1BAF08A300C0919E /* chan.c */; settings = {ASSET_TAGS = (); }; };
+		B00ED9A71BD7C10600BBBBAE /* TCPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9761BD6EFB200BBBBAE /* TCPError.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9A81BD7C10600BBBBAE /* Receivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BC11BB1814700548E11 /* Receivable.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9A91BD7C10600BBBBAE /* Co.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E201B7E6353004CBD6E /* Co.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9AA1BD7C10600BBBBAE /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E27E431B7E8B03004CBD6E /* Timer.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9AB1BD7C10600BBBBAE /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8AA1BAF08A300C0919E /* utils.c */; settings = {ASSET_TAGS = (); }; };
+		B00ED9AC1BD7C10600BBBBAE /* slist.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A41BAF08A300C0919E /* slist.c */; settings = {ASSET_TAGS = (); }; };
+		B00ED9AD1BD7C10600BBBBAE /* IP.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED96C1BD6EF0100BBBBAE /* IP.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9AE1BD7C10600BBBBAE /* TCPListeningSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9861BD7B3C400BBBBAE /* TCPListeningSocket.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9AF1BD7C10600BBBBAE /* Poller.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9711BD6EF4D00BBBBAE /* Poller.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9B01BD7C10600BBBBAE /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = B003AD821BAF84F700AAD51E /* Operators.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9B11BD7C10600BBBBAE /* stack.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A61BAF08A300C0919E /* stack.c */; settings = {ASSET_TAGS = (); }; };
+		B00ED9B21BD7C10600BBBBAE /* libmill_swift.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A81BAF08A300C0919E /* libmill_swift.c */; settings = {ASSET_TAGS = (); }; };
+		B00ED9B31BD7C10600BBBBAE /* FallibleReceivingChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A568BCD1BB183D400548E11 /* FallibleReceivingChannel.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9B41BD7C10600BBBBAE /* poller.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C8A21BAF08A300C0919E /* poller.c */; settings = {ASSET_TAGS = (); }; };
+		B00ED9B51BD7C10600BBBBAE /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = B004C89F1BAF08A300C0919E /* list.c */; settings = {ASSET_TAGS = (); }; };
+		B00ED9B61BD7C10600BBBBAE /* TCPClientSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9821BD7B3B400BBBBAE /* TCPClientSocket.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9BE1BD7C1FD00BBBBAE /* IPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9BD1BD7C1FD00BBBBAE /* IPError.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9BF1BD7C1FD00BBBBAE /* IPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9BD1BD7C1FD00BBBBAE /* IPError.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9C01BD7C1FD00BBBBAE /* IPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9BD1BD7C1FD00BBBBAE /* IPError.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9C11BD7C1FD00BBBBAE /* IPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9BD1BD7C1FD00BBBBAE /* IPError.swift */; settings = {ASSET_TAGS = (); }; };
 		B016B46B1BC6D4FC00488CD8 /* SelectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */; settings = {ASSET_TAGS = (); }; };
 		B016B46C1BC6D4FC00488CD8 /* SelectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */; settings = {ASSET_TAGS = (); }; };
 		B05B23501BC899CA00567BD8 /* FallibleChannelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */; settings = {ASSET_TAGS = (); }; };
@@ -128,6 +186,13 @@
 			remoteGlobalIDString = B0E8CE5F1B82C255007F6857;
 			remoteInfo = "SwiftGo OSX";
 		};
+		B00ED9951BD7C10600BBBBAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B06A144B1B7D16800095BA12 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B0E8CE5F1B82C255007F6857;
+			remoteInfo = "SwiftGo OSX";
+		};
 		B07C3D221BC5E098008564C3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B06A144B1B7D16800095BA12 /* Project object */;
@@ -147,10 +212,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		B00ED9B81BD7C10600BBBBAE /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3A36C9EF1BC5384200B02006 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = main.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		3A36C9F61BC538C200B02006 /* Venice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Venice.h; sourceTree = "<group>"; };
 		3A36CA161BC53AE300B02006 /* PerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PerformanceTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		3A36CA181BC53AE300B02006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -166,7 +239,7 @@
 		3A7ADE6A1BD5015D00675E77 /* Venice.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Venice.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A7ADE6B1BD5015D00675E77 /* Venice iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Venice iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A7ADE6C1BD5015D00675E77 /* Venice iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Venice iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3A7ADE6D1BD5015D00675E77 /* Venice */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Venice; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A7ADE6D1BD5015D00675E77 /* Chinese Whispers */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Chinese Whispers"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B003AD7F1BAF838B00AAD51E /* FallibleChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = FallibleChannel.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B003AD821BAF84F700AAD51E /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		B004C89A1BAF08A300C0919E /* chan.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = chan.c; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
@@ -187,6 +260,18 @@
 		B004C8A91BAF08A300C0919E /* libmill_swift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = libmill_swift.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		B004C8AA1BAF08A300C0919E /* utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utils.c; sourceTree = "<group>"; };
 		B004C8AB1BAF08A300C0919E /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		B00ED9601BD6E56400BBBBAE /* tcp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tcp.c; sourceTree = "<group>"; };
+		B00ED9641BD6E5D800BBBBAE /* ip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ip.c; sourceTree = "<group>"; };
+		B00ED9651BD6E5D800BBBBAE /* ip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ip.h; sourceTree = "<group>"; };
+		B00ED96C1BD6EF0100BBBBAE /* IP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IP.swift; path = Venice/IP/IP.swift; sourceTree = "<group>"; };
+		B00ED9711BD6EF4D00BBBBAE /* Poller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Poller.swift; path = Poller/Poller.swift; sourceTree = "<group>"; };
+		B00ED9761BD6EFB200BBBBAE /* TCPError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TCPError.swift; path = TCP/TCPError.swift; sourceTree = "<group>"; };
+		B00ED9821BD7B3B400BBBBAE /* TCPClientSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TCPClientSocket.swift; path = TCP/TCPClientSocket.swift; sourceTree = "<group>"; };
+		B00ED9861BD7B3C400BBBBAE /* TCPListeningSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TCPListeningSocket.swift; path = TCP/TCPListeningSocket.swift; sourceTree = "<group>"; };
+		B00ED98E1BD7C0BA00BBBBAE /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		B00ED9901BD7C0BA00BBBBAE /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		B00ED9BC1BD7C10600BBBBAE /* Greet Server */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = "Greet Server"; path = "/Users/paulofaria/Development/Venice/build/Debug/Greet Server"; sourceTree = "<absolute>"; };
+		B00ED9BD1BD7C1FD00BBBBAE /* IPError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IPError.swift; path = Venice/IP/IPError.swift; sourceTree = "<group>"; };
 		B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SelectTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = FallibleChannelTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B05B23551BC99AD900567BD8 /* TickerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TickerTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -217,6 +302,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B00ED9B71BD7C10600BBBBAE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B06CEB921BAE020600A88073 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -241,14 +333,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3A36C9EE1BC5384200B02006 /* Venice Command Line */ = {
-			isa = PBXGroup;
-			children = (
-				3A36C9EF1BC5384200B02006 /* main.swift */,
-			);
-			path = "Venice Command Line";
-			sourceTree = "<group>";
-		};
 		3A36CA151BC53AE300B02006 /* Venice Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -271,7 +355,7 @@
 				3A7ADE6A1BD5015D00675E77 /* Venice.framework */,
 				3A7ADE6B1BD5015D00675E77 /* Venice iOS Tests.xctest */,
 				3A7ADE6C1BD5015D00675E77 /* Venice iOS Tests.xctest */,
-				3A7ADE6D1BD5015D00675E77 /* Venice */,
+				3A7ADE6D1BD5015D00675E77 /* Chinese Whispers */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -290,11 +374,11 @@
 				B004C8A11BAF08A300C0919E /* module.map */,
 				B004C8A91BAF08A300C0919E /* libmill_swift.h */,
 				B004C8A81BAF08A300C0919E /* libmill_swift.c */,
+				B004C89E1BAF08A300C0919E /* libmill.h */,
 				B004C89A1BAF08A300C0919E /* chan.c */,
 				B004C89B1BAF08A300C0919E /* chan.h */,
 				B004C89C1BAF08A300C0919E /* cr.c */,
 				B004C89D1BAF08A300C0919E /* cr.h */,
-				B004C89E1BAF08A300C0919E /* libmill.h */,
 				B004C89F1BAF08A300C0919E /* list.c */,
 				B004C8A01BAF08A300C0919E /* list.h */,
 				B004C8A21BAF08A300C0919E /* poller.c */,
@@ -305,8 +389,64 @@
 				B004C8A71BAF08A300C0919E /* stack.h */,
 				B004C8AA1BAF08A300C0919E /* utils.c */,
 				B004C8AB1BAF08A300C0919E /* utils.h */,
+				B00ED9641BD6E5D800BBBBAE /* ip.c */,
+				B00ED9651BD6E5D800BBBBAE /* ip.h */,
+				B00ED9601BD6E56400BBBBAE /* tcp.c */,
 			);
 			path = libmill;
+			sourceTree = "<group>";
+		};
+		B00ED96B1BD6EED900BBBBAE /* IP */ = {
+			isa = PBXGroup;
+			children = (
+				B00ED9BD1BD7C1FD00BBBBAE /* IPError.swift */,
+				B00ED96C1BD6EF0100BBBBAE /* IP.swift */,
+			);
+			name = IP;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		B00ED9701BD6EF3300BBBBAE /* Poller */ = {
+			isa = PBXGroup;
+			children = (
+				B00ED9711BD6EF4D00BBBBAE /* Poller.swift */,
+			);
+			name = Poller;
+			sourceTree = "<group>";
+		};
+		B00ED9751BD6EF9C00BBBBAE /* TCP */ = {
+			isa = PBXGroup;
+			children = (
+				B00ED9761BD6EFB200BBBBAE /* TCPError.swift */,
+				B00ED9821BD7B3B400BBBBAE /* TCPClientSocket.swift */,
+				B00ED9861BD7B3C400BBBBAE /* TCPListeningSocket.swift */,
+			);
+			name = TCP;
+			sourceTree = "<group>";
+		};
+		B00ED98C1BD7C0BA00BBBBAE /* Command Line Applications */ = {
+			isa = PBXGroup;
+			children = (
+				B00ED98D1BD7C0BA00BBBBAE /* Chinese Whispers */,
+				B00ED98F1BD7C0BA00BBBBAE /* Greet Server */,
+			);
+			path = "Command Line Applications";
+			sourceTree = "<group>";
+		};
+		B00ED98D1BD7C0BA00BBBBAE /* Chinese Whispers */ = {
+			isa = PBXGroup;
+			children = (
+				B00ED98E1BD7C0BA00BBBBAE /* main.swift */,
+			);
+			path = "Chinese Whispers";
+			sourceTree = "<group>";
+		};
+		B00ED98F1BD7C0BA00BBBBAE /* Greet Server */ = {
+			isa = PBXGroup;
+			children = (
+				B00ED9901BD7C0BA00BBBBAE /* main.swift */,
+			);
+			path = "Greet Server";
 			sourceTree = "<group>";
 		};
 		B06A144A1B7D16800095BA12 = {
@@ -315,7 +455,7 @@
 				B004C8981BAF08A300C0919E /* Dependencies */,
 				B06CEBAB1BAE029C00A88073 /* Venice */,
 				3A36CA151BC53AE300B02006 /* Venice Tests */,
-				3A36C9EE1BC5384200B02006 /* Venice Command Line */,
+				B00ED98C1BD7C0BA00BBBBAE /* Command Line Applications */,
 				B0E8CE781B82EC4E007F6857 /* Examples */,
 				3A7ADE6E1BD5016E00675E77 /* Products */,
 			);
@@ -326,8 +466,11 @@
 			children = (
 				3A36C9F61BC538C200B02006 /* Venice.h */,
 				B0E8CE641B82C255007F6857 /* Info.plist */,
-				B097D6071BD463440093407B /* Channel */,
+				B00ED9701BD6EF3300BBBBAE /* Poller */,
+				B00ED96B1BD6EED900BBBBAE /* IP */,
+				B00ED9751BD6EF9C00BBBBAE /* TCP */,
 				B097D6081BD463490093407B /* Co */,
+				B097D6071BD463440093407B /* Channel */,
 				B097D60A1BD463530093407B /* Fallible Channel */,
 				B097D6091BD4634D0093407B /* Operators */,
 				B097D60B1BD4635D0093407B /* Select */,
@@ -425,6 +568,7 @@
 				B004C8AF1BAF08A300C0919E /* chan.h in Headers */,
 				B004C8B31BAF08A300C0919E /* cr.h in Headers */,
 				B004C8C11BAF08A300C0919E /* slist.h in Headers */,
+				B00ED96A1BD6E5D800BBBBAE /* ip.h in Headers */,
 				B004C8C91BAF08A300C0919E /* libmill_swift.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -442,6 +586,7 @@
 				B004C8AE1BAF08A300C0919E /* chan.h in Headers */,
 				B004C8B21BAF08A300C0919E /* cr.h in Headers */,
 				B004C8C01BAF08A300C0919E /* slist.h in Headers */,
+				B00ED9691BD6E5D800BBBBAE /* ip.h in Headers */,
 				B004C8C81BAF08A300C0919E /* libmill_swift.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -449,9 +594,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		3A36C9EC1BC5384200B02006 /* Venice Command Line */ = {
+		3A36C9EC1BC5384200B02006 /* Chinese Whispers */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3A36C9F31BC5384200B02006 /* Build configuration list for PBXNativeTarget "Venice Command Line" */;
+			buildConfigurationList = 3A36C9F31BC5384200B02006 /* Build configuration list for PBXNativeTarget "Chinese Whispers" */;
 			buildPhases = (
 				3A36C9E91BC5384200B02006 /* Sources */,
 				3A36C9EA1BC5384200B02006 /* Frameworks */,
@@ -462,9 +607,9 @@
 			dependencies = (
 				3A36C9F51BC5386100B02006 /* PBXTargetDependency */,
 			);
-			name = "Venice Command Line";
+			name = "Chinese Whispers";
 			productName = "SwiftGo CLI";
-			productReference = 3A7ADE6D1BD5015D00675E77 /* Venice */;
+			productReference = 3A7ADE6D1BD5015D00675E77 /* Chinese Whispers */;
 			productType = "com.apple.product-type.tool";
 		};
 		3A36CA131BC53AE300B02006 /* Venice OSX Tests */ = {
@@ -484,6 +629,24 @@
 			productName = "SwiftGo Tests";
 			productReference = 3A7ADE6B1BD5015D00675E77 /* Venice iOS Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B00ED9931BD7C10600BBBBAE /* Greet Server */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B00ED9B91BD7C10600BBBBAE /* Build configuration list for PBXNativeTarget "Greet Server" */;
+			buildPhases = (
+				B00ED9961BD7C10600BBBBAE /* Sources */,
+				B00ED9B71BD7C10600BBBBAE /* Frameworks */,
+				B00ED9B81BD7C10600BBBBAE /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B00ED9941BD7C10600BBBBAE /* PBXTargetDependency */,
+			);
+			name = "Greet Server";
+			productName = "SwiftGo CLI";
+			productReference = B00ED9BC1BD7C10600BBBBAE /* Greet Server */;
+			productType = "com.apple.product-type.tool";
 		};
 		B06CEB951BAE020600A88073 /* Venice iOS */ = {
 			isa = PBXNativeTarget;
@@ -583,7 +746,8 @@
 				B06CEB951BAE020600A88073 /* Venice iOS */,
 				3A36CA131BC53AE300B02006 /* Venice OSX Tests */,
 				B07C3D1B1BC5E098008564C3 /* Venice iOS Tests */,
-				3A36C9EC1BC5384200B02006 /* Venice Command Line */,
+				3A36C9EC1BC5384200B02006 /* Chinese Whispers */,
+				B00ED9931BD7C10600BBBBAE /* Greet Server */,
 			);
 		};
 /* End PBXProject section */
@@ -625,29 +789,37 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A36CA071BC539CF00B02006 /* SendingChannel.swift in Sources */,
-				3A36C9F01BC5384200B02006 /* main.swift in Sources */,
 				3A36CA091BC539CF00B02006 /* FallibleReceivable.swift in Sources */,
 				3A36CA0D1BC539CF00B02006 /* Select.swift in Sources */,
 				3A36CA051BC539CF00B02006 /* Sendable.swift in Sources */,
 				3A36CA081BC539CF00B02006 /* FallibleChannel.swift in Sources */,
+				B00ED9681BD6E5D800BBBBAE /* ip.c in Sources */,
+				B00ED9631BD6E56400BBBBAE /* tcp.c in Sources */,
 				3A36CA031BC539CF00B02006 /* Channel.swift in Sources */,
 				3A36C9FA1BC539CF00B02006 /* cr.c in Sources */,
 				3A36CA061BC539CF00B02006 /* ReceivingChannel.swift in Sources */,
 				3A36CA0A1BC539CF00B02006 /* FallibleSendable.swift in Sources */,
+				B00ED9C01BD7C1FD00BBBBAE /* IPError.swift in Sources */,
 				3A36CA0E1BC539CF00B02006 /* Ticker.swift in Sources */,
+				B00ED9911BD7C0BA00BBBBAE /* main.swift in Sources */,
 				3A36CA0C1BC539CF00B02006 /* FallibleSendingChannel.swift in Sources */,
 				3A36C9F91BC539CF00B02006 /* chan.c in Sources */,
+				B00ED9791BD6EFB200BBBBAE /* TCPError.swift in Sources */,
 				3A36CA041BC539CF00B02006 /* Receivable.swift in Sources */,
 				3A36CA011BC539CF00B02006 /* Co.swift in Sources */,
 				3A36CA0F1BC539CF00B02006 /* Timer.swift in Sources */,
 				3A36CA001BC539CF00B02006 /* utils.c in Sources */,
 				3A36C9FD1BC539CF00B02006 /* slist.c in Sources */,
+				B00ED96F1BD6EF0100BBBBAE /* IP.swift in Sources */,
+				B00ED9891BD7B3C400BBBBAE /* TCPListeningSocket.swift in Sources */,
+				B00ED9741BD6EF4D00BBBBAE /* Poller.swift in Sources */,
 				3A36CA021BC539CF00B02006 /* Operators.swift in Sources */,
 				3A36C9FE1BC539CF00B02006 /* stack.c in Sources */,
 				3A36C9FF1BC539CF00B02006 /* libmill_swift.c in Sources */,
 				3A36CA0B1BC539CF00B02006 /* FallibleReceivingChannel.swift in Sources */,
 				3A36C9FC1BC539CF00B02006 /* poller.c in Sources */,
 				3A36C9FB1BC539CF00B02006 /* list.c in Sources */,
+				B00ED9851BD7B3B400BBBBAE /* TCPClientSocket.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -665,11 +837,51 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B00ED9961BD7C10600BBBBAE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B00ED9971BD7C10600BBBBAE /* SendingChannel.swift in Sources */,
+				B00ED9981BD7C10600BBBBAE /* FallibleReceivable.swift in Sources */,
+				B00ED9991BD7C10600BBBBAE /* Select.swift in Sources */,
+				B00ED99A1BD7C10600BBBBAE /* Sendable.swift in Sources */,
+				B00ED99B1BD7C10600BBBBAE /* FallibleChannel.swift in Sources */,
+				B00ED99C1BD7C10600BBBBAE /* ip.c in Sources */,
+				B00ED99D1BD7C10600BBBBAE /* tcp.c in Sources */,
+				B00ED99E1BD7C10600BBBBAE /* Channel.swift in Sources */,
+				B00ED99F1BD7C10600BBBBAE /* cr.c in Sources */,
+				B00ED9A01BD7C10600BBBBAE /* ReceivingChannel.swift in Sources */,
+				B00ED9A11BD7C10600BBBBAE /* main.swift in Sources */,
+				B00ED9C11BD7C1FD00BBBBAE /* IPError.swift in Sources */,
+				B00ED9A21BD7C10600BBBBAE /* FallibleSendable.swift in Sources */,
+				B00ED9A31BD7C10600BBBBAE /* Ticker.swift in Sources */,
+				B00ED9A51BD7C10600BBBBAE /* FallibleSendingChannel.swift in Sources */,
+				B00ED9A61BD7C10600BBBBAE /* chan.c in Sources */,
+				B00ED9A71BD7C10600BBBBAE /* TCPError.swift in Sources */,
+				B00ED9A81BD7C10600BBBBAE /* Receivable.swift in Sources */,
+				B00ED9A91BD7C10600BBBBAE /* Co.swift in Sources */,
+				B00ED9AA1BD7C10600BBBBAE /* Timer.swift in Sources */,
+				B00ED9AB1BD7C10600BBBBAE /* utils.c in Sources */,
+				B00ED9AC1BD7C10600BBBBAE /* slist.c in Sources */,
+				B00ED9AD1BD7C10600BBBBAE /* IP.swift in Sources */,
+				B00ED9AE1BD7C10600BBBBAE /* TCPListeningSocket.swift in Sources */,
+				B00ED9AF1BD7C10600BBBBAE /* Poller.swift in Sources */,
+				B00ED9B01BD7C10600BBBBAE /* Operators.swift in Sources */,
+				B00ED9B11BD7C10600BBBBAE /* stack.c in Sources */,
+				B00ED9B21BD7C10600BBBBAE /* libmill_swift.c in Sources */,
+				B00ED9B31BD7C10600BBBBAE /* FallibleReceivingChannel.swift in Sources */,
+				B00ED9B41BD7C10600BBBBAE /* poller.c in Sources */,
+				B00ED9B51BD7C10600BBBBAE /* list.c in Sources */,
+				B00ED9B61BD7C10600BBBBAE /* TCPClientSocket.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B06CEB911BAE020600A88073 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				B06CEBA91BAE026200A88073 /* Ticker.swift in Sources */,
+				B00ED9731BD6EF4D00BBBBAE /* Poller.swift in Sources */,
 				B004C8AD1BAF08A300C0919E /* chan.c in Sources */,
 				B06CEBA71BAE026200A88073 /* Channel.swift in Sources */,
 				3A568BC31BB1814700548E11 /* Receivable.swift in Sources */,
@@ -677,20 +889,27 @@
 				3A568BCC1BB1834E00548E11 /* FallibleReceivable.swift in Sources */,
 				B004C8B71BAF08A300C0919E /* list.c in Sources */,
 				3A568BC91BB182FB00548E11 /* FallibleSendable.swift in Sources */,
+				B00ED9BF1BD7C1FD00BBBBAE /* IPError.swift in Sources */,
 				B004C8BB1BAF08A300C0919E /* poller.c in Sources */,
 				B004C8C71BAF08A300C0919E /* libmill_swift.c in Sources */,
 				3A568BBD1BB1807000548E11 /* ReceivingChannel.swift in Sources */,
 				B06CEBAA1BAE026200A88073 /* Timer.swift in Sources */,
 				B004C8CB1BAF08A300C0919E /* utils.c in Sources */,
 				B004C8B11BAF08A300C0919E /* cr.c in Sources */,
+				B00ED9881BD7B3C400BBBBAE /* TCPListeningSocket.swift in Sources */,
+				B00ED9781BD6EFB200BBBBAE /* TCPError.swift in Sources */,
 				B004C8C31BAF08A300C0919E /* stack.c in Sources */,
 				3A568BD21BB1840900548E11 /* FallibleSendingChannel.swift in Sources */,
 				B06CEBA81BAE026200A88073 /* Select.swift in Sources */,
+				B00ED9841BD7B3B400BBBBAE /* TCPClientSocket.swift in Sources */,
 				B003AD841BAF84F700AAD51E /* Operators.swift in Sources */,
 				3A568BC01BB180AF00548E11 /* SendingChannel.swift in Sources */,
 				B06CEBA61BAE026200A88073 /* Co.swift in Sources */,
+				B00ED96E1BD6EF0100BBBBAE /* IP.swift in Sources */,
 				B004C8BF1BAF08A300C0919E /* slist.c in Sources */,
+				B00ED9621BD6E56400BBBBAE /* tcp.c in Sources */,
 				B003AD811BAF838B00AAD51E /* FallibleChannel.swift in Sources */,
+				B00ED9671BD6E5D800BBBBAE /* ip.c in Sources */,
 				3A568BCF1BB183D400548E11 /* FallibleReceivingChannel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -714,6 +933,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0E8CE851B82EC6F007F6857 /* Ticker.swift in Sources */,
+				B00ED9721BD6EF4D00BBBBAE /* Poller.swift in Sources */,
 				B004C8AC1BAF08A300C0919E /* chan.c in Sources */,
 				B0E8CE821B82EC6F007F6857 /* Channel.swift in Sources */,
 				3A568BC21BB1814700548E11 /* Receivable.swift in Sources */,
@@ -721,20 +941,27 @@
 				3A568BCB1BB1834E00548E11 /* FallibleReceivable.swift in Sources */,
 				B004C8B61BAF08A300C0919E /* list.c in Sources */,
 				3A568BC81BB182FB00548E11 /* FallibleSendable.swift in Sources */,
+				B00ED9BE1BD7C1FD00BBBBAE /* IPError.swift in Sources */,
 				B004C8BA1BAF08A300C0919E /* poller.c in Sources */,
 				B004C8C61BAF08A300C0919E /* libmill_swift.c in Sources */,
 				3A568BBC1BB1806E00548E11 /* ReceivingChannel.swift in Sources */,
 				B0E8CE841B82EC6F007F6857 /* Timer.swift in Sources */,
 				B004C8CA1BAF08A300C0919E /* utils.c in Sources */,
 				B004C8B01BAF08A300C0919E /* cr.c in Sources */,
+				B00ED9871BD7B3C400BBBBAE /* TCPListeningSocket.swift in Sources */,
+				B00ED9771BD6EFB200BBBBAE /* TCPError.swift in Sources */,
 				B004C8C21BAF08A300C0919E /* stack.c in Sources */,
 				3A568BD11BB1840900548E11 /* FallibleSendingChannel.swift in Sources */,
 				B0E8CE831B82EC6F007F6857 /* Select.swift in Sources */,
+				B00ED9831BD7B3B400BBBBAE /* TCPClientSocket.swift in Sources */,
 				B003AD831BAF84F700AAD51E /* Operators.swift in Sources */,
 				3A568BBF1BB180AF00548E11 /* SendingChannel.swift in Sources */,
 				B0E8CE811B82EC6F007F6857 /* Co.swift in Sources */,
+				B00ED96D1BD6EF0100BBBBAE /* IP.swift in Sources */,
 				B004C8BE1BAF08A300C0919E /* slist.c in Sources */,
+				B00ED9611BD6E56400BBBBAE /* tcp.c in Sources */,
 				B003AD801BAF838B00AAD51E /* FallibleChannel.swift in Sources */,
+				B00ED9661BD6E5D800BBBBAE /* ip.c in Sources */,
 				3A568BCE1BB183D400548E11 /* FallibleReceivingChannel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -752,6 +979,11 @@
 			target = B0E8CE5F1B82C255007F6857 /* Venice OSX */;
 			targetProxy = 3A36CA1A1BC53AE300B02006 /* PBXContainerItemProxy */;
 		};
+		B00ED9941BD7C10600BBBBAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B0E8CE5F1B82C255007F6857 /* Venice OSX */;
+			targetProxy = B00ED9951BD7C10600BBBBAE /* PBXContainerItemProxy */;
+		};
 		B07C3D231BC5E098008564C3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = B06CEB951BAE020600A88073 /* Venice iOS */;
@@ -764,7 +996,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_NAME = Venice;
+				PRODUCT_NAME = "Chinese Whispers";
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies";
 			};
 			name = Debug;
@@ -773,7 +1005,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_NAME = Venice;
+				PRODUCT_NAME = "Chinese Whispers";
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies";
 			};
 			name = Release;
@@ -800,6 +1032,24 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Zewo.Venice-Tests";
 				PRODUCT_NAME = "Venice iOS Tests";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies";
+			};
+			name = Release;
+		};
+		B00ED9BA1BD7C10600BBBBAE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies";
+			};
+			name = Debug;
+		};
+		B00ED9BB1BD7C10600BBBBAE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies";
 			};
 			name = Release;
@@ -1014,7 +1264,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3A36C9F31BC5384200B02006 /* Build configuration list for PBXNativeTarget "Venice Command Line" */ = {
+		3A36C9F31BC5384200B02006 /* Build configuration list for PBXNativeTarget "Chinese Whispers" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3A36C9F11BC5384200B02006 /* Debug */,
@@ -1028,6 +1278,15 @@
 			buildConfigurations = (
 				3A36CA1D1BC53AE300B02006 /* Debug */,
 				3A36CA1E1BC53AE300B02006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B00ED9B91BD7C10600BBBBAE /* Build configuration list for PBXNativeTarget "Greet Server" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00ED9BA1BD7C10600BBBBAE /* Debug */,
+				B00ED9BB1BD7C10600BBBBAE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

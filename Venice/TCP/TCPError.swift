@@ -1,4 +1,4 @@
-// Timer.swift
+// TCPError.swift
 //
 // The MIT License (MIT)
 //
@@ -22,29 +22,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class Timer {
-    private var internalChannel = Channel<Void>()
-    private var stopped: Bool = false
+import libmill
 
-    public var channel: SendingChannel<Void> {
-        return internalChannel.sendingChannel
+public struct TCPError : ErrorType, CustomStringConvertible {
+    public let description: String
+    public let bytesProcessed: Int?
+
+    init(description: String, bytesProcessed: Int? = nil) {
+        self.description = description
+        self.bytesProcessed = bytesProcessed
     }
 
-    public init(deadline: Deadline) {
-        co {
-            wakeUp(deadline)
-            if !self.stopped {
-                self.stopped = true
-                self.internalChannel <- Void()
-            }
-        }
-    }
-
-    public func stop() -> Bool {
-        if !stopped {
-            self.stopped = true
-            return true
-        }
-        return false
+    static var lastSystemErrorDescription: String {
+        return String.fromCString(strerror(errno)) ?? "Unknown error"
     }
 }

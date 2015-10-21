@@ -1,4 +1,4 @@
-// Timer.swift
+// main.swift
 //
 // The MIT License (MIT)
 //
@@ -22,29 +22,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class Timer {
-    private var internalChannel = Channel<Void>()
-    private var stopped: Bool = false
-
-    public var channel: SendingChannel<Void> {
-        return internalChannel.sendingChannel
+func chineseWhispers(numberOfWhispers numberOfWhispers: Int) {
+    func whisper(left: ReceivingChannel<Int>, _ right: SendingChannel<Int>) {
+        left <- 1 + !<-right
     }
 
-    public init(deadline: Deadline) {
-        co {
-            wakeUp(deadline)
-            if !self.stopped {
-                self.stopped = true
-                self.internalChannel <- Void()
-            }
-        }
+    let leftmost = Channel<Int>()
+    var right = leftmost
+    var left = leftmost
+
+    for _ in 0 ..< numberOfWhispers {
+        right = Channel<Int>()
+        co(whisper(left.receivingChannel, right.sendingChannel))
+        left = right
     }
 
-    public func stop() -> Bool {
-        if !stopped {
-            self.stopped = true
-            return true
-        }
-        return false
-    }
+    co(right <- 1)
+    print(!<-leftmost)
 }
+
+chineseWhispers(numberOfWhispers: 10000)

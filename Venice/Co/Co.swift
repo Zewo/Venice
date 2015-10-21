@@ -25,14 +25,17 @@
 import libmill
 
 /// Current time
-public var now: Int {
-    return Int(libmill.now())
+public var now: Int64 {
+    return libmill.now()
 }
 
-public let hour = 3600000
-public let minute = 60000
-public let second = 1000
-public let millisecond = 1
+public let hour: Int64 = 3600000
+public let minute: Int64 = 60000
+public let second: Int64 = 1000
+public let millisecond: Int64 = 1
+
+public typealias Deadline = Int64
+let NoDeadline: Deadline = -1
 
 /// Runs the expression in a lightweight coroutine
 public func co(@autoclosure(escaping) routine: Void -> Void) {
@@ -45,7 +48,7 @@ public func co(routine: Void -> Void) {
 }
 
 /// Runs the expression in a lightweight coroutine
-public func after(napDuration: Int, routine: Void -> Void) {
+public func after(napDuration: Int64, routine: Void -> Void) {
     libmill.co {
         nap(napDuration)
         routine()
@@ -58,46 +61,16 @@ public func preallocateCoroutineStacks(stackCount stackCount: Int, stackSize: In
 }
 
 /// Sleeps for duration
-public func nap(duration: Int) {
-    mill_msleep(Int64(now + duration))
+public func nap(duration: Int64) {
+    mill_msleep(now + duration)
 }
 
 /// Wakes up at deadline
-public func wakeUp(deadline: Int) {
-    mill_msleep(Int64(deadline))
+public func wakeUp(deadline: Deadline) {
+    mill_msleep(deadline)
 }
 
 /// Passes control to other coroutines
 public var yield: Void {
     mill_yield()
-}
-
-public struct PollEvent : OptionSetType {
-    public let rawValue: Int32
-
-    public init(rawValue: Int32) {
-        self.rawValue = rawValue
-    }
-
-    public static let Read  = PollEvent(rawValue: 1)
-    public static let Write = PollEvent(rawValue: 2)
-}
-
-public struct PollResult : OptionSetType {
-    public let rawValue: Int32
-
-    public init(rawValue: Int32) {
-        self.rawValue = rawValue
-    }
-
-    public static let Timeout = PollResult(rawValue: 0)
-    public static let Read    = PollResult(rawValue: 1)
-    public static let Write   = PollResult(rawValue: 2)
-    public static let Error   = PollResult(rawValue: 4)
-}
-
-/// Polls file descriptor for events
-public func pollFileDescriptor(fileDescriptor: Int32, events: PollEvent, deadline: Int = -1) -> PollResult {
-    let event = mill_fdwait(fileDescriptor, events.rawValue, Int64(deadline))
-    return PollResult(rawValue: event)
 }

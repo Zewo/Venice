@@ -63,8 +63,8 @@ class CoTests: XCTestCase {
     }
 
     func testNap() {
-        let channel = Channel<Int>()
-        func delay(n: Int) {
+        let channel = Channel<Int64>()
+        func delay(n: Int64) {
             nap(n)
             channel <- n
         }

@@ -321,7 +321,7 @@ public class SelectCaseBuilder {
         }
     }
 
-    public func timeout(deadline: Int, closure: Void -> Void) {
+    public func timeout(deadline: Deadline, closure: Void -> Void) {
         let done = Channel<Bool>()
         co {
             wakeUp(deadline)

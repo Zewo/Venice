@@ -1,4 +1,4 @@
-// main.swift
+// IPError.swift
 //
 // The MIT License (MIT)
 //
@@ -22,21 +22,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-func whisper(left: ReceivingChannel<Int>, _ right: SendingChannel<Int>) {
-    left <- 1 + !<-right
+import libmill
+
+public struct IPError : ErrorType, CustomStringConvertible {
+    public let description: String
+
+    init(description: String, bytesProcessed: Int? = nil) {
+        self.description = description
+    }
+
+    static var lastSystemErrorDescription: String {
+        return String.fromCString(strerror(errno)) ?? "Unknown error"
+    }
 }
-
-let numberOfWhispers = 10000
-
-let leftmost = Channel<Int>()
-var right = leftmost
-var left = leftmost
-
-for _ in 0 ..< numberOfWhispers {
-    right = Channel<Int>()
-    co(whisper(left.receivingChannel, right.sendingChannel))
-    left = right
-}
-
-co(right <- 1)
-print(!<-leftmost)

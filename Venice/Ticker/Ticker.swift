@@ -23,14 +23,14 @@
 // SOFTWARE.
 
 public final class Ticker {
-    private let internalChannel = Channel<Int>()
+    private let internalChannel = Channel<Int64>()
     private var stopped: Bool = false
 
-    public var channel: SendingChannel<Int> {
+    public var channel: SendingChannel<Int64> {
         return internalChannel.sendingChannel
     }
 
-    public init(period: Int) {
+    public init(period: Int64) {
         co {
             while true {
                 nap(period)
