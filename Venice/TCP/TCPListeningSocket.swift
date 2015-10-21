@@ -1,4 +1,4 @@
-// TCPError.swift
+// TCPListeningSocket.swift
 //
 // The MIT License (MIT)
 //
@@ -25,9 +25,9 @@
 import libmill
 
 public final class TCPListeningSocket {
-    let socket: tcpsock
+    private var socket: tcpsock
 
-    var port: Int {
+    public var port: Int {
         return Int(tcpport(self.socket))
     }
 
@@ -42,24 +42,63 @@ public final class TCPListeningSocket {
         }
     }
 
+    public init(fileDescriptor: Int32) throws {
+        self.socket = tcpattach(fileDescriptor, 1)
+
+        if errno != 0 {
+            let description = TCPError.lastSystemErrorDescription
+            throw TCPError(description: description)
+        }
+    }
+
+    deinit {
+        close()
+    }
+
     public func accept(deadline: Deadline = NoDeadline) throws -> TCPClientSocket {
         if closed {
             throw TCPError(description: "Closed socket")
         }
 
-        let socket = tcpaccept(self.socket, deadline)
+        let clientSocket = tcpaccept(socket, deadline)
 
         if errno != 0 {
             let description = TCPError.lastSystemErrorDescription
             throw TCPError(description: description)
         }
 
-        return TCPClientSocket(socket: socket)
+        return TCPClientSocket(socket: clientSocket)
+    }
+
+    public func attach(fileDescriptor: Int32) throws {
+        if !closed {
+            tcpclose(socket)
+        }
+
+        socket = tcpattach(fileDescriptor, 1)
+
+        if errno != 0 {
+            let description = TCPError.lastSystemErrorDescription
+            throw TCPError(description: description)
+        }
+
+        closed = false
+    }
+
+    public func detach() throws -> Int32 {
+        if closed {
+            throw TCPError(description: "Closed socket")
+        }
+
+        closed = true
+        return tcpdetach(socket)
     }
 
     public func close() {
-        self.closed = true
-        tcpclose(self.socket)
+        if !closed {
+            closed = true
+            tcpclose(socket)
+        }
     }
 }
 
@@ -67,9 +106,9 @@ extension TCPListeningSocket {
     public func acceptClients(accepted: TCPClientSocket -> Void) throws {
         var sequentialErrorsCount = 0
 
-        while !self.closed {
+        while !closed {
             do {
-                let clientSocket = try self.accept()
+                let clientSocket = try accept()
                 sequentialErrorsCount = 0
                 co(accepted(clientSocket))
             } catch {

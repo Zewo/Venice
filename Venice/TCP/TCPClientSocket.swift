@@ -1,4 +1,4 @@
-// TCPError.swift
+// TCPClientSocket.swift
 //
 // The MIT License (MIT)
 //
@@ -25,15 +25,11 @@
 import libmill
 
 public final class TCPClientSocket {
-    let socket: tcpsock
+    private var socket: tcpsock
     public private(set) var closed = false
 
-    public init(socket: tcpsock) {
+    init(socket: tcpsock) {
         self.socket = socket
-    }
-
-    deinit {
-        close()
     }
 
     public init(ip: IP, deadline: Deadline = NoDeadline) throws {
@@ -45,12 +41,25 @@ public final class TCPClientSocket {
         }
     }
 
+    public init(fileDescriptor: Int32) throws {
+        self.socket = tcpattach(fileDescriptor, 0)
+
+        if errno != 0 {
+            let description = TCPError.lastSystemErrorDescription
+            throw TCPError(description: description)
+        }
+    }
+
+    deinit {
+        close()
+    }
+
     public func send(data: UnsafeMutablePointer<Void>, length: Int, deadline: Deadline = NoDeadline) throws {
         if closed {
             throw TCPError(description: "Closed socket")
         }
 
-        let bytesProcessed = tcpsend(self.socket, data, length, deadline)
+        let bytesProcessed = tcpsend(socket, data, length, deadline)
 
         if errno != 0 {
             let description = TCPError.lastSystemErrorDescription
@@ -63,7 +72,7 @@ public final class TCPClientSocket {
             throw TCPError(description: "Closed socket")
         }
 
-        tcpflush(self.socket, deadline)
+        tcpflush(socket, deadline)
 
         if errno != 0 {
             let description = TCPError.lastSystemErrorDescription
@@ -77,7 +86,7 @@ public final class TCPClientSocket {
         }
 
         var buffer: [Int8] = [Int8](count: bufferSize, repeatedValue: 0)
-        let bytesProcessed = tcprecv(self.socket, &buffer, bufferSize, deadline)
+        let bytesProcessed = tcprecv(socket, &buffer, bufferSize, deadline)
 
         if errno != 0 {
             let description = TCPError.lastSystemErrorDescription
@@ -93,9 +102,9 @@ public final class TCPClientSocket {
         }
 
         var buffer: [Int8] = [Int8](count: bufferSize, repeatedValue: 0)
-        let bytesProcessed = tcprecvuntil(self.socket, &buffer, bufferSize, delimiter, delimiter.utf8.count, deadline)
+        let bytesProcessed = tcprecvuntil(socket, &buffer, bufferSize, delimiter, delimiter.utf8.count, deadline)
 
-        if errno != 0 {
+        if errno != 0 && errno != ENOBUFS {
             let description = TCPError.lastSystemErrorDescription
             throw TCPError(description: description, bytesProcessed: bytesProcessed)
         }
@@ -103,10 +112,34 @@ public final class TCPClientSocket {
         return Array(buffer[0 ..< bytesProcessed])
     }
 
+    public func attach(fileDescriptor: Int32) throws {
+        if !closed {
+            tcpclose(socket)
+        }
+
+        socket = tcpattach(fileDescriptor, 0)
+
+        if errno != 0 {
+            let description = TCPError.lastSystemErrorDescription
+            throw TCPError(description: description)
+        }
+
+        closed = false
+    }
+
+    public func detach() throws -> Int32 {
+        if closed {
+            throw TCPError(description: "Closed socket")
+        }
+
+        closed = true
+        return tcpdetach(socket)
+    }
+
     public func close() {
-        if !self.closed {
-            self.closed = true
-            tcpclose(self.socket)
+        if !closed {
+            closed = true
+            tcpclose(socket)
         }
     }
 }
@@ -127,12 +160,18 @@ extension TCPClientSocket {
         return String.fromCString(response)
     }
 
+    public func receiveString(bufferSize bufferSize: Int = 256, deadline: Deadline = NoDeadline) throws -> String? {
+        var response = try receive(bufferSize: bufferSize, deadline: deadline)
+        response.append(0)
+        return String.fromCString(response)
+    }
+
     public func receive(bufferSize bufferSize: Int = 256, received: [Int8] -> Void) throws {
         var sequentialErrorsCount = 0
 
-        while !self.closed {
+        while !closed {
             do {
-                let data = try self.receive(bufferSize: bufferSize)
+                let data = try receive(bufferSize: bufferSize)
                 sequentialErrorsCount = 0
                 co(received(data))
             } catch {

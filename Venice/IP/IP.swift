@@ -54,8 +54,8 @@ public struct IP {
         }
     }
 
-    public init(localName: String, port: Int, mode: IPMode) throws {
-        self.address = iplocal(localName, Int32(port), mode.code)
+    public init(local: String, port: Int, mode: IPMode = .IPV4) throws {
+        self.address = iplocal(local, Int32(port), mode.code)
 
         if errno != 0 {
             let description = IPError.lastSystemErrorDescription
@@ -63,8 +63,8 @@ public struct IP {
         }
     }
 
-    public init(remoteName: String, port: Int, mode: IPMode, deadline: Deadline = NoDeadline) throws {
-        self.address = ipremote(remoteName, Int32(port), mode.code, deadline)
+    public init(remote: String, port: Int, mode: IPMode = .IPV4, deadline: Deadline = NoDeadline) throws {
+        self.address = ipremote(remote, Int32(port), mode.code, deadline)
 
         if errno != 0 {
             let description = IPError.lastSystemErrorDescription
