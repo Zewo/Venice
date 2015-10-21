@@ -160,7 +160,7 @@ ipaddr iplocal(const char *name, int port, int mode) {
        return addr;
     /* Address is not a literal. It must be an interface name then. */
     struct ifaddrs *ifaces = NULL;
-    int rc = getifaddrs (&ifaces);
+    int rc = getifaddrs(&ifaces);
     mill_assert (rc == 0);
     mill_assert (ifaces);
     /*  Find first IPv4 and first IPv6 address. */

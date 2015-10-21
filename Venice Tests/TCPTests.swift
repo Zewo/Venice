@@ -27,10 +27,18 @@ import Venice
 
 class TCPTests: XCTestCase {
 
+    func testInvalidNetworkInterface() {
+        do {
+            try IP(networkInterface: "yo-yo ma", port: 5555, mode: .IPV6)
+        } catch {
+            XCTAssert(true)
+        }
+    }
+
     func testTCP() {
         func client(port: Int) {
             do {
-                let ip = try IP(remote: "127.0.0.1", port: port)
+                let ip = try IP(address: "127.0.0.1", port: port)
                 let clientSocket = try TCPClientSocket(ip: ip)
 
                 let fileDescriptor = try clientSocket.detach()
@@ -73,7 +81,7 @@ class TCPTests: XCTestCase {
             }
 
             let diff = now - deadline
-            XCTAssert(diff > -200 && diff < 200)
+            XCTAssert(diff > -300 && diff < 300)
 
             try clientSocket.sendString("ABC")
             try clientSocket.flush()
