@@ -37,6 +37,7 @@ public final class TCPListeningSocket {
         self.socket = tcplisten(ip.address, Int32(backlog))
 
         if errno != 0 {
+            closed = true
             let description = TCPError.lastSystemErrorDescription
             throw TCPError(description: description)
         }
@@ -46,6 +47,7 @@ public final class TCPListeningSocket {
         self.socket = tcpattach(fileDescriptor, 1)
 
         if errno != 0 {
+            closed = true
             let description = TCPError.lastSystemErrorDescription
             throw TCPError(description: description)
         }
@@ -78,6 +80,7 @@ public final class TCPListeningSocket {
         socket = tcpattach(fileDescriptor, 1)
 
         if errno != 0 {
+            closed = true
             let description = TCPError.lastSystemErrorDescription
             throw TCPError(description: description)
         }

@@ -151,6 +151,8 @@
 		B00ED9C51BD8014A00BBBBAE /* TCPTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9C21BD8014A00BBBBAE /* TCPTests.swift */; settings = {ASSET_TAGS = (); }; };
 		B00ED9D01BD85EEE00BBBBAE /* IPTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9CB1BD85EEA00BBBBAE /* IPTests.swift */; settings = {ASSET_TAGS = (); }; };
 		B00ED9D21BD85EF200BBBBAE /* IPTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9CB1BD85EEA00BBBBAE /* IPTests.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9D41BD86ABB00BBBBAE /* TCPClientSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9D31BD86ABB00BBBBAE /* TCPClientSocket.swift */; settings = {ASSET_TAGS = (); }; };
+		B00ED9D51BD86ABB00BBBBAE /* TCPClientSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00ED9D31BD86ABB00BBBBAE /* TCPClientSocket.swift */; settings = {ASSET_TAGS = (); }; };
 		B016B46B1BC6D4FC00488CD8 /* SelectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */; settings = {ASSET_TAGS = (); }; };
 		B016B46C1BC6D4FC00488CD8 /* SelectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */; settings = {ASSET_TAGS = (); }; };
 		B05B23501BC899CA00567BD8 /* FallibleChannelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */; settings = {ASSET_TAGS = (); }; };
@@ -279,6 +281,7 @@
 		B00ED9BD1BD7C1FD00BBBBAE /* IPError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IPError.swift; path = Venice/IP/IPError.swift; sourceTree = "<group>"; };
 		B00ED9C21BD8014A00BBBBAE /* TCPTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCPTests.swift; sourceTree = "<group>"; };
 		B00ED9CB1BD85EEA00BBBBAE /* IPTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IPTests.swift; sourceTree = "<group>"; };
+		B00ED9D31BD86ABB00BBBBAE /* TCPClientSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCPClientSocket.swift; sourceTree = "<group>"; };
 		B016B46A1BC6D4FC00488CD8 /* SelectTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SelectTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B05B234D1BC8995E00567BD8 /* FallibleChannelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = FallibleChannelTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B05B23551BC99AD900567BD8 /* TickerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TickerTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -353,6 +356,7 @@
 				B05B23581BC99F2500567BD8 /* TimerTests.swift */,
 				B00ED9CB1BD85EEA00BBBBAE /* IPTests.swift */,
 				B00ED9C21BD8014A00BBBBAE /* TCPTests.swift */,
+				B00ED9D31BD86ABB00BBBBAE /* TCPClientSocket.swift */,
 			);
 			path = "Venice Tests";
 			sourceTree = "<group>";
@@ -845,6 +849,7 @@
 				B016B46B1BC6D4FC00488CD8 /* SelectTests.swift in Sources */,
 				B05B23501BC899CA00567BD8 /* FallibleChannelTests.swift in Sources */,
 				B05B23561BC99AD900567BD8 /* TickerTests.swift in Sources */,
+				B00ED9D41BD86ABB00BBBBAE /* TCPClientSocket.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -939,6 +944,7 @@
 				B016B46C1BC6D4FC00488CD8 /* SelectTests.swift in Sources */,
 				B05B23511BC899CB00567BD8 /* FallibleChannelTests.swift in Sources */,
 				B05B23571BC99AD900567BD8 /* TickerTests.swift in Sources */,
+				B00ED9D51BD86ABB00BBBBAE /* TCPClientSocket.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

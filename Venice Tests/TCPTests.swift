@@ -27,7 +27,7 @@ import Venice
 
 class TCPTests: XCTestCase {
 
-    func testTCP() {
+    func testTCPClientServer() {
         func client(port: Int) {
             do {
                 let ip = try IP(address: "127.0.0.1", port: port)

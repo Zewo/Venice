@@ -32,6 +32,6 @@ public struct IPError : ErrorType, CustomStringConvertible {
     }
 
     static var lastSystemErrorDescription: String {
-        return String.fromCString(strerror(errno)) ?? "Unknown error"
+        return String.fromCString(strerror(errno))!
     }
 }

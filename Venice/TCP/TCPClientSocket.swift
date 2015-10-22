@@ -36,6 +36,7 @@ public final class TCPClientSocket {
         self.socket = tcpconnect(ip.address, deadline)
 
         if errno != 0 {
+            closed = true
             let description = TCPError.lastSystemErrorDescription
             throw TCPError(description: description)
         }
@@ -45,6 +46,7 @@ public final class TCPClientSocket {
         self.socket = tcpattach(fileDescriptor, 0)
 
         if errno != 0 {
+            closed = true
             let description = TCPError.lastSystemErrorDescription
             throw TCPError(description: description)
         }
