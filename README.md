@@ -23,6 +23,7 @@ Venice
 - [x] Select
 - [x] Timers
 - [x] Tickers
+- [x] File Descriptor Polling
 - [x] IP
 - [x] TCP Sockets
 - [ ] UDP Sockets
