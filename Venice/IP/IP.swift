@@ -34,10 +34,10 @@ public enum IPMode {
 extension IPMode {
     var code: Int32 {
         switch self {
-        case .IPV4: return 0
-        case .IPV6: return 1
-        case .IPV4Prefered: return 2
-        case .IPV6Prefered: return 3
+        case .IPV4: return 1
+        case .IPV6: return 2
+        case .IPV4Prefered: return 3
+        case .IPV6Prefered: return 4
         }
     }
 }

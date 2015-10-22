@@ -27,6 +27,7 @@ Venice
 - [x] TCP Sockets
 - [ ] UDP Sockets
 - [ ] UNIX Sockets
+- [ ] File
 
 **Venice** wraps a modified version of the C library [libmill](https://github.com/sustrik/libmill).
 

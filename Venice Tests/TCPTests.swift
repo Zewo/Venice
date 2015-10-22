@@ -27,14 +27,6 @@ import Venice
 
 class TCPTests: XCTestCase {
 
-    func testInvalidNetworkInterface() {
-        do {
-            try IP(networkInterface: "yo-yo ma", port: 5555, mode: .IPV6)
-        } catch {
-            XCTAssert(true)
-        }
-    }
-
     func testTCP() {
         func client(port: Int) {
             do {
