@@ -36,12 +36,14 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
     private let channel: chan
     public var closed: Bool = false
     private var buffer: [T] = []
+    public let bufferSize: Int
 
     public convenience init() {
         self.init(bufferSize: 0)
     }
 
     public init(bufferSize: Int) {
+        self.bufferSize = bufferSize
         self.channel = mill_chmake(bufferSize)
     }
 

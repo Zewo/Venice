@@ -31,8 +31,8 @@ public struct PollEvent : OptionSetType {
         self.rawValue = rawValue
     }
 
-    public static let Read  = PollEvent(rawValue: 1)
-    public static let Write = PollEvent(rawValue: 2)
+    public static let Read  = PollEvent(rawValue: Int(FDW_IN))
+    public static let Write = PollEvent(rawValue: Int(FDW_OUT))
 }
 
 public struct PollResult : OptionSetType {
@@ -43,9 +43,9 @@ public struct PollResult : OptionSetType {
     }
 
     public static let Timeout = PollResult(rawValue: 0)
-    public static let Read    = PollResult(rawValue: 1)
-    public static let Write   = PollResult(rawValue: 2)
-    public static let Error   = PollResult(rawValue: 4)
+    public static let Read    = PollResult(rawValue: Int(FDW_IN))
+    public static let Write   = PollResult(rawValue: Int(FDW_OUT))
+    public static let Error   = PollResult(rawValue: Int(FDW_ERR))
 }
 
 /// Polls file descriptor for events
