@@ -1512,12 +1512,9 @@ received b from channel b
 func fibonacci(n: Int, channel: Channel<Int>) {
     var x = 0
     var y = 1
-    var z = 0
     for _ in 0 ..< n {
         channel <- x
-        z = x
-        x = y
-        y = z + y
+        (x, y) = (y, x + y)
     }
     channel.close()
 }
