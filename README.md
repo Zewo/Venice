@@ -12,7 +12,7 @@ Venice
 
 ## Features
 
-- [x] No `Foundation` depency (**Linux ready**)
+- [x] No `Foundation` dependency (**Linux ready**)
 - [x] Coroutines
 - [x] Coroutine Preallocation
 - [x] Channels
