@@ -1,4 +1,4 @@
 module libmill [system] {
-    header "libmill_swift.h"
+    header "libmill/libmill_swift.h"
     export *
 }

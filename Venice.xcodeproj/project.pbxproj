@@ -256,7 +256,6 @@
 		B004C89E1BAF08A300C0919E /* libmill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = libmill.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		B004C89F1BAF08A300C0919E /* list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = list.c; sourceTree = "<group>"; };
 		B004C8A01BAF08A300C0919E /* list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = list.h; sourceTree = "<group>"; };
-		B004C8A11BAF08A300C0919E /* module.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.map; sourceTree = "<group>"; };
 		B004C8A21BAF08A300C0919E /* poller.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = poller.c; sourceTree = "<group>"; };
 		B004C8A31BAF08A300C0919E /* poller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = poller.h; sourceTree = "<group>"; };
 		B004C8A41BAF08A300C0919E /* slist.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = slist.c; sourceTree = "<group>"; };
@@ -269,6 +268,7 @@
 		B004C8AB1BAF08A300C0919E /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		B00512C61BEC5AFD001B3F26 /* Greet Server */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Greet Server"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B00512C71BEC5B32001B3F26 /* TCPServerSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TCPServerSocket.swift; path = TCP/TCPServerSocket.swift; sourceTree = "<group>"; };
+		B00512CC1BEC5FD8001B3F26 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		B00ED9601BD6E56400BBBBAE /* tcp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tcp.c; sourceTree = "<group>"; };
 		B00ED9641BD6E5D800BBBBAE /* ip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ip.c; sourceTree = "<group>"; };
 		B00ED9651BD6E5D800BBBBAE /* ip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ip.h; sourceTree = "<group>"; };
@@ -376,6 +376,7 @@
 		B004C8981BAF08A300C0919E /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
+				B00512CC1BEC5FD8001B3F26 /* module.modulemap */,
 				B004C8991BAF08A300C0919E /* libmill */,
 			);
 			path = Dependencies;
@@ -384,7 +385,6 @@
 		B004C8991BAF08A300C0919E /* libmill */ = {
 			isa = PBXGroup;
 			children = (
-				B004C8A11BAF08A300C0919E /* module.map */,
 				B004C8A91BAF08A300C0919E /* libmill_swift.h */,
 				B004C8A81BAF08A300C0919E /* libmill_swift.c */,
 				B004C89E1BAF08A300C0919E /* libmill.h */,
