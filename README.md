@@ -324,8 +324,8 @@ do {
 // server
 do {
 	let ip = try IP(port: 5555)
-	let listeningSocket = try TCPListeningSocket(ip: ip)
-	let clientSocket = try listeningSocket.accept()
+	let serverSocket = try TCPServerSocket(ip: ip)
+	let clientSocket = try serverSocket.accept()
 	
 	let yo = try clientSocket.receiveString(untilDelimiter: "\n")
 } catch {

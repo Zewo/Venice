@@ -47,29 +47,30 @@ class TCPTests: XCTestCase {
 
                 clientSocket.close()
             } catch {
+                print(error)
                 XCTAssert(false)
             }
         }
 
         do {
             let ip = try IP(port: 5555)
-            let listeningSocket = try TCPListeningSocket(ip: ip)
+            let serverSocket = try TCPServerSocket(ip: ip)
 
-            let fileDescriptor = try listeningSocket.detach()
+            let fileDescriptor = try serverSocket.detach()
             XCTAssert(fileDescriptor != -1)
-            try listeningSocket.attach(fileDescriptor)
-            XCTAssert(listeningSocket.port == 5555)
+            try serverSocket.attach(fileDescriptor)
+            XCTAssert(serverSocket.port == 5555)
 
             co(client(5555))
 
-            let clientSocket = try listeningSocket.accept()
+            let clientSocket = try serverSocket.accept()
             let deadline = now + 30 * millisecond
 
             do {
                 try clientSocket.receive(bufferSize: 16, deadline: deadline)
                 XCTAssert(false)
-            } catch let error as TCPError {
-                XCTAssert(error.bytesProcessed == 0)
+            } catch {
+                XCTAssert(true)
             }
 
             let diff = now - deadline
@@ -84,12 +85,17 @@ class TCPTests: XCTestCase {
             let second = try clientSocket.receiveString(untilDelimiter: "\n")
             XCTAssert(second == "45\n")
 
-            let third = try clientSocket.receiveString(bufferSize: 3, untilDelimiter: "\n")
-            XCTAssert(third == "678")
+            do {
+                try clientSocket.receiveString(bufferSize: 3, untilDelimiter: "\n")
+                XCTAssert(false)
+            } catch TCPError.NoBufferSpaceAvailabe(_, let receivedData) {
+                XCTAssert(receivedData.count == 3)
+            }
 
-            listeningSocket.close()
+            serverSocket.close()
             clientSocket.close()
         } catch {
+            print(error)
             XCTAssert(false)
         }
     }

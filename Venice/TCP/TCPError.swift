@@ -24,16 +24,27 @@
 
 import libmill
 
-public struct TCPError : ErrorType, CustomStringConvertible {
-    public let description: String
-    public let bytesProcessed: Int?
+public enum TCPError : ErrorType {
+    case Generic(description: String)
+    case ConnectionResetByPeer(description: String, remainingData: [Int8])
+    case NoBufferSpaceAvailabe(description: String, receivedData: [Int8])
 
-    init(description: String, bytesProcessed: Int? = nil) {
-        self.description = description
-        self.bytesProcessed = bytesProcessed
+    static func lastErrorWithData(data: [Int8], bytesProcessed: Int) -> TCPError {
+        let description = String.fromCString(strerror(errno))!
+        switch errno {
+        case ECONNRESET:
+            let remainingData = remainingDataFromSource(data, bytesProcessed: bytesProcessed)
+            return .ConnectionResetByPeer(description: description, remainingData: remainingData)
+        case ENOBUFS:
+            let receivedData = processedDataFromSource(data, bytesProcessed: bytesProcessed)
+            return .NoBufferSpaceAvailabe(description: description, receivedData: receivedData)
+        default:
+            return .Generic(description: description)
+        }
     }
 
-    static var lastSystemErrorDescription: String {
-        return String.fromCString(strerror(errno))!
+    static var lastError: TCPError {
+        let description = String.fromCString(strerror(errno))!
+        return .Generic(description: description)
     }
 }

@@ -447,7 +447,7 @@ class FallibleChannelTests: XCTestCase {
     func testReceiveResult() {
         let channel = FallibleChannel<Int>(bufferSize: 1)
         co {
-            channel.receivingChannel <- Result<Int>.Value(333)
+            channel.receivingChannel <- ChannelResult<Int>.Value(333)
         }
         XCTAssert(try! <-channel == 333)
     }

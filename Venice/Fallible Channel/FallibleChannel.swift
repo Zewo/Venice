@@ -27,12 +27,12 @@ import libmill
 public struct FallibleChannelGenerator<T> : GeneratorType {
     let channel: FallibleSendingChannel<T>
 
-    public mutating func next() -> Result<T>? {
+    public mutating func next() -> ChannelResult<T>? {
         return channel.sendResult()
     }
 }
 
-public enum Result<T> {
+public enum ChannelResult<T> {
     case Value(T)
     case Error(ErrorType)
     
@@ -54,7 +54,7 @@ public enum Result<T> {
 public final class FallibleChannel<T> : SequenceType, FallibleSendable, FallibleReceivable {
     private let channel: chan
     public var closed: Bool = false
-    private var buffer: [Result<T>] = []
+    private var buffer: [ChannelResult<T>] = []
     public let  bufferSize: Int
 
     public convenience init() {
@@ -90,7 +90,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
     }
 
     /// Receives a result.
-    public func receiveResult(result: Result<T>) {
+    public func receiveResult(result: ChannelResult<T>) {
         if !closed {
             buffer.append(result)
             mill_chs(channel)
@@ -100,7 +100,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
     /// Receives a value.
     public func receive(value: T) {
         if !closed {
-            let result = Result<T>.Value(value)
+            let result = ChannelResult<T>.Value(value)
             buffer.append(result)
             mill_chs(channel)
         }
@@ -109,7 +109,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
     /// Receives a value from select.
     func receive(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
         if !closed {
-            let result = Result<T>.Value(value)
+            let result = ChannelResult<T>.Value(value)
             buffer.append(result)
             mill_choose_out(clause, channel, Int32(index))
         }
@@ -118,7 +118,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
     /// Receives an error.
     public func receiveError(error: ErrorType) {
         if !closed {
-            let result = Result<T>.Error(error)
+            let result = ChannelResult<T>.Error(error)
             buffer.append(result)
             mill_chs(channel)
         }
@@ -127,7 +127,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
     /// Receives an error from select.
     func receive(error: ErrorType, clause: UnsafeMutablePointer<Void>, index: Int) {
         if !closed {
-            let result = Result<T>.Error(error)
+            let result = ChannelResult<T>.Error(error)
             buffer.append(result)
             mill_choose_out(clause, channel, Int32(index))
         }
@@ -150,7 +150,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
     }
 
     /// Sends a result.
-    public func sendResult() -> Result<T>? {
+    public func sendResult() -> ChannelResult<T>? {
         if closed && buffer.count <= 0 {
             return nil
         }
@@ -162,7 +162,7 @@ public final class FallibleChannel<T> : SequenceType, FallibleSendable, Fallible
         mill_choose_in(clause, channel, Int32(index))
     }
 
-    func getResultFromBuffer() -> Result<T>? {
+    func getResultFromBuffer() -> ChannelResult<T>? {
         if closed && buffer.count <= 0 {
             return nil
         }

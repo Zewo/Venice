@@ -71,9 +71,9 @@ final class SendingChannelReceiveCase<T> : SelectCase {
 
 final class FallibleChannelReceiveCase<T> : SelectCase {
     let channel: FallibleChannel<T>
-    var closure: Result<T> -> Void
+    var closure: ChannelResult<T> -> Void
 
-    init(channel: FallibleChannel<T>, closure: Result<T> -> Void) {
+    init(channel: FallibleChannel<T>, closure: ChannelResult<T> -> Void) {
         self.channel = channel
         self.closure = closure
     }
@@ -91,9 +91,9 @@ final class FallibleChannelReceiveCase<T> : SelectCase {
 
 final class FallibleSendingChannelReceiveCase<T> : SelectCase {
     let channel: FallibleSendingChannel<T>
-    var closure: Result<T> -> Void
+    var closure: ChannelResult<T> -> Void
 
-    init(channel: FallibleSendingChannel<T>, closure: Result<T> -> Void) {
+    init(channel: FallibleSendingChannel<T>, closure: ChannelResult<T> -> Void) {
         self.channel = channel
         self.closure = closure
     }
@@ -265,14 +265,14 @@ public class SelectCaseBuilder {
         }
     }
 
-    public func receiveFrom<T>(channel: FallibleChannel<T>?, closure: Result<T> -> Void) {
+    public func receiveFrom<T>(channel: FallibleChannel<T>?, closure: ChannelResult<T> -> Void) {
         if let channel = channel {
             let selectCase = FallibleChannelReceiveCase(channel: channel, closure: closure)
             cases.append(selectCase)
         }
     }
     
-    public func receiveFrom<T>(channel: FallibleSendingChannel<T>?, closure: Result<T> -> Void) {
+    public func receiveFrom<T>(channel: FallibleSendingChannel<T>?, closure: ChannelResult<T> -> Void) {
         if let channel = channel {
             let selectCase = FallibleSendingChannelReceiveCase(channel: channel, closure: closure)
             cases.append(selectCase)

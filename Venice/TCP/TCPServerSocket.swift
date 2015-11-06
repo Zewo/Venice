@@ -1,4 +1,4 @@
-// TCPListeningSocket.swift
+// TCPServerSocket.swift
 //
 // The MIT License (MIT)
 //
@@ -24,7 +24,7 @@
 
 import libmill
 
-public final class TCPListeningSocket {
+public final class TCPServerSocket {
     private var socket: tcpsock
 
     public var port: Int {
@@ -38,8 +38,7 @@ public final class TCPListeningSocket {
 
         if errno != 0 {
             closed = true
-            let description = TCPError.lastSystemErrorDescription
-            throw TCPError(description: description)
+            throw TCPError.lastError
         }
     }
 
@@ -48,8 +47,7 @@ public final class TCPListeningSocket {
 
         if errno != 0 {
             closed = true
-            let description = TCPError.lastSystemErrorDescription
-            throw TCPError(description: description)
+            throw TCPError.lastError
         }
     }
 
@@ -59,14 +57,13 @@ public final class TCPListeningSocket {
 
     public func accept(deadline: Deadline = NoDeadline) throws -> TCPClientSocket {
         if closed {
-            throw TCPError(description: "Closed socket")
+            throw TCPError.Generic(description: "Closed socket")
         }
 
         let clientSocket = tcpaccept(socket, deadline)
 
         if errno != 0 {
-            let description = TCPError.lastSystemErrorDescription
-            throw TCPError(description: description)
+            throw TCPError.lastError
         }
 
         return TCPClientSocket(socket: clientSocket)
@@ -81,8 +78,7 @@ public final class TCPListeningSocket {
 
         if errno != 0 {
             closed = true
-            let description = TCPError.lastSystemErrorDescription
-            throw TCPError(description: description)
+            throw TCPError.lastError
         }
 
         closed = false
@@ -90,7 +86,7 @@ public final class TCPListeningSocket {
 
     public func detach() throws -> Int32 {
         if closed {
-            throw TCPError(description: "Closed socket")
+            throw TCPError.Generic(description: "Closed socket")
         }
 
         closed = true
@@ -105,7 +101,7 @@ public final class TCPListeningSocket {
     }
 }
 
-extension TCPListeningSocket {
+extension TCPServerSocket {
     public func acceptClients(accepted: TCPClientSocket -> Void) throws {
         var sequentialErrorsCount = 0
 

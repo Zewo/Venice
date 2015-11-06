@@ -29,7 +29,7 @@ public final class FallibleReceivingChannel<T> : FallibleReceivable {
         self.channel = channel
     }
 
-    public func receiveResult(result: Result<T>) {
+    public func receiveResult(result: ChannelResult<T>) {
         return channel.receiveResult(result)
     }
     

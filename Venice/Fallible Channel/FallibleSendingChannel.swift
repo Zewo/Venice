@@ -33,7 +33,7 @@ public final class FallibleSendingChannel<T> : FallibleSendable, SequenceType {
         return try channel.send()
     }
 
-    public func sendResult() -> Result<T>? {
+    public func sendResult() -> ChannelResult<T>? {
         return channel.sendResult()
     }
     
@@ -49,7 +49,7 @@ public final class FallibleSendingChannel<T> : FallibleSendable, SequenceType {
         return channel.registerSend(clause, index: index)
     }
 
-    func getResultFromBuffer() -> Result<T>? {
+    func getResultFromBuffer() -> ChannelResult<T>? {
         return channel.getResultFromBuffer()
     }
 

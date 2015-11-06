@@ -34,9 +34,9 @@ func greetServer(port port: Int) {
         co(dashboard(statistics: statistics.sendingChannel))
 
         let ip = try IP(port: port)
-        let listeningSocket = try TCPListeningSocket(ip: ip)
+        let serverSocket = try TCPServerSocket(ip: ip)
         
-        try listeningSocket.acceptClients { clientSocket in
+        try serverSocket.acceptClients { clientSocket in
             dialogue(clientSocket: clientSocket, statistics: statistics.receivingChannel)
         }
     } catch {

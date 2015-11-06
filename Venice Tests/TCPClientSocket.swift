@@ -62,7 +62,7 @@ class TCPClientSocketTests: XCTestCase {
                 let ip = try IP(address: "127.0.0.1", port: port)
                 let clientSocket = try TCPClientSocket(ip: ip)
                 clientSocket.close()
-                try clientSocket.send(nil, length: 0)
+                try clientSocket.send([])
                 XCTAssert(false)
             } catch {
                 called = true
@@ -72,9 +72,9 @@ class TCPClientSocketTests: XCTestCase {
         do {
             let port = 5555
             let ip = try IP(port: port)
-            let listeningSocket = try TCPListeningSocket(ip: ip)
+            let serverSocket = try TCPServerSocket(ip: ip)
             co(client(port))
-            try listeningSocket.accept()
+            try serverSocket.accept()
             nap(1 * millisecond)
         } catch {
             XCTAssert(false)
@@ -101,9 +101,9 @@ class TCPClientSocketTests: XCTestCase {
         do {
             let port = 5555
             let ip = try IP(port: port)
-            let listeningSocket = try TCPListeningSocket(ip: ip)
+            let serverSocket = try TCPServerSocket(ip: ip)
             co(client(port))
-            try listeningSocket.accept()
+            try serverSocket.accept()
             nap(1 * millisecond)
         } catch {
             XCTAssert(false)
@@ -130,9 +130,9 @@ class TCPClientSocketTests: XCTestCase {
         do {
             let port = 5555
             let ip = try IP(port: port)
-            let listeningSocket = try TCPListeningSocket(ip: ip)
+            let serverSocket = try TCPServerSocket(ip: ip)
             co(client(port))
-            try listeningSocket.accept()
+            try serverSocket.accept()
             nap(1 * millisecond)
         } catch {
             XCTAssert(false)
@@ -159,9 +159,9 @@ class TCPClientSocketTests: XCTestCase {
         do {
             let port = 5555
             let ip = try IP(port: port)
-            let listeningSocket = try TCPListeningSocket(ip: ip)
+            let serverSocket = try TCPServerSocket(ip: ip)
             co(client(port))
-            try listeningSocket.accept()
+            try serverSocket.accept()
             nap(1 * millisecond)
         } catch {
             XCTAssert(false)
@@ -188,37 +188,9 @@ class TCPClientSocketTests: XCTestCase {
         do {
             let port = 5555
             let ip = try IP(port: port)
-            let listeningSocket = try TCPListeningSocket(ip: ip)
+            let serverSocket = try TCPServerSocket(ip: ip)
             co(client(port))
-            try listeningSocket.accept()
-            nap(1 * millisecond)
-        } catch {
-            XCTAssert(false)
-        }
-
-        XCTAssert(called)
-    }
-
-    func testSendBufferPointerInvalidLength() {
-        var called = false
-
-        func client(port: Int) {
-            do {
-                let ip = try IP(address: "127.0.0.1", port: port)
-                let clientSocket = try TCPClientSocket(ip: ip)
-                try clientSocket.send(nil, length: -1)
-                XCTAssert(false)
-            } catch {
-                called = true
-            }
-        }
-
-        do {
-            let port = 5555
-            let ip = try IP(port: port)
-            let listeningSocket = try TCPListeningSocket(ip: ip)
-            co(client(port))
-            try listeningSocket.accept()
+            try serverSocket.accept()
             nap(1 * millisecond)
         } catch {
             XCTAssert(false)
@@ -244,9 +216,9 @@ class TCPClientSocketTests: XCTestCase {
         do {
             let port = 5555
             let ip = try IP(port: port)
-            let listeningSocket = try TCPListeningSocket(ip: ip)
+            let serverSocket = try TCPServerSocket(ip: ip)
             co(client(port))
-            let clientSocket = try listeningSocket.accept()
+            let clientSocket = try serverSocket.accept()
             try clientSocket.receive(bufferSize: 1) { data in
                 called = true
                 XCTAssert(data == [123])
