@@ -32,9 +32,10 @@ Venice
 
 **Venice** wraps a modified version of the C library [libmill](https://github.com/sustrik/libmill).
 
-## Renaming
+## Products
 
-**Venice** was previously called **SwiftGo**. The name was changed to allow more freedom and to focus on [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) in general.
+**Venice** is the base for:
+- [Epoch](https://github.com/Zewo/Epoch) - HTTP server that uses [Luminescence](https://github.com/Zewo/Luminescence) as the HTTP parser
 
 ##Performance
 
