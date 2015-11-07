@@ -1249,7 +1249,7 @@
 				PRODUCT_MODULE_NAME = Venice;
 				PRODUCT_NAME = Venice;
 				SKIP_INSTALL = YES;
-				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies/**";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1275,7 +1275,7 @@
 				PRODUCT_MODULE_NAME = Venice;
 				PRODUCT_NAME = Venice;
 				SKIP_INSTALL = YES;
-				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies/**";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/Dependencies";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
