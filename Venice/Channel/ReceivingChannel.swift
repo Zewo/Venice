@@ -37,7 +37,7 @@ public final class ReceivingChannel<T> : Receivable {
         return channel.receive(value, clause: clause, index: index)
     }
 
-    var closed: Bool {
+    public var closed: Bool {
         return channel.closed
     }
 }

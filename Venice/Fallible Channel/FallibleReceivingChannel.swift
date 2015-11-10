@@ -49,7 +49,7 @@ public final class FallibleReceivingChannel<T> : FallibleReceivable {
         return channel.receive(error, clause: clause, index: index)
     }
     
-    var closed: Bool {
+    public var closed: Bool {
         return channel.closed
     }
 }

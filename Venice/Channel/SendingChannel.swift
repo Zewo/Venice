@@ -41,7 +41,7 @@ public final class SendingChannel<T> : Sendable, SequenceType {
         channel.close()
     }
     
-    public func registerSend(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func registerSend(clause: UnsafeMutablePointer<Void>, index: Int) {
         return channel.registerSend(clause, index: index)
     }
     
