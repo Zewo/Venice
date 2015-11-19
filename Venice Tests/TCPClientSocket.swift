@@ -219,7 +219,7 @@ class TCPClientSocketTests: XCTestCase {
             let serverSocket = try TCPServerSocket(ip: ip)
             co(client(port))
             let clientSocket = try serverSocket.accept()
-            try clientSocket.receive(bufferSize: 1) { data in
+            try clientSocket.receive(lowWaterMark: 1, highWaterMark: 1) { data in
                 called = true
                 XCTAssert(data == [123])
                 clientSocket.close()
