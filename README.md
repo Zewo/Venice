@@ -434,14 +434,12 @@ $ git submodule add https://github.com/Zewo/Venice.git
 
 ###Command Line Application
 
-Unfortunately swift does not support importing **Swift Frameworks** in command line applications. To use **Venice** in a command line application you'll have to:
+To use **Venice** in a command line application:
 
-- add all .swift and .c files from **Venice** and *libmill* to the command line application target
-- add `$(SRCROOT)/Dependencies` to **Import Paths** at **Swift Compiler - Serach Paths** in the **Build Settings**
+- Install the [Swift Command Line Application](https://github.com/Zewo/Swift-Command-Line-Application-Template) Xcode template
+- Follow the [Embedded Framework](#embedded-framework) instructions.
 
-![Import Paths](http://s30.postimg.org/72kkgqpa9/Screen_Shot_2015_10_07_at_10_11_11.png)
-
-There's an example of a command line application target in the Xcode project.
+Check the `Command Line Applications` directory for examples.
 
 Examples
 ========
