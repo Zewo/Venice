@@ -22,6 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Venice
+
 func chineseWhispers(numberOfWhispers numberOfWhispers: Int) {
     func whisper(left: ReceivingChannel<Int>, _ right: SendingChannel<Int>) {
         left <- 1 + !<-right

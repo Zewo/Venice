@@ -22,6 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Venice
+
 enum ConnectionStatus {
     case Established
     case Succeded
@@ -35,7 +37,7 @@ func greetServer(port port: Int) {
 
         let ip = try IP(port: port)
         let serverSocket = try TCPServerSocket(ip: ip)
-        
+
         try serverSocket.acceptClients { clientSocket in
             dialogue(clientSocket: clientSocket, statistics: statistics.receivingChannel)
         }

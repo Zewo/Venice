@@ -1,0 +1,467 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B0BE746B1C00F140004FA803 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BE746A1C00F140004FA803 /* main.swift */; };
+		B0BE74931C00F1F6004FA803 /* Venice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0BE748A1C00F14F004FA803 /* Venice.framework */; };
+		B0BE74941C00F1F6004FA803 /* Venice.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B0BE748A1C00F14F004FA803 /* Venice.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B0BE74721C00F140004FA803 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B0BE74601C00F140004FA803 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B0BE74661C00F140004FA803;
+			remoteInfo = ChineseWhispers;
+		};
+		B0BE74891C00F14F004FA803 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B0BE747E1C00F14F004FA803 /* Venice.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B0BE74811C00F14F004FA803;
+			remoteInfo = "Venice OSX";
+		};
+		B0BE748B1C00F14F004FA803 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B0BE747E1C00F14F004FA803 /* Venice.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B0BE74821C00F14F004FA803;
+			remoteInfo = "Venice iOS";
+		};
+		B0BE748D1C00F14F004FA803 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B0BE747E1C00F14F004FA803 /* Venice.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B0BE74831C00F14F004FA803;
+			remoteInfo = "Venice OSX Tests";
+		};
+		B0BE748F1C00F14F004FA803 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B0BE747E1C00F14F004FA803 /* Venice.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B0BE74841C00F14F004FA803;
+			remoteInfo = "Venice iOS Tests";
+		};
+		B0BE74911C00F159004FA803 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B0BE747E1C00F14F004FA803 /* Venice.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = B0E8CE5F1B82C255007F6857;
+			remoteInfo = "Venice OSX";
+		};
+		B0BE74951C00F1F6004FA803 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B0BE747E1C00F14F004FA803 /* Venice.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = B0E8CE5F1B82C255007F6857;
+			remoteInfo = "Venice OSX";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B0BE74971C00F1F6004FA803 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B0BE74941C00F1F6004FA803 /* Venice.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		B0BE746A1C00F140004FA803 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		B0BE746C1C00F140004FA803 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B0BE747E1C00F14F004FA803 /* Venice.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Venice.xcodeproj; path = ../../Venice.xcodeproj; sourceTree = "<group>"; };
+		B0BE749D1C00F2B0004FA803 /* ChineseWhispers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChineseWhispers.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0BE749E1C00F2B0004FA803 /* ChineseWhispersTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChineseWhispersTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B0BE74651C00F140004FA803 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0BE74931C00F1F6004FA803 /* Venice.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0BE746E1C00F140004FA803 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B0BE745F1C00F140004FA803 = {
+			isa = PBXGroup;
+			children = (
+				B0BE747E1C00F14F004FA803 /* Venice.xcodeproj */,
+				B0BE74691C00F140004FA803 /* ChineseWhispers */,
+				B0BE74A21C00F2BC004FA803 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B0BE74691C00F140004FA803 /* ChineseWhispers */ = {
+			isa = PBXGroup;
+			children = (
+				B0BE746A1C00F140004FA803 /* main.swift */,
+				B0BE746C1C00F140004FA803 /* Info.plist */,
+			);
+			path = ChineseWhispers;
+			sourceTree = "<group>";
+		};
+		B0BE747F1C00F14F004FA803 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B0BE748A1C00F14F004FA803 /* Venice.framework */,
+				B0BE748C1C00F14F004FA803 /* Venice.framework */,
+				B0BE748E1C00F14F004FA803 /* Venice iOS Tests.xctest */,
+				B0BE74901C00F14F004FA803 /* Venice iOS Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B0BE74A21C00F2BC004FA803 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B0BE749D1C00F2B0004FA803 /* ChineseWhispers.app */,
+				B0BE749E1C00F2B0004FA803 /* ChineseWhispersTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B0BE74661C00F140004FA803 /* ChineseWhispers */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B0BE74781C00F140004FA803 /* Build configuration list for PBXNativeTarget "ChineseWhispers" */;
+			buildPhases = (
+				B0BE74641C00F140004FA803 /* Sources */,
+				B0BE74651C00F140004FA803 /* Frameworks */,
+				B0BE74971C00F1F6004FA803 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B0BE74921C00F159004FA803 /* PBXTargetDependency */,
+				B0BE74961C00F1F6004FA803 /* PBXTargetDependency */,
+			);
+			name = ChineseWhispers;
+			productName = ChineseWhispers;
+			productReference = B0BE749D1C00F2B0004FA803 /* ChineseWhispers.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B0BE74701C00F140004FA803 /* ChineseWhispersTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B0BE747B1C00F140004FA803 /* Build configuration list for PBXNativeTarget "ChineseWhispersTests" */;
+			buildPhases = (
+				B0BE746D1C00F140004FA803 /* Sources */,
+				B0BE746E1C00F140004FA803 /* Frameworks */,
+				B0BE746F1C00F140004FA803 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B0BE74731C00F140004FA803 /* PBXTargetDependency */,
+			);
+			name = ChineseWhispersTests;
+			productName = ChineseWhispersTests;
+			productReference = B0BE749E1C00F2B0004FA803 /* ChineseWhispersTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B0BE74601C00F140004FA803 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0710;
+				LastUpgradeCheck = 0710;
+				ORGANIZATIONNAME = Zewo;
+				TargetAttributes = {
+					B0BE74661C00F140004FA803 = {
+						CreatedOnToolsVersion = 7.1;
+					};
+					B0BE74701C00F140004FA803 = {
+						CreatedOnToolsVersion = 7.1;
+						TestTargetID = B0BE74661C00F140004FA803;
+					};
+				};
+			};
+			buildConfigurationList = B0BE74631C00F140004FA803 /* Build configuration list for PBXProject "ChineseWhispers" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = B0BE745F1C00F140004FA803;
+			productRefGroup = B0BE745F1C00F140004FA803;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = B0BE747F1C00F14F004FA803 /* Products */;
+					ProjectRef = B0BE747E1C00F14F004FA803 /* Venice.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				B0BE74661C00F140004FA803 /* ChineseWhispers */,
+				B0BE74701C00F140004FA803 /* ChineseWhispersTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		B0BE748A1C00F14F004FA803 /* Venice.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Venice.framework;
+			remoteRef = B0BE74891C00F14F004FA803 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B0BE748C1C00F14F004FA803 /* Venice.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Venice.framework;
+			remoteRef = B0BE748B1C00F14F004FA803 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B0BE748E1C00F14F004FA803 /* Venice iOS Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Venice iOS Tests.xctest";
+			remoteRef = B0BE748D1C00F14F004FA803 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B0BE74901C00F14F004FA803 /* Venice iOS Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Venice iOS Tests.xctest";
+			remoteRef = B0BE748F1C00F14F004FA803 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B0BE746F1C00F140004FA803 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B0BE74641C00F140004FA803 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0BE746B1C00F140004FA803 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0BE746D1C00F140004FA803 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B0BE74731C00F140004FA803 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B0BE74661C00F140004FA803 /* ChineseWhispers */;
+			targetProxy = B0BE74721C00F140004FA803 /* PBXContainerItemProxy */;
+		};
+		B0BE74921C00F159004FA803 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Venice OSX";
+			targetProxy = B0BE74911C00F159004FA803 /* PBXContainerItemProxy */;
+		};
+		B0BE74961C00F1F6004FA803 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Venice OSX";
+			targetProxy = B0BE74951C00F1F6004FA803 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		B0BE74761C00F140004FA803 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		B0BE74771C00F140004FA803 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		B0BE74791C00F140004FA803 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = ChineseWhispers/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zewo.ChineseWhispers;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B0BE747A1C00F140004FA803 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = ChineseWhispers/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zewo.ChineseWhispers;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		B0BE747C1C00F140004FA803 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = ChineseWhispersTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zewo.ChineseWhispersTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ChineseWhispers.app/Contents/MacOS/ChineseWhispers";
+			};
+			name = Debug;
+		};
+		B0BE747D1C00F140004FA803 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = ChineseWhispersTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zewo.ChineseWhispersTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ChineseWhispers.app/Contents/MacOS/ChineseWhispers";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B0BE74631C00F140004FA803 /* Build configuration list for PBXProject "ChineseWhispers" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0BE74761C00F140004FA803 /* Debug */,
+				B0BE74771C00F140004FA803 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B0BE74781C00F140004FA803 /* Build configuration list for PBXNativeTarget "ChineseWhispers" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0BE74791C00F140004FA803 /* Debug */,
+				B0BE747A1C00F140004FA803 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B0BE747B1C00F140004FA803 /* Build configuration list for PBXNativeTarget "ChineseWhispersTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0BE747C1C00F140004FA803 /* Debug */,
+				B0BE747D1C00F140004FA803 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B0BE74601C00F140004FA803 /* Project object */;
+}

@@ -1,0 +1,357 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B0D8016A1C00F33400E2D63E /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D801691C00F33400E2D63E /* main.swift */; };
+		B0D801901C00F34500E2D63E /* Venice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0D801891C00F33C00E2D63E /* Venice.framework */; };
+		B0D801911C00F34500E2D63E /* Venice.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B0D801891C00F33C00E2D63E /* Venice.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B0D801881C00F33C00E2D63E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B0D8017D1C00F33C00E2D63E /* Venice.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B0D801801C00F33C00E2D63E;
+			remoteInfo = "Venice OSX";
+		};
+		B0D8018A1C00F33C00E2D63E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B0D8017D1C00F33C00E2D63E /* Venice.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B0D801811C00F33C00E2D63E;
+			remoteInfo = "Venice iOS";
+		};
+		B0D8018C1C00F33C00E2D63E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B0D8017D1C00F33C00E2D63E /* Venice.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B0D801821C00F33C00E2D63E;
+			remoteInfo = "Venice OSX Tests";
+		};
+		B0D8018E1C00F33C00E2D63E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B0D8017D1C00F33C00E2D63E /* Venice.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B0D801831C00F33C00E2D63E;
+			remoteInfo = "Venice iOS Tests";
+		};
+		B0D801921C00F34500E2D63E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B0D8017D1C00F33C00E2D63E /* Venice.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = B0E8CE5F1B82C255007F6857;
+			remoteInfo = "Venice OSX";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B0D801941C00F34600E2D63E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B0D801911C00F34500E2D63E /* Venice.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		B0D801661C00F33400E2D63E /* GreetServer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GreetServer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0D801691C00F33400E2D63E /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		B0D8016B1C00F33400E2D63E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B0D8017D1C00F33C00E2D63E /* Venice.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Venice.xcodeproj; path = ../../Venice.xcodeproj; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B0D801641C00F33400E2D63E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0D801901C00F34500E2D63E /* Venice.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B0D8015E1C00F33400E2D63E = {
+			isa = PBXGroup;
+			children = (
+				B0D8017D1C00F33C00E2D63E /* Venice.xcodeproj */,
+				B0D801681C00F33400E2D63E /* GreetServer */,
+				B0D801671C00F33400E2D63E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B0D801671C00F33400E2D63E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B0D801661C00F33400E2D63E /* GreetServer.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B0D801681C00F33400E2D63E /* GreetServer */ = {
+			isa = PBXGroup;
+			children = (
+				B0D801691C00F33400E2D63E /* main.swift */,
+				B0D8016B1C00F33400E2D63E /* Info.plist */,
+			);
+			path = GreetServer;
+			sourceTree = "<group>";
+		};
+		B0D8017E1C00F33C00E2D63E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B0D801891C00F33C00E2D63E /* Venice.framework */,
+				B0D8018B1C00F33C00E2D63E /* Venice.framework */,
+				B0D8018D1C00F33C00E2D63E /* Venice iOS Tests.xctest */,
+				B0D8018F1C00F33C00E2D63E /* Venice iOS Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B0D801651C00F33400E2D63E /* GreetServer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B0D801771C00F33400E2D63E /* Build configuration list for PBXNativeTarget "GreetServer" */;
+			buildPhases = (
+				B0D801631C00F33400E2D63E /* Sources */,
+				B0D801641C00F33400E2D63E /* Frameworks */,
+				B0D801941C00F34600E2D63E /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B0D801931C00F34500E2D63E /* PBXTargetDependency */,
+			);
+			name = GreetServer;
+			productName = GreetServer;
+			productReference = B0D801661C00F33400E2D63E /* GreetServer.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B0D8015F1C00F33400E2D63E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0710;
+				LastUpgradeCheck = 0710;
+				ORGANIZATIONNAME = Zewo;
+				TargetAttributes = {
+					B0D801651C00F33400E2D63E = {
+						CreatedOnToolsVersion = 7.1;
+					};
+				};
+			};
+			buildConfigurationList = B0D801621C00F33400E2D63E /* Build configuration list for PBXProject "GreetServer" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = B0D8015E1C00F33400E2D63E;
+			productRefGroup = B0D801671C00F33400E2D63E /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = B0D8017E1C00F33C00E2D63E /* Products */;
+					ProjectRef = B0D8017D1C00F33C00E2D63E /* Venice.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				B0D801651C00F33400E2D63E /* GreetServer */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		B0D801891C00F33C00E2D63E /* Venice.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Venice.framework;
+			remoteRef = B0D801881C00F33C00E2D63E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B0D8018B1C00F33C00E2D63E /* Venice.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Venice.framework;
+			remoteRef = B0D8018A1C00F33C00E2D63E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B0D8018D1C00F33C00E2D63E /* Venice iOS Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Venice iOS Tests.xctest";
+			remoteRef = B0D8018C1C00F33C00E2D63E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B0D8018F1C00F33C00E2D63E /* Venice iOS Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Venice iOS Tests.xctest";
+			remoteRef = B0D8018E1C00F33C00E2D63E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B0D801631C00F33400E2D63E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0D8016A1C00F33400E2D63E /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B0D801931C00F34500E2D63E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Venice OSX";
+			targetProxy = B0D801921C00F34500E2D63E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		B0D801751C00F33400E2D63E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		B0D801761C00F33400E2D63E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		B0D801781C00F33400E2D63E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = GreetServer/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zewo.GreetServer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B0D801791C00F33400E2D63E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = GreetServer/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zewo.GreetServer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B0D801621C00F33400E2D63E /* Build configuration list for PBXProject "GreetServer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0D801751C00F33400E2D63E /* Debug */,
+				B0D801761C00F33400E2D63E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B0D801771C00F33400E2D63E /* Build configuration list for PBXNativeTarget "GreetServer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0D801781C00F33400E2D63E /* Debug */,
+				B0D801791C00F33400E2D63E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B0D8015F1C00F33400E2D63E /* Project object */;
+}
