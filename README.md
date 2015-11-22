@@ -368,7 +368,7 @@ To integrate Venice into your Xcode project using CocoaPods, specify it in your 
 source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
-pod 'Venice'
+pod 'Venice', '0.9'
 ```
 
 Then, run the following command:
@@ -391,7 +391,7 @@ $ brew install carthage
 To integrate **Venice** into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "Zewo/Venice"
+github "Zewo/Venice" == 0.9
 ```
 
 ### Manually
