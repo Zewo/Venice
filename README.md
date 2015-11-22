@@ -437,7 +437,7 @@ $ git submodule add https://github.com/Zewo/Venice.git
 To use **Venice** in a command line application:
 
 - Install the [Swift Command Line Application](https://github.com/Zewo/Swift-Command-Line-Application-Template) Xcode template
-- Follow the [Embedded Framework](#embedded-framework) instructions.
+- Follow [Cocoa Pods](#cocoapods), [Carthage](#carthage) or [Embedded Framework](#embedded-framework) instructions.
 
 Check the `Command Line Applications` directory for examples.
 
