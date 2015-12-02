@@ -1224,7 +1224,7 @@ buffering our limiter channel. This `burstyLimiter`
 channel will allow bursts of up to 3 events.
 
 ```swift
-let burstyLimiter = Channel<Int>(bufferSize: 3)
+let burstyLimiter = Channel<Int64>(bufferSize: 3)
 ```
 
 Fill up the channel to represent allowed bursting.
