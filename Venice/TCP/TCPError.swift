@@ -24,10 +24,12 @@
 
 import libmill
 
-public enum TCPError : ErrorType {
-    case Generic(description: String)
+public enum TCPError: ErrorType {
+    case Unknown(description: String)
     case ConnectionResetByPeer(description: String, remainingData: [Int8])
     case NoBufferSpaceAvailabe(description: String, receivedData: [Int8])
+    case OperationTimedOut(description: String)
+    case ClosedSocket(description: String)
 
     static func lastErrorWithData(data: [Int8], bytesProcessed: Int) -> TCPError {
         let description = String.fromCString(strerror(errno))!
@@ -38,13 +40,37 @@ public enum TCPError : ErrorType {
         case ENOBUFS:
             let receivedData = processedDataFromSource(data, bytesProcessed: bytesProcessed)
             return .NoBufferSpaceAvailabe(description: description, receivedData: receivedData)
+        case ETIMEDOUT:
+            return .OperationTimedOut(description: description)
         default:
-            return .Generic(description: description)
+            return .Unknown(description: description)
         }
     }
 
     static var lastError: TCPError {
         let description = String.fromCString(strerror(errno))!
-        return .Generic(description: description)
+        // TODO: Switch on errno
+        return .Unknown(description: description)
+    }
+
+    static var closedSocketError: TCPError {
+        return TCPError.ClosedSocket(description: "Closed socket")
+    }
+}
+
+extension TCPError: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case Unknown(let description):
+            return description
+        case ConnectionResetByPeer(let description, _):
+            return description
+        case NoBufferSpaceAvailabe(let description, _):
+            return description
+        case OperationTimedOut(let description):
+            return description
+        case ClosedSocket(let description):
+            return description
+        }
     }
 }

@@ -56,7 +56,7 @@ public final class TCPClientSocket {
 
     public func send(var data: [Int8], deadline: Deadline = NoDeadline) throws {
         if closed {
-            throw TCPError.Generic(description: "Closed socket")
+            throw TCPError.closedSocketError
         }
 
         let bytesProcessed = tcpsend(socket, &data, data.count, deadline)
@@ -68,7 +68,7 @@ public final class TCPClientSocket {
 
     public func flush(deadline: Deadline = NoDeadline) throws {
         if closed {
-            throw TCPError.Generic(description: "Closed socket")
+            throw TCPError.closedSocketError
         }
 
         tcpflush(socket, deadline)
@@ -80,7 +80,7 @@ public final class TCPClientSocket {
 
     public func receive(bufferSize bufferSize: Int = 256, deadline: Deadline = NoDeadline) throws -> [Int8] {
         if closed {
-            throw TCPError.Generic(description: "Closed socket")
+            throw TCPError.closedSocketError
         }
 
         var data: [Int8] = [Int8](count: bufferSize, repeatedValue: 0)
@@ -95,7 +95,7 @@ public final class TCPClientSocket {
 
     public func receiveLowWaterMark(lowWaterMark: Int = 256, highWaterMark: Int = 256, deadline: Deadline = NoDeadline) throws -> [Int8] {
         if closed {
-            throw TCPError.Generic(description: "Closed socket")
+            throw TCPError.closedSocketError
         }
 
         var data: [Int8] = [Int8](count: highWaterMark, repeatedValue: 0)
@@ -110,7 +110,7 @@ public final class TCPClientSocket {
 
     public func receive(bufferSize bufferSize: Int = 256, untilDelimiter delimiter: String, deadline: Deadline = NoDeadline) throws -> [Int8] {
         if closed {
-            throw TCPError.Generic(description: "Closed socket")
+            throw TCPError.closedSocketError
         }
 
         var data: [Int8] = [Int8](count: bufferSize, repeatedValue: 0)
@@ -139,7 +139,7 @@ public final class TCPClientSocket {
 
     public func detach() throws -> Int32 {
         if closed {
-            throw TCPError.Generic(description: "Closed socket")
+            throw TCPError.closedSocketError
         }
 
         closed = true
@@ -192,9 +192,13 @@ extension TCPClientSocket {
             }
             when.otherwise {
                 do {
-                    let data = try self.receiveLowWaterMark(lowWaterMark, highWaterMark: highWaterMark)
+                    let data = try self.receiveLowWaterMark(lowWaterMark, highWaterMark: highWaterMark, deadline: now + 1 * second)
                     sequentialErrorsCount = 0
                     co(completion({ data }))
+                } catch TCPError.OperationTimedOut {
+                    // Do nothing
+                } catch TCPError.ClosedSocket {
+                    done()
                 } catch {
                     ++sequentialErrorsCount
                     if sequentialErrorsCount >= 10 {

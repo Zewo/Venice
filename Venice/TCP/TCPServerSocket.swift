@@ -57,7 +57,7 @@ public final class TCPServerSocket {
 
     public func accept(deadline: Deadline = NoDeadline) throws -> TCPClientSocket {
         if closed {
-            throw TCPError.Generic(description: "Closed socket")
+            throw TCPError.closedSocketError
         }
 
         let clientSocket = tcpaccept(socket, deadline)
@@ -86,7 +86,7 @@ public final class TCPServerSocket {
 
     public func detach() throws -> Int32 {
         if closed {
-            throw TCPError.Generic(description: "Closed socket")
+            throw TCPError.closedSocketError
         }
 
         closed = true

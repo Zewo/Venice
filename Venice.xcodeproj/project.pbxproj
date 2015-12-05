@@ -301,8 +301,8 @@
 			isa = PBXGroup;
 			children = (
 				B00ED9761BD6EFB200BBBBAE /* TCPError.swift */,
-				B00ED9821BD7B3B400BBBBAE /* TCPClientSocket.swift */,
 				B00512C71BEC5B32001B3F26 /* TCPServerSocket.swift */,
+				B00ED9821BD7B3B400BBBBAE /* TCPClientSocket.swift */,
 			);
 			name = TCP;
 			sourceTree = "<group>";
