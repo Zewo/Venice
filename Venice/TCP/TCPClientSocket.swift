@@ -183,27 +183,26 @@ extension TCPClientSocket {
     public func receive(closeChannel closeChannel: Channel<Void>, lowWaterMark: Int = 256, highWaterMark: Int = 256, completion: (Void throws -> [Int8]) -> Void) {
         var sequentialErrorsCount = 0
 
-        forSelect { when, done in
-            if closed {
-                done()
-            }
-            when.receiveFrom(closeChannel) { _ in
-                done()
-            }
-            when.otherwise {
-                do {
-                    let data = try self.receiveLowWaterMark(lowWaterMark, highWaterMark: highWaterMark, deadline: now + 1 * second)
-                    sequentialErrorsCount = 0
-                    co(completion({ data }))
-                } catch TCPError.OperationTimedOut {
-                    // Do nothing
-                } catch TCPError.ClosedSocket {
-                    done()
-                } catch {
-                    ++sequentialErrorsCount
-                    if sequentialErrorsCount >= 10 {
-                        completion({ throw error })
-                    }
+        var done = false
+
+        co {
+            closeChannel.receive()
+            done = true
+        }
+
+        while !closed || !done {
+            do {
+                let data = try self.receiveLowWaterMark(lowWaterMark, highWaterMark: highWaterMark, deadline: now + 1 * second)
+                sequentialErrorsCount = 0
+                co(completion({ data }))
+            } catch TCPError.OperationTimedOut {
+                // Do nothing
+            } catch TCPError.ClosedSocket {
+                break
+            } catch {
+                ++sequentialErrorsCount
+                if sequentialErrorsCount >= 10 {
+                    completion({ throw error })
                 }
             }
         }
