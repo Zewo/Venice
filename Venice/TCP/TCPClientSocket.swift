@@ -180,18 +180,23 @@ extension TCPClientSocket {
         return String.fromCString(response)
     }
 
-    public func receive(lowWaterMark lowWaterMark: Int = 256, highWaterMark: Int = 256, received: [Int8] -> Void) throws {
+    public func receive(closeChannel closeChannel: Channel<Void>, lowWaterMark: Int = 256, highWaterMark: Int = 256, completion: (Void throws -> [Int8]) -> Void) {
         var sequentialErrorsCount = 0
 
-        while !closed {
-            do {
-                let data = try receiveLowWaterMark(lowWaterMark, highWaterMark: highWaterMark)
-                sequentialErrorsCount = 0
-                co(received(data))
-            } catch {
-                ++sequentialErrorsCount
-                if sequentialErrorsCount >= 10 {
-                    throw error
+        forSelect { when, done in
+            when.receiveFrom(closeChannel) { _ in
+                done()
+            }
+            when.otherwise {
+                do {
+                    let data = try self.receiveLowWaterMark(lowWaterMark, highWaterMark: highWaterMark)
+                    sequentialErrorsCount = 0
+                    co(completion({ data }))
+                } catch {
+                    ++sequentialErrorsCount
+                    if sequentialErrorsCount >= 10 {
+                        completion({ throw error })
+                    }
                 }
             }
         }
