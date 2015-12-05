@@ -184,6 +184,9 @@ extension TCPClientSocket {
         var sequentialErrorsCount = 0
 
         forSelect { when, done in
+            if closed {
+                done()
+            }
             when.receiveFrom(closeChannel) { _ in
                 done()
             }
