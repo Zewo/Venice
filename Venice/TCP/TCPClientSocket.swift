@@ -190,13 +190,16 @@ extension TCPClientSocket {
             done = true
         }
 
-        while !closed || !done {
+        while !closed {
             do {
                 let data = try self.receiveLowWaterMark(lowWaterMark, highWaterMark: highWaterMark, deadline: now + 1 * second)
                 sequentialErrorsCount = 0
                 co(completion({ data }))
             } catch TCPError.OperationTimedOut {
-                // Do nothing
+                if done {
+                    closeChannel.send()
+                    break
+                }
             } catch TCPError.ClosedSocket {
                 break
             } catch {
