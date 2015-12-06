@@ -38,18 +38,24 @@ public typealias Deadline = Int64
 let NoDeadline: Deadline = -1
 
 /// Runs the expression in a lightweight coroutine
-public func co(@autoclosure(escaping) routine: Void -> Void) {
-    libmill.co(routine)
+public func co(routine: Void -> Void) {
+    var routine = routine
+    CLibvenice.co(&routine) { routinePointer in
+        UnsafeMutablePointer<(Void -> Void)>(routinePointer).memory()
+    }
 }
 
 /// Runs the expression in a lightweight coroutine
-public func co(routine: Void -> Void) {
-    libmill.co(routine)
+public func co(@autoclosure(escaping) routine: Void -> Void) {
+    var routine = routine
+    CLibvenice.co(&routine) { routinePointer in
+        UnsafeMutablePointer<(Void -> Void)>(routinePointer).memory()
+    }
 }
 
 /// Runs the expression in a lightweight coroutine
 public func after(napDuration: Int64, routine: Void -> Void) {
-    libmill.co {
+    co {
         nap(napDuration)
         routine()
     }
