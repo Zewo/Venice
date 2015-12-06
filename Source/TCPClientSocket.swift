@@ -54,11 +54,12 @@ public final class TCPClientSocket {
         close()
     }
 
-    public func send(var data: [Int8], deadline: Deadline = NoDeadline) throws {
+    public func send(data: [Int8], deadline: Deadline = NoDeadline) throws {
         if closed {
             throw TCPError.closedSocketError
         }
 
+        var data = data
         let bytesProcessed = tcpsend(socket, &data, data.count, deadline)
 
         if errno != 0 {
