@@ -26,22 +26,26 @@ import libmill
 
 public enum TCPError: ErrorType {
     case Unknown(description: String)
-    case ConnectionResetByPeer(description: String, remainingData: [Int8])
-    case NoBufferSpaceAvailabe(description: String, receivedData: [Int8])
-    case OperationTimedOut(description: String)
+    case ConnectionResetByPeer(description: String, data: [Int8])
+    case NoBufferSpaceAvailabe(description: String, data: [Int8])
+    case OperationTimedOut(description: String, data: [Int8])
     case ClosedSocket(description: String)
 
-    static func lastErrorWithData(data: [Int8], bytesProcessed: Int) -> TCPError {
+    static func lastErrorWithData(data: [Int8], bytesProcessed: Int, receive: Bool) -> TCPError {
         let description = String.fromCString(strerror(errno))!
+        let d: [Int8]
+        if receive {
+            d = processedDataFromSource(data, bytesProcessed: bytesProcessed)
+        } else {
+            d = remainingDataFromSource(data, bytesProcessed: bytesProcessed)
+        }
         switch errno {
         case ECONNRESET:
-            let remainingData = remainingDataFromSource(data, bytesProcessed: bytesProcessed)
-            return .ConnectionResetByPeer(description: description, remainingData: remainingData)
+            return .ConnectionResetByPeer(description: description, data: d)
         case ENOBUFS:
-            let receivedData = processedDataFromSource(data, bytesProcessed: bytesProcessed)
-            return .NoBufferSpaceAvailabe(description: description, receivedData: receivedData)
+            return .NoBufferSpaceAvailabe(description: description, data: d)
         case ETIMEDOUT:
-            return .OperationTimedOut(description: description)
+            return .OperationTimedOut(description: description, data: d)
         default:
             return .Unknown(description: description)
         }
@@ -67,7 +71,7 @@ extension TCPError: CustomStringConvertible {
             return description
         case NoBufferSpaceAvailabe(let description, _):
             return description
-        case OperationTimedOut(let description):
+        case OperationTimedOut(let description, _):
             return description
         case ClosedSocket(let description):
             return description

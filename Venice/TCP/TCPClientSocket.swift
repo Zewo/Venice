@@ -62,7 +62,7 @@ public final class TCPClientSocket {
         let bytesProcessed = tcpsend(socket, &data, data.count, deadline)
 
         if errno != 0 {
-            throw TCPError.lastErrorWithData(data, bytesProcessed: bytesProcessed)
+            throw TCPError.lastErrorWithData(data, bytesProcessed: bytesProcessed, receive: false)
         }
     }
 
@@ -87,7 +87,7 @@ public final class TCPClientSocket {
         let bytesProcessed = tcprecv(socket, &data, data.count, deadline)
 
         if errno != 0 {
-            throw TCPError.lastErrorWithData(data, bytesProcessed: bytesProcessed)
+            throw TCPError.lastErrorWithData(data, bytesProcessed: bytesProcessed, receive: true)
         }
 
         return processedDataFromSource(data, bytesProcessed: bytesProcessed)
@@ -102,7 +102,7 @@ public final class TCPClientSocket {
         let bytesProcessed = tcprecvlh(socket, &data, lowWaterMark, highWaterMark, deadline)
 
         if errno != 0 {
-            throw TCPError.lastErrorWithData(data, bytesProcessed: bytesProcessed)
+            throw TCPError.lastErrorWithData(data, bytesProcessed: bytesProcessed, receive: true)
         }
 
         return processedDataFromSource(data, bytesProcessed: bytesProcessed)
@@ -117,7 +117,7 @@ public final class TCPClientSocket {
         let bytesProcessed = tcprecvuntil(socket, &data, data.count, delimiter, delimiter.utf8.count, deadline)
 
         if errno != 0 {
-            throw TCPError.lastErrorWithData(data, bytesProcessed: bytesProcessed)
+            throw TCPError.lastErrorWithData(data, bytesProcessed: bytesProcessed, receive: true)
         }
 
         return processedDataFromSource(data, bytesProcessed: bytesProcessed)
@@ -178,36 +178,5 @@ extension TCPClientSocket {
         var response = try receive(bufferSize: bufferSize, deadline: deadline)
         response.append(0)
         return String.fromCString(response)
-    }
-
-    public func receive(closeChannel closeChannel: Channel<Void>, lowWaterMark: Int = 256, highWaterMark: Int = 256, completion: (Void throws -> [Int8]) -> Void) {
-        var sequentialErrorsCount = 0
-
-        var done = false
-
-        co {
-            closeChannel.receive()
-            done = true
-        }
-
-        while !closed {
-            do {
-                let data = try self.receiveLowWaterMark(lowWaterMark, highWaterMark: highWaterMark, deadline: now + 1 * second)
-                sequentialErrorsCount = 0
-                co(completion({ data }))
-            } catch TCPError.OperationTimedOut {
-                if done {
-                    closeChannel.send()
-                    break
-                }
-            } catch TCPError.ClosedSocket {
-                break
-            } catch {
-                ++sequentialErrorsCount
-                if sequentialErrorsCount >= 10 {
-                    completion({ throw error })
-                }
-            }
-        }
     }
 }
