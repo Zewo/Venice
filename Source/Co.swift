@@ -26,7 +26,7 @@ import CLibvenice
 
 /// Current time
 public var now: Int64 {
-    return libmill.now()
+    return CLibvenice.now()
 }
 
 public let hour: Int64 = 3600000
@@ -39,16 +39,16 @@ let NoDeadline: Deadline = -1
 
 /// Runs the expression in a lightweight coroutine
 public func co(routine: Void -> Void) {
-    var routine = routine
-    CLibvenice.co(&routine) { routinePointer in
+    var _routine = routine
+    CLibvenice.co(&_routine) { routinePointer in
         UnsafeMutablePointer<(Void -> Void)>(routinePointer).memory()
     }
 }
 
 /// Runs the expression in a lightweight coroutine
 public func co(@autoclosure(escaping) routine: Void -> Void) {
-    var routine = routine
-    CLibvenice.co(&routine) { routinePointer in
+    var _routine = routine
+    CLibvenice.co(&_routine) { routinePointer in
         UnsafeMutablePointer<(Void -> Void)>(routinePointer).memory()
     }
 }
