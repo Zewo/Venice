@@ -22,7 +22,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import libmill
+#if os(Linux)
+    import Glibc
+#else
+    import Darwin.C
+#endif
+import CLibvenice
 
 public enum IPMode {
     case IPV4
