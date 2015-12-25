@@ -22,34 +22,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class FallibleReceivingChannel<T> : FallibleReceivable {
+public final class FallibleReceivingChannel<T>: FallibleReceivable, SequenceType {
     private let channel: FallibleChannel<T>
-    
+
     init(_ channel: FallibleChannel<T>) {
         self.channel = channel
     }
 
-    public func receiveResult(result: ChannelResult<T>) {
-        return channel.receiveResult(result)
-    }
-    
-    public func receive(value: T) {
-        return channel.receive(value)
+    public func receive() throws -> T? {
+        return try channel.receive()
     }
 
-    func receive(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
-        return channel.receive(value, clause: clause, index: index)
-    }
-    
-    public func receiveError(error: ErrorType) {
-        return channel.receiveError(error)
+    public func receiveResult() -> ChannelResult<T>? {
+        return channel.receiveResult()
     }
 
-    func receive(error: ErrorType, clause: UnsafeMutablePointer<Void>, index: Int) {
-        return channel.receive(error, clause: clause, index: index)
+    public func generate() -> FallibleChannelGenerator<T> {
+        return FallibleChannelGenerator(channel: self)
+    }
+
+    public func close() {
+        channel.close()
+    }
+
+    func registerReceive(clause: UnsafeMutablePointer<Void>, index: Int) {
+        return channel.registerReceive(clause, index: index)
+    }
+
+    func getResultFromBuffer() -> ChannelResult<T>? {
+        return channel.getResultFromBuffer()
     }
     
-    public var closed: Bool {
-        return channel.closed
-    }
 }

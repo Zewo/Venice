@@ -26,7 +26,6 @@ import XCTest
 import Venice
 
 class TCPTests: XCTestCase {
-
     func testTCPClientServer() {
         func client(port: Int) {
             do {
@@ -99,6 +98,5 @@ class TCPTests: XCTestCase {
             XCTAssert(false)
         }
     }
-
 }
 

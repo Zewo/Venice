@@ -26,7 +26,6 @@ import XCTest
 import Venice
 
 class IPTests: XCTestCase {
-
     func testLocalIPV4() {
         do {
             let _ = try IP(port: 5555, mode: .IPV4)

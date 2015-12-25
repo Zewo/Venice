@@ -26,11 +26,10 @@ import XCTest
 import Venice
 
 class CoTests: XCTestCase {
-
     var sum: Int = 0
 
     override func setUp() {
-        preallocateCoroutineStacks(stackCount: 10, stackSize: 25000, channelValueMaxSize: 300)
+//        preallocateCoroutineStacks(stackCount: 10, stackSize: 25000)
     }
 
     func worker(count count: Int, n: Int) {

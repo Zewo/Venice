@@ -24,9 +24,14 @@
 
 public protocol Receivable {
     typealias T
-    func receive(value: T)
+    func receive() -> T?
+    func close()
 }
 
-public func <-<R: Receivable>(receiver: R, value: R.T) {
-    receiver.receive(value)
+public prefix func <-<S: Receivable>(receiver: S) -> S.T? {
+    return receiver.receive()
+}
+
+public prefix func !<-<S: Receivable>(receiver: S) -> S.T! {
+    return receiver.receive()
 }

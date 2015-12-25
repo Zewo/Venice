@@ -24,13 +24,19 @@
 
 public protocol FallibleSendable {
     typealias T
-    func send() throws -> T?
+    func send(value: T)
+    func sendError(error: ErrorType)
+    func sendResult(result: ChannelResult<T>)
 }
 
-public prefix func <-<R: FallibleSendable>(channel: R) throws -> R.T? {
-    return try channel.send()
+public func <-<W: FallibleSendable>(sender: W, result: ChannelResult<W.T>) {
+    sender.sendResult(result)
 }
 
-public prefix func !<-<R: FallibleSendable>(channel: R) throws -> R.T! {
-    return try channel.send()!
+public func <-<W: FallibleSendable>(sender: W, value: W.T) {
+    sender.send(value)
+}
+
+public func <-<W: FallibleSendable>(sender: W, error: ErrorType) {
+    sender.sendError(error)
 }

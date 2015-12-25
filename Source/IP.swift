@@ -51,6 +51,10 @@ public struct IP {
     let address: ipaddr
 
     public init(port: Int, mode: IPMode = .IPV4) throws {
+        if port < 0 || port > 0xffff {
+            throw IPError(description: "port should be between 0 and 0xffff")
+        }
+
         self.address = iplocal(nil, Int32(port), mode.code)
 
         if errno != 0 {
@@ -60,6 +64,10 @@ public struct IP {
     }
 
     public init(networkInterface: String, port: Int, mode: IPMode = .IPV4) throws {
+        if port < 0 || port > 0xffff {
+            throw IPError(description: "port should be between 0 and 0xffff")
+        }
+
         self.address = iplocal(networkInterface, Int32(port), mode.code)
 
         if errno != 0 {
@@ -69,6 +77,10 @@ public struct IP {
     }
 
     public init(address: String, port: Int, mode: IPMode = .IPV4, deadline: Deadline = NoDeadline) throws {
+        if port < 0 || port > 0xffff {
+            throw IPError(description: "port should be between 0 and 0xffff")
+        }
+        
         self.address = ipremote(address, Int32(port), mode.code, deadline)
 
         if errno != 0 {

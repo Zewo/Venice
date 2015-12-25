@@ -22,35 +22,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class FallibleSendingChannel<T> : FallibleSendable, SequenceType {
+public final class FallibleSendingChannel<T>: FallibleSendable {
     private let channel: FallibleChannel<T>
-    
+
     init(_ channel: FallibleChannel<T>) {
         self.channel = channel
     }
-    
-    public func send() throws -> T? {
-        return try channel.send()
+
+    public func sendResult(result: ChannelResult<T>) {
+        return channel.sendResult(result)
     }
 
-    public func sendResult() -> ChannelResult<T>? {
-        return channel.sendResult()
-    }
-    
-    public func generate() -> FallibleChannelGenerator<T> {
-        return FallibleChannelGenerator(channel: self)
-    }
-    
-    public func close() {
-        channel.close()
+    public func send(value: T) {
+        return channel.send(value)
     }
 
-    func registerSend(clause: UnsafeMutablePointer<Void>, index: Int) {
-        return channel.registerSend(clause, index: index)
+    func send(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
+        return channel.send(value, clause: clause, index: index)
     }
 
-    func getResultFromBuffer() -> ChannelResult<T>? {
-        return channel.getResultFromBuffer()
+    public func sendError(error: ErrorType) {
+        return channel.sendError(error)
     }
 
+    func send(error: ErrorType, clause: UnsafeMutablePointer<Void>, index: Int) {
+        return channel.send(error, clause: clause, index: index)
+    }
+
+    public var closed: Bool {
+        return channel.closed
+    }
 }

@@ -26,7 +26,6 @@ import XCTest
 import Venice
 
 class TickerTests: XCTestCase {
-
     func testTicker() {
         let ticker = Ticker(period: 10 * millisecond)
         co {
@@ -36,5 +35,4 @@ class TickerTests: XCTestCase {
         ticker.stop()
         nap(20 * millisecond)
     }
-
 }

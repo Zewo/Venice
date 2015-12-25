@@ -24,14 +24,9 @@
 
 public protocol Sendable {
     typealias T
-    func send() -> T?
-    func close()
+    func send(value: T)
 }
 
-public prefix func <-<S: Sendable>(sender: S) -> S.T? {
-    return sender.send()
-}
-
-public prefix func !<-<S: Sendable>(sender: S) -> S.T! {
-    return sender.send()
+public func <-<R: Sendable>(sender: R, value: R.T) {
+    sender.send(value)
 }

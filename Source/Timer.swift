@@ -26,8 +26,8 @@ public final class Timer {
     private var internalChannel = Channel<Void>()
     private var stopped: Bool = false
 
-    public var channel: SendingChannel<Void> {
-        return internalChannel.sendingChannel
+    public var channel: ReceivingChannel<Void> {
+        return internalChannel.receivingChannel
     }
 
     public init(deadline: Deadline) {

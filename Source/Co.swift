@@ -40,17 +40,17 @@ let NoDeadline: Deadline = -1
 /// Runs the expression in a lightweight coroutine
 public func co(routine: Void -> Void) {
     var _routine = routine
-    CLibvenice.co(&_routine) { routinePointer in
+    CLibvenice.co(&_routine, { routinePointer in
         UnsafeMutablePointer<(Void -> Void)>(routinePointer).memory()
-    }
+    }, "co")
 }
 
 /// Runs the expression in a lightweight coroutine
 public func co(@autoclosure(escaping) routine: Void -> Void) {
     var _routine: Void -> Void = routine
-    CLibvenice.co(&_routine) { routinePointer in
+    CLibvenice.co(&_routine, { routinePointer in
         UnsafeMutablePointer<(Void -> Void)>(routinePointer).memory()
-    }
+    }, "co")
 }
 
 /// Runs the expression in a lightweight coroutine
@@ -62,21 +62,21 @@ public func after(napDuration: Int64, routine: Void -> Void) {
 }
 
 /// Preallocates coroutine stacks. Returns the number of stacks that it actually managed to allocate.
-public func preallocateCoroutineStacks(stackCount stackCount: Int, stackSize: Int, channelValueMaxSize: Int) -> Int {
-    return Int(goprepare(Int32(stackCount), stackSize, channelValueMaxSize))
+public func preallocateCoroutineStacks(stackCount stackCount: Int, stackSize: Int) {
+    return goprepare(Int32(stackCount), stackSize)
 }
 
 /// Sleeps for duration
 public func nap(duration: Int64) {
-    mill_msleep(now + duration)
+    mill_msleep(now + duration, "nap")
 }
 
 /// Wakes up at deadline
 public func wakeUp(deadline: Deadline) {
-    mill_msleep(deadline)
+    mill_msleep(deadline, "wakeUp")
 }
 
 /// Passes control to other coroutines
 public var yield: Void {
-    mill_yield()
+    mill_yield("yield")
 }

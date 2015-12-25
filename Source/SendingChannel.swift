@@ -22,30 +22,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class SendingChannel<T> : Sendable, SequenceType {
+public final class SendingChannel<T>: Sendable {
     private let channel: Channel<T>
-    
+
     init(_ channel: Channel<T>) {
         self.channel = channel
     }
-    
-    public func send() -> T? {
-        return channel.send()
+
+    public func send(value: T) {
+        return channel.send(value)
     }
-    
-    public func generate() -> ChannelGenerator<T> {
-        return ChannelGenerator(channel: self)
+
+    func send(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
+        return channel.send(value, clause: clause, index: index)
     }
-    
-    public func close() {
-        channel.close()
-    }
-    
-    func registerSend(clause: UnsafeMutablePointer<Void>, index: Int) {
-        return channel.registerSend(clause, index: index)
-    }
-    
-    func getValueFromBuffer() -> T? {
-        return channel.getValueFromBuffer()
+
+    public var closed: Bool {
+        return channel.closed
     }
 }
+

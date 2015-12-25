@@ -24,19 +24,13 @@
 
 public protocol FallibleReceivable {
     typealias T
-    func receive(value: T)
-    func receiveError(error: ErrorType)
-    func receiveResult(result: ChannelResult<T>)
+    func receive() throws -> T?
 }
 
-public func <-<W: FallibleReceivable>(channel: W, result: ChannelResult<W.T>) {
-    channel.receiveResult(result)
+public prefix func <-<R: FallibleReceivable>(receiver: R) throws -> R.T? {
+    return try receiver.receive()
 }
 
-public func <-<W: FallibleReceivable>(channel: W, value: W.T) {
-    channel.receive(value)
-}
-
-public func <-<W: FallibleReceivable>(channel: W, error: ErrorType) {
-    channel.receiveError(error)
+public prefix func !<-<R: FallibleReceivable>(receiver: R) throws -> R.T! {
+    return try receiver.receive()!
 }

@@ -26,7 +26,6 @@ import XCTest
 import Venice
 
 class PerformanceTests: XCTestCase {
-
     func testSyncPerformanceVenice() {
         self.measureBlock {
             let numberOfSyncs = 10000
@@ -71,7 +70,7 @@ class PerformanceTests: XCTestCase {
 
     func testThousandWhispers() {
         self.measureBlock {
-            func whisper(left: ReceivingChannel<Int>, _ right: SendingChannel<Int>) {
+            func whisper(left: SendingChannel<Int>, _ right: ReceivingChannel<Int>) {
                 left <- 1 + !<-right
             }
 
@@ -83,7 +82,7 @@ class PerformanceTests: XCTestCase {
 
             for _ in 0 ..< numberOfWhispers {
                 right = Channel<Int>()
-                co(whisper(left.receivingChannel, right.sendingChannel))
+                co(whisper(left.sendingChannel, right.receivingChannel))
                 left = right
             }
 

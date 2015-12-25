@@ -24,15 +24,15 @@
 
 import CLibvenice
 
-public struct ChannelGenerator<T> : GeneratorType {
-    let channel: SendingChannel<T>
+public struct ChannelGenerator<T>: GeneratorType {
+    let channel: ReceivingChannel<T>
 
     public mutating func next() -> T? {
-        return channel.send()
+        return channel.receive()
     }
 }
 
-public final class Channel<T> : SequenceType, Sendable, Receivable {
+public final class Channel<T>: SequenceType, Sendable, Receivable {
     private let channel: chan
     public var closed: Bool = false
     private var buffer: [T] = []
@@ -44,11 +44,11 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
 
     public init(bufferSize: Int) {
         self.bufferSize = bufferSize
-        self.channel = mill_chmake(bufferSize)
+        self.channel = mill_chmake(bufferSize, "Channel init")
     }
 
     deinit {
-        mill_chclose(channel)
+        mill_chclose(channel, "Channel deinit")
     }
 
     /// Reference that can only send values.
@@ -59,43 +59,43 @@ public final class Channel<T> : SequenceType, Sendable, Receivable {
 
     /// Creates a generator.
     public func generate() -> ChannelGenerator<T> {
-        return ChannelGenerator(channel: sendingChannel)
+        return ChannelGenerator(channel: receivingChannel)
     }
 
     /// Closes the channel. When a channel is closed it cannot receive values anymore.
     public func close() {
         if !closed {
             closed = true
-            mill_chdone(channel)
+            mill_chdone(channel, "Channel close")
         }
     }
 
-    /// Receives a value.
-    public func receive(value: T) {
+    /// Send a value to the channel.
+    public func send(value: T) {
         if !closed {
             buffer.append(value)
-            mill_chs(channel)
+            mill_chs(channel, "Channel send")
         }
     }
 
-    /// Receives a value from select.
-    func receive(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
+    /// Send a value from select.
+    func send(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
         if !closed {
             buffer.append(value)
             mill_choose_out(clause, channel, Int32(index))
         }
     }
 
-    /// Sends a value.
-    public func send() -> T? {
+    /// Receives a value from the channel.
+    public func receive() -> T? {
         if closed && buffer.count <= 0 {
             return nil
         }
-        mill_chr(channel)
+        mill_chr(channel, "Channel receive")
         return getValueFromBuffer()
     }
 
-    func registerSend(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func registerReceive(clause: UnsafeMutablePointer<Void>, index: Int) {
         mill_choose_in(clause, channel, Int32(index))
     }
     

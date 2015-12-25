@@ -24,13 +24,12 @@
 
 import XCTest
 import Venice
-import libmill
+import CLibvenice
 
-struct Error : ErrorType {}
-struct NastyError : ErrorType {}
+struct Error: ErrorType {}
+struct NastyError: ErrorType {}
 
 class FallibleChannelTests: XCTestCase {
-
     func testReceiverWaitsForSender() {
         let channel = FallibleChannel<Int>()
         co {
@@ -67,42 +66,42 @@ class FallibleChannelTests: XCTestCase {
 
     func testReceivingChannel() {
         let channel = FallibleChannel<Int>()
-        func receive(channel: FallibleReceivingChannel<Int>) {
+        func receive(channel: FallibleSendingChannel<Int>) {
             channel <- 888
         }
-        co(receive(channel.receivingChannel))
+        co(receive(channel.sendingChannel))
         XCTAssert(try! <-channel == 888)
     }
 
     func testReceivingChannelError() {
         let channel = FallibleChannel<Int>()
-        func receive(channel: FallibleReceivingChannel<Int>) {
+        func receive(channel: FallibleSendingChannel<Int>) {
             channel <- Error()
         }
-        co(receive(channel.receivingChannel))
+        co(receive(channel.sendingChannel))
         assertChannel(channel, catchesErrorOfType: Error.self)
     }
 
     func testSendingChannel() {
         let channel = FallibleChannel<Int>()
-        func send(channel: FallibleSendingChannel<Int>) {
+        func send(channel: FallibleReceivingChannel<Int>) {
             XCTAssert(try! <-channel == 999)
         }
         co{
             channel <- 999
         }
-        send(channel.sendingChannel)
+        send(channel.receivingChannel)
     }
 
     func testSendingChannelError() {
         let channel = FallibleChannel<Int>()
-        func send(channel: FallibleSendingChannel<Int>) {
+        func send(channel: FallibleReceivingChannel<Int>) {
             assertChannel(channel, catchesErrorOfType: Error.self)
         }
         co{
             channel <- Error()
         }
-        send(channel.sendingChannel)
+        send(channel.receivingChannel)
     }
 
     func testTwoSimultaneousSenders() {
@@ -325,56 +324,56 @@ class FallibleChannelTests: XCTestCase {
         assertChannel(channel, catchesErrorOfType: NastyError.self)
     }
 
-    func testPanicWhenSendingToChannelDeadlocks() {
-        let pid = mill_fork()
-        XCTAssert(pid >= 0)
-        if pid == 0 {
-            alarm(1)
-            let channel = FallibleChannel<Int>()
-            signal(SIGABRT) { _ in
-                _exit(0)
-            }
-            channel <- 42
-            XCTFail()
-        }
-        var exitCode: Int32 = 0
-        XCTAssert(waitpid(pid, &exitCode, 0) != 0)
-        XCTAssert(exitCode == 0)
-    }
-
-    func testPanicWhenSendingToChannelDeadlocksError() {
-        let pid = mill_fork()
-        XCTAssert(pid >= 0)
-        if pid == 0 {
-            alarm(1)
-            let channel = FallibleChannel<Int>()
-            signal(SIGABRT) { _ in
-                _exit(0)
-            }
-            channel <- Error()
-            XCTFail()
-        }
-        var exitCode: Int32 = 0
-        XCTAssert(waitpid(pid, &exitCode, 0) != 0)
-        XCTAssert(exitCode == 0)
-    }
-
-    func testPanicWhenReceivingFromChannelDeadlocks() {
-        let pid = mill_fork()
-        XCTAssert(pid >= 0)
-        if pid == 0 {
-            alarm(1)
-            let channel = FallibleChannel<Int>()
-            signal(SIGABRT) { _ in
-                _exit(0)
-            }
-            try! <-channel
-            XCTFail()
-        }
-        var exitCode: Int32 = 0
-        XCTAssert(waitpid(pid, &exitCode, 0) != 0)
-        XCTAssert(exitCode == 0)
-    }
+//    func testPanicWhenSendingToChannelDeadlocks() {
+//        let pid = mill_fork()
+//        XCTAssert(pid >= 0)
+//        if pid == 0 {
+//            alarm(1)
+//            let channel = FallibleChannel<Int>()
+//            signal(SIGABRT) { _ in
+//                _exit(0)
+//            }
+//            channel <- 42
+//            XCTFail()
+//        }
+//        var exitCode: Int32 = 0
+//        XCTAssert(waitpid(pid, &exitCode, 0) != 0)
+//        XCTAssert(exitCode == 0)
+//    }
+//
+//    func testPanicWhenSendingToChannelDeadlocksError() {
+//        let pid = mill_fork()
+//        XCTAssert(pid >= 0)
+//        if pid == 0 {
+//            alarm(1)
+//            let channel = FallibleChannel<Int>()
+//            signal(SIGABRT) { _ in
+//                _exit(0)
+//            }
+//            channel <- Error()
+//            XCTFail()
+//        }
+//        var exitCode: Int32 = 0
+//        XCTAssert(waitpid(pid, &exitCode, 0) != 0)
+//        XCTAssert(exitCode == 0)
+//    }
+//
+//    func testPanicWhenReceivingFromChannelDeadlocks() {
+//        let pid = mill_fork()
+//        XCTAssert(pid >= 0)
+//        if pid == 0 {
+//            alarm(1)
+//            let channel = FallibleChannel<Int>()
+//            signal(SIGABRT) { _ in
+//                _exit(0)
+//            }
+//            try! <-channel
+//            XCTFail()
+//        }
+//        var exitCode: Int32 = 0
+//        XCTAssert(waitpid(pid, &exitCode, 0) != 0)
+//        XCTAssert(exitCode == 0)
+//    }
 
     func testChannelIteration() {
         let channel =  FallibleChannel<Int>(bufferSize: 2)
@@ -414,7 +413,7 @@ class FallibleChannelTests: XCTestCase {
         let channel =  FallibleChannel<Int>(bufferSize: 2)
         channel <- 444
         channel <- 444
-        func receive(channel: FallibleSendingChannel<Int>) {
+        func receive(channel: FallibleReceivingChannel<Int>) {
             channel.close()
             for result in channel {
                 var value = 0
@@ -424,14 +423,14 @@ class FallibleChannelTests: XCTestCase {
                 XCTAssert(value == 444)
             }
         }
-        receive(channel.sendingChannel)
+        receive(channel.receivingChannel)
     }
 
     func testSendingChannelIterationError() {
         let channel =  FallibleChannel<Int>(bufferSize: 2)
         channel <- Error()
         channel <- Error()
-        func receive(channel: FallibleSendingChannel<Int>) {
+        func receive(channel: FallibleReceivingChannel<Int>) {
             channel.close()
             for result in channel {
                 var error: ErrorType? = nil
@@ -441,13 +440,13 @@ class FallibleChannelTests: XCTestCase {
                 XCTAssert(error is Error)
             }
         }
-        receive(channel.sendingChannel)
+        receive(channel.receivingChannel)
     }
 
     func testReceiveResult() {
         let channel = FallibleChannel<Int>(bufferSize: 1)
         co {
-            channel.receivingChannel <- ChannelResult<Int>.Value(333)
+            channel.sendingChannel <- ChannelResult<Int>.Value(333)
         }
         XCTAssert(try! <-channel == 333)
     }
@@ -456,7 +455,7 @@ class FallibleChannelTests: XCTestCase {
 
 extension FallibleChannelTests {
 
-    private func assertChannel<T : FallibleSendable, E>(channel: T, catchesErrorOfType type: E.Type) {
+    private func assertChannel<T: FallibleReceivable, E>(channel: T, catchesErrorOfType type: E.Type) {
         var thrown = false
         do {
             try !<-channel

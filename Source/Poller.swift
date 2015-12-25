@@ -50,6 +50,6 @@ public struct PollResult : OptionSetType {
 
 /// Polls file descriptor for events
 public func pollFileDescriptor(fileDescriptor: Int32, events: PollEvent, deadline: Deadline = NoDeadline) -> PollResult {
-    let event = mill_fdwait(fileDescriptor, Int32(events.rawValue), deadline)
+    let event = mill_fdwait(fileDescriptor, Int32(events.rawValue), deadline, "pollFileDescriptor")
     return PollResult(rawValue: Int(event))
 }

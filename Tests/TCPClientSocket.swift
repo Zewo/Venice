@@ -26,7 +26,6 @@ import XCTest
 import Venice
 
 class TCPClientSocketTests: XCTestCase {
-
     func testConnectionRefused() {
         var called = false
 
@@ -200,8 +199,6 @@ class TCPClientSocketTests: XCTestCase {
     }
 
     func testSendReceive() {
-        var called = false
-
         func client(port: Int) {
             do {
                 let ip = try IP(address: "127.0.0.1", port: port)
@@ -219,16 +216,11 @@ class TCPClientSocketTests: XCTestCase {
             let serverSocket = try TCPServerSocket(ip: ip)
             co(client(port))
             let clientSocket = try serverSocket.accept()
-            try clientSocket.receive(lowWaterMark: 1, highWaterMark: 1) { data in
-                called = true
-                XCTAssert(data == [123])
-                clientSocket.close()
-            }
+            let data = try clientSocket.receive(bufferSize: 1)
+            XCTAssert(data == [123])
+            clientSocket.close()
         } catch {
             XCTAssert(false)
         }
-
-        XCTAssert(called)
     }
-
 }

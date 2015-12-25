@@ -26,7 +26,6 @@ import XCTest
 import Venice
 
 class SelectTests: XCTestCase {
-
     func testNonBlockingReceiver() {
         let channel = Channel<Int>()
         co {
@@ -319,7 +318,7 @@ class SelectTests: XCTestCase {
             channel <- 555
         }
         sel { when in
-            when.receiveFrom(channel.sendingChannel) { value in
+            when.receiveFrom(channel.receivingChannel) { value in
                 XCTAssert(value == 555)
             }
         }
@@ -363,7 +362,7 @@ class SelectTests: XCTestCase {
             channel <- 555
         }
         sel { when in
-            when.receiveFrom(channel.sendingChannel) { result in
+            when.receiveFrom(channel.receivingChannel) { result in
                 var value = 0
                 result.success { v in
                     value = v
@@ -379,7 +378,7 @@ class SelectTests: XCTestCase {
             channel <- Error()
         }
         sel { when in
-            when.receiveFrom(channel.sendingChannel) { result in
+            when.receiveFrom(channel.receivingChannel) { result in
                 var error: ErrorType? = nil
                 result.failure { e in
                     error = e
@@ -396,7 +395,7 @@ class SelectTests: XCTestCase {
             XCTAssert(value == 777)
         }
         sel { when in
-            when.send(777, to: channel.receivingChannel) {}
+            when.send(777, to: channel.sendingChannel) {}
         }
     }
 
@@ -428,7 +427,7 @@ class SelectTests: XCTestCase {
             XCTAssert(value == 777)
         }
         sel { when in
-            when.send(777, to: channel.receivingChannel) {}
+            when.send(777, to: channel.sendingChannel) {}
         }
     }
 
@@ -438,7 +437,7 @@ class SelectTests: XCTestCase {
             self.assertChannel(channel, catchesErrorOfType: Error.self)
         }
         sel { when in
-            when.throwError(Error(), into: channel.receivingChannel) {}
+            when.throwError(Error(), into: channel.sendingChannel) {}
         }
     }
 
@@ -476,7 +475,7 @@ class SelectTests: XCTestCase {
 
 extension SelectTests {
 
-    private func assertChannel<T : FallibleSendable, E>(channel: T, catchesErrorOfType type: E.Type) {
+    private func assertChannel<T: FallibleReceivable, E>(channel: T, catchesErrorOfType type: E.Type) {
         var thrown = false
         do {
             try <-channel

@@ -26,8 +26,8 @@ public final class Ticker {
     private let internalChannel = Channel<Int64>()
     private var stopped: Bool = false
 
-    public var channel: SendingChannel<Int64> {
-        return internalChannel.sendingChannel
+    public var channel: ReceivingChannel<Int64> {
+        return internalChannel.receivingChannel
     }
 
     public init(period: Int64) {

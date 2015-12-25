@@ -22,22 +22,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class ReceivingChannel<T> : Receivable {
+public final class ReceivingChannel<T>: Receivable, SequenceType {
     private let channel: Channel<T>
-    
+
     init(_ channel: Channel<T>) {
         self.channel = channel
     }
-    
-    public func receive(value: T) {
-        return channel.receive(value)
-    }
-    
-    func receive(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
-        return channel.receive(value, clause: clause, index: index)
+
+    public func receive() -> T? {
+        return channel.receive()
     }
 
-    public var closed: Bool {
-        return channel.closed
+    public func generate() -> ChannelGenerator<T> {
+        return ChannelGenerator(channel: self)
+    }
+
+    public func close() {
+        channel.close()
+    }
+
+    func registerReceive(clause: UnsafeMutablePointer<Void>, index: Int) {
+        return channel.registerReceive(clause, index: index)
+    }
+
+    func getValueFromBuffer() -> T? {
+        return channel.getValueFromBuffer()
     }
 }

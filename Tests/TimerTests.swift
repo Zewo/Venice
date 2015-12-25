@@ -26,7 +26,6 @@ import XCTest
 import Venice
 
 class TimerTests: XCTestCase {
-
     func testTimer() {
         let deadline = now + 100 * millisecond
         let timer = Timer(deadline: deadline)
@@ -51,5 +50,4 @@ class TimerTests: XCTestCase {
         wakeUp(deadline + 500 * millisecond)
         XCTAssert(timer.stop() == false)
     }
-    
 }
