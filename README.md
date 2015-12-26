@@ -346,11 +346,24 @@ do {
 
 - Install [`libvenice`](https://github.com/Zewo/libvenice)
 
+### Homebrew 
 ```bash
-$ git clone https://github.com/Zewo/libvenice.git
-$ cd libvenice
+$ brew tap zewo/tap
+$ brew install libvenice
+```
+
+### Ubuntu/Debian
+```bash
+$ echo "deb [trusted=yes] http://apt.zewo.io/deb ./" | sudo tee --append /etc/apt/sources.list
+$ sudo apt-get update
+$ sudo apt-get install libvenice
+```
+
+### Source
+```bash
+$ git clone https://github.com/Zewo/libvenice.git && cd libvenice
 $ make
-$ dpkg -i libvenice.deb
+$ (sudo) make install
 ```
 
 - Add `Venice` to your `Package.swift`
