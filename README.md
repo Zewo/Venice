@@ -105,8 +105,8 @@ print(message!)
 // without operators
 
 let messages = Channel<String>()
-co(messages.receive("ping"))
-let message = messages.send()
+co(messages.send("ping"))
+let message = messages.receive()
 print(message!)
 
 // buffered channels
@@ -127,13 +127,13 @@ You can get a reference to a channel with receive or send only capabilities.
 
 ```swift
 func receiveOnly(channel: ReceivingChannel<String>) {
-    // can only receive
-    channel <- "yo"
+    // can only receive from channel
+    <-channel
 }
 
 func sendOnly(channel: SendingChannel<String>) {
-    // can only send
-    <-channel
+    // can only send to channel
+    channel <- "yo"
 }
 
 let channel = Channel<String>(bufferSize: 1)
@@ -576,7 +576,7 @@ values. It would be a compile-time error to try to
 receive values from this channel.
 
 ```swift
-func ping(pings: ReceivingChannel<String>, message: String) {
+func ping(pings: SendingChannel<String>, message: String) {
     pings <- message
 }
 ```
@@ -585,7 +585,7 @@ The `pong` function accepts one channel that only sends values
 (`pings`) and a second that only receives values (`pongs`).
 
 ```swift
-func pong(pings: SendingChannel<String>, _ pongs: ReceivingChannel<String>) {
+func pong(pings: ReceivingChannel<String>, _ pongs: SendingChannel<String>) {
     let message = !<-pings
     pongs <- message
 }
@@ -593,8 +593,8 @@ func pong(pings: SendingChannel<String>, _ pongs: ReceivingChannel<String>) {
 let pings = Channel<String>(bufferSize: 1)
 let pongs = Channel<String>(bufferSize: 1)
 
-ping(pings.receivingChannel, message: "passed message")
-pong(pings.sendingChannel, pongs.receivingChannel)
+ping(pings.sendingChannel, message: "passed message")
+pong(pings.receivingChannel, pongs.sendingChannel)
 
 print(!<-pongs)
 ```
@@ -1341,7 +1341,7 @@ operations: 55798
 ---------------------
 
 ```swift
-func whisper(left: ReceivingChannel<Int>, _ right: SendingChannel<Int>) {
+func whisper(left: SendingChannel<Int>, _ right: ReceivingChannel<Int>) {
     left <- 1 + !<-right
 }
 
@@ -1353,7 +1353,7 @@ var left = leftmost
 
 for _ in 0 ..< n {
     right = Channel<Int>()
-    co(whisper(left.receivingChannel, right.sendingChannel))
+    co(whisper(left.sendingChannel, right.receivingChannel))
     left = right
 }
 
@@ -1673,13 +1673,13 @@ Launches a walk in a new coroutine,
 and returns a read-only channel of values.
 
 ```swift
-func walker<T>(tree: Tree<T>?) -> SendingChannel<T> {
+func walker<T>(tree: Tree<T>?) -> ReceivingChannel<T> {
     let channel = Channel<T>()
     co {
         walk(tree, channel: channel)
         channel.close()
     }
-    return channel.sendingChannel
+    return channel.receivingChannel
 }
 ```
 
@@ -1844,7 +1844,7 @@ struct Fetcher : FetcherType {
 }
 
 protocol SubscriptionType {
-    var updates: SendingChannel<Item> { get }
+    var updates: ReceivingChannel<Item> { get }
     func close() -> ErrorType?
 }
 
@@ -1858,8 +1858,8 @@ struct Subscription : SubscriptionType {
         co(self.getUpdates())
     }
 
-    var updates: SendingChannel<Item> {
-        return self.items.sendingChannel
+    var updates: ReceivingChannel<Item> {
+        return self.items.receivingChannel
     }
 
     func getUpdates() {
