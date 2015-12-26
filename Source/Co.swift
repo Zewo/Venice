@@ -24,7 +24,7 @@
 
 import CLibvenice
 
-/// Current time
+/// Current time.
 public var now: Int64 {
     return CLibvenice.now()
 }
@@ -37,7 +37,7 @@ public let millisecond: Int64 = 1
 public typealias Deadline = Int64
 let NoDeadline: Deadline = -1
 
-/// Runs the expression in a lightweight coroutine
+/// Runs the expression in a lightweight coroutine.
 public func co(routine: Void -> Void) {
     var _routine = routine
     CLibvenice.co(&_routine, { routinePointer in
@@ -45,7 +45,7 @@ public func co(routine: Void -> Void) {
     }, "co")
 }
 
-/// Runs the expression in a lightweight coroutine
+/// Runs the expression in a lightweight coroutine.
 public func co(@autoclosure(escaping) routine: Void -> Void) {
     var _routine: Void -> Void = routine
     CLibvenice.co(&_routine, { routinePointer in
@@ -53,7 +53,7 @@ public func co(@autoclosure(escaping) routine: Void -> Void) {
     }, "co")
 }
 
-/// Runs the expression in a lightweight coroutine
+/// Runs the expression in a lightweight coroutine.
 public func after(napDuration: Int64, routine: Void -> Void) {
     co {
         nap(napDuration)
@@ -66,17 +66,27 @@ public func preallocateCoroutineStacks(stackCount stackCount: Int, stackSize: In
     return goprepare(Int32(stackCount), stackSize)
 }
 
-/// Sleeps for duration
+/// Sleeps for duration.
 public func nap(duration: Int64) {
     mill_msleep(now + duration, "nap")
 }
 
-/// Wakes up at deadline
+/// Wakes up at deadline.
 public func wakeUp(deadline: Deadline) {
     mill_msleep(deadline, "wakeUp")
 }
 
-/// Passes control to other coroutines
+/// Passes control to other coroutines.
 public var yield: Void {
     mill_yield("yield")
+}
+
+/// Fork the current process.
+public func fork() -> pid_t {
+    return mfork()
+}
+
+/// Get the number of logical CPU cores available. This might return a bigger number than the physical CPU Core number if the CPU supports hyper-threading.
+public var CPUCoreCount: Int {
+    return Int(mill_number_of_cores())
 }

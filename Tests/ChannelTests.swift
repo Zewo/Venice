@@ -24,7 +24,6 @@
 
 import XCTest
 import Venice
-import CLibvenice
 
 class ChannelTests: XCTestCase {
     func testReceiverWaitsForSender() {
@@ -174,39 +173,39 @@ class ChannelTests: XCTestCase {
         XCTAssert(<-channel == 2)
     }
 
-//    func testPanicWhenSendingToChannelDeadlocks() {
-//        let pid = mill_fork()
-//        XCTAssert(pid >= 0)
-//        if pid == 0 {
-//            alarm(1)
-//            let channel = Channel<Int>()
-//            signal(SIGABRT) { _ in
-//                _exit(0)
-//            }
-//            channel <- 42
-//            XCTFail()
-//        }
-//        var exitCode: Int32 = 0
-//        XCTAssert(waitpid(pid, &exitCode, 0) != 0)
-//        XCTAssert(exitCode == 0)
-//    }
-//
-//    func testPanicWhenReceivingFromChannelDeadlocks() {
-//        let pid = mill_fork()
-//        XCTAssert(pid >= 0)
-//        if pid == 0 {
-//            alarm(1)
-//            let channel = Channel<Int>()
-//            signal(SIGABRT) { _ in
-//                _exit(0)
-//            }
-//            <-channel
-//            XCTFail()
-//        }
-//        var exitCode: Int32 = 0
-//        XCTAssert(waitpid(pid, &exitCode, 0) != 0)
-//        XCTAssert(exitCode == 0)
-//    }
+    func testPanicWhenSendingToChannelDeadlocks() {
+        let pid = fork()
+        XCTAssert(pid >= 0)
+        if pid == 0 {
+            alarm(1)
+            let channel = Channel<Int>()
+            signal(SIGABRT) { _ in
+                _exit(0)
+            }
+            channel <- 42
+            XCTFail()
+        }
+        var exitCode: Int32 = 0
+        XCTAssert(waitpid(pid, &exitCode, 0) != 0)
+        XCTAssert(exitCode == 0)
+    }
+
+    func testPanicWhenReceivingFromChannelDeadlocks() {
+        let pid = fork()
+        XCTAssert(pid >= 0)
+        if pid == 0 {
+            alarm(1)
+            let channel = Channel<Int>()
+            signal(SIGABRT) { _ in
+                _exit(0)
+            }
+            <-channel
+            XCTFail()
+        }
+        var exitCode: Int32 = 0
+        XCTAssert(waitpid(pid, &exitCode, 0) != 0)
+        XCTAssert(exitCode == 0)
+    }
 
     func testChannelIteration() {
         let channel =  Channel<Int>(bufferSize: 2)
