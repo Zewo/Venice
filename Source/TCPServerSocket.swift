@@ -116,7 +116,7 @@ extension TCPServerSocket {
                 sequentialErrorsCount = 0
                 co(accepted(clientSocket))
             } catch {
-                ++sequentialErrorsCount
+                sequentialErrorsCount += 1
                 if sequentialErrorsCount >= 10 {
                     throw error
                 }
