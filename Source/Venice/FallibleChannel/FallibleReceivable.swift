@@ -1,4 +1,4 @@
-// TimerTests.swift
+// FallibleReceivable.swift
 //
 // The MIT License (MIT)
 //
@@ -22,32 +22,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import XCTest
-import Venice
+public protocol FallibleReceivable {
+    associatedtype T
+    func receive() throws -> T?
+    func close() -> Bool
+}
 
-class TimerTests: XCTestCase {
-    func testTimer() {
-        let deadline = now + 100 * millisecond
-        let timer = Timer(deadline: deadline)
-        <-timer.channel
-    }
+public prefix func <-<R: FallibleReceivable>(receiver: R) throws -> R.T? {
+    return try receiver.receive()
+}
 
-    func testTimerStops() {
-        let deadline = now + 500 * millisecond
-        let timer = Timer(deadline: deadline)
-        co {
-            <-timer.channel
-        }
-        XCTAssert(timer.stop() == true)
-    }
-
-    func testTimerStopsReturnFalse() {
-        let deadline = now + 100 * millisecond
-        let timer = Timer(deadline: deadline)
-        co {
-            <-timer.channel
-        }
-        wakeUp(deadline + 500 * millisecond)
-        XCTAssert(timer.stop() == false)
-    }
+public prefix func !<-<R: FallibleReceivable>(receiver: R) throws -> R.T! {
+    return try receiver.receive()!
 }

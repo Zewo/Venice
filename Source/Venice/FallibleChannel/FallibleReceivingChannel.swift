@@ -1,4 +1,4 @@
-// Operators.swift
+// FallibleReceivingChannel.swift
 //
 // The MIT License (MIT)
 //
@@ -22,6 +22,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-infix operator <- {}
-prefix operator <- {}
-prefix operator !<- {}
+public final class FallibleReceivingChannel<T>: FallibleReceivable, SequenceType {
+    private let channel: FallibleChannel<T>
+
+    init(_ channel: FallibleChannel<T>) {
+        self.channel = channel
+    }
+
+    public func receive() throws -> T? {
+        return try channel.receive()
+    }
+
+    public func receiveResult() -> ChannelResult<T>? {
+        return channel.receiveResult()
+    }
+
+    public func generate() -> FallibleChannelGenerator<T> {
+        return FallibleChannelGenerator(channel: self)
+    }
+
+    public func close() -> Bool {
+        return channel.close()
+    }
+
+    func registerReceive(clause: UnsafeMutablePointer<Void>, index: Int) {
+        return channel.registerReceive(clause, index: index)
+    }
+
+    func getResultFromBuffer() -> ChannelResult<T>? {
+        return channel.getResultFromBuffer()
+    }
+    
+}

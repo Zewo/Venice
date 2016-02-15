@@ -1,5 +1,0 @@
-module CLibvenice [system] {
-    header "/usr/local/include/libvenice/libvenice.h"
-    link "venice"
-    export *
-}

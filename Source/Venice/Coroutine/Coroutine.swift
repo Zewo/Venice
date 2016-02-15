@@ -35,7 +35,10 @@ public let second: Int64 = 1000
 public let millisecond: Int64 = 1
 
 public typealias Deadline = Int64
-let NoDeadline: Deadline = -1
+public let noDeadline: Deadline = -1
+
+public typealias Duration = Int64
+public typealias PID = pid_t
 
 /// Runs the expression in a lightweight coroutine.
 public func co(routine: Void -> Void) {
@@ -53,11 +56,24 @@ public func co(@autoclosure(escaping) routine: Void -> Void) {
     }, "co")
 }
 
-/// Runs the expression in a lightweight coroutine.
-public func after(napDuration: Int64, routine: Void -> Void) {
+/// Runs the expression in a lightweight coroutine after the given duration.
+public func after(napDuration: Duration, routine: Void -> Void) {
     co {
         nap(napDuration)
         routine()
+    }
+}
+
+/// Runs the expression in a lightweight coroutine periodically. Call done() to leave the loop.
+public func every(napDuration: Duration, routine: (done: Void -> Void) -> Void) {
+    co {
+        var done = false
+        while !done {
+            nap(napDuration)
+            routine {
+                done = true
+            }
+        }
     }
 }
 
@@ -67,7 +83,7 @@ public func preallocateCoroutineStacks(stackCount stackCount: Int, stackSize: In
 }
 
 /// Sleeps for duration.
-public func nap(duration: Int64) {
+public func nap(duration: Duration) {
     mill_msleep(now + duration, "nap")
 }
 
@@ -82,7 +98,7 @@ public var yield: Void {
 }
 
 /// Fork the current process.
-public func fork() -> pid_t {
+public func fork() -> PID {
     return mfork()
 }
 
@@ -90,3 +106,11 @@ public func fork() -> pid_t {
 public var CPUCoreCount: Int {
     return Int(mill_number_of_cores())
 }
+
+public func dump() {
+    goredump()
+}
+
+infix operator <- {}
+prefix operator <- {}
+prefix operator !<- {}

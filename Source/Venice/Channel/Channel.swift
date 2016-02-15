@@ -38,6 +38,10 @@ public final class Channel<T>: SequenceType, Sendable, Receivable {
     private var buffer: [T] = []
     public let bufferSize: Int
 
+    public var isBuffered: Bool {
+        return bufferSize > 0
+    }
+
     public convenience init() {
         self.init(bufferSize: 0)
     }
@@ -63,11 +67,14 @@ public final class Channel<T>: SequenceType, Sendable, Receivable {
     }
 
     /// Closes the channel. When a channel is closed it cannot receive values anymore.
-    public func close() {
-        if !closed {
-            closed = true
-            mill_chdone(channel, "Channel close")
+    public func close() -> Bool {
+        if closed {
+            return false
         }
+
+        closed = true
+        mill_chdone(channel, "Channel close")
+        return true
     }
 
     /// Send a value to the channel.

@@ -82,11 +82,14 @@ public final class FallibleChannel<T>: SequenceType, FallibleSendable, FallibleR
     }
 
     /// Closes the channel. When a channel is closed it cannot receive values anymore.
-    public func close() {
-        if !closed {
-            closed = true
-            mill_chdone(channel, "FallibleChannel close")
+    public func close() -> Bool {
+        if closed {
+            return false
         }
+
+        closed = true
+        mill_chdone(channel, "Channel close")
+        return true
     }
 
     /// Send a result to the channel.

@@ -1,4 +1,4 @@
-// FallibleReceivable.swift
+// FallibleSendable.swift
 //
 // The MIT License (MIT)
 //
@@ -22,15 +22,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public protocol FallibleReceivable {
-    typealias T
-    func receive() throws -> T?
+public protocol FallibleSendable {
+    associatedtype T
+    
+    func send(value: T)
+    func sendError(error: ErrorType)
+    func sendResult(result: ChannelResult<T>)
 }
 
-public prefix func <-<R: FallibleReceivable>(receiver: R) throws -> R.T? {
-    return try receiver.receive()
+public func <-<W: FallibleSendable>(sender: W, result: ChannelResult<W.T>) {
+    sender.sendResult(result)
 }
 
-public prefix func !<-<R: FallibleReceivable>(receiver: R) throws -> R.T! {
-    return try receiver.receive()!
+public func <-<W: FallibleSendable>(sender: W, value: W.T) {
+    sender.send(value)
+}
+
+public func <-<W: FallibleSendable>(sender: W, error: ErrorType) {
+    sender.sendError(error)
 }

@@ -1,4 +1,4 @@
-// Receivable.swift
+// Poller.swift
 //
 // The MIT License (MIT)
 //
@@ -22,16 +22,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public protocol Receivable {
-    typealias T
-    func receive() -> T?
-    func close()
+import CLibvenice
+
+public typealias FileDescriptor = Int32
+
+public struct PollEvent: OptionSetType {
+    public let rawValue: Int
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+
+    public static let Read  = PollEvent(rawValue: Int(FDW_IN))
+    public static let Write = PollEvent(rawValue: Int(FDW_OUT))
 }
 
-public prefix func <-<S: Receivable>(receiver: S) -> S.T? {
-    return receiver.receive()
+public struct PollResult: OptionSetType {
+    public let rawValue: Int
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+
+    public static let Timeout = PollResult(rawValue: 0)
+    public static let Read    = PollResult(rawValue: Int(FDW_IN))
+    public static let Write   = PollResult(rawValue: Int(FDW_OUT))
+    public static let Error   = PollResult(rawValue: Int(FDW_ERR))
 }
 
-public prefix func !<-<S: Receivable>(receiver: S) -> S.T! {
-    return receiver.receive()
+/// Polls file descriptor for events
+public func poll(fileDescriptor: FileDescriptor, events: PollEvent, deadline: Deadline = noDeadline) -> PollResult {
+    let event = mill_fdwait(fileDescriptor, Int32(events.rawValue), deadline, "pollFileDescriptor")
+    return PollResult(rawValue: Int(event))
 }

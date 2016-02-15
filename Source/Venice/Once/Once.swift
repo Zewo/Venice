@@ -1,4 +1,4 @@
-// FallibleReceivingChannel.swift
+// Once.swift
 //
 // The MIT License (MIT)
 //
@@ -22,35 +22,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class FallibleReceivingChannel<T>: FallibleReceivable, SequenceType {
-    private let channel: FallibleChannel<T>
+public final class Once {
+    public var done = false
+    public init() {}
 
-    init(_ channel: FallibleChannel<T>) {
-        self.channel = channel
+    public func run(f: Void -> Void) {
+        if done { return }
+        done = true
+        f()
     }
 
-    public func receive() throws -> T? {
-        return try channel.receive()
+    public func runInBackground(f: Void -> Void) {
+        if done { return }
+        done = true
+        co(f())
     }
-
-    public func receiveResult() -> ChannelResult<T>? {
-        return channel.receiveResult()
-    }
-
-    public func generate() -> FallibleChannelGenerator<T> {
-        return FallibleChannelGenerator(channel: self)
-    }
-
-    public func close() {
-        channel.close()
-    }
-
-    func registerReceive(clause: UnsafeMutablePointer<Void>, index: Int) {
-        return channel.registerReceive(clause, index: index)
-    }
-
-    func getResultFromBuffer() -> ChannelResult<T>? {
-        return channel.getResultFromBuffer()
-    }
-    
 }

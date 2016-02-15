@@ -10,7 +10,6 @@ Venice
 
 ## Features
 
-- [x] No `Foundation` dependency (**Linux ready**)
 - [x] Coroutines
 - [x] Coroutine Preallocation
 - [x] Channels
@@ -22,19 +21,8 @@ Venice
 - [x] Timers
 - [x] Tickers
 - [x] File Descriptor Polling
-- [x] IP
-- [x] TCP Sockets
-- [ ] UDP Sockets
-- [ ] UNIX Sockets
-- [ ] File
 
 **Venice** wraps a fork of the C library [libmill](https://github.com/sustrik/libmill).
-
-## Products
-
-**Venice** is the base for:
-
-- [Epoch](https://github.com/Zewo/Epoch) - HTTP server
 
 ##Usage
 
@@ -284,61 +272,6 @@ forSelect { when, done in
             co(flipCoin(results))
         }
     }
-}
-```
-
-`IP`
-----
-
-```swift
-// local
-do {
-    // all network interfaces
-    let ip1 = try IP(port: 5555, mode: .IPV4)
-    
-    // specific network interface
-    let ip2 = try IP(networkInterface: "en0", port: 5555, mode: .IPV6)
-} catch {
-    // something bad happened :(
-}
-
-// remote
-do {
-    // if the deadline is reached the call will throw
-    let ip3 = try IP(address: "127.0.0.1", port: 5555, mode: .IPV4, deadline: now + 10 * second)
-} catch {
-    // something bad happened :(
-}
-```
-
-`TCP`
-----
-
-```swift
-// server
-do {
-	let ip = try IP(port: 5555)
-	let serverSocket = try TCPServerSocket(ip: ip)
-	let clientSocket = try serverSocket.accept()
-	
-	let yo = try clientSocket.receiveString(untilDelimiter: "\n")
-} catch {
-    // something bad happened :(
-}
-
-// client
-do {
-	let ip = try IP(address: "127.0.0.1", port: 5555)
-	let clientSocket = try TCPClientSocket(ip: ip)
-	let deadline = now + 10 * second
-	
-	// calls to send append the data to an internal
-	// buffer to minimize system calls
-	try clientSocket.sendString("yo\n", deadline: deadline)
-	// flush actually sends all data in the buffer
-	try clientSocket.flush()
-} catch {
-    // something bad happened :(
 }
 ```
 

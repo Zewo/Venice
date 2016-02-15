@@ -2,8 +2,8 @@
 //  Venice.h
 //  Venice
 //
-//  Created by Paulo Faria on 12/25/15.
-//  Copyright © 2015 Zewo. All rights reserved.
+//  Created by David Ask on 15/02/16.
+//  Copyright © 2016 Zewo. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>

@@ -1,4 +1,4 @@
-// Sendable.swift
+// ReceivingChannel.swift
 //
 // The MIT License (MIT)
 //
@@ -22,11 +22,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public protocol Sendable {
-    typealias T
-    func send(value: T)
-}
+public final class ReceivingChannel<T>: Receivable, SequenceType {
+    private let channel: Channel<T>
 
-public func <-<R: Sendable>(sender: R, value: R.T) {
-    sender.send(value)
+    init(_ channel: Channel<T>) {
+        self.channel = channel
+    }
+
+    public func receive() -> T? {
+        return channel.receive()
+    }
+
+    public func generate() -> ChannelGenerator<T> {
+        return ChannelGenerator(channel: self)
+    }
+
+    public func close() -> Bool {
+        return channel.close()
+    }
+
+    func registerReceive(clause: UnsafeMutablePointer<Void>, index: Int) {
+        return channel.registerReceive(clause, index: index)
+    }
+
+    func getValueFromBuffer() -> T? {
+        return channel.getValueFromBuffer()
+    }
 }

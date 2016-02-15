@@ -1,4 +1,4 @@
-// ReceivingChannel.swift
+// Receivable.swift
 //
 // The MIT License (MIT)
 //
@@ -22,30 +22,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class ReceivingChannel<T>: Receivable, SequenceType {
-    private let channel: Channel<T>
+public protocol Receivable {
+    associatedtype T
+    func receive() -> T?
+    func close() -> Bool
+}
 
-    init(_ channel: Channel<T>) {
-        self.channel = channel
-    }
+public prefix func <-<S: Receivable>(receiver: S) -> S.T? {
+    return receiver.receive()
+}
 
-    public func receive() -> T? {
-        return channel.receive()
-    }
-
-    public func generate() -> ChannelGenerator<T> {
-        return ChannelGenerator(channel: self)
-    }
-
-    public func close() {
-        channel.close()
-    }
-
-    func registerReceive(clause: UnsafeMutablePointer<Void>, index: Int) {
-        return channel.registerReceive(clause, index: index)
-    }
-
-    func getValueFromBuffer() -> T? {
-        return channel.getValueFromBuffer()
-    }
+public prefix func !<-<S: Receivable>(receiver: S) -> S.T! {
+    return receiver.receive()
 }

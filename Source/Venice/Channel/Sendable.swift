@@ -1,4 +1,4 @@
-// IPError.swift
+// Sendable.swift
 //
 // The MIT License (MIT)
 //
@@ -22,22 +22,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if os(Linux)
-    import Glibc
-#else
-    import Darwin.C
-#endif
-import CLibvenice
+public protocol Sendable {
+    associatedtype T
+    func send(value: T)
+}
 
-
-public struct IPError : ErrorType, CustomStringConvertible {
-    public let description: String
-
-    init(description: String, bytesProcessed: Int? = nil) {
-        self.description = description
-    }
-
-    static var lastSystemErrorDescription: String {
-        return String.fromCString(strerror(errno))!
-    }
+public func <-<R: Sendable>(sender: R, value: R.T) {
+    sender.send(value)
 }
