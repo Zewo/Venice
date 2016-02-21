@@ -30,12 +30,17 @@ public var now: Int64 {
 }
 
 public let hour: Int64 = 3600000
+public let hours = hour
 public let minute: Int64 = 60000
+public let minutes = minute
 public let second: Int64 = 1000
+public let seconds = second
 public let millisecond: Int64 = 1
+public let milliseconds = millisecond
 
 public typealias Deadline = Int64
-public let noDeadline: Deadline = -1
+public let never: Deadline = -1
+public let noDeadline = never
 
 public typealias Duration = Int64
 public typealias PID = pid_t
