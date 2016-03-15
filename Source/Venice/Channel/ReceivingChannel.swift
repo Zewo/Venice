@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class ReceivingChannel<T>: Receivable, SequenceType {
+public final class ReceivingChannel<T>: Receivable, Sequence {
     private let channel: Channel<T>
 
     init(_ channel: Channel<T>) {
@@ -33,7 +33,7 @@ public final class ReceivingChannel<T>: Receivable, SequenceType {
         return channel.receive()
     }
 
-    public func generate() -> ChannelGenerator<T> {
+    public func makeIterator() -> ChannelGenerator<T> {
         return ChannelGenerator(channel: self)
     }
 

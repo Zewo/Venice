@@ -26,7 +26,7 @@ import CLibvenice
 
 public typealias FileDescriptor = Int32
 
-public struct PollEvent: OptionSetType {
+public struct PollEvent: OptionSet {
     public let rawValue: Int
 
     public init(rawValue: Int) {
@@ -37,7 +37,7 @@ public struct PollEvent: OptionSetType {
     public static let Write = PollEvent(rawValue: Int(FDW_OUT))
 }
 
-public struct PollResult: OptionSetType {
+public struct PollResult: OptionSet {
     public let rawValue: Int
 
     public init(rawValue: Int) {

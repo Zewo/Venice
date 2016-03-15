@@ -24,7 +24,7 @@
 
 import CLibvenice
 
-public struct ChannelGenerator<T>: GeneratorType {
+public struct ChannelGenerator<T>: IteratorProtocol {
     let channel: ReceivingChannel<T>
 
     public mutating func next() -> T? {
@@ -32,7 +32,7 @@ public struct ChannelGenerator<T>: GeneratorType {
     }
 }
 
-public final class Channel<T>: SequenceType, Sendable, Receivable {
+public final class Channel<T>: Sequence, Sendable, Receivable {
     private let channel: chan
     public var closed: Bool = false
     private var buffer: [T] = []
@@ -62,7 +62,7 @@ public final class Channel<T>: SequenceType, Sendable, Receivable {
     public lazy var receivingChannel: ReceivingChannel<T> = ReceivingChannel(self)
 
     /// Creates a generator.
-    public func generate() -> ChannelGenerator<T> {
+    public func makeIterator() -> ChannelGenerator<T> {
         return ChannelGenerator(channel: receivingChannel)
     }
 

@@ -49,7 +49,7 @@ public typealias PID = pid_t
 public func co(routine: Void -> Void) {
     var _routine = routine
     CLibvenice.co(&_routine, { routinePointer in
-        UnsafeMutablePointer<(Void -> Void)>(routinePointer).memory()
+        UnsafeMutablePointer<(Void -> Void)>(routinePointer).pointee()
     }, "co")
 }
 
@@ -57,7 +57,7 @@ public func co(routine: Void -> Void) {
 public func co(@autoclosure(escaping) routine: Void -> Void) {
     var _routine: Void -> Void = routine
     CLibvenice.co(&_routine, { routinePointer in
-        UnsafeMutablePointer<(Void -> Void)>(routinePointer).memory()
+        UnsafeMutablePointer<(Void -> Void)>(routinePointer).pointee()
     }, "co")
 }
 

@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class FallibleReceivingChannel<T>: FallibleReceivable, SequenceType {
+public final class FallibleReceivingChannel<T>: FallibleReceivable, Sequence {
     private let channel: FallibleChannel<T>
 
     init(_ channel: FallibleChannel<T>) {
@@ -37,7 +37,7 @@ public final class FallibleReceivingChannel<T>: FallibleReceivable, SequenceType
         return channel.receiveResult()
     }
 
-    public func generate() -> FallibleChannelGenerator<T> {
+    public func makeIterator() -> FallibleChannelGenerator<T> {
         return FallibleChannelGenerator(channel: self)
     }
 

@@ -24,7 +24,7 @@
 
 import CLibvenice
 
-public struct FallibleChannelGenerator<T>: GeneratorType {
+public struct FallibleChannelGenerator<T>: IteratorProtocol {
     let channel: FallibleReceivingChannel<T>
 
     public mutating func next() -> ChannelResult<T>? {
@@ -34,7 +34,7 @@ public struct FallibleChannelGenerator<T>: GeneratorType {
 
 public enum ChannelResult<T> {
     case Value(T)
-    case Error(ErrorType)
+    case Error(ErrorProtocol)
     
     public func success(@noescape closure: T -> Void) {
         switch self {
@@ -43,7 +43,7 @@ public enum ChannelResult<T> {
         }
     }
     
-    public func failure(@noescape closure: ErrorType -> Void) {
+    public func failure(@noescape closure: ErrorProtocol -> Void) {
         switch self {
         case .Error(let error): closure(error)
         default: break
@@ -51,7 +51,7 @@ public enum ChannelResult<T> {
     }
 }
 
-public final class FallibleChannel<T>: SequenceType, FallibleSendable, FallibleReceivable {
+public final class FallibleChannel<T>: Sequence, FallibleSendable, FallibleReceivable {
     private let channel: chan
     public var closed: Bool = false
     private var buffer: [ChannelResult<T>] = []
@@ -77,7 +77,7 @@ public final class FallibleChannel<T>: SequenceType, FallibleSendable, FallibleR
     public lazy var receivingChannel: FallibleReceivingChannel<T> = FallibleReceivingChannel(self)
 
     /// Creates a generator.
-    public func generate() -> FallibleChannelGenerator<T> {
+    public func makeIterator() -> FallibleChannelGenerator<T> {
         return FallibleChannelGenerator(channel: receivingChannel)
     }
 
@@ -119,7 +119,7 @@ public final class FallibleChannel<T>: SequenceType, FallibleSendable, FallibleR
     }
 
     /// Send an error to the channel.
-    public func sendError(error: ErrorType) {
+    public func sendError(error: ErrorProtocol) {
         if !closed {
             let result = ChannelResult<T>.Error(error)
             buffer.append(result)
@@ -128,7 +128,7 @@ public final class FallibleChannel<T>: SequenceType, FallibleSendable, FallibleR
     }
 
     /// Send an error from select.
-    func send(error: ErrorType, clause: UnsafeMutablePointer<Void>, index: Int) {
+    func send(error: ErrorProtocol, clause: UnsafeMutablePointer<Void>, index: Int) {
         if !closed {
             let result = ChannelResult<T>.Error(error)
             buffer.append(result)

@@ -191,10 +191,10 @@ final class FallibleSendingChannelSendCase<T>: SelectCase {
 
 final class FallibleChannelSendErrorCase<T>: SelectCase {
     let channel: FallibleChannel<T>
-    let error: ErrorType
+    let error: ErrorProtocol
     let closure: Void -> Void
 
-    init(channel: FallibleChannel<T>, error: ErrorType, closure: Void -> Void) {
+    init(channel: FallibleChannel<T>, error: ErrorProtocol, closure: Void -> Void) {
         self.channel = channel
         self.error = error
         self.closure = closure
@@ -211,10 +211,10 @@ final class FallibleChannelSendErrorCase<T>: SelectCase {
 
 final class FallibleSendingChannelSendErrorCase<T>: SelectCase {
     let channel: FallibleSendingChannel<T>
-    let error: ErrorType
+    let error: ErrorProtocol
     let closure: Void -> Void
 
-    init(channel: FallibleSendingChannel<T>, error: ErrorType, closure: Void -> Void) {
+    init(channel: FallibleSendingChannel<T>, error: ErrorProtocol, closure: Void -> Void) {
         self.channel = channel
         self.error = error
         self.closure = closure
@@ -307,14 +307,14 @@ public class SelectCaseBuilder {
         }
     }
 
-    public func throwError<T>(error: ErrorType, into channel: FallibleChannel<T>?, closure: Void -> Void) {
+    public func throwError<T>(error: ErrorProtocol, into channel: FallibleChannel<T>?, closure: Void -> Void) {
         if let channel = channel where !channel.closed {
             let selectCase = FallibleChannelSendErrorCase(channel: channel, error: error, closure: closure)
             cases.append(selectCase)
         }
     }
     
-    public func throwError<T>(error: ErrorType, into channel: FallibleSendingChannel<T>?, closure: Void -> Void) {
+    public func throwError<T>(error: ErrorProtocol, into channel: FallibleSendingChannel<T>?, closure: Void -> Void) {
         if let channel = channel where !channel.closed {
             let selectCase = FallibleSendingChannelSendErrorCase(channel: channel, error: error, closure: closure)
             cases.append(selectCase)
@@ -341,7 +341,7 @@ private func select(builder: SelectCaseBuilder) {
 
     var clauses: [UnsafeMutablePointer<Void>] = []
 
-    for (index, selectCase) in builder.cases.enumerate() {
+    for (index, selectCase) in builder.cases.enumerated() {
         let clause = malloc(mill_clauselen())
         clauses.append(clause)
         selectCase.register(clause, index: index)

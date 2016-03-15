@@ -26,7 +26,7 @@ public protocol FallibleSendable {
     associatedtype T
     
     func send(value: T)
-    func sendError(error: ErrorType)
+    func sendError(error: ErrorProtocol)
     func sendResult(result: ChannelResult<T>)
 }
 
@@ -38,6 +38,6 @@ public func <-<W: FallibleSendable>(sender: W, value: W.T) {
     sender.send(value)
 }
 
-public func <-<W: FallibleSendable>(sender: W, error: ErrorType) {
+public func <-<W: FallibleSendable>(sender: W, error: ErrorProtocol) {
     sender.sendError(error)
 }
