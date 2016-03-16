@@ -1,12 +1,12 @@
 Venice
 ======
 
-[![Swift 2.2](https://img.shields.io/badge/Swift-2.2-orange.svg?style=flat)](https://developer.apple.com/swift/)
-[![Platforms Linux | OSX](https://img.shields.io/badge/Platforms-Linux%20|%20OSX-lightgray.svg?style=flat)](https://developer.apple.com/swift/)
-[![License MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](https://tldrlegal.com/license/mit-license)
-[![Slack Status](https://zewo-slackin.herokuapp.com/badge.svg)](https://zewo-slackin.herokuapp.com)
+[![Swift][swift-badge]][swift-url]
+[![Platform][platform-badge]][platform-url]
+[![License][mit-badge]][mit-url]
+[![Slack][slack-badge]][slack-url]
 
-**Venice** provides [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) for **Swift 2.2**.
+**Venice** provides [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) for **Swift 3.0**.
 
 ## Features
 
@@ -135,7 +135,7 @@ sendOnly(channel.sendingChannel)
 Fallible channels accept values and errors as well.
 
 ```swift
-struct Error : ErrorType {}
+struct Error : ErrorProtocol {}
 
 let channel = FallibleChannel<String>(bufferSize: 2)
 
@@ -1487,7 +1487,7 @@ BOOM!
 
 ```swift
 func flipCoin(result: FallibleChannel<String>) {
-    struct Error : ErrorType, CustomStringConvertible { let description: String }
+    struct Error : ErrorProtocol, CustomStringConvertible { let description: String }
     if arc4random_uniform(2) == 0 {
         result <- "Success"
     } else {
@@ -1527,7 +1527,7 @@ Success
 ---------------------------------
 
 ```swift
-struct Error : ErrorType, CustomStringConvertible { let description: String }
+struct Error : ErrorProtocol, CustomStringConvertible { let description: String }
 
 func flipCoin(result: FallibleChannel<String>) {
     if arc4random_uniform(2) == 0 {
@@ -1569,7 +1569,7 @@ Something went wrong
 ---------
 
 ```swift
-extension CollectionType where Index == Int {
+extension Collection where Index == Int {
     func shuffle() -> [Generator.Element] {
         var list = Array(self)
         list.shuffleInPlace()
@@ -1577,7 +1577,7 @@ extension CollectionType where Index == Int {
     }
 }
 
-extension MutableCollectionType where Index == Int {
+extension MutableCollection where Index == Int {
     mutating func shuffleInPlace() {
         if count < 2 { return }
 
@@ -1783,7 +1783,7 @@ struct Fetcher : FetcherType {
             )
             return Result.Value(fetchResponse)
         } else {
-            struct Error : ErrorType, CustomStringConvertible { let description: String }
+            struct Error : ErrorProtocol, CustomStringConvertible { let description: String }
             return Result.Error(Error(description: "Network Error"))
         }
     }
@@ -1903,3 +1903,13 @@ License
 -------
 
 **Venice** is released under the MIT license. See LICENSE for details.
+
+[swift-badge]: https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat
+[swift-url]: https://swift.org
+[platform-badge]: https://img.shields.io/badge/Platform-Mac%20%26%20Linux-lightgray.svg?style=flat
+[platform-url]: https://swift.org
+[mit-badge]: https://img.shields.io/badge/License-MIT-blue.svg?style=flat
+[mit-url]: https://tldrlegal.com/license/mit-license
+[slack-image]: http://s13.postimg.org/ybwy92ktf/Slack.png
+[slack-badge]: https://zewo-slackin.herokuapp.com/badge.svg
+[slack-url]: http://slack.zewo.io
