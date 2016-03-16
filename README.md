@@ -1570,7 +1570,7 @@ Something went wrong
 
 ```swift
 extension Collection where Index == Int {
-    func shuffle() -> [Generator.Element] {
+    func shuffle() -> [Iterator.Element] {
         var list = Array(self)
         list.shuffleInPlace()
         return list
@@ -1791,13 +1791,13 @@ struct Fetcher : FetcherType {
 
 protocol SubscriptionType {
     var updates: ReceivingChannel<Item> { get }
-    func close() -> ErrorType?
+    func close() -> ErrorProtocol?
 }
 
 struct Subscription : SubscriptionType {
     let fetcher: FetcherType
     let items = Channel<Item>()
-    let closing = Channel<Channel<ErrorType?>>()
+    let closing = Channel<Channel<ErrorProtocol?>>()
 
     init(fetcher: FetcherType) {
         self.fetcher = fetcher
@@ -1812,7 +1812,7 @@ struct Subscription : SubscriptionType {
         let maxPendingItems = 10
         let fetchDone = Channel<Result<FetchResponse>>(bufferSize: 1)
 
-        var lastError: ErrorType?
+        var lastError: ErrorProtocol?
         var pendingItems: [Item] = []
         var seenItems: [Item] = []
         var nextFetchTime = now
@@ -1860,8 +1860,8 @@ struct Subscription : SubscriptionType {
         }
     }
 
-    func close() -> ErrorType? {
-        let errorChannel = Channel<ErrorType?>()
+    func close() -> ErrorProtocol? {
+        let errorChannel = Channel<ErrorProtocol?>()
         closing <- errorChannel
         return !<-errorChannel
     }
