@@ -52,13 +52,13 @@ co {
 ```swift
 co {
     // wakes up 1 second from now
-    wakeUp(now + 1 * second)
+    wakeUp(1.second.fromNow)
     print("yawn")
 }
 
 // nap for two seconds so the program
 // doesn't terminate before the print
-nap(2 * second)
+nap(2.seconds)
 ```
 
 `after`
@@ -67,14 +67,14 @@ nap(2 * second)
 `after` runs the coroutine after the specified duration.
 
 ```swift
-after(1 * second) {
+after(1.second) {
     print("yoo")
 }
 
 // same as
 
 co {
-	nap(1 * second)
+	nap(1.second)
 	print("yoo")
 }
 ```
@@ -181,7 +181,7 @@ select { when in
     when.throwError(Error(), into: fallibleChannel) {
         print("threw error")
     }
-    when.timeout(now + 1 * second) {
+    when.timeout(1.second.fromNow) {
         print("timeout")
     }
     when.otherwise {
@@ -357,7 +357,7 @@ coroutines now, so execution falls through to here. We wait 1 second
 before the program exits
 
 ```swift
-nap(1 * second)
+nap(1.second)
 print("done")
 ```
 
@@ -478,7 +478,7 @@ coroutine that this function's work is done.
 ```swift
 func worker(done: Channel<Bool>) {
     print("working...")
-    nap(1 * second)
+    nap(1.second)
     print("done")
     done <- true // Send a value to notify that we're done.
 }
@@ -571,12 +571,12 @@ executing in concurrent coroutines.
 
 ```swift
 co {
-    nap(1 * second)
+    nap(1.second)
     channel1 <- "one"
 }
 
 co {
-    nap(2 * second)
+    nap(2.seconds)
     channel2 <- "two"
 }
 ```
@@ -624,13 +624,13 @@ after 2s.
 let channel1 = Channel<String>(bufferSize: 1)
 
 co {
-    nap(2 * second)
+    nap(2.seconds)
     channel1 <- "result 1"
 }
 ```
 
 Here's the `select` implementing a timeout.
-`receiveFrom(channel1)` awaits the result and `timeout(now + 1 * second)`
+`receiveFrom(channel1)` awaits the result and `timeout(1.second.fromNow)`
 awaits a value to be sent after the timeout of
 1s. Since `select` proceeds with the first
 receive that's ready, we'll take the timeout case
@@ -641,7 +641,7 @@ select { when in
     when.receiveFrom(channel1) { result in
         print(result)
     }
-    when.timeout(now + 1 * second) {
+    when.timeout(1.second.fromNow) {
         print("timeout 1")
     }
 }
@@ -654,7 +654,7 @@ from `channel2` will succeed and we'll print the result.
 let channel2 = Channel<String>(bufferSize: 1)
 
 co {
-    nap(2 * second)
+    nap(2.seconds)
     channel2 <- "result 2"
 }
 
@@ -662,7 +662,7 @@ select { when in
     when.receiveFrom(channel2) { result in
         print(result)
     }
-    when.timeout(now + 3 * second) {
+    when.timeout(3.seconds.fromNow) {
         print("timeout 2")
     }
 }
@@ -877,7 +877,7 @@ provides a channel that will be notified at that
 time. This timer will wait 2 seconds.
 
 ```swift
-let timer1 = Timer(deadline: now + 2 * second)
+let timer1 = Timer(deadline: 2.seconds.fromNow)
 ```
 
 The `<-timer1.channel` blocks on the timer's channel
@@ -895,7 +895,7 @@ that you can cancel the timer before it expires.
 Here's an example of that.
 
 ```swift
-let timer2 = Timer(deadline: now + 1 * second)
+let timer2 = Timer(deadline: 1.second.fromNow)
 
 co {
     <-timer2.channel
@@ -934,7 +934,7 @@ channel that is sent values. Here we'll use the
 the values as they arrive every 500ms.
 
 ```swift
-let ticker = Ticker(period: 500 * millisecond)
+let ticker = Ticker(period: 500.milliseconds)
 
 co {
     for time in ticker.channel {
@@ -948,7 +948,7 @@ is stopped it won't receive any more values on its
 channel. We'll stop ours after 1600ms.
 
 ```swift
-nap(1600 * millisecond)
+nap(1600.milliseconds)
 ticker.stop()
 print("Ticker stopped")
 ```
@@ -980,7 +980,7 @@ simulate an expensive task.
 func worker(id: Int, jobs: Channel<Int>, results: Channel<Int>) {
     for job in jobs {
         print("worker \(id) processing job \(job)")
-        nap(1 * second)
+        nap(1.second)
         results <- job * 2
     }
 }
@@ -1070,7 +1070,7 @@ every 200 milliseconds. This is the regulator in
 our rate limiting scheme.
 
 ```swift
-let limiter = Ticker(period: 200 * millisecond)
+let limiter = Ticker(period: 200.milliseconds)
 ```
 
 By blocking on a receive from the `limiter` channel
@@ -1109,7 +1109,7 @@ value to `burstyLimiter`, up to its limit of 3.
 
 ```swift
 co {
-    for time in Ticker(period: 200 * millisecond).channel {
+    for time in Ticker(period: 200.milliseconds).channel {
         burstyLimiter <- time
     }
 }
@@ -1268,7 +1268,7 @@ for _ in 0 ..< 10 {
 Let the coroutines work for a second.
 
 ```swift
-nap(1 * second)
+nap(1.second)
 ```
 
 Finally, capture and report the `operations` count.
@@ -1327,7 +1327,7 @@ func player(name: String, table: Channel<Ball>) {
         let ball = !<-table
         ball.hits++
         print("\(name) \(ball.hits)")
-        nap(100 * millisecond)
+        nap(100.milliseconds)
         table <- ball
     }
 }
@@ -1338,7 +1338,7 @@ co(player("ping", table: table))
 co(player("pong", table: table))
 
 table <- Ball()
-nap(1 * second)
+nap(1.second)
 <-table
 ```
 
@@ -1442,8 +1442,8 @@ for n in fibonacciChannel {
 ---------
 
 ```swift
-let tick = Ticker(period: 100 * millisecond).channel
-let boom = Timer(deadline: now + 500 * millisecond).channel
+let tick = Ticker(period: 100.milliseconds).channel
+let boom = Timer(deadline: 500.milliseconds.fromNow).channel
 
 var done = false
 while !done {
@@ -1457,7 +1457,7 @@ while !done {
         }
         when.otherwise {
             print("    .")
-            nap(50 * millisecond)
+            nap(50.milliseconds)
         }
     }
 }
@@ -1779,7 +1779,7 @@ struct Fetcher : FetcherType {
         if arc4random_uniform(2) == 0 {
             let fetchResponse = FetchResponse(
                 items: randomItems(),
-                nextFetchTime: now + 300 * millisecond
+                nextFetchTime: 300.milliseconds.fromNow
             )
             return Result.Value(fetchResponse)
         } else {
@@ -1848,7 +1848,7 @@ struct Subscription : SubscriptionType {
                 }
                 fetchResult.failure { error in
                     lastError = error
-                    nextFetchTime = now + 1 * second
+                    nextFetchTime = 1.second.fromNow
                 }
             }
 
@@ -1870,7 +1870,7 @@ struct Subscription : SubscriptionType {
 let fetcher = Fetcher(domain: "developer.apple.com/swift/blog/")
 let subscription = Subscription(fetcher: fetcher)
 
-after(5 * second) {
+after(5.seconds) {
     if let lastError = subscription.close() {
         print("Closed with last error: \(lastError)")
     } else {
