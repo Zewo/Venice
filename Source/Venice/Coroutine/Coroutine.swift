@@ -29,6 +29,50 @@ public var now: Int64 {
     return CLibvenice.now()
 }
 
+public extension Int64 {
+    /// Interval of `self` from now.
+    var fromNow: Int64 {
+        return CLibvenice.now() + self
+    }
+}
+
+public protocol IntervalConvertible {
+    var millisecond: Int64 { get }
+    var second: Int64 { get }
+    var minute: Int64 { get }
+    var hour: Int64 { get }
+}
+
+extension IntervalConvertible {
+    public var milliseconds: Int64 {
+        return millisecond
+    }
+    public var second: Int64 {
+        return millisecond * 1000
+    }
+    public var seconds: Int64 {
+        return second
+    }
+    public var minute: Int64 {
+        return millisecond * 60000
+    }
+    public var minutes: Int64 {
+        return minute
+    }
+    public var hour: Int64 {
+        return millisecond * 3600000
+    }
+    public var hours: Int64 {
+        return hour
+    }
+}
+
+extension Int: IntervalConvertible {
+    public var millisecond: Int64 {
+        return Int64(self)
+    }
+}
+
 public let hour: Int64 = 3600000
 public let hours = hour
 public let minute: Int64 = 60000
