@@ -33,19 +33,19 @@ public struct FallibleChannelGenerator<T>: IteratorProtocol {
 }
 
 public enum ChannelResult<T> {
-    case Value(T)
-    case Error(ErrorProtocol)
+    case value(T)
+    case error(ErrorProtocol)
     
     public func success(@noescape closure: T -> Void) {
         switch self {
-        case .Value(let value): closure(value)
+        case .value(let value): closure(value)
         default: break
         }
     }
     
     public func failure(@noescape closure: ErrorProtocol -> Void) {
         switch self {
-        case .Error(let error): closure(error)
+        case .error(let error): closure(error)
         default: break
         }
     }
@@ -103,7 +103,7 @@ public final class FallibleChannel<T>: Sequence, FallibleSendable, FallibleRecei
     /// Send a value to the channel.
     public func send(value: T) {
         if !closed {
-            let result = ChannelResult<T>.Value(value)
+            let result = ChannelResult<T>.value(value)
             buffer.append(result)
             mill_chs(channel, "FallibleChannel send")
         }
@@ -112,7 +112,7 @@ public final class FallibleChannel<T>: Sequence, FallibleSendable, FallibleRecei
     /// Send a value from select.
     func send(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
         if !closed {
-            let result = ChannelResult<T>.Value(value)
+            let result = ChannelResult<T>.value(value)
             buffer.append(result)
             mill_choose_out(clause, channel, Int32(index))
         }
@@ -121,7 +121,7 @@ public final class FallibleChannel<T>: Sequence, FallibleSendable, FallibleRecei
     /// Send an error to the channel.
     public func sendError(error: ErrorProtocol) {
         if !closed {
-            let result = ChannelResult<T>.Error(error)
+            let result = ChannelResult<T>.error(error)
             buffer.append(result)
             mill_chs(channel, "FallibleChannel send")
         }
@@ -130,7 +130,7 @@ public final class FallibleChannel<T>: Sequence, FallibleSendable, FallibleRecei
     /// Send an error from select.
     func send(error: ErrorProtocol, clause: UnsafeMutablePointer<Void>, index: Int) {
         if !closed {
-            let result = ChannelResult<T>.Error(error)
+            let result = ChannelResult<T>.error(error)
             buffer.append(result)
             mill_choose_out(clause, channel, Int32(index))
         }
@@ -144,8 +144,8 @@ public final class FallibleChannel<T>: Sequence, FallibleSendable, FallibleRecei
         mill_chr(channel, "FallibleChannel receive")
         if let value = getResultFromBuffer() {
             switch value {
-            case .Value(let v): return v
-            case .Error(let e): throw e
+            case .value(let v): return v
+            case .error(let e): throw e
             }
         } else {
             return nil
