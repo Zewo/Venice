@@ -277,28 +277,6 @@ forSelect { when, done in
 
 ## Installation
 
-- Install [`libvenice`](https://github.com/Zewo/libvenice)
-
-### Homebrew 
-```bash
-$ brew tap zewo/tap
-$ brew install libvenice
-```
-
-### Ubuntu/Debian
-```bash
-$ echo "deb [trusted=yes] http://apt.zewo.io/deb ./" | sudo tee --append /etc/apt/sources.list
-$ sudo apt-get update
-$ sudo apt-get install libvenice
-```
-
-### Source
-```bash
-$ git clone https://github.com/Zewo/libvenice.git && cd libvenice
-$ make
-$ (sudo) make install
-```
-
 - Add `Venice` to your `Package.swift`
 
 ```swift
@@ -306,7 +284,7 @@ import PackageDescription
 
 let package = Package(
 	dependencies: [
-		.Package(url: "https://github.com/Zewo/Venice.git", majorVersion: 0, minor: 1)
+		.Package(url: "https://github.com/VeniceX/Venice.git", majorVersion: 0, minor: 4)
 	]
 )
 ```
