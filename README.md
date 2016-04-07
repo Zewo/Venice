@@ -11,7 +11,6 @@ Venice
 ## Features
 
 - [x] Coroutines
-- [x] Coroutine Preallocation
 - [x] Channels
 - [x] Fallible Channels
 - [x] Receive-only Channels
@@ -34,13 +33,13 @@ func doSomething() {
     print("did something")
 }
 
-// call sync
+// regular call
 doSomething()
 
-// call async
+// coroutine call
 co(doSomething())
 
-// async closure
+// coroutine closure
 co {
     print("did something else")
 }
@@ -58,7 +57,7 @@ co {
 
 // nap for two seconds so the program
 // doesn't terminate before the print
-nap(2.seconds)
+nap(for: 2.seconds)
 ```
 
 `after`
@@ -74,41 +73,69 @@ after(1.second) {
 // same as
 
 co {
-	nap(1.second)
+	nap(for: 1.second)
 	print("yoo")
 }
 ```
 
-`Channel<Type>`
+`every`
+------------------
+
+`every` runs the expression in a coroutine periodically. Call done() to leave the loop.
+
+```swift
+var count = 0
+every(1.second) { done in
+    print("yoo")
+    count += 1
+    if count == 3 {
+        done()
+    }
+}
+
+// same as
+
+var count = 0
+co {
+    while true {
+        nap(for: 1.second)
+        print("yoo")
+        count += 1
+        if count == 3 { break }
+    }
+}
+```
+
+`Channel<Element>`
 ---------------
 
 Channels are typed and return optionals wrapping the value or nil if the channel is closed and doesn't have any values left in the buffer.
 
 ```swift
 let messages = Channel<String>()
-co(messages <- "ping")
-let message = <-messages
-print(message!)
+co(messages.send("ping"))
+let message = messages.receive()!
+print(message)
 
-// without operators
+// with operators
 
 let messages = Channel<String>()
-co(messages.send("ping"))
-let message = messages.receive()
-print(message!)
+co(messages <- "ping")
+let message = !<-messages
+print(message)
 
 // buffered channels
 
 let messages = Channel<String>(bufferSize: 2)
 
-messages <- "buffered"
-messages <- "channel"
+messages.send("buffered")
+messages.send("channel")
 
-print(!<-messages)
-print(!<-messages)
+print(messages.receive()!)
+print(messages.receive()!)
 ```
 
-`ReceivingChannel<Type>` and `SendingChannel<Type>`
+`ReceivingChannel<Element>` and `SendingChannel<Element>`
 ---------------------------------------------------
 
 You can get a reference to a channel with receive or send only capabilities.
@@ -116,12 +143,12 @@ You can get a reference to a channel with receive or send only capabilities.
 ```swift
 func receiveOnly(channel: ReceivingChannel<String>) {
     // can only receive from channel
-    <-channel
+    let string = channel.receive()!
 }
 
 func sendOnly(channel: SendingChannel<String>) {
     // can only send to channel
-    channel <- "yo"
+    channel.send("yo")
 }
 
 let channel = Channel<String>(bufferSize: 1)
@@ -135,16 +162,16 @@ sendOnly(channel.sendingChannel)
 Fallible channels accept values and errors as well.
 
 ```swift
-struct Error : ErrorProtocol {}
+struct Error: ErrorProtocol {}
 
 let channel = FallibleChannel<String>(bufferSize: 2)
 
-channel <- "yo"
-channel <- Error()
+channel.send("yo")
+channel.send(Error())
 
 do {
-    let yo = try <-channel
-    try <-channel // will throw
+    let yo = try channel.receive()
+    try channel.receive() // will throw
 } catch {
     print("error")
 }
@@ -197,7 +224,7 @@ You can disable a channel selection by turning it to nil
 var channelA: Channel<String>? = Channel<String>()
 var channelB: Channel<String>? = Channel<String>()
 
-if arc4random_uniform(2) == 0 {
+if random(0...1) == 0 {
     channelA = nil
     print("disabled channel a")
 } else {
@@ -205,8 +232,8 @@ if arc4random_uniform(2) == 0 {
     print("disabled channel b")
 }
 
-co { channelA?.receive("a") }
-co { channelB?.receive("b") }
+co { channelA?.send("a") }
+co { channelB?.send("b") }
 
 sel { when in
     when.receiveFrom(channelA) { value in
@@ -218,17 +245,17 @@ sel { when in
 }
 ```
 
-Another way to disable a channel selection is to simply put it's case inside an if.
+Another way to disable a channel selection is to simply put its case inside an if statement.
 
 ```swift
 let channelA = Channel<String>()
 let channelB = Channel<String>()
 
-co(channelA <- "a")
-co(channelB <- "b")
+co(channelA.send("a"))
+co(channelB.send("b"))
 
 select { when in
-    if arc4random_uniform(2) == 0 {
+    if random(0...1) == 0 {
         print("disabled channel b")
         when.receiveFrom(channelA) { value in
             print("received \(value) from channel a")
@@ -249,20 +276,20 @@ select { when in
 A lot of times we need to wrap our select inside a while loop. To make it easier to work with this pattern we can use `forSelect`. `forSelect` will loop until you call `done()`.
 
 ```swift
-func flipCoin(result: FallibleChannel<String>) {
-    if arc4random_uniform(2) == 0 {
-        result <- "Success"
+func flipCoin(outcome: FallibleChannel<String>) {
+    if random(0...1) == 0 {
+        outcome.send("Success")
     } else {
-        result <- Error(description: "Something went wrong")
+        outcome.send(Error(description: "Something went wrong"))
     }
 }
 
-let results = FallibleChannel<String>()
+let outcome = FallibleChannel<String>()
 
-co(flipCoin(results))
+co(flipCoin(outcome))
 
 forSelect { when, done in
-    when.receiveFrom(results) { result in
+    when.receiveFrom(outcome) { result in
         result.success { value in
             print(value)
             done()
@@ -275,29 +302,60 @@ forSelect { when, done in
 }
 ```
 
+`Timer`
+-------
+
+`Timer` sends to its channel when it expires.
+
+```swift
+let timer = Timer(timingOut: 2.second.fromNow)
+
+co {
+    timer.channel.receive()
+    print("Timer expired")
+}
+
+if timer.stop() {
+    print("Timer stopped")
+}
+```
+
+`Ticker`
+--------
+
+`Ticker` sends current time to its channel periodically until stopped.
+
+```swift
+let ticker = Ticker(tickingEvery: 500.milliseconds)
+
+co {
+    for time in ticker.channel {
+        print("Tick at \(time)")
+    }
+}
+
+after(2.seconds) {
+    ticker.stop()
+}
+```
+
+`poll`
+--------
+
+`poll` polls a file descriptor for reading or writing optionally timing out if the file descriptor is not ready before the given deadline.
+
+```swift
+do {
+    // yields to other coroutines if fd not ready
+    try poll(fileDescriptor, for: .writing, timingOut: 5.seconds.fromNow)      
+    // runs when fd is ready
+    fileDescriptor.write(data)
+} catch {
+   // throws in case of timeout or polling error
+}
+```
+
 ## Installation
-
-- Install [`libvenice`](https://github.com/Zewo/libvenice)
-
-### Homebrew 
-```bash
-$ brew tap zewo/tap
-$ brew install libvenice
-```
-
-### Ubuntu/Debian
-```bash
-$ echo "deb [trusted=yes] http://apt.zewo.io/deb ./" | sudo tee --append /etc/apt/sources.list
-$ sudo apt-get update
-$ sudo apt-get install libvenice
-```
-
-### Source
-```bash
-$ git clone https://github.com/Zewo/libvenice.git && cd libvenice
-$ make
-$ (sudo) make install
-```
 
 - Add `Venice` to your `Package.swift`
 
@@ -306,7 +364,7 @@ import PackageDescription
 
 let package = Package(
 	dependencies: [
-		.Package(url: "https://github.com/Zewo/Venice.git", majorVersion: 0, minor: 1)
+		.Package(url: "https://github.com/VeniceX/Venice.git", majorVersion: 0, minor: 4)
 	]
 )
 ```
@@ -357,7 +415,7 @@ coroutines now, so execution falls through to here. We wait 1 second
 before the program exits
 
 ```swift
-nap(1.second)
+nap(for: 1.second)
 print("done")
 ```
 
@@ -396,27 +454,27 @@ Channels are typed by the values they convey.
 let messages = Channel<String>()
 ```
 
-_Send_ a value into a channel using the `channel <- value`
+_Send_ a value into a channel using the `channel.send(value)`
 syntax. Here we send `"ping"`  to the `messages`
 channel we made above, from a new coroutine.
 
 ```swift
-co(messages <- "ping")
+co(messages.semd("ping"))
 ```
 
-The `<-channel` syntax _receives_ a value from the
+The `channel.receive()` syntax _receives_ a value from the
 channel. Here we'll receive the `"ping"` message
 we sent above and print it out.
 
 ```swift
-let message = <-messages
+let message = messages.receive()
 print(message!)
 ```
 
 When we run the program the "ping" message is successfully passed from
 one coroutine to another via our channel. By default sends and receives block until both the sender and receiver are ready. This property allowed us to wait at the end of our program for the "ping" message without having to use any other synchronization.
 
-Values received from channels are `Optional`s. If you try to get a value from a closed channel with no values left in the buffer, it'll return `nil`. If you are sure that there is a value wraped in the `Optional`, you can use the `!<-` operator, which returns an implictly unwraped optional.
+Values received from channels are `Optional`s. If you try to get a value from a closed channel with no values left in the buffer, it'll return `nil`. If you are sure that there is a value wraped in the `Optional`, you can use the `!` operator, to force unwrap the optional.
 
 ###Output
 
@@ -428,8 +486,8 @@ ping
 ----------------------
 
 By default channels are *unbuffered*, meaning that they
-will only accept receiving values (`channel <- value`) if there is a
-corresponding receive (`let value = <-channel`) ready to receive the
+will only accept values (`channel.send(value)`) if there is a
+corresponding receive (`let value = channel.receive()`) ready to receive the
 value sent by the channel. _Buffered channels_ accept a limited
 number of  values without a corresponding receiver for
 those values.
@@ -446,15 +504,15 @@ values into the channel without a corresponding
 concurrent receive.
 
 ```swift
-messages <- "buffered"
-messages <- "channel"
+messages.send("buffered")
+messages.send("channel")
 ```
 
 Later we can receive these two values as usual.
 
 ```swift
-print(!<-messages)
-print(!<-messages)
+print(messages.receive()!)
+print(messages.receive()!)
 ```
 
 ###Output
@@ -476,11 +534,11 @@ This is the function we'll run in a coroutine. The
 coroutine that this function's work is done.
 
 ```swift
-func worker(done: Channel<Bool>) {
+func worker(done: Channel<Void>) {
     print("working...")
-    nap(1.second)
+    nap(for: 1.second)
     print("done")
-    done <- true // Send a value to notify that we're done.
+    done.send() // Send to notify that we're done.
 }
 ```
 
@@ -496,10 +554,10 @@ Block until we receive a notification from the
 worker on the channel.
 
 ```swift
-<-done
+done.receive()
 ```
 
-If you removed the `<-done` line from this program, the program would
+If you remove the `done.receive()` line from this program, the program would
 exit before the worker even started.
 
 ###Output
@@ -523,7 +581,7 @@ receive values from this channel.
 
 ```swift
 func ping(pings: SendingChannel<String>, message: String) {
-    pings <- message
+    pings.send(message)
 }
 ```
 
@@ -532,8 +590,8 @@ The `pong` function accepts one channel that only sends values
 
 ```swift
 func pong(pings: ReceivingChannel<String>, _ pongs: SendingChannel<String>) {
-    let message = !<-pings
-    pongs <- message
+    let message = pings.receive()!
+    pongs.send(message)
 }
 
 let pings = Channel<String>(bufferSize: 1)
@@ -542,7 +600,7 @@ let pongs = Channel<String>(bufferSize: 1)
 ping(pings.sendingChannel, message: "passed message")
 pong(pings.receivingChannel, pongs.sendingChannel)
 
-print(!<-pongs)
+print(pongs.receive()!)
 ```
 
 ###Output
@@ -570,14 +628,12 @@ of time, to simulate e.g. blocking RPC operations
 executing in concurrent coroutines.
 
 ```swift
-co {
-    nap(1.second)
-    channel1 <- "one"
+after(1.second) {
+    channel1.send("one")
 }
 
-co {
-    nap(2.seconds)
-    channel2 <- "two"
+after(2.seconds) {
+    channel2.send("two")
 }
 ```
 
@@ -623,9 +679,8 @@ after 2s.
 ```swift
 let channel1 = Channel<String>(bufferSize: 1)
 
-co {
-    nap(2.seconds)
-    channel1 <- "result 1"
+after(2.seconds) {
+    channel1.send("result 1")
 }
 ```
 
@@ -653,8 +708,7 @@ from `channel2` will succeed and we'll print the result.
 ```swift
 let channel2 = Channel<String>(bufferSize: 1)
 
-co {
-    nap(2.seconds)
+after(2.seconds)
     channel2 <- "result 2"
 }
 
@@ -765,7 +819,7 @@ the worker we'll `close` the `jobs` channel.
 
 ```swift
 let jobs = Channel<Int>(bufferSize: 5)
-let done = Channel<Bool>()
+let done = Channel<Void>()
 ```
 
 Here's the worker coroutine. It repeatedly receives
@@ -778,11 +832,11 @@ all our jobs.
 ```swift
 co {
     while true {
-        if let job = <-jobs {
+        if let job = jobs.receive() {
             print("received job \(job)")
         } else {
             print("received all jobs")
-            done <- true
+            done.send()
             return
         }
     }
@@ -793,9 +847,9 @@ This sends 3 jobs to the worker over the `jobs`
 channel, then closes it.
 
 ```swift
-for job in 1 ... 3 {
+for job in 1...3 {
     print("sent job \(job)")
-    jobs <- job
+    jobs.send(job)
 }
 
 jobs.close()
@@ -806,7 +860,7 @@ We await the worker using the synchronization approach
 we saw earlier.
 
 ```swift
-<-done
+done.receive()
 ```
 
 The idea of closed channels leads naturally to our next example: iterating over channels.
@@ -835,8 +889,8 @@ We'll iterate over 2 values in the `queue` channel.
 ```swift
 let queue =  Channel<String>(bufferSize: 2)
 
-queue <- "one"
-queue <- "two"
+queue.send("one")
+queue.send("two")
 queue.close()
 ```
 
@@ -877,15 +931,15 @@ provides a channel that will be notified at that
 time. This timer will wait 2 seconds.
 
 ```swift
-let timer1 = Timer(deadline: 2.seconds.fromNow)
+let timer1 = Timer(timingOut: 2.seconds.fromNow)
 ```
 
-The `<-timer1.channel` blocks on the timer's channel
+The `timer1.channel.receive()` blocks on the timer's channel
 until it sends a value indicating that the timer
 expired.
 
 ```swift
-<-timer1.channel
+timer1.channel.receive()
 print("Timer 1 expired")
 ```
 
@@ -895,16 +949,14 @@ that you can cancel the timer before it expires.
 Here's an example of that.
 
 ```swift
-let timer2 = Timer(deadline: 1.second.fromNow)
+let timer2 = Timer(timingOut: 1.second.fromNow)
 
 co {
-    <-timer2.channel
+    timer2.channel.receive()
     print("Timer 2 expired")
 }
 
-let stop2 = timer2.stop()
-
-if stop2 {
+if timer2.stop() {
     print("Timer 2 stopped")
 }
 ```
@@ -930,11 +982,11 @@ periodically until we stop it.
 
 Tickers use a similar mechanism to timers: a
 channel that is sent values. Here we'll use the
-`generator` builtin on the channel to iterate over
+`iterator` builtin on the channel to iterate over
 the values as they arrive every 500ms.
 
 ```swift
-let ticker = Ticker(period: 500.milliseconds)
+let ticker = Ticker(tickingEvery: 500.milliseconds)
 
 co {
     for time in ticker.channel {
@@ -948,7 +1000,7 @@ is stopped it won't receive any more values on its
 channel. We'll stop ours after 1600ms.
 
 ```swift
-nap(1600.milliseconds)
+nap(for: 1600.milliseconds)
 ticker.stop()
 print("Ticker stopped")
 ```
@@ -980,8 +1032,8 @@ simulate an expensive task.
 func worker(id: Int, jobs: Channel<Int>, results: Channel<Int>) {
     for job in jobs {
         print("worker \(id) processing job \(job)")
-        nap(1.second)
-        results <- job * 2
+        nap(for: 1.second)
+        results.send(job * 2)
     }
 }
 ```
@@ -999,7 +1051,7 @@ This starts up 3 workers, initially blocked
 because there are no jobs yet.
 
 ```swift
-for workerId in 1 ... 3 {
+for workerId in 1...3 {
     co(worker(workerId, jobs: jobs, results: results))
 }
 ```
@@ -1008,8 +1060,8 @@ Here we send 9 `jobs` and then `close` that
 channel to indicate that's all the work we have.
 
 ```swift
-for job in 1 ... 9 {
-    jobs <- job
+for job in 1...9 {
+    jobs.send(job)
 }
 
 jobs.close()
@@ -1018,8 +1070,8 @@ jobs.close()
 Finally we collect all the results of the work.
 
 ```swift
-for _ in 1 ... 9 {
-    <-results
+for _ in 1...9 {
+    results.receive()
 }
 ```
 
@@ -1058,8 +1110,8 @@ same name.
 ```swift
 var requests = Channel<Int>(bufferSize: 5)
 
-for request in 1 ... 5 {
-    requests <- request
+for request in 1...5 {
+    requests.send(request)
 }
 
 requests.close()
@@ -1070,7 +1122,7 @@ every 200 milliseconds. This is the regulator in
 our rate limiting scheme.
 
 ```swift
-let limiter = Ticker(period: 200.milliseconds)
+let limiter = Ticker(tickingEvery: 200.milliseconds)
 ```
 
 By blocking on a receive from the `limiter` channel
@@ -1079,7 +1131,7 @@ before serving each request, we limit ourselves to
 
 ```swift
 for request in requests {
-    <-limiter.channel
+    limiter.channel.receive()
     print("request \(request) \(now)")
 }
 
@@ -1100,7 +1152,7 @@ Fill up the channel to represent allowed bursting.
 
 ```swift
 for _ in 0 ..< 3 {
-    burstyLimiter <- now
+    burstyLimiter.send(now)
 }
 ```
 
@@ -1109,8 +1161,8 @@ value to `burstyLimiter`, up to its limit of 3.
 
 ```swift
 co {
-    for time in Ticker(period: 200.milliseconds).channel {
-        burstyLimiter <- time
+    for time in Ticker(tickingEvery: 200.milliseconds).channel {
+        burstyLimiter.send(time)
     }
 }
 ```
@@ -1122,14 +1174,14 @@ of `burstyLimiter`.
 ```swift
 let burstyRequests = Channel<Int>(bufferSize: 5)
 
-for request in 1 ... 5 {
-    burstyRequests <- request
+for request in 1... 5 {
+    burstyRequests.send(request)
 }
 
 burstyRequests.close()
 
 for request in burstyRequests {
-    <-burstyLimiter
+    burstyLimiter.receive()
     print("request \(request) \(now)")
 }
 ```
@@ -1177,7 +1229,7 @@ struct ReadOperation {
 struct WriteOperation {
     let key: Int
     let value: Int
-    let responses: Channel<Bool>
+    let responses: Channel<Void>
 }
 ```
 
@@ -1212,11 +1264,11 @@ co {
     while true {
         select { when in
             when.receiveFrom(reads) { read in
-                read.responses <- state[read.key] ?? 0
+                read.responses.send(state[read.key] ?? 0)
             }
             when.receiveFrom(writes) { write in
                 state[write.key] = write.value
-                write.responses <- true
+                write.responses.send()
             }
         }
     }
@@ -1234,11 +1286,11 @@ for _ in 0 ..< 100 {
     co {
         while true {
             let read = ReadOperation(
-                key: Int(arc4random_uniform(5)),
+                key: random(0...5),
                 responses: Channel<Int>()
             )
-            reads <- read
-            <-read.responses
+            reads.send(read)
+            read.responses.receive()
             operations++
         }
     }
@@ -1253,12 +1305,12 @@ for _ in 0 ..< 10 {
     co {
         while true {
             let write = WriteOperation(
-                key: Int(arc4random_uniform(5)),
-                value: Int(arc4random_uniform(100)),
-                responses: Channel<Bool>()
+                key: random(0...5),
+                value: random(0...100),
+                responses: Channel<Void>()
             )
-            writes <- write
-            <-write.responses
+            writes.send(write)
+            write.responses.receive()
             operations++
         }
     }
@@ -1268,7 +1320,7 @@ for _ in 0 ..< 10 {
 Let the coroutines work for a second.
 
 ```swift
-nap(1.second)
+nap(for: 1.second)
 ```
 
 Finally, capture and report the `operations` count.
@@ -1288,7 +1340,7 @@ operations: 55798
 
 ```swift
 func whisper(left: SendingChannel<Int>, _ right: ReceivingChannel<Int>) {
-    left <- 1 + !<-right
+    left.send(right.receive()! + 1)
 }
 
 let n = 1000
@@ -1297,17 +1349,17 @@ let leftmost = Channel<Int>()
 var right = leftmost
 var left = leftmost
 
-for _ in 0 ..< n {
+for _ in 0..<n {
     right = Channel<Int>()
     co(whisper(left.sendingChannel, right.receivingChannel))
     left = right
 }
 
 co {
-    right <- 1
+    right.send(1)
 }
 
-print(!<-leftmost)
+print(leftmost.receive()!)
 ```
 
 ###Output
@@ -1320,15 +1372,17 @@ print(!<-leftmost)
 --------------
 
 ```swift
-final class Ball { var hits: Int = 0 }
+final class Ball {
+    var hits: Int = 0
+}
 
 func player(name: String, table: Channel<Ball>) {
     while true {
-        let ball = !<-table
-        ball.hits++
+        let ball = table.receive()!
+        ball.hits += 1
         print("\(name) \(ball.hits)")
-        nap(100.milliseconds)
-        table <- ball
+        nap(for: 100.milliseconds)
+        table.send(ball)
     }
 }
 
@@ -1337,9 +1391,9 @@ let table = Channel<Ball>()
 co(player("ping", table: table))
 co(player("pong", table: table))
 
-table <- Ball()
-nap(1.second)
-<-table
+table.send(Ball())
+nap(for: 1.second)
+table.receive()
 ```
 
 ###Output
@@ -1358,57 +1412,15 @@ pong 10
 ping 11
 ```
 
-18 - Disabling Channel Select
------------------------------
-
-```swift
-var channelA: Channel<String>? = Channel<String>()
-var channelB: Channel<String>? = Channel<String>()
-
-if arc4random_uniform(2) == 0 {
-    channelA = nil
-    print("disabled channel a")
-} else {
-    channelB = nil
-    print("disabled channel b")
-}
-
-co { channelA?.receive("a") }
-co { channelB?.receive("b") }
-
-select { when in
-    when.receiveFrom(channelA) { value in
-        print("received \(value) from channel a")
-    }
-    when.receiveFrom(channelB) { value in
-        print("received \(value) from channel b")
-    }
-}
-```
-
-###Output
-
-```
-disabled channel b
-received a from channel a
-```
-
-or
-
-```
-disabled channel a
-received b from channel b
-```
-
-19 - Fibonacci
+18 - Fibonacci
 --------------
 
 ```swift
 func fibonacci(n: Int, channel: Channel<Int>) {
     var x = 0
     var y = 1
-    for _ in 0 ..< n {
-        channel <- x
+    for _ in 0..<n {
+        channel.send(x)
         (x, y) = (y, x + y)
     }
     channel.close()
@@ -1438,27 +1450,24 @@ for n in fibonacciChannel {
 34
 ```
 
-20 - Bomb
+19 - Bomb
 ---------
 
 ```swift
-let tick = Ticker(period: 100.milliseconds).channel
-let boom = Timer(deadline: 500.milliseconds.fromNow).channel
+let tick = Ticker(tickingEvery: 100.milliseconds).channel
+let boom = Timer(timingOut: 500.milliseconds.fromNow).channel
 
-var done = false
-while !done {
-    select { when in
-        when.receiveFrom(tick) { _ in
-            print("tick")
-        }
-        when.receiveFrom(boom) { _ in
-            print("BOOM!")
-            done = true
-        }
-        when.otherwise {
-            print("    .")
-            nap(50.milliseconds)
-        }
+forSelect { when, done in
+    when.receiveFrom(tick) { _ in
+        print("tick")
+    }
+    when.receiveFrom(boom) { _ in
+        print("BOOM!")
+        done()
+    }
+    when.otherwise {
+        print("    .")
+        nap(for: 50.milliseconds)
     }
 }
 ```
@@ -1482,90 +1491,7 @@ tick
 BOOM!
 ```
 
-21 - Fallible Channels
-----------------------
-
-```swift
-func flipCoin(result: FallibleChannel<String>) {
-    struct Error : ErrorProtocol, CustomStringConvertible { let description: String }
-    if arc4random_uniform(2) == 0 {
-        result <- "Success"
-    } else {
-        result <- Error(description: "Something went wrong.")
-    }
-}
-
-let results = FallibleChannel<String>()
-var done = false
-
-co(flipCoin(results))
-
-while !done {
-    do {
-        let value = try !<-results
-        print(value)
-        done = true
-    } catch {
-        print("\(error) Retrying...")
-        co(flipCoin(results))
-    }
-}
-```
-
-###Output
-
-```
-Something went wrong. Retrying...
-Something went wrong. Retrying...
-Something went wrong. Retrying...
-Something went wrong. Retrying...
-Something went wrong. Retrying...
-Success
-```
-
-22 - Select and Fallible Channels
----------------------------------
-
-```swift
-struct Error : ErrorProtocol, CustomStringConvertible { let description: String }
-
-func flipCoin(result: FallibleChannel<String>) {
-    if arc4random_uniform(2) == 0 {
-        result <- "Success"
-    } else {
-        result <- Error(description: "Something went wrong")
-    }
-}
-
-let results = FallibleChannel<String>()
-
-co(flipCoin(results))
-
-select { when in
-    when.receiveFrom(results) { result in
-        result.success { value in
-            print(value)
-        }
-        result.failure { error in
-            print(error)
-        }
-    }
-}
-```
-
-###Output
-
-```
-Success
-```
-
-or
-
-```
-Something went wrong
-```
-
-23 - Tree
+20 - Tree
 ---------
 
 ```swift
@@ -1698,46 +1624,7 @@ Differing values false
 Dissimilar false
 ```
 
-24 - Disabling Channel Select ||
---------------------------------
-
-```swift
-let channelA = Channel<String>()
-let channelB = Channel<String>()
-
-co(channelA <- "a")
-co(channelB <- "b")
-
-select { when in
-    if arc4random_uniform(2) == 0 {
-        print("disabled channel b")
-        when.receiveFrom(channelA) { value in
-            print("received \(value) from channel a")
-        }
-    } else {
-        print("disabled channel a")
-        when.receiveFrom(channelB) { value in
-            print("received \(value) from channel b")
-        }
-    }
-}
-```
-
-###Output
-
-```
-disabled channel b
-received a from channel a
-```
-
-or
-
-```
-disabled channel a
-received b from channel b
-```
-
-25 - Fake RSS Client
+21 - Fake RSS Client
 --------------------
 
 ```swift
