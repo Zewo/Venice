@@ -61,7 +61,7 @@ nap(for: 2.seconds)
 ```
 
 `after`
-------------------
+-----------------
 
 `after` runs the coroutine after the specified duration.
 
@@ -347,7 +347,7 @@ after(2.seconds) {
 ```swift
 do {
     // yields to other coroutines if fd not ready
-    try poll(fileDescriptor, for: .writing, timingOut: 5.seconds.fromNow)      
+    try poll(fileDescriptor, for: .writing, timingOut: 5.seconds.fromNow)
     // runs when fd is ready
     fileDescriptor.write(data)
 } catch {
