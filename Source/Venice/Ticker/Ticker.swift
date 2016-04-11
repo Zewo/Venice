@@ -30,12 +30,12 @@ public final class Ticker {
         return internalChannel.receivingChannel
     }
 
-    public init(period: Int64) {
+    public init(tickingEvery period: Int64) {
         co {
             while true {
-                nap(period)
+                nap(for: period)
                 if self.stopped { break }
-                self.internalChannel <- now
+                self.internalChannel.send(now)
             }
         }
     }
@@ -43,5 +43,4 @@ public final class Ticker {
     public func stop() {
         self.stopped = true
     }
-    
 }

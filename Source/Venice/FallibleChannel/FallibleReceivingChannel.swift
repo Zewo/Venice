@@ -52,5 +52,4 @@ public final class FallibleReceivingChannel<T>: FallibleReceivable, Sequence {
     func getResultFromBuffer() -> ChannelResult<T>? {
         return channel.getResultFromBuffer()
     }
-    
 }

@@ -105,7 +105,7 @@ public final class Channel<T>: Sequence, Sendable, Receivable {
     func registerReceive(clause: UnsafeMutablePointer<Void>, index: Int) {
         mill_choose_in(clause, channel, Int32(index))
     }
-    
+
     func getValueFromBuffer() -> T? {
         if closed && buffer.count <= 0 {
             return nil

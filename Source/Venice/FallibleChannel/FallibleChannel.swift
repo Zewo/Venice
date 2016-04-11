@@ -35,14 +35,14 @@ public struct FallibleChannelGenerator<T>: IteratorProtocol {
 public enum ChannelResult<T> {
     case value(T)
     case error(ErrorProtocol)
-    
+
     public func success(@noescape closure: T -> Void) {
         switch self {
         case .value(let value): closure(value)
         default: break
         }
     }
-    
+
     public func failure(@noescape closure: ErrorProtocol -> Void) {
         switch self {
         case .error(let error): closure(error)
@@ -93,7 +93,7 @@ public final class FallibleChannel<T>: Sequence, FallibleSendable, FallibleRecei
     }
 
     /// Send a result to the channel.
-    public func sendResult(result: ChannelResult<T>) {
+    public func send(result: ChannelResult<T>) {
         if !closed {
             buffer.append(result)
             mill_chs(channel, "FallibleChannel sendResult")
@@ -119,7 +119,7 @@ public final class FallibleChannel<T>: Sequence, FallibleSendable, FallibleRecei
     }
 
     /// Send an error to the channel.
-    public func sendError(error: ErrorProtocol) {
+    public func send(error: ErrorProtocol) {
         if !closed {
             let result = ChannelResult<T>.error(error)
             buffer.append(result)

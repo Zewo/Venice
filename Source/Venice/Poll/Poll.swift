@@ -26,6 +26,11 @@ import CLibvenice
 
 public typealias FileDescriptor = Int32
 
+public enum PollError: ErrorProtocol {
+    case timeout
+    case fail
+}
+
 public struct PollEvent: OptionSet {
     public let rawValue: Int
 
@@ -33,25 +38,21 @@ public struct PollEvent: OptionSet {
         self.rawValue = rawValue
     }
 
-    public static let Read  = PollEvent(rawValue: Int(FDW_IN))
-    public static let Write = PollEvent(rawValue: Int(FDW_OUT))
-}
-
-public struct PollResult: OptionSet {
-    public let rawValue: Int
-
-    public init(rawValue: Int) {
-        self.rawValue = rawValue
-    }
-
-    public static let Timeout = PollResult(rawValue: 0)
-    public static let Read    = PollResult(rawValue: Int(FDW_IN))
-    public static let Write   = PollResult(rawValue: Int(FDW_OUT))
-    public static let Error   = PollResult(rawValue: Int(FDW_ERR))
+    public static let reading  = PollEvent(rawValue: Int(FDW_IN))
+    public static let writing = PollEvent(rawValue: Int(FDW_OUT))
 }
 
 /// Polls file descriptor for events
-public func poll(fileDescriptor: FileDescriptor, events: PollEvent, deadline: Deadline = never) -> PollResult {
+public func poll(fileDescriptor: FileDescriptor, for events: PollEvent, timingOut deadline: Deadline = never) throws -> PollEvent {
     let event = mill_fdwait(fileDescriptor, Int32(events.rawValue), deadline, "pollFileDescriptor")
-    return PollResult(rawValue: Int(event))
+
+    if event == 0 {
+        throw PollError.timeout
+    }
+
+    if event == FDW_ERR {
+        throw PollError.fail
+    }
+
+    return PollEvent(rawValue: Int(event))
 }

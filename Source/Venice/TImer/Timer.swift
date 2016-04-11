@@ -30,7 +30,7 @@ public final class Timer {
         return internalChannel.receivingChannel
     }
 
-    public init(deadline: Deadline) {
+    public init(timingOut deadline: Deadline) {
         co {
             wakeUp(deadline)
             if !self.stopped {

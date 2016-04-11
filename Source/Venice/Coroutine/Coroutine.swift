@@ -108,7 +108,7 @@ public func co(@autoclosure(escaping) routine: Void -> Void) {
 /// Runs the expression in a lightweight coroutine after the given duration.
 public func after(napDuration: Duration, routine: Void -> Void) {
     co {
-        nap(napDuration)
+        nap(for: napDuration)
         routine()
     }
 }
@@ -118,7 +118,7 @@ public func every(napDuration: Duration, routine: (done: Void -> Void) -> Void) 
     co {
         var done = false
         while !done {
-            nap(napDuration)
+            nap(for: napDuration)
             routine {
                 done = true
             }
@@ -132,7 +132,7 @@ public func preallocateCoroutineStacks(stackCount stackCount: Int, stackSize: In
 }
 
 /// Sleeps for duration.
-public func nap(duration: Duration) {
+public func nap(for duration: Duration) {
     mill_msleep(now + duration, "nap")
 }
 
@@ -152,7 +152,7 @@ public func fork() -> PID {
 }
 
 /// Get the number of logical CPU cores available. This might return a bigger number than the physical CPU Core number if the CPU supports hyper-threading.
-public var CPUCoreCount: Int {
+public var logicalCPUCount: Int {
     return Int(mill_number_of_cores())
 }
 
