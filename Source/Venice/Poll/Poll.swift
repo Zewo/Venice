@@ -23,6 +23,7 @@
 // SOFTWARE.
 
 import CLibvenice
+import C7
 
 public typealias FileDescriptor = Int32
 
@@ -54,5 +55,12 @@ public func poll(fileDescriptor: FileDescriptor, for events: PollEvent, timingOu
         throw PollError.fail
     }
 
+<<<<<<< cc102dac7c98d2f2855b596d182872f2fd05dc80
     return PollEvent(rawValue: Int(event))
+=======
+/// Polls file descriptor for events
+public func poll(fileDescriptor: FileDescriptor, events: PollEvent, timingOut deadline: Double = .never) -> PollResult {
+    let event = mill_fdwait(fileDescriptor, Int32(events.rawValue), deadline.int64milliseconds, "pollFileDescriptor")
+    return PollResult(rawValue: Int(event))
+>>>>>>> Removed unnecessary protocols, C7 compatibility, Double instead of Int64
 }

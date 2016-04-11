@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class SendingChannel<T>: Sendable {
+public final class SendingChannel<T> {
     private let channel: Channel<T>
 
     init(_ channel: Channel<T>) {

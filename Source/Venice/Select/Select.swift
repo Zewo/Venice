@@ -321,11 +321,11 @@ public class SelectCaseBuilder {
         }
     }
 
-    public func timeout(deadline: Deadline, closure: Void -> Void) {
+    public func timeout(deadline: Double, closure: Void -> Void) {
         let done = Channel<Bool>()
         co {
             wakeUp(deadline)
-            done <- true
+            done.send(true)
         }
         let selectCase = TimeoutCase<Bool>(channel: done, closure: closure)
         cases.append(selectCase)

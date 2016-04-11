@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class FallibleSendingChannel<T>: FallibleSendable {
+public final class FallibleSendingChannel<T> {
     private let channel: FallibleChannel<T>
 
     init(_ channel: FallibleChannel<T>) {

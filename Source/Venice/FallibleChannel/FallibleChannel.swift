@@ -51,7 +51,7 @@ public enum ChannelResult<T> {
     }
 }
 
-public final class FallibleChannel<T>: Sequence, FallibleSendable, FallibleReceivable {
+public final class FallibleChannel<T>: Sequence {
     private let channel: chan
     public var closed: Bool = false
     private var buffer: [ChannelResult<T>] = []

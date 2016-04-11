@@ -32,7 +32,7 @@ public struct ChannelGenerator<T>: IteratorProtocol {
     }
 }
 
-public final class Channel<T>: Sequence, Sendable, Receivable {
+public final class Channel<T>: Sequence {
     private let channel: chan
     public var closed: Bool = false
     private var buffer: [T] = []
