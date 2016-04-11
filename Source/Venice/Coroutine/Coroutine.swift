@@ -81,7 +81,7 @@ public func nap(for duration: Double) {
 }
 
 /// Wakes up at deadline.
-public func wakeUp(deadline: Double) {
+public func wake(at deadline: Double) {
     mill_msleep(deadline.int64milliseconds, "wakeUp")
 }
 

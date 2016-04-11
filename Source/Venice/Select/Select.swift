@@ -251,28 +251,28 @@ public class SelectCaseBuilder {
     var cases: [SelectCase] = []
     var otherwise: (Void -> Void)?
 
-    public func receiveFrom<T>(channel: Channel<T>?, closure: T -> Void) {
+    public func receive<T>(from channel: Channel<T>?, closure: T -> Void) {
         if let channel = channel {
             let selectCase = ChannelReceiveCase(channel: channel, closure: closure)
             cases.append(selectCase)
         }
     }
     
-    public func receiveFrom<T>(channel: ReceivingChannel<T>?, closure: T -> Void) {
+    public func receive<T>(from channel: ReceivingChannel<T>?, closure: T -> Void) {
         if let channel = channel {
             let selectCase = ReceivingChannelReceiveCase(channel: channel, closure: closure)
             cases.append(selectCase)
         }
     }
 
-    public func receiveFrom<T>(channel: FallibleChannel<T>?, closure: ChannelResult<T> -> Void) {
+    public func receive<T>(from channel: FallibleChannel<T>?, closure: ChannelResult<T> -> Void) {
         if let channel = channel {
             let selectCase = FallibleChannelReceiveCase(channel: channel, closure: closure)
             cases.append(selectCase)
         }
     }
     
-    public func receiveFrom<T>(channel: FallibleReceivingChannel<T>?, closure: ChannelResult<T> -> Void) {
+    public func receive<T>(from channel: FallibleReceivingChannel<T>?, closure: ChannelResult<T> -> Void) {
         if let channel = channel {
             let selectCase = FallibleReceivingChannelReceiveCase(channel: channel, closure: closure)
             cases.append(selectCase)
