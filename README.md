@@ -117,13 +117,6 @@ co(messages.send("ping"))
 let message = messages.receive()!
 print(message)
 
-// with operators
-
-let messages = Channel<String>()
-co(messages <- "ping")
-let message = !<-messages
-print(message)
-
 // buffered channels
 
 let messages = Channel<String>(bufferSize: 2)
@@ -709,7 +702,7 @@ from `channel2` will succeed and we'll print the result.
 let channel2 = Channel<String>(bufferSize: 1)
 
 after(2.seconds)
-    channel2 <- "result 2"
+    channel2.send("result 2")
 }
 
 select { when in
@@ -823,7 +816,7 @@ let done = Channel<Void>()
 ```
 
 Here's the worker coroutine. It repeatedly receives
-from `jobs` with `j = <-jobs`. The return value
+from `jobs` with `j = jobs.receive()`. The return value
 will be `nil` if `jobs` has been `close`d and all
 values in the channel have already been received.
 We use this to notify on `done` when we've worked
@@ -1535,7 +1528,7 @@ sending each Value on a channel.
 func walk<T>(tree: Tree<T>?, channel: Channel<T>) {
     if let tree = tree {
         walk(tree.left, channel: channel)
-        channel <- tree.value
+        channel.send(tree.value)
         walk(tree.right, channel: channel)
     }
 }
@@ -1564,8 +1557,8 @@ func ==<T : Equatable>(tree1: Tree<T>, tree2: Tree<T>) -> Bool {
     let channel1 = walker(tree1)
     let channel2 = walker(tree2)
     while true {
-        let value1 = <-channel1
-        let value2 = <-channel2
+        let value1 = channel1.receive()
+        let value2 = channel2.receive()
         if value1 == nil || value2 == nil {
             return value1 == value2
         }
@@ -1707,7 +1700,7 @@ struct Subscription : SubscriptionType {
 
         forSelect { when, done in
             when.receiveFrom(closing) { errorChannel in
-                errorChannel <- lastError
+                errorChannel.send(lastError)
                 self.items.close()
                 done()
             }
@@ -1716,7 +1709,7 @@ struct Subscription : SubscriptionType {
                 when.timeout(nextFetchTime) {
                     fetching = true
                     co {
-                        fetchDone <- self.fetcher.fetch()
+                        fetchDone.send(self.fetcher.fetch())
                     }
                 }
             }
@@ -1749,8 +1742,8 @@ struct Subscription : SubscriptionType {
 
     func close() -> ErrorProtocol? {
         let errorChannel = Channel<ErrorProtocol?>()
-        closing <- errorChannel
-        return !<-errorChannel
+        closing.send(errorChannel)
+        return errorChannel.receive()
     }
 }
 
