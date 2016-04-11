@@ -32,7 +32,7 @@ public final class Timer {
 
     public init(timingOut deadline: Double) {
         co {
-            wakeUp(deadline)
+            wake(at: deadline)
             if !self.stopped {
                 self.stopped = true
                 self.internalChannel.send(Void())
