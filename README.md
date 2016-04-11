@@ -45,13 +45,13 @@ co {
 }
 ```
 
-`nap` and `wakeUp`
+`nap` and `wake`
 ------------------
 
 ```swift
 co {
     // wakes up 1 second from now
-    wakeUp(1.second.fromNow)
+    wake(at: 1.second.fromNow())
     print("yawn")
 }
 
@@ -201,7 +201,7 @@ select { when in
     when.throwError(Error(), into: fallibleChannel) {
         print("threw error")
     }
-    when.timeout(1.second.fromNow) {
+    when.timeout(1.second.fromNow()) {
         print("timeout")
     }
     when.otherwise {
@@ -301,7 +301,7 @@ forSelect { when, done in
 `Timer` sends to its channel when it expires.
 
 ```swift
-let timer = Timer(timingOut: 2.second.fromNow)
+let timer = Timer(timingOut: 2.second.fromNow())
 
 co {
     timer.channel.receive()
@@ -340,7 +340,7 @@ after(2.seconds) {
 ```swift
 do {
     // yields to other coroutines if fd not ready
-    try poll(fileDescriptor, for: .writing, timingOut: 5.seconds.fromNow)
+    try poll(fileDescriptor, for: .writing, timingOut: 5.seconds.fromNow())
     // runs when fd is ready
     fileDescriptor.write(data)
 } catch {
@@ -678,7 +678,7 @@ after(2.seconds) {
 ```
 
 Here's the `select` implementing a timeout.
-`receiveFrom(channel1)` awaits the result and `timeout(1.second.fromNow)`
+`receiveFrom(channel1)` awaits the result and `timeout(1.second.fromNow())`
 awaits a value to be sent after the timeout of
 1s. Since `select` proceeds with the first
 receive that's ready, we'll take the timeout case
@@ -689,7 +689,7 @@ select { when in
     when.receiveFrom(channel1) { result in
         print(result)
     }
-    when.timeout(1.second.fromNow) {
+    when.timeout(1.second.fromNow()) {
         print("timeout 1")
     }
 }
@@ -709,7 +709,7 @@ select { when in
     when.receiveFrom(channel2) { result in
         print(result)
     }
-    when.timeout(3.seconds.fromNow) {
+    when.timeout(3.seconds.fromNow()) {
         print("timeout 2")
     }
 }
@@ -924,7 +924,7 @@ provides a channel that will be notified at that
 time. This timer will wait 2 seconds.
 
 ```swift
-let timer1 = Timer(timingOut: 2.seconds.fromNow)
+let timer1 = Timer(timingOut: 2.seconds.fromNow())
 ```
 
 The `timer1.channel.receive()` blocks on the timer's channel
@@ -942,7 +942,7 @@ that you can cancel the timer before it expires.
 Here's an example of that.
 
 ```swift
-let timer2 = Timer(timingOut: 1.second.fromNow)
+let timer2 = Timer(timingOut: 1.second.fromNow())
 
 co {
     timer2.channel.receive()
@@ -1448,7 +1448,7 @@ for n in fibonacciChannel {
 
 ```swift
 let tick = Ticker(tickingEvery: 100.milliseconds).channel
-let boom = Timer(timingOut: 500.milliseconds.fromNow).channel
+let boom = Timer(timingOut: 500.milliseconds.fromNow()).channel
 
 forSelect { when, done in
     when.receiveFrom(tick) { _ in
@@ -1659,7 +1659,7 @@ struct Fetcher : FetcherType {
         if arc4random_uniform(2) == 0 {
             let fetchResponse = FetchResponse(
                 items: randomItems(),
-                nextFetchTime: 300.milliseconds.fromNow
+                nextFetchTime: 300.milliseconds.fromNow()
             )
             return Result.Value(fetchResponse)
         } else {
@@ -1728,7 +1728,7 @@ struct Subscription : SubscriptionType {
                 }
                 fetchResult.failure { error in
                     lastError = error
-                    nextFetchTime = 1.second.fromNow
+                    nextFetchTime = 1.second.fromNow()
                 }
             }
 
@@ -1743,7 +1743,7 @@ struct Subscription : SubscriptionType {
     func close() -> ErrorProtocol? {
         let errorChannel = Channel<ErrorProtocol?>()
         closing.send(errorChannel)
-        return errorChannel.receive()
+        return errorChannel.receive()!
     }
 }
 
