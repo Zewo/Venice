@@ -26,15 +26,15 @@ public final class Once {
     public var done = false
     public init() {}
 
-    public func run(f: Void -> Void) {
+    public func run(task: Void -> Void) {
         if done { return }
         done = true
-        f()
+        task()
     }
 
-    public func runInBackground(f: Void -> Void) {
+    public func runInBackground(task: Void -> Void) {
         if done { return }
         done = true
-        co(f())
+        co(task())
     }
 }

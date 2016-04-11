@@ -30,12 +30,12 @@ public final class Timer {
         return internalChannel.receivingChannel
     }
 
-    public init(timingOut deadline: Deadline) {
+    public init(timingOut deadline: Double) {
         co {
-            wakeUp(deadline)
+            wake(at: deadline)
             if !self.stopped {
                 self.stopped = true
-                self.internalChannel <- Void()
+                self.internalChannel.send(Void())
             }
         }
     }

@@ -45,13 +45,13 @@ co {
 }
 ```
 
-`nap` and `wakeUp`
+`nap` and `wake`
 ------------------
 
 ```swift
 co {
     // wakes up 1 second from now
-    wakeUp(1.second.fromNow)
+    wake(at: 1.second.fromNow())
     print("yawn")
 }
 
@@ -115,13 +115,6 @@ Channels are typed and return optionals wrapping the value or nil if the channel
 let messages = Channel<String>()
 co(messages.send("ping"))
 let message = messages.receive()!
-print(message)
-
-// with operators
-
-let messages = Channel<String>()
-co(messages <- "ping")
-let message = !<-messages
 print(message)
 
 // buffered channels
@@ -208,7 +201,7 @@ select { when in
     when.throwError(Error(), into: fallibleChannel) {
         print("threw error")
     }
-    when.timeout(1.second.fromNow) {
+    when.timeout(1.second.fromNow()) {
         print("timeout")
     }
     when.otherwise {
@@ -308,7 +301,7 @@ forSelect { when, done in
 `Timer` sends to its channel when it expires.
 
 ```swift
-let timer = Timer(timingOut: 2.second.fromNow)
+let timer = Timer(timingOut: 2.second.fromNow())
 
 co {
     timer.channel.receive()
@@ -347,7 +340,7 @@ after(2.seconds) {
 ```swift
 do {
     // yields to other coroutines if fd not ready
-    try poll(fileDescriptor, for: .writing, timingOut: 5.seconds.fromNow)
+    try poll(fileDescriptor, for: .writing, timingOut: 5.seconds.fromNow())
     // runs when fd is ready
     fileDescriptor.write(data)
 } catch {
@@ -685,7 +678,7 @@ after(2.seconds) {
 ```
 
 Here's the `select` implementing a timeout.
-`receiveFrom(channel1)` awaits the result and `timeout(1.second.fromNow)`
+`receiveFrom(channel1)` awaits the result and `timeout(1.second.fromNow())`
 awaits a value to be sent after the timeout of
 1s. Since `select` proceeds with the first
 receive that's ready, we'll take the timeout case
@@ -696,7 +689,7 @@ select { when in
     when.receiveFrom(channel1) { result in
         print(result)
     }
-    when.timeout(1.second.fromNow) {
+    when.timeout(1.second.fromNow()) {
         print("timeout 1")
     }
 }
@@ -709,14 +702,14 @@ from `channel2` will succeed and we'll print the result.
 let channel2 = Channel<String>(bufferSize: 1)
 
 after(2.seconds)
-    channel2 <- "result 2"
+    channel2.send("result 2")
 }
 
 select { when in
     when.receiveFrom(channel2) { result in
         print(result)
     }
-    when.timeout(3.seconds.fromNow) {
+    when.timeout(3.seconds.fromNow()) {
         print("timeout 2")
     }
 }
@@ -823,7 +816,7 @@ let done = Channel<Void>()
 ```
 
 Here's the worker coroutine. It repeatedly receives
-from `jobs` with `j = <-jobs`. The return value
+from `jobs` with `j = jobs.receive()`. The return value
 will be `nil` if `jobs` has been `close`d and all
 values in the channel have already been received.
 We use this to notify on `done` when we've worked
@@ -931,7 +924,7 @@ provides a channel that will be notified at that
 time. This timer will wait 2 seconds.
 
 ```swift
-let timer1 = Timer(timingOut: 2.seconds.fromNow)
+let timer1 = Timer(timingOut: 2.seconds.fromNow())
 ```
 
 The `timer1.channel.receive()` blocks on the timer's channel
@@ -949,7 +942,7 @@ that you can cancel the timer before it expires.
 Here's an example of that.
 
 ```swift
-let timer2 = Timer(timingOut: 1.second.fromNow)
+let timer2 = Timer(timingOut: 1.second.fromNow())
 
 co {
     timer2.channel.receive()
@@ -1455,7 +1448,7 @@ for n in fibonacciChannel {
 
 ```swift
 let tick = Ticker(tickingEvery: 100.milliseconds).channel
-let boom = Timer(timingOut: 500.milliseconds.fromNow).channel
+let boom = Timer(timingOut: 500.milliseconds.fromNow()).channel
 
 forSelect { when, done in
     when.receiveFrom(tick) { _ in
@@ -1535,7 +1528,7 @@ sending each Value on a channel.
 func walk<T>(tree: Tree<T>?, channel: Channel<T>) {
     if let tree = tree {
         walk(tree.left, channel: channel)
-        channel <- tree.value
+        channel.send(tree.value)
         walk(tree.right, channel: channel)
     }
 }
@@ -1564,8 +1557,8 @@ func ==<T : Equatable>(tree1: Tree<T>, tree2: Tree<T>) -> Bool {
     let channel1 = walker(tree1)
     let channel2 = walker(tree2)
     while true {
-        let value1 = <-channel1
-        let value2 = <-channel2
+        let value1 = channel1.receive()
+        let value2 = channel2.receive()
         if value1 == nil || value2 == nil {
             return value1 == value2
         }
@@ -1666,7 +1659,7 @@ struct Fetcher : FetcherType {
         if arc4random_uniform(2) == 0 {
             let fetchResponse = FetchResponse(
                 items: randomItems(),
-                nextFetchTime: 300.milliseconds.fromNow
+                nextFetchTime: 300.milliseconds.fromNow()
             )
             return Result.Value(fetchResponse)
         } else {
@@ -1707,7 +1700,7 @@ struct Subscription : SubscriptionType {
 
         forSelect { when, done in
             when.receiveFrom(closing) { errorChannel in
-                errorChannel <- lastError
+                errorChannel.send(lastError)
                 self.items.close()
                 done()
             }
@@ -1716,7 +1709,7 @@ struct Subscription : SubscriptionType {
                 when.timeout(nextFetchTime) {
                     fetching = true
                     co {
-                        fetchDone <- self.fetcher.fetch()
+                        fetchDone.send(self.fetcher.fetch())
                     }
                 }
             }
@@ -1735,7 +1728,7 @@ struct Subscription : SubscriptionType {
                 }
                 fetchResult.failure { error in
                     lastError = error
-                    nextFetchTime = 1.second.fromNow
+                    nextFetchTime = 1.second.fromNow()
                 }
             }
 
@@ -1749,8 +1742,8 @@ struct Subscription : SubscriptionType {
 
     func close() -> ErrorProtocol? {
         let errorChannel = Channel<ErrorProtocol?>()
-        closing <- errorChannel
-        return !<-errorChannel
+        closing.send(errorChannel)
+        return errorChannel.receive()!
     }
 }
 

@@ -23,6 +23,7 @@
 // SOFTWARE.
 
 import CLibvenice
+import C7
 
 public typealias FileDescriptor = Int32
 
@@ -43,8 +44,8 @@ public struct PollEvent: OptionSet {
 }
 
 /// Polls file descriptor for events
-public func poll(fileDescriptor: FileDescriptor, for events: PollEvent, timingOut deadline: Deadline = never) throws -> PollEvent {
-    let event = mill_fdwait(fileDescriptor, Int32(events.rawValue), deadline, "pollFileDescriptor")
+public func poll(fileDescriptor: FileDescriptor, for events: PollEvent, timingOut deadline: Double = .never) throws -> PollEvent {
+    let event = mill_fdwait(fileDescriptor, Int32(events.rawValue), deadline.int64milliseconds, "pollFileDescriptor")
 
     if event == 0 {
         throw PollError.timeout

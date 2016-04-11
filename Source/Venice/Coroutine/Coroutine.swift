@@ -23,71 +23,15 @@
 // SOFTWARE.
 
 import CLibvenice
+import C7
 
-/// Current time.
-public var now: Int64 {
-    return CLibvenice.now()
-}
-
-public extension Int64 {
-    /// Interval of `self` from now.
-    var fromNow: Int64 {
-        return CLibvenice.now() + self
-    }
-}
-
-public protocol IntervalConvertible {
-    var millisecond: Int64 { get }
-    var second: Int64 { get }
-    var minute: Int64 { get }
-    var hour: Int64 { get }
-}
-
-extension IntervalConvertible {
-    public var milliseconds: Int64 {
-        return millisecond
-    }
-    public var second: Int64 {
-        return millisecond * 1000
-    }
-    public var seconds: Int64 {
-        return second
-    }
-    public var minute: Int64 {
-        return millisecond * 60000
-    }
-    public var minutes: Int64 {
-        return minute
-    }
-    public var hour: Int64 {
-        return millisecond * 3600000
-    }
-    public var hours: Int64 {
-        return hour
-    }
-}
-
-extension Int: IntervalConvertible {
-    public var millisecond: Int64 {
-        return Int64(self)
-    }
-}
-
-public let hour: Int64 = 3600000
-public let hours = hour
-public let minute: Int64 = 60000
-public let minutes = minute
-public let second: Int64 = 1000
-public let seconds = second
-public let millisecond: Int64 = 1
-public let milliseconds = millisecond
-
-public typealias Deadline = Int64
-public let never: Deadline = -1
-public let noDeadline = never
-
-public typealias Duration = Int64
 public typealias PID = pid_t
+
+public extension Double {
+    public var int64milliseconds: Int64 {
+        return Int64(self * 1000)
+    }
+}
 
 /// Runs the expression in a lightweight coroutine.
 public func co(routine: Void -> Void) {
@@ -106,7 +50,7 @@ public func co(@autoclosure(escaping) routine: Void -> Void) {
 }
 
 /// Runs the expression in a lightweight coroutine after the given duration.
-public func after(napDuration: Duration, routine: Void -> Void) {
+public func after(napDuration: Double, routine: Void -> Void) {
     co {
         nap(for: napDuration)
         routine()
@@ -114,7 +58,7 @@ public func after(napDuration: Duration, routine: Void -> Void) {
 }
 
 /// Runs the expression in a lightweight coroutine periodically. Call done() to leave the loop.
-public func every(napDuration: Duration, routine: (done: Void -> Void) -> Void) {
+public func every(napDuration: Double, routine: (done: Void -> Void) -> Void) {
     co {
         var done = false
         while !done {
@@ -132,13 +76,13 @@ public func preallocateCoroutineStacks(stackCount stackCount: Int, stackSize: In
 }
 
 /// Sleeps for duration.
-public func nap(for duration: Duration) {
-    mill_msleep(now + duration, "nap")
+public func nap(for duration: Double) {
+    mill_msleep(duration.fromNow().int64milliseconds, "nap")
 }
 
 /// Wakes up at deadline.
-public func wakeUp(deadline: Deadline) {
-    mill_msleep(deadline, "wakeUp")
+public func wake(at deadline: Double) {
+    mill_msleep(deadline.int64milliseconds, "wakeUp")
 }
 
 /// Passes control to other coroutines.
@@ -159,7 +103,3 @@ public var logicalCPUCount: Int {
 public func dump() {
     goredump()
 }
-
-infix operator <- {}
-prefix operator <- {}
-prefix operator !<- {}

@@ -22,6 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import C7
+
 public final class Ticker {
     private let internalChannel = Channel<Int64>()
     private var stopped: Bool = false
@@ -30,12 +32,12 @@ public final class Ticker {
         return internalChannel.receivingChannel
     }
 
-    public init(tickingEvery period: Int64) {
+    public init(tickingEvery period: Double) {
         co {
             while true {
                 nap(for: period)
                 if self.stopped { break }
-                self.internalChannel.send(now)
+                self.internalChannel.send(now().int64milliseconds)
             }
         }
     }
