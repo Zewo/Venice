@@ -27,8 +27,8 @@ import C7
 
 public typealias PID = pid_t
 
-internal extension Double {
-    var int64milliseconds: Int64 {
+public extension Double {
+    public var int64milliseconds: Int64 {
         return Int64(self * 1000)
     }
 }
