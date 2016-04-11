@@ -1743,7 +1743,7 @@ struct Subscription : SubscriptionType {
     func close() -> ErrorProtocol? {
         let errorChannel = Channel<ErrorProtocol?>()
         closing.send(errorChannel)
-        return errorChannel.receive()
+        return errorChannel.receive()!
     }
 }
 
