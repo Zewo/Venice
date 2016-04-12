@@ -23,7 +23,7 @@
 // SOFTWARE.
 
 import CLibvenice
-import C7
+@_exported import C7
 
 public typealias PID = pid_t
 
