@@ -29,11 +29,11 @@ public final class SendingChannel<T> {
         self.channel = channel
     }
 
-    public func send(value: T) {
+    public func send(_ value: T) {
         return channel.send(value)
     }
 
-    func send(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
+    func send(_ value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
         return channel.send(value, clause: clause, index: index)
     }
 

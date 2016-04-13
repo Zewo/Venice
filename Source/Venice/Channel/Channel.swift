@@ -78,7 +78,7 @@ public final class Channel<T>: Sequence {
     }
 
     /// Send a value to the channel.
-    public func send(value: T) {
+    public func send(_ value: T) {
         if !closed {
             buffer.append(value)
             mill_chs(channel, "Channel send")
@@ -86,7 +86,7 @@ public final class Channel<T>: Sequence {
     }
 
     /// Send a value from select.
-    func send(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
+    func send(_ value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
         if !closed {
             buffer.append(value)
             mill_choose_out(clause, channel, Int32(index))
@@ -102,7 +102,7 @@ public final class Channel<T>: Sequence {
         return getValueFromBuffer()
     }
 
-    func registerReceive(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func registerReceive(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         mill_choose_in(clause, channel, Int32(index))
     }
 

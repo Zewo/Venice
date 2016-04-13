@@ -25,7 +25,7 @@
 import CLibvenice
 
 protocol SelectCase {
-    func register(clause: UnsafeMutablePointer<Void>, index: Int)
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int)
     func execute()
 }
 
@@ -38,7 +38,7 @@ final class ChannelReceiveCase<T>: SelectCase {
         self.closure = closure
     }
 
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.registerReceive(clause, index: index)
     }
 
@@ -58,7 +58,7 @@ final class ReceivingChannelReceiveCase<T>: SelectCase {
         self.closure = closure
     }
     
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.registerReceive(clause, index: index)
     }
     
@@ -78,7 +78,7 @@ final class FallibleChannelReceiveCase<T>: SelectCase {
         self.closure = closure
     }
 
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.registerReceive(clause, index: index)
     }
 
@@ -98,7 +98,7 @@ final class FallibleReceivingChannelReceiveCase<T>: SelectCase {
         self.closure = closure
     }
     
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.registerReceive(clause, index: index)
     }
     
@@ -120,7 +120,7 @@ final class ChannelSendCase<T>: SelectCase {
         self.closure = closure
     }
 
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.send(value, clause: clause, index: index)
     }
 
@@ -140,7 +140,7 @@ final class SendingChannelSendCase<T>: SelectCase {
         self.closure = closure
     }
     
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.send(value, clause: clause, index: index)
     }
     
@@ -160,7 +160,7 @@ final class FallibleChannelSendCase<T>: SelectCase {
         self.closure = closure
     }
 
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.send(value, clause: clause, index: index)
     }
 
@@ -180,7 +180,7 @@ final class FallibleSendingChannelSendCase<T>: SelectCase {
         self.closure = closure
     }
     
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.send(value, clause: clause, index: index)
     }
     
@@ -200,7 +200,7 @@ final class FallibleChannelSendErrorCase<T>: SelectCase {
         self.closure = closure
     }
 
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.send(error, clause: clause, index: index)
     }
 
@@ -220,7 +220,7 @@ final class FallibleSendingChannelSendErrorCase<T>: SelectCase {
         self.closure = closure
     }
     
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.send(error, clause: clause, index: index)
     }
     
@@ -238,7 +238,7 @@ final class TimeoutCase<T>: SelectCase {
         self.closure = closure
     }
 
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.registerReceive(clause, index: index)
     }
 
@@ -336,7 +336,7 @@ public class SelectCaseBuilder {
     }
 }
 
-private func select(builder: SelectCaseBuilder) {
+private func select(_ builder: SelectCaseBuilder) {
     mill_choose_init("select")
 
     var clauses: [UnsafeMutablePointer<Void>] = []
@@ -362,17 +362,17 @@ private func select(builder: SelectCaseBuilder) {
     clauses.forEach(free)
 }
 
-public func select(@noescape build: (when: SelectCaseBuilder) -> Void) {
+public func select(@noescape _ build: (when: SelectCaseBuilder) -> Void) {
     let builder = SelectCaseBuilder()
     build(when: builder)
     select(builder)
 }
 
-public func sel(@noescape build: (when: SelectCaseBuilder) -> Void) {
+public func sel(@noescape _ build: (when: SelectCaseBuilder) -> Void) {
     select(build)
 }
 
-public func forSelect(@noescape build: (when: SelectCaseBuilder, done: Void -> Void) -> Void) {
+public func forSelect(@noescape _ build: (when: SelectCaseBuilder, done: Void -> Void) -> Void) {
     let builder = SelectCaseBuilder()
     var keepRunning = true
     func done() {
