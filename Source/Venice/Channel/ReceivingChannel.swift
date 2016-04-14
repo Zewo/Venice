@@ -37,8 +37,8 @@ public final class ReceivingChannel<T>: Sequence {
         return ChannelGenerator(channel: self)
     }
 
-    public func close() -> Bool {
-        return channel.close()
+    public func close() throws {
+        try channel.close()
     }
 
     func registerReceive(_ clause: UnsafeMutablePointer<Void>, index: Int) {
