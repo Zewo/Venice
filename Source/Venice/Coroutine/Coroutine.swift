@@ -71,7 +71,7 @@ public func every(_ napDuration: Double, routine: (done: Void -> Void) -> Void) 
 }
 
 /// Preallocates coroutine stacks. Returns the number of stacks that it actually managed to allocate.
-public func preallocateCoroutineStacks(_ stackCount: Int, stackSize: Int) {
+public func preallocateCoroutineStacks(stackCount: Int, stackSize: Int) {
     return goprepare(Int32(stackCount), stackSize)
 }
 
