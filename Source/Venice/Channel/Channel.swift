@@ -67,7 +67,7 @@ public final class Channel<T>: Sequence {
     }
 
     /// Closes the channel. When a channel is closed it cannot receive values anymore.
-    public func close() throws {
+    public func close() {
         guard !closed else { return }
 
         closed = true
