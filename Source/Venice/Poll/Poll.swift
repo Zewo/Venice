@@ -29,7 +29,7 @@ public typealias FileDescriptor = Int32
 
 public enum PollError: ErrorProtocol {
     case timeout
-    case fail
+    case failure
 }
 
 public struct PollEvent: OptionSet {
@@ -52,7 +52,7 @@ public func poll(_ fileDescriptor: FileDescriptor, for events: PollEvent, timing
     }
 
     if event == FDW_ERR {
-        throw PollError.fail
+        throw PollError.failure
     }
 
     return PollEvent(rawValue: Int(event))
