@@ -321,7 +321,7 @@ public class SelectCaseBuilder {
         }
     }
 
-    public func timedOut(deadline: Double, closure: Void -> Void) {
+    public func timedOut(_ deadline: Double, closure: Void -> Void) {
         let done = Channel<Bool>()
         co {
             wake(at: deadline)
@@ -331,7 +331,7 @@ public class SelectCaseBuilder {
         cases.append(selectCase)
     }
 
-    public func otherwise(closure: Void -> Void) {
+    public func otherwise(_ closure: Void -> Void) {
         self.otherwise = closure
     }
 }
