@@ -25,19 +25,19 @@
 import C7
 
 public final class Ticker {
-    private let internalChannel = Channel<Int64>()
+    private let internalChannel = Channel<Void>()
     private var stopped: Bool = false
 
-    public var channel: ReceivingChannel<Int64> {
+    public var channel: ReceivingChannel<Void> {
         return internalChannel.receivingChannel
     }
 
-    public init(tickingEvery period: Double) {
+    public init(period: Double) {
         co {
             while true {
                 nap(for: period)
                 if self.stopped { break }
-                self.internalChannel.send(now().int64milliseconds)
+                self.internalChannel.send(Void())
             }
         }
     }

@@ -25,27 +25,27 @@
 public final class FallibleSendingChannel<T> {
     private let channel: FallibleChannel<T>
 
-    init(_ channel: FallibleChannel<T>) {
+    internal init(_ channel: FallibleChannel<T>) {
         self.channel = channel
     }
 
-    public func send(result: ChannelResult<T>) {
+    public func send(_ result: ChannelResult<T>) {
         return channel.send(result)
     }
 
-    public func send(value: T) {
+    public func send(_ value: T) {
         return channel.send(value)
     }
 
-    func send(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
+    internal func send(_ value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
         return channel.send(value, clause: clause, index: index)
     }
 
-    public func send(error: ErrorProtocol) {
+    public func send(_ error: ErrorProtocol) {
         return channel.send(error)
     }
 
-    func send(error: ErrorProtocol, clause: UnsafeMutablePointer<Void>, index: Int) {
+    internal func send(_ error: ErrorProtocol, clause: UnsafeMutablePointer<Void>, index: Int) {
         return channel.send(error, clause: clause, index: index)
     }
 

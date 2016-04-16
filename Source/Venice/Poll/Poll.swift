@@ -29,7 +29,7 @@ public typealias FileDescriptor = Int32
 
 public enum PollError: ErrorProtocol {
     case timeout
-    case fail
+    case failure
 }
 
 public struct PollEvent: OptionSet {
@@ -44,7 +44,7 @@ public struct PollEvent: OptionSet {
 }
 
 /// Polls file descriptor for events
-public func poll(fileDescriptor: FileDescriptor, for events: PollEvent, timingOut deadline: Double = .never) throws -> PollEvent {
+public func poll(_ fileDescriptor: FileDescriptor, for events: PollEvent, timingOut deadline: Double = .never) throws -> PollEvent {
     let event = mill_fdwait(fileDescriptor, Int32(events.rawValue), deadline.int64milliseconds, "pollFileDescriptor")
 
     if event == 0 {
@@ -52,7 +52,7 @@ public func poll(fileDescriptor: FileDescriptor, for events: PollEvent, timingOu
     }
 
     if event == FDW_ERR {
-        throw PollError.fail
+        throw PollError.failure
     }
 
     return PollEvent(rawValue: Int(event))

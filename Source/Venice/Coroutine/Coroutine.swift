@@ -34,7 +34,7 @@ public extension Double {
 }
 
 /// Runs the expression in a lightweight coroutine.
-public func co(routine: Void -> Void) {
+public func co(_ routine: Void -> Void) {
     var _routine = routine
     CLibvenice.co(&_routine, { routinePointer in
         UnsafeMutablePointer<(Void -> Void)>(routinePointer).pointee()
@@ -42,7 +42,7 @@ public func co(routine: Void -> Void) {
 }
 
 /// Runs the expression in a lightweight coroutine.
-public func co(@autoclosure(escaping) routine: Void -> Void) {
+public func co(@autoclosure(escaping) _ routine: Void -> Void) {
     var _routine: Void -> Void = routine
     CLibvenice.co(&_routine, { routinePointer in
         UnsafeMutablePointer<(Void -> Void)>(routinePointer).pointee()
@@ -50,7 +50,7 @@ public func co(@autoclosure(escaping) routine: Void -> Void) {
 }
 
 /// Runs the expression in a lightweight coroutine after the given duration.
-public func after(napDuration: Double, routine: Void -> Void) {
+public func after(_ napDuration: Double, routine: Void -> Void) {
     co {
         nap(for: napDuration)
         routine()
@@ -58,7 +58,7 @@ public func after(napDuration: Double, routine: Void -> Void) {
 }
 
 /// Runs the expression in a lightweight coroutine periodically. Call done() to leave the loop.
-public func every(napDuration: Double, routine: (done: Void -> Void) -> Void) {
+public func every(_ napDuration: Double, routine: (done: Void -> Void) -> Void) {
     co {
         var done = false
         while !done {
@@ -71,7 +71,7 @@ public func every(napDuration: Double, routine: (done: Void -> Void) -> Void) {
 }
 
 /// Preallocates coroutine stacks. Returns the number of stacks that it actually managed to allocate.
-public func preallocateCoroutineStacks(stackCount stackCount: Int, stackSize: Int) {
+public func preallocateCoroutineStacks(stackCount: Int, stackSize: Int) {
     return goprepare(Int32(stackCount), stackSize)
 }
 

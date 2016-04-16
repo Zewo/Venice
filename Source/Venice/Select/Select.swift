@@ -25,7 +25,7 @@
 import CLibvenice
 
 protocol SelectCase {
-    func register(clause: UnsafeMutablePointer<Void>, index: Int)
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int)
     func execute()
 }
 
@@ -38,7 +38,7 @@ final class ChannelReceiveCase<T>: SelectCase {
         self.closure = closure
     }
 
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.registerReceive(clause, index: index)
     }
 
@@ -58,7 +58,7 @@ final class ReceivingChannelReceiveCase<T>: SelectCase {
         self.closure = closure
     }
     
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.registerReceive(clause, index: index)
     }
     
@@ -78,7 +78,7 @@ final class FallibleChannelReceiveCase<T>: SelectCase {
         self.closure = closure
     }
 
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.registerReceive(clause, index: index)
     }
 
@@ -98,7 +98,7 @@ final class FallibleReceivingChannelReceiveCase<T>: SelectCase {
         self.closure = closure
     }
     
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.registerReceive(clause, index: index)
     }
     
@@ -120,7 +120,7 @@ final class ChannelSendCase<T>: SelectCase {
         self.closure = closure
     }
 
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.send(value, clause: clause, index: index)
     }
 
@@ -140,7 +140,7 @@ final class SendingChannelSendCase<T>: SelectCase {
         self.closure = closure
     }
     
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.send(value, clause: clause, index: index)
     }
     
@@ -160,7 +160,7 @@ final class FallibleChannelSendCase<T>: SelectCase {
         self.closure = closure
     }
 
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.send(value, clause: clause, index: index)
     }
 
@@ -180,7 +180,7 @@ final class FallibleSendingChannelSendCase<T>: SelectCase {
         self.closure = closure
     }
     
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.send(value, clause: clause, index: index)
     }
     
@@ -200,7 +200,7 @@ final class FallibleChannelSendErrorCase<T>: SelectCase {
         self.closure = closure
     }
 
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.send(error, clause: clause, index: index)
     }
 
@@ -220,7 +220,7 @@ final class FallibleSendingChannelSendErrorCase<T>: SelectCase {
         self.closure = closure
     }
     
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.send(error, clause: clause, index: index)
     }
     
@@ -238,7 +238,7 @@ final class TimeoutCase<T>: SelectCase {
         self.closure = closure
     }
 
-    func register(clause: UnsafeMutablePointer<Void>, index: Int) {
+    func register(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         channel.registerReceive(clause, index: index)
     }
 
@@ -251,77 +251,77 @@ public class SelectCaseBuilder {
     var cases: [SelectCase] = []
     var otherwise: (Void -> Void)?
 
-    public func receive<T>(from channel: Channel<T>?, closure: T -> Void) {
+    public func received<T>(valueFrom channel: Channel<T>?, closure: T -> Void) {
         if let channel = channel {
             let selectCase = ChannelReceiveCase(channel: channel, closure: closure)
             cases.append(selectCase)
         }
     }
     
-    public func receive<T>(from channel: ReceivingChannel<T>?, closure: T -> Void) {
+    public func received<T>(valueFrom channel: ReceivingChannel<T>?, closure: T -> Void) {
         if let channel = channel {
             let selectCase = ReceivingChannelReceiveCase(channel: channel, closure: closure)
             cases.append(selectCase)
         }
     }
 
-    public func receive<T>(from channel: FallibleChannel<T>?, closure: ChannelResult<T> -> Void) {
+    public func received<T>(resultFrom channel: FallibleChannel<T>?, closure: ChannelResult<T> -> Void) {
         if let channel = channel {
             let selectCase = FallibleChannelReceiveCase(channel: channel, closure: closure)
             cases.append(selectCase)
         }
     }
     
-    public func receive<T>(from channel: FallibleReceivingChannel<T>?, closure: ChannelResult<T> -> Void) {
+    public func received<T>(resultFrom channel: FallibleReceivingChannel<T>?, closure: ChannelResult<T> -> Void) {
         if let channel = channel {
             let selectCase = FallibleReceivingChannelReceiveCase(channel: channel, closure: closure)
             cases.append(selectCase)
         }
     }
 
-    public func send<T>(value: T, to channel: Channel<T>?, closure: Void -> Void) {
+    public func sent<T>(_ value: T, to channel: Channel<T>?, closure: Void -> Void) {
         if let channel = channel where !channel.closed {
             let selectCase = ChannelSendCase(channel: channel, value: value, closure: closure)
             cases.append(selectCase)
         }
     }
     
-    public func send<T>(value: T, to channel: SendingChannel<T>?, closure: Void -> Void) {
+    public func sent<T>(_ value: T, to channel: SendingChannel<T>?, closure: Void -> Void) {
         if let channel = channel where !channel.closed {
             let selectCase = SendingChannelSendCase(channel: channel, value: value, closure: closure)
             cases.append(selectCase)
         }
     }
 
-    public func send<T>(value: T, to channel: FallibleChannel<T>?, closure: Void -> Void) {
+    public func sent<T>(_ value: T, to channel: FallibleChannel<T>?, closure: Void -> Void) {
         if let channel = channel where !channel.closed {
             let selectCase = FallibleChannelSendCase(channel: channel, value: value, closure: closure)
             cases.append(selectCase)
         }
     }
     
-    public func send<T>(value: T, to channel: FallibleSendingChannel<T>?, closure: Void -> Void) {
+    public func sent<T>(_ value: T, to channel: FallibleSendingChannel<T>?, closure: Void -> Void) {
         if let channel = channel where !channel.closed {
             let selectCase = FallibleSendingChannelSendCase(channel: channel, value: value, closure: closure)
             cases.append(selectCase)
         }
     }
 
-    public func throwError<T>(error: ErrorProtocol, into channel: FallibleChannel<T>?, closure: Void -> Void) {
+    public func sent<T>(_ error: ErrorProtocol, to channel: FallibleChannel<T>?, closure: Void -> Void) {
         if let channel = channel where !channel.closed {
             let selectCase = FallibleChannelSendErrorCase(channel: channel, error: error, closure: closure)
             cases.append(selectCase)
         }
     }
     
-    public func throwError<T>(error: ErrorProtocol, into channel: FallibleSendingChannel<T>?, closure: Void -> Void) {
+    public func sent<T>(_ error: ErrorProtocol, to channel: FallibleSendingChannel<T>?, closure: Void -> Void) {
         if let channel = channel where !channel.closed {
             let selectCase = FallibleSendingChannelSendErrorCase(channel: channel, error: error, closure: closure)
             cases.append(selectCase)
         }
     }
 
-    public func timeout(deadline: Double, closure: Void -> Void) {
+    public func timedOut(_ deadline: Double, closure: Void -> Void) {
         let done = Channel<Bool>()
         co {
             wake(at: deadline)
@@ -331,12 +331,12 @@ public class SelectCaseBuilder {
         cases.append(selectCase)
     }
 
-    public func otherwise(closure: Void -> Void) {
+    public func otherwise(_ closure: Void -> Void) {
         self.otherwise = closure
     }
 }
 
-private func select(builder: SelectCaseBuilder) {
+private func select(_ builder: SelectCaseBuilder) {
     mill_choose_init("select")
 
     var clauses: [UnsafeMutablePointer<Void>] = []
@@ -362,17 +362,17 @@ private func select(builder: SelectCaseBuilder) {
     clauses.forEach(free)
 }
 
-public func select(@noescape build: (when: SelectCaseBuilder) -> Void) {
+public func select(@noescape _ build: (when: SelectCaseBuilder) -> Void) {
     let builder = SelectCaseBuilder()
     build(when: builder)
     select(builder)
 }
 
-public func sel(@noescape build: (when: SelectCaseBuilder) -> Void) {
+public func sel(@noescape _ build: (when: SelectCaseBuilder) -> Void) {
     select(build)
 }
 
-public func forSelect(@noescape build: (when: SelectCaseBuilder, done: Void -> Void) -> Void) {
+public func forSelect(@noescape _ build: (when: SelectCaseBuilder, done: Void -> Void) -> Void) {
     let builder = SelectCaseBuilder()
     var keepRunning = true
     func done() {

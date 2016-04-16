@@ -25,7 +25,7 @@
 import CLibvenice
 
 public struct FallibleChannelGenerator<T>: IteratorProtocol {
-    let channel: FallibleReceivingChannel<T>
+    internal let channel: FallibleReceivingChannel<T>
 
     public mutating func next() -> ChannelResult<T>? {
         return channel.receiveResult()
@@ -36,14 +36,14 @@ public enum ChannelResult<T> {
     case value(T)
     case error(ErrorProtocol)
 
-    public func success(@noescape closure: T -> Void) {
+    public func success(@noescape _ closure: T -> Void) {
         switch self {
         case .value(let value): closure(value)
         default: break
         }
     }
 
-    public func failure(@noescape closure: ErrorProtocol -> Void) {
+    public func failure(@noescape _ closure: ErrorProtocol -> Void) {
         switch self {
         case .error(let error): closure(error)
         default: break
@@ -82,18 +82,15 @@ public final class FallibleChannel<T>: Sequence {
     }
 
     /// Closes the channel. When a channel is closed it cannot receive values anymore.
-    public func close() -> Bool {
-        if closed {
-            return false
-        }
+    public func close() {
+        guard !closed else { return }
 
         closed = true
         mill_chdone(channel, "Channel close")
-        return true
     }
 
     /// Send a result to the channel.
-    public func send(result: ChannelResult<T>) {
+    public func send(_ result: ChannelResult<T>) {
         if !closed {
             buffer.append(result)
             mill_chs(channel, "FallibleChannel sendResult")
@@ -101,7 +98,7 @@ public final class FallibleChannel<T>: Sequence {
     }
 
     /// Send a value to the channel.
-    public func send(value: T) {
+    public func send(_ value: T) {
         if !closed {
             let result = ChannelResult<T>.value(value)
             buffer.append(result)
@@ -109,8 +106,7 @@ public final class FallibleChannel<T>: Sequence {
         }
     }
 
-    /// Send a value from select.
-    func send(value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
+    internal func send(_ value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
         if !closed {
             let result = ChannelResult<T>.value(value)
             buffer.append(result)
@@ -119,7 +115,7 @@ public final class FallibleChannel<T>: Sequence {
     }
 
     /// Send an error to the channel.
-    public func send(error: ErrorProtocol) {
+    public func send(_ error: ErrorProtocol) {
         if !closed {
             let result = ChannelResult<T>.error(error)
             buffer.append(result)
@@ -127,8 +123,7 @@ public final class FallibleChannel<T>: Sequence {
         }
     }
 
-    /// Send an error from select.
-    func send(error: ErrorProtocol, clause: UnsafeMutablePointer<Void>, index: Int) {
+    internal func send(_ error: ErrorProtocol, clause: UnsafeMutablePointer<Void>, index: Int) {
         if !closed {
             let result = ChannelResult<T>.error(error)
             buffer.append(result)
@@ -161,15 +156,14 @@ public final class FallibleChannel<T>: Sequence {
         return getResultFromBuffer()
     }
 
-    func registerReceive(clause: UnsafeMutablePointer<Void>, index: Int) {
+    internal func registerReceive(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         mill_choose_in(clause, channel, Int32(index))
     }
 
-    func getResultFromBuffer() -> ChannelResult<T>? {
+    internal func getResultFromBuffer() -> ChannelResult<T>? {
         if closed && buffer.count <= 0 {
             return nil
         }
         return buffer.removeFirst()
     }
-
 }
