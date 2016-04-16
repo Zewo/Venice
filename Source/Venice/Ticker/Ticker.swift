@@ -32,7 +32,7 @@ public final class Ticker {
         return internalChannel.receivingChannel
     }
 
-    public init(tickingEvery period: Double) {
+    public init(period: Double) {
         co {
             while true {
                 nap(for: period)
