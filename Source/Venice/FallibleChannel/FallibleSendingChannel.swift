@@ -25,7 +25,7 @@
 public final class FallibleSendingChannel<T> {
     private let channel: FallibleChannel<T>
 
-    init(_ channel: FallibleChannel<T>) {
+    internal init(_ channel: FallibleChannel<T>) {
         self.channel = channel
     }
 
@@ -37,7 +37,7 @@ public final class FallibleSendingChannel<T> {
         return channel.send(value)
     }
 
-    func send(_ value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
+    internal func send(_ value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
         return channel.send(value, clause: clause, index: index)
     }
 
@@ -45,7 +45,7 @@ public final class FallibleSendingChannel<T> {
         return channel.send(error)
     }
 
-    func send(_ error: ErrorProtocol, clause: UnsafeMutablePointer<Void>, index: Int) {
+    internal func send(_ error: ErrorProtocol, clause: UnsafeMutablePointer<Void>, index: Int) {
         return channel.send(error, clause: clause, index: index)
     }
 

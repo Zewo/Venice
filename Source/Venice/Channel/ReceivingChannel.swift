@@ -25,7 +25,7 @@
 public final class ReceivingChannel<T>: Sequence {
     private let channel: Channel<T>
 
-    init(_ channel: Channel<T>) {
+    internal init(_ channel: Channel<T>) {
         self.channel = channel
     }
 
@@ -41,11 +41,11 @@ public final class ReceivingChannel<T>: Sequence {
         channel.close()
     }
 
-    func registerReceive(_ clause: UnsafeMutablePointer<Void>, index: Int) {
+    internal func registerReceive(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         return channel.registerReceive(clause, index: index)
     }
 
-    func getValueFromBuffer() -> T? {
+    internal func getValueFromBuffer() -> T? {
         return channel.getValueFromBuffer()
     }
 }

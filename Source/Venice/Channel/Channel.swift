@@ -25,7 +25,7 @@
 import CLibvenice
 
 public struct ChannelGenerator<T>: IteratorProtocol {
-    let channel: ReceivingChannel<T>
+    internal let channel: ReceivingChannel<T>
 
     public mutating func next() -> T? {
         return channel.receive()
@@ -82,8 +82,7 @@ public final class Channel<T>: Sequence {
         }
     }
 
-    /// Send a value from select.
-    func send(_ value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
+    internal func send(_ value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
         if !closed {
             buffer.append(value)
             mill_choose_out(clause, channel, Int32(index))
@@ -99,11 +98,11 @@ public final class Channel<T>: Sequence {
         return getValueFromBuffer()
     }
 
-    func registerReceive(_ clause: UnsafeMutablePointer<Void>, index: Int) {
+    internal func registerReceive(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         mill_choose_in(clause, channel, Int32(index))
     }
 
-    func getValueFromBuffer() -> T? {
+    internal func getValueFromBuffer() -> T? {
         if closed && buffer.count <= 0 {
             return nil
         }

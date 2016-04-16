@@ -25,7 +25,7 @@
 public final class FallibleReceivingChannel<T>: Sequence {
     private let channel: FallibleChannel<T>
 
-    init(_ channel: FallibleChannel<T>) {
+    internal init(_ channel: FallibleChannel<T>) {
         self.channel = channel
     }
 
@@ -45,11 +45,11 @@ public final class FallibleReceivingChannel<T>: Sequence {
         channel.close()
     }
 
-    func registerReceive(_ clause: UnsafeMutablePointer<Void>, index: Int) {
+    internal func registerReceive(_ clause: UnsafeMutablePointer<Void>, index: Int) {
         return channel.registerReceive(clause, index: index)
     }
 
-    func getResultFromBuffer() -> ChannelResult<T>? {
+    internal func getResultFromBuffer() -> ChannelResult<T>? {
         return channel.getResultFromBuffer()
     }
 }
