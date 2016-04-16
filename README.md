@@ -306,7 +306,7 @@ forSelect { when, done in
 `Timer` sends to its channel when it expires.
 
 ```swift
-let timer = Timer(timingOut: 2.second.fromNow())
+let timer = Timer(deadline: 2.second.fromNow())
 
 co {
     timer.channel.receive()
@@ -324,7 +324,7 @@ if timer.stop() {
 `Ticker` sends current time to its channel periodically until stopped.
 
 ```swift
-let ticker = Ticker(tickingEvery: 500.milliseconds)
+let ticker = Ticker(period: 500.milliseconds)
 
 co {
     for time in ticker.channel {
@@ -929,7 +929,7 @@ provides a channel that will be notified at that
 time. This timer will wait 2 seconds.
 
 ```swift
-let timer1 = Timer(timingOut: 2.seconds.fromNow())
+let timer1 = Timer(deadline: 2.seconds.fromNow())
 ```
 
 The `timer1.channel.receive()` blocks on the timer's channel
@@ -947,7 +947,7 @@ that you can cancel the timer before it expires.
 Here's an example of that.
 
 ```swift
-let timer2 = Timer(timingOut: 1.second.fromNow())
+let timer2 = Timer(deadline: 1.second.fromNow())
 
 co {
     timer2.channel.receive()
@@ -984,7 +984,7 @@ channel that is sent values. Here we'll use the
 the values as they arrive every 500ms.
 
 ```swift
-let ticker = Ticker(tickingEvery: 500.milliseconds)
+let ticker = Ticker(period: 500.milliseconds)
 
 co {
     for time in ticker.channel {
@@ -1120,7 +1120,7 @@ every 200 milliseconds. This is the regulator in
 our rate limiting scheme.
 
 ```swift
-let limiter = Ticker(tickingEvery: 200.milliseconds)
+let limiter = Ticker(period: 200.milliseconds)
 ```
 
 By blocking on a receive from the `limiter` channel
@@ -1159,7 +1159,7 @@ value to `burstyLimiter`, up to its limit of 3.
 
 ```swift
 co {
-    for time in Ticker(tickingEvery: 200.milliseconds).channel {
+    for time in Ticker(period: 200.milliseconds).channel {
         burstyLimiter.send(time)
     }
 }
@@ -1452,8 +1452,8 @@ for n in fibonacciChannel {
 ---------
 
 ```swift
-let tick = Ticker(tickingEvery: 100.milliseconds).channel
-let boom = Timer(timingOut: 500.milliseconds.fromNow()).channel
+let tick = Ticker(period: 100.milliseconds).channel
+let boom = Timer(deadline: 500.milliseconds.fromNow()).channel
 
 forSelect { when, done in
     when.received(valueFrom: tick) { _ in
