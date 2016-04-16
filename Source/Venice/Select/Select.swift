@@ -307,14 +307,14 @@ public class SelectCaseBuilder {
         }
     }
 
-    public func thrown<T>(_ error: ErrorProtocol, from channel: FallibleChannel<T>?, closure: Void -> Void) {
+    public func sent<T>(_ error: ErrorProtocol, to channel: FallibleChannel<T>?, closure: Void -> Void) {
         if let channel = channel where !channel.closed {
             let selectCase = FallibleChannelSendErrorCase(channel: channel, error: error, closure: closure)
             cases.append(selectCase)
         }
     }
     
-    public func thrown<T>(_ error: ErrorProtocol, from channel: FallibleSendingChannel<T>?, closure: Void -> Void) {
+    public func sent<T>(_ error: ErrorProtocol, to channel: FallibleSendingChannel<T>?, closure: Void -> Void) {
         if let channel = channel where !channel.closed {
             let selectCase = FallibleSendingChannelSendErrorCase(channel: channel, error: error, closure: closure)
             cases.append(selectCase)
