@@ -48,17 +48,22 @@ co {
 `nap` and `wake`
 ------------------
 
+`nap` stops the execution **for** the given amount of time, while `wake` stops the execution **until** some moment.
+
 ```swift
 co {
-    // wakes up 1 second from now
-    wake(at: 1.second.fromNow())
+    // sleep for one second
+    nap(for: 1.second)
     print("yawn")
 }
 
-// nap for two seconds so the program
+// stop for two seconds so the program
 // doesn't terminate before the print
-nap(for: 2.seconds)
+let deadline = 2.seconds.fromNow()
+wake(at: deadline)
 ```
+
+Always use `nap` if you're setting up the time yourself. Use `wake` only if you got `deadline` from somewhere else.
 
 `after`
 -----------------
@@ -181,10 +186,10 @@ let channel = Channel<String>()
 let fallibleChannel = FallibleChannel<String>()
 
 select { when in
-    when.receiveFrom(channel) { value in
+    when.received(valueFrom: channel) { value in
         print("received \(value)")
     }
-    when.receiveFrom(fallibleChannel) { result in
+    when.received(resultFrom: fallibleChannel) { result in
         result.success { value in
             print(value)
         }
@@ -192,16 +197,16 @@ select { when in
             print(error)
         }
     }
-    when.send("value", to: channel) {
+    when.sent("value", to: channel) {
         print("sent value")
     }
-    when.send("value", to: fallibleChannel) {
+    when.sent("value", to: fallibleChannel) {
         print("sent value")
     }
-    when.throwError(Error(), into: fallibleChannel) {
+    when.sent(Error(), to: fallibleChannel) {
         print("threw error")
     }
-    when.timeout(1.second.fromNow()) {
+    when.timedOut(1.second.fromNow()) {
         print("timeout")
     }
     when.otherwise {
@@ -229,10 +234,10 @@ co { channelA?.send("a") }
 co { channelB?.send("b") }
 
 sel { when in
-    when.receiveFrom(channelA) { value in
+    when.received(valueFrom: channelA) { value in
         print("received \(value) from channel a")
     }
-    when.receiveFrom(channelB) { value in
+    when.received(valueFrom: channelB) { value in
         print("received \(value) from channel b")
     }
 }
@@ -250,12 +255,12 @@ co(channelB.send("b"))
 select { when in
     if random(0...1) == 0 {
         print("disabled channel b")
-        when.receiveFrom(channelA) { value in
+        when.received(valueFrom: channelA) { value in
             print("received \(value) from channel a")
         }
     } else {
         print("disabled channel a")
-        when.receiveFrom(channelB) { value in
+        when.received(valueFrom: channelB) { value in
             print("received \(value) from channel b")
         }
     }
@@ -282,7 +287,7 @@ let outcome = FallibleChannel<String>()
 co(flipCoin(outcome))
 
 forSelect { when, done in
-    when.receiveFrom(outcome) { result in
+    when.received(resultFrom: outcome) { result in
         result.success { value in
             print(value)
             done()
@@ -636,10 +641,10 @@ simultaneously, printing each one as it arrives.
 ```swift
 for _ in 0 ..< 2 {
     select { when in
-        when.receiveFrom(channel1) { message1 in
+        when.received(valueFrom: channel1) { message1 in
             print("received \(message1)")
         }
-        when.receiveFrom(channel2) { message2 in
+        when.received(valueFrom: channel2) { message2 in
             print("received \(message2)")
         }
     }
@@ -678,7 +683,7 @@ after(2.seconds) {
 ```
 
 Here's the `select` implementing a timeout.
-`receiveFrom(channel1)` awaits the result and `timeout(1.second.fromNow())`
+`received(resultFrom: channel1)` awaits the result and `timeout(1.second.fromNow())`
 awaits a value to be sent after the timeout of
 1s. Since `select` proceeds with the first
 receive that's ready, we'll take the timeout case
@@ -686,10 +691,10 @@ if the operation takes more than the allowed 1s.
 
 ```swift
 select { when in
-    when.receiveFrom(channel1) { result in
+    when.received(resultFrom: channel1) { result in
         print(result)
     }
-    when.timeout(1.second.fromNow()) {
+    when.timedOut(1.second.fromNow()) {
         print("timeout 1")
     }
 }
@@ -706,10 +711,10 @@ after(2.seconds)
 }
 
 select { when in
-    when.receiveFrom(channel2) { result in
+    when.received(resultFrom: channel2) { result in
         print(result)
     }
-    when.timeout(3.seconds.fromNow()) {
+    when.timedOut(3.seconds.fromNow()) {
         print("timeout 2")
     }
 }
@@ -743,12 +748,12 @@ let signals = Channel<Bool>()
 
 Here's a non-blocking receive. If a value is
 available on `messages` then `select` will take
-the `receiveFrom(messages)` case with that value. If not
+the `received(valueFrom: messages)` case with that value. If not
 it will immediately take the `otherwise` case.
 
 ```swift
 select { when in
-    when.receiveFrom(messages) { message in
+    when.received(valueFrom: messages) { message in
         print("received message \(message)")
     }
     when.otherwise {
@@ -763,7 +768,7 @@ A non-blocking send works similarly.
 let message = "hi"
 
 select { when in
-    when.send(message, to: messages) {
+    when.sent(message, to: messages) {
         print("sent message \(message)")
     }
     when.otherwise {
@@ -779,10 +784,10 @@ on both `messages` and `signals`.
 
 ```swift
 select { when in
-    when.receiveFrom(messages) { message in
+    when.received(valueFrom: messages) { message in
         print("received message \(message)")
     }
-    when.receiveFrom(signals) { signal in
+    when.received(valueFrom: signals) { signal in
         print("received signal \(signal)")
     }
     when.otherwise {
@@ -1256,10 +1261,10 @@ co {
     var state: [Int: Int] = [:]
     while true {
         select { when in
-            when.receiveFrom(reads) { read in
+            when.received(valueFrom: reads) { read in
                 read.responses.send(state[read.key] ?? 0)
             }
-            when.receiveFrom(writes) { write in
+            when.received(valueFrom: writes) { write in
                 state[write.key] = write.value
                 write.responses.send()
             }
@@ -1451,10 +1456,10 @@ let tick = Ticker(tickingEvery: 100.milliseconds).channel
 let boom = Timer(timingOut: 500.milliseconds.fromNow()).channel
 
 forSelect { when, done in
-    when.receiveFrom(tick) { _ in
+    when.received(valueFrom: tick) { _ in
         print("tick")
     }
-    when.receiveFrom(boom) { _ in
+    when.received(valueFrom: boom) { _ in
         print("BOOM!")
         done()
     }
@@ -1699,14 +1704,14 @@ struct Subscription : SubscriptionType {
         var fetching = false
 
         forSelect { when, done in
-            when.receiveFrom(closing) { errorChannel in
+            when.received(valueFrom: closing) { errorChannel in
                 errorChannel.send(lastError)
                 self.items.close()
                 done()
             }
 
             if !fetching && pendingItems.count < maxPendingItems {
-                when.timeout(nextFetchTime) {
+                when.timedOut(nextFetchTime) {
                     fetching = true
                     co {
                         fetchDone.send(self.fetcher.fetch())
@@ -1714,7 +1719,7 @@ struct Subscription : SubscriptionType {
                 }
             }
 
-            when.receiveFrom(fetchDone) { fetchResult in
+            when.received(resultFrom: fetchDone) { fetchResult in
                 fetching = false
                 fetchResult.success { response in
                     for item in response.items {
@@ -1733,7 +1738,7 @@ struct Subscription : SubscriptionType {
             }
 
             if let item = pendingItems.first {
-                when.send(item, to: items) {
+                when.sent(item, to: items) {
                     pendingItems.removeFirst()
                 }
             }
