@@ -251,77 +251,77 @@ public class SelectCaseBuilder {
     var cases: [SelectCase] = []
     var otherwise: (Void -> Void)?
 
-    public func receive<T>(from channel: Channel<T>?, closure: T -> Void) {
+    public func received<T>(valueFrom channel: Channel<T>?, closure: T -> Void) {
         if let channel = channel {
             let selectCase = ChannelReceiveCase(channel: channel, closure: closure)
             cases.append(selectCase)
         }
     }
     
-    public func receive<T>(from channel: ReceivingChannel<T>?, closure: T -> Void) {
+    public func received<T>(valueFrom channel: ReceivingChannel<T>?, closure: T -> Void) {
         if let channel = channel {
             let selectCase = ReceivingChannelReceiveCase(channel: channel, closure: closure)
             cases.append(selectCase)
         }
     }
 
-    public func receive<T>(from channel: FallibleChannel<T>?, closure: ChannelResult<T> -> Void) {
+    public func received<T>(resultFrom channel: FallibleChannel<T>?, closure: ChannelResult<T> -> Void) {
         if let channel = channel {
             let selectCase = FallibleChannelReceiveCase(channel: channel, closure: closure)
             cases.append(selectCase)
         }
     }
     
-    public func receive<T>(from channel: FallibleReceivingChannel<T>?, closure: ChannelResult<T> -> Void) {
+    public func received<T>(resultFrom channel: FallibleReceivingChannel<T>?, closure: ChannelResult<T> -> Void) {
         if let channel = channel {
             let selectCase = FallibleReceivingChannelReceiveCase(channel: channel, closure: closure)
             cases.append(selectCase)
         }
     }
 
-    public func send<T>(value: T, to channel: Channel<T>?, closure: Void -> Void) {
+    public func sent<T>(_ value: T, to channel: Channel<T>?, closure: Void -> Void) {
         if let channel = channel where !channel.closed {
             let selectCase = ChannelSendCase(channel: channel, value: value, closure: closure)
             cases.append(selectCase)
         }
     }
     
-    public func send<T>(value: T, to channel: SendingChannel<T>?, closure: Void -> Void) {
+    public func sent<T>(_ value: T, to channel: SendingChannel<T>?, closure: Void -> Void) {
         if let channel = channel where !channel.closed {
             let selectCase = SendingChannelSendCase(channel: channel, value: value, closure: closure)
             cases.append(selectCase)
         }
     }
 
-    public func send<T>(value: T, to channel: FallibleChannel<T>?, closure: Void -> Void) {
+    public func sent<T>(_ value: T, to channel: FallibleChannel<T>?, closure: Void -> Void) {
         if let channel = channel where !channel.closed {
             let selectCase = FallibleChannelSendCase(channel: channel, value: value, closure: closure)
             cases.append(selectCase)
         }
     }
     
-    public func send<T>(value: T, to channel: FallibleSendingChannel<T>?, closure: Void -> Void) {
+    public func sent<T>(_ value: T, to channel: FallibleSendingChannel<T>?, closure: Void -> Void) {
         if let channel = channel where !channel.closed {
             let selectCase = FallibleSendingChannelSendCase(channel: channel, value: value, closure: closure)
             cases.append(selectCase)
         }
     }
 
-    public func throwError<T>(error: ErrorProtocol, into channel: FallibleChannel<T>?, closure: Void -> Void) {
+    public func thrown<T>(_ error: ErrorProtocol, from channel: FallibleChannel<T>?, closure: Void -> Void) {
         if let channel = channel where !channel.closed {
             let selectCase = FallibleChannelSendErrorCase(channel: channel, error: error, closure: closure)
             cases.append(selectCase)
         }
     }
     
-    public func throwError<T>(error: ErrorProtocol, into channel: FallibleSendingChannel<T>?, closure: Void -> Void) {
+    public func thrown<T>(_ error: ErrorProtocol, from channel: FallibleSendingChannel<T>?, closure: Void -> Void) {
         if let channel = channel where !channel.closed {
             let selectCase = FallibleSendingChannelSendErrorCase(channel: channel, error: error, closure: closure)
             cases.append(selectCase)
         }
     }
 
-    public func timeout(deadline: Double, closure: Void -> Void) {
+    public func timedOut(deadline: Double, closure: Void -> Void) {
         let done = Channel<Bool>()
         co {
             wake(at: deadline)
