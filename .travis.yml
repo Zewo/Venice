@@ -1,3 +1,5 @@
+notifications:
+  slack: zewo:VjyVCCQvTOw9yrbzQysZezD1
 os:
   - linux
   - osx
