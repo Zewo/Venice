@@ -362,17 +362,17 @@ private func select(_ builder: SelectCaseBuilder) {
     clauses.forEach(free)
 }
 
-public func select(@noescape _ build: (when: SelectCaseBuilder) -> Void) {
+public func select(_ build: @noescape (when: SelectCaseBuilder) -> Void) {
     let builder = SelectCaseBuilder()
     build(when: builder)
     select(builder)
 }
 
-public func sel(@noescape _ build: (when: SelectCaseBuilder) -> Void) {
+public func sel(_ build: @noescape (when: SelectCaseBuilder) -> Void) {
     select(build)
 }
 
-public func forSelect(@noescape _ build: (when: SelectCaseBuilder, done: Void -> Void) -> Void) {
+public func forSelect(_ build: @noescape (when: SelectCaseBuilder, done: Void -> Void) -> Void) {
     let builder = SelectCaseBuilder()
     var keepRunning = true
     func done() {
@@ -385,6 +385,6 @@ public func forSelect(@noescape _ build: (when: SelectCaseBuilder, done: Void ->
     }
 }
 
-public func forSel(@noescape build: (when: SelectCaseBuilder, done: Void -> Void) -> Void) {
+public func forSel(build: @noescape (when: SelectCaseBuilder, done: Void -> Void) -> Void) {
     forSelect(build)
 }
