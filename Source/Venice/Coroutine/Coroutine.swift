@@ -42,7 +42,7 @@ public func co(_ routine: Void -> Void) {
 }
 
 /// Runs the expression in a lightweight coroutine.
-public func co(@autoclosure(escaping) _ routine: Void -> Void) {
+public func co(_ routine: @autoclosure(escaping) Void -> Void) {
     var _routine: Void -> Void = routine
     CLibvenice.co(&_routine, { routinePointer in
         UnsafeMutablePointer<(Void -> Void)>(routinePointer).pointee()
