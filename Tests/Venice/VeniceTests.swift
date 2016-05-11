@@ -8,7 +8,7 @@ class VeniceTests: XCTestCase {
 }
 
 extension VeniceTests {
-    static var allTests : [(String, VeniceTests -> () throws -> Void)] {
+    static var allTests : [(String, (VeniceTests) -> () throws -> Void)] {
         return [
            ("testReality", testReality),
         ]

@@ -36,14 +36,14 @@ public enum ChannelResult<T> {
     case value(T)
     case error(ErrorProtocol)
 
-    public func success(_ closure: @noescape T -> Void) {
+    public func success(_ closure: @noescape (T) -> Void) {
         switch self {
         case .value(let value): closure(value)
         default: break
         }
     }
 
-    public func failure(_ closure: @noescape ErrorProtocol -> Void) {
+    public func failure(_ closure: @noescape (ErrorProtocol) -> Void) {
         switch self {
         case .error(let error): closure(error)
         default: break
