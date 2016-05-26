@@ -41,4 +41,3 @@ public final class SendingChannel<T> {
         return channel.closed
     }
 }
-
