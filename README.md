@@ -458,7 +458,7 @@ syntax. Here we send `"ping"`  to the `messages`
 channel we made above, from a new coroutine.
 
 ```swift
-co(messages.semd("ping"))
+co(messages.send("ping"))
 ```
 
 The `channel.receive()` syntax _receives_ a value from the
