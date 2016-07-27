@@ -41,11 +41,11 @@ public final class FallibleSendingChannel<T> {
         return channel.send(value, clause: clause, index: index)
     }
 
-    public func send(_ error: ErrorProtocol) {
+    public func send(_ error: Error) {
         return channel.send(error)
     }
 
-    internal func send(_ error: ErrorProtocol, clause: UnsafeMutablePointer<Void>, index: Int) {
+    internal func send(_ error: Error, clause: UnsafeMutablePointer<Void>, index: Int) {
         return channel.send(error, clause: clause, index: index)
     }
 
