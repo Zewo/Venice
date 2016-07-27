@@ -191,10 +191,10 @@ final class FallibleSendingChannelSendCase<T>: SelectCase {
 
 final class FallibleChannelSendErrorCase<T>: SelectCase {
     let channel: FallibleChannel<T>
-    let error: ErrorProtocol
+    let error: Error
     let closure: (Void) -> Void
 
-    init(channel: FallibleChannel<T>, error: ErrorProtocol, closure: (Void) -> Void) {
+    init(channel: FallibleChannel<T>, error: Error, closure: (Void) -> Void) {
         self.channel = channel
         self.error = error
         self.closure = closure
@@ -211,10 +211,10 @@ final class FallibleChannelSendErrorCase<T>: SelectCase {
 
 final class FallibleSendingChannelSendErrorCase<T>: SelectCase {
     let channel: FallibleSendingChannel<T>
-    let error: ErrorProtocol
+    let error: Error
     let closure: (Void) -> Void
 
-    init(channel: FallibleSendingChannel<T>, error: ErrorProtocol, closure: (Void) -> Void) {
+    init(channel: FallibleSendingChannel<T>, error: Error, closure: (Void) -> Void) {
         self.channel = channel
         self.error = error
         self.closure = closure
@@ -280,42 +280,42 @@ public class SelectCaseBuilder {
     }
 
     public func sent<T>(_ value: T, to channel: Channel<T>?, closure: (Void) -> Void) {
-        if let channel = channel where !channel.closed {
+        if let channel = channel, !channel.closed {
             let selectCase = ChannelSendCase(channel: channel, value: value, closure: closure)
             cases.append(selectCase)
         }
     }
     
     public func sent<T>(_ value: T, to channel: SendingChannel<T>?, closure: (Void) -> Void) {
-        if let channel = channel where !channel.closed {
+        if let channel = channel, !channel.closed {
             let selectCase = SendingChannelSendCase(channel: channel, value: value, closure: closure)
             cases.append(selectCase)
         }
     }
 
     public func sent<T>(_ value: T, to channel: FallibleChannel<T>?, closure: (Void) -> Void) {
-        if let channel = channel where !channel.closed {
+        if let channel = channel, !channel.closed {
             let selectCase = FallibleChannelSendCase(channel: channel, value: value, closure: closure)
             cases.append(selectCase)
         }
     }
     
     public func sent<T>(_ value: T, to channel: FallibleSendingChannel<T>?, closure: (Void) -> Void) {
-        if let channel = channel where !channel.closed {
+        if let channel = channel, !channel.closed {
             let selectCase = FallibleSendingChannelSendCase(channel: channel, value: value, closure: closure)
             cases.append(selectCase)
         }
     }
 
-    public func sent<T>(_ error: ErrorProtocol, to channel: FallibleChannel<T>?, closure: (Void) -> Void) {
-        if let channel = channel where !channel.closed {
+    public func sent<T>(_ error: Error, to channel: FallibleChannel<T>?, closure: (Void) -> Void) {
+        if let channel = channel, !channel.closed {
             let selectCase = FallibleChannelSendErrorCase(channel: channel, error: error, closure: closure)
             cases.append(selectCase)
         }
     }
     
-    public func sent<T>(_ error: ErrorProtocol, to channel: FallibleSendingChannel<T>?, closure: (Void) -> Void) {
-        if let channel = channel where !channel.closed {
+    public func sent<T>(_ error: Error, to channel: FallibleSendingChannel<T>?, closure: (Void) -> Void) {
+        if let channel = channel, !channel.closed {
             let selectCase = FallibleSendingChannelSendErrorCase(channel: channel, error: error, closure: closure)
             cases.append(selectCase)
         }
