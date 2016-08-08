@@ -33,7 +33,7 @@ public final class SendingChannel<T> {
         return channel.send(value)
     }
 
-    internal func send(_ value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
+    internal func send(_ value: T, clause: UnsafeMutableRawPointer, index: Int) {
         return channel.send(value, clause: clause, index: index)
     }
 

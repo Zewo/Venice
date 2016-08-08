@@ -22,13 +22,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class ReceivingChannel<T>: Sequence {
+public final class ReceivingChannel<T> : Sequence {
     private let channel: Channel<T>
 
     internal init(_ channel: Channel<T>) {
         self.channel = channel
     }
 
+    @discardableResult
     public func receive() -> T? {
         return channel.receive()
     }
@@ -41,7 +42,7 @@ public final class ReceivingChannel<T>: Sequence {
         channel.close()
     }
 
-    internal func registerReceive(_ clause: UnsafeMutablePointer<Void>, index: Int) {
+    internal func registerReceive(_ clause: UnsafeMutableRawPointer, index: Int) {
         return channel.registerReceive(clause, index: index)
     }
 

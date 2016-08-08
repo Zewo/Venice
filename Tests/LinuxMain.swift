@@ -1,10 +1,11 @@
-#if os(Linux)
-
 import XCTest
-@testable import VeniceTestSuite
+@testable import VeniceTests
 
 XCTMain([
-    testCase(VeniceTests.allTests)
+    testCase(ChannelTests.allTests),
+    testCase(CoroutineTests.allTests),
+    testCase(FallibleChannelTests.allTests),
+    testCase(SelectTests.allTests),
+    testCase(TickerTests.allTests),
+    testCase(TimerTests.allTests),
 ])
-
-#endif
