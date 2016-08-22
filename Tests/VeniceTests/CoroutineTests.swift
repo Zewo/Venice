@@ -2,6 +2,12 @@ import XCTest
 import C7
 @testable import Venice
 
+#if os(Linux)
+    import Glibc
+#else
+    import Darwin.C
+#endif
+
 class CoroutineTests : XCTestCase {
     var sum: Int = 0
 
