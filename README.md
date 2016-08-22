@@ -33,7 +33,7 @@ import PackageDescription
 
 let package = Package(
 	dependencies: [
-		.Package(url: "https://github.com/VeniceX/Venice.git", majorVersion: 0, minor: 8)
+		.Package(url: "https://github.com/VeniceX/Venice.git", majorVersion: 0, minor: 12)
 	]
 )
 ```
