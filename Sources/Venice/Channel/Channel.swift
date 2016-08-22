@@ -24,7 +24,7 @@
 
 import CLibvenice
 
-public struct ChannelGenerator<T>: IteratorProtocol {
+public struct ChannelGenerator<T> : IteratorProtocol {
     internal let channel: ReceivingChannel<T>
 
     public mutating func next() -> T? {
@@ -32,16 +32,12 @@ public struct ChannelGenerator<T>: IteratorProtocol {
     }
 }
 
-public final class Channel<T>: Sequence {
+public final class Channel<T> : Sequence {
     private let channel: chan
     public var closed: Bool = false
     private var buffer: [T] = []
     public let bufferSize: Int
-
-    public var isBuffered: Bool {
-        return bufferSize > 0
-    }
-
+    
     public convenience init() {
         self.init(bufferSize: 0)
     }
@@ -82,7 +78,7 @@ public final class Channel<T>: Sequence {
         }
     }
 
-    internal func send(_ value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
+    internal func send(_ value: T, clause: UnsafeMutableRawPointer, index: Int) {
         if !closed {
             buffer.append(value)
             mill_choose_out(clause, channel, Int32(index))
@@ -90,20 +86,21 @@ public final class Channel<T>: Sequence {
     }
 
     /// Receives a value from the channel.
+    @discardableResult
     public func receive() -> T? {
-        if closed && buffer.count <= 0 {
+        if closed && buffer.isEmpty {
             return nil
         }
         mill_chr(channel, "Channel receive")
         return getValueFromBuffer()
     }
 
-    internal func registerReceive(_ clause: UnsafeMutablePointer<Void>, index: Int) {
+    internal func registerReceive(_ clause: UnsafeMutableRawPointer, index: Int) {
         mill_choose_in(clause, channel, Int32(index))
     }
 
     internal func getValueFromBuffer() -> T? {
-        if closed && buffer.count <= 0 {
+        if closed && buffer.isEmpty {
             return nil
         }
         return buffer.removeFirst()

@@ -1,4 +1,4 @@
-// FallibleReceivingChannel.swift
+// SendingChannel.swift
 //
 // The MIT License (MIT)
 //
@@ -22,34 +22,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class FallibleReceivingChannel<T>: Sequence {
-    private let channel: FallibleChannel<T>
+public final class SendingChannel<T> {
+    private let channel: Channel<T>
 
-    internal init(_ channel: FallibleChannel<T>) {
+    internal init(_ channel: Channel<T>) {
         self.channel = channel
     }
 
-    public func receive() throws -> T? {
-        return try channel.receive()
+    public func send(_ value: T) {
+        return channel.send(value)
     }
 
-    public func receiveResult() -> ChannelResult<T>? {
-        return channel.receiveResult()
+    internal func send(_ value: T, clause: UnsafeMutableRawPointer, index: Int) {
+        return channel.send(value, clause: clause, index: index)
     }
 
-    public func makeIterator() -> FallibleChannelGenerator<T> {
-        return FallibleChannelGenerator(channel: self)
-    }
-
-    public func close() {
-        channel.close()
-    }
-
-    internal func registerReceive(_ clause: UnsafeMutablePointer<Void>, index: Int) {
-        return channel.registerReceive(clause, index: index)
-    }
-
-    internal func getResultFromBuffer() -> ChannelResult<T>? {
-        return channel.getResultFromBuffer()
+    public var closed: Bool {
+        return channel.closed
     }
 }

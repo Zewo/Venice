@@ -1,4 +1,4 @@
-// Poller.swift
+// FallibleReceivingChannel.swift
 //
 // The MIT License (MIT)
 //
@@ -22,38 +22,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import CLibvenice
-import C7
+public final class FallibleReceivingChannel<T> : Sequence {
+    private let channel: FallibleChannel<T>
 
-public typealias FileDescriptor = Int32
-
-public enum PollError: Error {
-    case timeout
-    case failure
-}
-
-public struct PollEvent: OptionSet {
-    public let rawValue: Int
-
-    public init(rawValue: Int) {
-        self.rawValue = rawValue
+    init(_ channel: FallibleChannel<T>) {
+        self.channel = channel
     }
 
-    public static let reading  = PollEvent(rawValue: Int(FDW_IN))
-    public static let writing = PollEvent(rawValue: Int(FDW_OUT))
-}
-
-/// Polls file descriptor for events
-public func poll(_ fileDescriptor: FileDescriptor, for events: PollEvent, timingOut deadline: Double = .never) throws -> PollEvent {
-    let event = mill_fdwait(fileDescriptor, Int32(events.rawValue), deadline.int64milliseconds, "pollFileDescriptor")
-
-    if event == 0 {
-        throw PollError.timeout
+    @discardableResult
+    public func receive() throws -> T? {
+        return try channel.receive()
     }
 
-    if event == FDW_ERR {
-        throw PollError.failure
+    @discardableResult
+    public func receiveResult() -> ChannelResult<T>? {
+        return channel.receiveResult()
     }
 
-    return PollEvent(rawValue: Int(event))
+    public func makeIterator() -> FallibleChannelGenerator<T> {
+        return FallibleChannelGenerator(channel: self)
+    }
+
+    public func close() {
+        channel.close()
+    }
+
+    func registerReceive(_ clause: UnsafeMutableRawPointer, index: Int) {
+        return channel.registerReceive(clause, index: index)
+    }
+
+    func getResultFromBuffer() -> ChannelResult<T>? {
+        return channel.getResultFromBuffer()
+    }
 }

@@ -1,4 +1,4 @@
-// SendingChannel.swift
+// Poller.swift
 //
 // The MIT License (MIT)
 //
@@ -22,22 +22,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class SendingChannel<T> {
-    private let channel: Channel<T>
+import CLibvenice
+import C7
 
-    internal init(_ channel: Channel<T>) {
-        self.channel = channel
+public typealias FileDescriptor = Int32
+
+public enum PollError : Error {
+    case timeout
+    case failure
+}
+
+public struct PollEvent : OptionSet {
+    public let rawValue: Int
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
     }
 
-    public func send(_ value: T) {
-        return channel.send(value)
+    public static let read  = PollEvent(rawValue: Int(FDW_IN))
+    public static let write = PollEvent(rawValue: Int(FDW_OUT))
+}
+
+/// Polls file descriptor for events
+public func poll(_ fileDescriptor: FileDescriptor, events: PollEvent, deadline: Double = .never) throws -> PollEvent {
+    let event = mill_fdwait(fileDescriptor, Int32(events.rawValue), deadline.int64milliseconds, "pollFileDescriptor")
+
+    if event == 0 {
+        throw PollError.timeout
     }
 
-    internal func send(_ value: T, clause: UnsafeMutablePointer<Void>, index: Int) {
-        return channel.send(value, clause: clause, index: index)
+    if event == FDW_ERR {
+        throw PollError.failure
     }
 
-    public var closed: Bool {
-        return channel.closed
-    }
+    return PollEvent(rawValue: Int(event))
 }
