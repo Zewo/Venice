@@ -25,10 +25,10 @@
 import C7
 
 public final class Ticker {
-    private let internalChannel = Channel<Void>()
+    private let internalChannel = Channel<UInt64>()
     private var stopped: Bool = false
 
-    public var channel: ReceivingChannel<Void> {
+    public var channel: ReceivingChannel<UInt64> {
         return internalChannel.receivingChannel
     }
 
@@ -37,7 +37,7 @@ public final class Ticker {
             while true {
                 nap(for: period)
                 if self.stopped { break }
-                self.internalChannel.send(Void())
+                self.internalChannel.send(UInt64(now()))
             }
         }
     }
