@@ -15,9 +15,9 @@ class TickerTests : XCTestCase {
 	func testTickerResolution() {
 		let ticker = Ticker(period: 10.milliseconds)
 		co {
-			var last: UInt64 = 0
+			var last: Double = 0
 			for time in ticker.channel {
-				XCTAssertTrue(time - last >= UInt64(0))
+				XCTAssertTrue(time - last >= Double(0))
 				last = time
 			}
 		}
