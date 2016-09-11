@@ -42,6 +42,8 @@ let package = Package(
 
 ### `co`
 
+`co` starts execution of a coroutine
+
 ```swift
 func doSomething() {
     print("did something")
@@ -148,19 +150,19 @@ print(messages.receive()!)
 You can get a reference to a channel with receive or send only capabilities.
 
 ```swift
-func receiveOnly(channel: ReceivingChannel<String>) {
+func receiveOnly(from channel: ReceivingChannel<String>) {
     // can only receive from channel
     let string = channel.receive()!
 }
 
-func sendOnly(channel: SendingChannel<String>) {
+func sendOnly(on channel: SendingChannel<String>) {
     // can only send to channel
     channel.send("yo")
 }
 
 let channel = Channel<String>(bufferSize: 1)
-receiveOnly(channel.receivingChannel)
-sendOnly(channel.sendingChannel)
+receiveOnly(from: channel.receivingChannel)
+sendOnly(to: channel.sendingChannel)
 ```
 
 ### `FallibleChannel<Type>`
@@ -193,10 +195,10 @@ let channel = Channel<String>()
 let fallibleChannel = FallibleChannel<String>()
 
 select { when in
-    when.received(valueFrom: channel) { value in
+    when.receive(from: channel) { value in
         print("received \(value)")
     }
-    when.received(resultFrom: fallibleChannel) { result in
+    when.receive(from: fallibleChannel) { result in
         result.success { value in
             print(value)
         }
@@ -204,16 +206,16 @@ select { when in
             print(error)
         }
     }
-    when.sent("value", to: channel) {
+    when.send("value", to: channel) {
         print("sent value")
     }
-    when.sent("value", to: fallibleChannel) {
+    when.send("value", to: fallibleChannel) {
         print("sent value")
     }
-    when.sent(Error(), to: fallibleChannel) {
+    when.send(Error(), to: fallibleChannel) {
         print("threw error")
     }
-    when.timedOut(1.second.fromNow()) {
+    when.timeout(1.second.fromNow()) {
         print("timeout")
     }
     when.otherwise {
@@ -241,10 +243,10 @@ co { channelA?.send("a") }
 co { channelB?.send("b") }
 
 sel { when in
-    when.received(valueFrom: channelA) { value in
+    when.receive(from: channelA) { value in
         print("received \(value) from channel a")
     }
-    when.received(valueFrom: channelB) { value in
+    when.receive(from: channelB) { value in
         print("received \(value) from channel b")
     }
 }
@@ -262,12 +264,12 @@ co(channelB.send("b"))
 select { when in
     if random(0...1) == 0 {
         print("disabled channel b")
-        when.received(valueFrom: channelA) { value in
+        when.receive(from: channelA) { value in
             print("received \(value) from channel a")
         }
     } else {
         print("disabled channel a")
-        when.received(valueFrom: channelB) { value in
+        when.receive(from: channelB) { value in
             print("received \(value) from channel b")
         }
     }
@@ -293,7 +295,7 @@ let outcome = FallibleChannel<String>()
 co(flipCoin(outcome))
 
 forSelect { when, done in
-    when.received(resultFrom: outcome) { result in
+    when.receive(from: outcome) { result in
         result.success { value in
             print(value)
             done()
