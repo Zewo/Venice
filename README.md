@@ -391,14 +391,14 @@ Suppose we have a function call `f(s)`. Here's how we'd call
 that in the usual way, running it synchronously.
 
 ```
-f("direct")
+f(from: "direct")
 ```
 
 To invoke this function in a coroutine, use `co(f(s))`. This new
 coroutine will execute concurrently with the calling one.
 
 ```
-co(f("coroutine"))
+co(f(from: "coroutine"))
 ```
 
 You can also start a coroutine with a closure.
@@ -533,7 +533,7 @@ This is the function we'll run in a coroutine. The
 coroutine that this function's work is done.
 
 ```swift
-func worker(done: Channel<Void>) {
+func worker(_ done: Channel<Void>) {
     print("working...")
     nap(for: 1.second)
     print("done")
@@ -545,7 +545,7 @@ Start a worker coroutine, giving it the channel to
 notify on.
 
 ```swift
-let done = Channel<Bool>(bufferSize: 1)
+let done = Channel<Void>(bufferSize: 1)
 co(worker(done))
 ```
 
@@ -579,8 +579,8 @@ values. It would be a compile-time error to try to
 receive values from this channel.
 
 ```swift
-func ping(pings: SendingChannel<String>, message: String) {
-    pings.send(message)
+func ping(message: String, to pingChannel: SendingChannel<String>) {
+    pingChannel.send(message)
 }
 ```
 
@@ -588,16 +588,16 @@ The `pong` function accepts one channel that only sends values
 (`pings`) and a second that only receives values (`pongs`).
 
 ```swift
-func pong(pings: ReceivingChannel<String>, _ pongs: SendingChannel<String>) {
-    let message = pings.receive()!
-    pongs.send(message)
+func pong(from pingChannel: ReceivingChannel<String>, to pongChannel: SendingChannel<String>) {
+    let message = pingChannel.receive()!
+    pongChannel.send(message)
 }
 
 let pings = Channel<String>(bufferSize: 1)
 let pongs = Channel<String>(bufferSize: 1)
 
-ping(pings.sendingChannel, message: "passed message")
-pong(pings.receivingChannel, pongs.sendingChannel)
+ping(message: "passed message", to: pings.sendingChannel)
+pong(from: pings.receivingChannel, to: pongs.sendingChannel)
 
 print(pongs.receive()!)
 ```
@@ -642,10 +642,10 @@ simultaneously, printing each one as it arrives.
 ```swift
 for _ in 0 ..< 2 {
     select { when in
-        when.received(valueFrom: channel1) { message1 in
+        when.receive(from: channel1) { message1 in
             print("received \(message1)")
         }
-        when.received(valueFrom: channel2) { message2 in
+        when.receive(from: channel2) { message2 in
             print("received \(message2)")
         }
     }
@@ -692,10 +692,10 @@ if the operation takes more than the allowed 1s.
 
 ```swift
 select { when in
-    when.received(resultFrom: channel1) { result in
+    when.receive(from: channel1) { result in
         print(result)
     }
-    when.timedOut(1.second.fromNow()) {
+    when.timeout(1.second.fromNow()) {
         print("timeout 1")
     }
 }
@@ -707,15 +707,15 @@ from `channel2` will succeed and we'll print the result.
 ```swift
 let channel2 = Channel<String>(bufferSize: 1)
 
-after(2.seconds)
+after(2.seconds) {
     channel2.send("result 2")
 }
 
 select { when in
-    when.received(resultFrom: channel2) { result in
+    when.receive(from: channel2) { result in
         print(result)
     }
-    when.timedOut(3.seconds.fromNow()) {
+    when.timeout(3.seconds.fromNow()) {
         print("timeout 2")
     }
 }
@@ -727,7 +727,7 @@ Using this select timeout pattern requires communicating results over channels. 
 good idea in general because other important features are based on channels and select.
 We’ll look at two examples of this next: timers and tickers.
 
-###Output
+### Output
 
 ```
 timeout 1
@@ -754,7 +754,7 @@ it will immediately take the `otherwise` case.
 
 ```swift
 select { when in
-    when.received(valueFrom: messages) { message in
+    when.receive(from: messages) { message in
         print("received message \(message)")
     }
     when.otherwise {
@@ -769,7 +769,7 @@ A non-blocking send works similarly.
 let message = "hi"
 
 select { when in
-    when.sent(message, to: messages) {
+    when.send(message, to: messages) {
         print("sent message \(message)")
     }
     when.otherwise {
@@ -785,10 +785,10 @@ on both `messages` and `signals`.
 
 ```swift
 select { when in
-    when.received(valueFrom: messages) { message in
+    when.receive(from: messages) { message in
         print("received message \(message)")
     }
-    when.received(valueFrom: signals) { signal in
+    when.receive(from: signals) { signal in
         print("received signal \(signal)")
     }
     when.otherwise {
@@ -797,7 +797,7 @@ select { when in
 }
 ```
 
-###Output
+### Output
 
 ```
 no message received
@@ -864,7 +864,7 @@ done.receive()
 
 The idea of closed channels leads naturally to our next example: iterating over channels.
 
-###Output
+### Output
 
 ```
 sent job 1
@@ -908,7 +908,7 @@ for element in queue {
 This example also showed that it’s possible to close a non-empty channel but still have the
 remaining values be received.
 
-###Output
+### Output
 
 ```
 one
@@ -963,7 +963,7 @@ if timer2.stop() {
 The first timer will expire ~2s after we start the program, but the second should be stopped
 before it has a chance to expire.
 
-###Output
+### Output
 
 ```
 Timer 1 expired
@@ -1006,7 +1006,7 @@ print("Ticker stopped")
 
 When we run this program the ticker should tick 3 times before we stop it.
 
-###Output
+### Output
 
 ```
 Tick at 37024098
@@ -1028,7 +1028,7 @@ results on `results`. We'll sleep a second per job to
 simulate an expensive task.
 
 ```swift
-func worker(id: Int, jobs: Channel<Int>, results: Channel<Int>) {
+func worker(_ id: Int, jobs: Channel<Int>, results: Channel<Int>) {
     for job in jobs {
         print("worker \(id) processing job \(job)")
         nap(for: 1.second)
@@ -1078,7 +1078,7 @@ Our running program shows the 9 jobs being executed by various workers. The prog
 takes about 3 seconds despite doing about 9 seconds of total work because there are 3
 workers operating concurrently.
 
-###Output
+### Output
 
 ```
 worker 1 processing job 1
@@ -1107,6 +1107,9 @@ We'll serve these requests off a channel of the
 same name.
 
 ```swift
+import C7  // now()
+import Venice
+
 var requests = Channel<Int>(bufferSize: 5)
 
 for request in 1...5 {
@@ -1131,7 +1134,7 @@ before serving each request, we limit ourselves to
 ```swift
 for request in requests {
     limiter.channel.receive()
-    print("request \(request) \(now)")
+    print("request \(request) \(now())")
 }
 
 print("")
@@ -1144,14 +1147,14 @@ buffering our limiter channel. This `burstyLimiter`
 channel will allow bursts of up to 3 events.
 
 ```swift
-let burstyLimiter = Channel<Int64>(bufferSize: 3)
+let burstyLimiter = Channel<Double>(bufferSize: 3)
 ```
 
 Fill up the channel to represent allowed bursting.
 
 ```swift
 for _ in 0 ..< 3 {
-    burstyLimiter.send(now)
+    burstyLimiter.send(now())
 }
 ```
 
@@ -1180,8 +1183,8 @@ for request in 1... 5 {
 burstyRequests.close()
 
 for request in burstyRequests {
-    burstyLimiter.receive()
-    print("request \(request) \(now)")
+    _ = burstyLimiter.receive()!
+    print("request \(request) \(now())")
 }
 ```
 
@@ -1191,20 +1194,20 @@ as desired.
 For the second batch of requests we serve the first 3 immediately because of the burstable
 rate limiting, then serve the remaining 2 with ~200ms delays each.
 
-###Output
+### Output
 
 ```
-request 1 37221046
-request 2 37221251
-request 3 37221453
-request 4 37221658
-request 5 37221860
+request 1 115342.499394391    |
+request 2 115342.700038433    | received
+request 3 115342.906077737    | each
+request 4 115343.109621681    | 200msec
+request 5 115343.314829288    |
 
-request 1 37221863
-request 2 37221864
-request 3 37221865
-request 4 37222064
-request 5 37222265
+request 1 115343.315044764    | burst
+request 2 115343.315077373    |
+request 3 115343.315102472    |
+request 4 115343.519245856    <- 200msec later
+request 5 115343.719813082    <- 200msec later
 ```
 
 15 - Stateful Coroutines
@@ -1218,6 +1221,30 @@ to the owning coroutine and receive corresponding
 replies. These `ReadOperation` and `WriteOperation` `struct`s
 encapsulate those requests and a way for the owning
 coroutine to respond.
+
+First you need a quick & dirty random function for this example
+
+```swift
+import C7
+import Venice
+
+#if os(Linux)
+	import Glibc
+#else
+	import Darwin.C
+#endif
+
+func random (_ range: ClosedRange<Int>) -> Int {
+	let (min, max) = (Int(range.lowerBound), Int(range.upperBound))
+	#if os(Linux)
+		return min + Int(random() % ((max - min) + 1))
+	#else
+		return min + Int(arc4random_uniform(UInt32(max - min + 1)))
+	#endif
+}
+```
+
+Let's start
 
 ```swift
 struct ReadOperation {
@@ -1262,10 +1289,10 @@ co {
     var state: [Int: Int] = [:]
     while true {
         select { when in
-            when.received(valueFrom: reads) { read in
+            when.receive(from: reads) { read in
                 read.responses.send(state[read.key] ?? 0)
             }
-            when.received(valueFrom: writes) { write in
+            when.receive(from: writes) { write in
                 state[write.key] = write.value
                 write.responses.send()
             }
@@ -1290,7 +1317,7 @@ for _ in 0 ..< 100 {
             )
             reads.send(read)
             read.responses.receive()
-            operations++
+            operations += 1
         }
     }
 }
@@ -1310,7 +1337,7 @@ for _ in 0 ..< 10 {
             )
             writes.send(write)
             write.responses.receive()
-            operations++
+            operations += 1
         }
     }
 }
@@ -1328,7 +1355,7 @@ Finally, capture and report the `operations` count.
 print("operations: \(operations)")
 ```
 
-###Output
+### Output
 
 ```
 operations: 55798
@@ -1338,11 +1365,11 @@ operations: 55798
 ---------------------
 
 ```swift
-func whisper(left: SendingChannel<Int>, _ right: ReceivingChannel<Int>) {
+func whisper(_ left: SendingChannel<Int>, _ right: ReceivingChannel<Int>) {
     left.send(right.receive()! + 1)
 }
 
-let n = 1000
+let n = 100000
 
 let leftmost = Channel<Int>()
 var right = leftmost
@@ -1361,11 +1388,13 @@ co {
 print(leftmost.receive()!)
 ```
 
-###Output
+### Output
 
 ```
-1001
+100001
 ```
+
+(takes between 1 and 2 seconds)
 
 17 - Ping Pong
 --------------
@@ -1387,15 +1416,15 @@ func player(name: String, table: Channel<Ball>) {
 
 let table = Channel<Ball>()
 
-co(player("ping", table: table))
-co(player("pong", table: table))
+co(player(name: "ping", table: table))
+co(player(name: "pong", table: table))
 
 table.send(Ball())
 nap(for: 1.second)
 table.receive()
 ```
 
-###Output
+### Output
 
 ```
 ping 1
@@ -1427,14 +1456,14 @@ func fibonacci(n: Int, channel: Channel<Int>) {
 
 let fibonacciChannel = Channel<Int>(bufferSize: 10)
 
-co(fibonacci(fibonacciChannel.bufferSize, channel: fibonacciChannel))
+co(fibonacci(n: fibonacciChannel.bufferSize, channel: fibonacciChannel))
 
 for n in fibonacciChannel {
     print(n)
 }
 ```
 
-###Output
+### Output
 
 ```
 0
@@ -1457,10 +1486,10 @@ let tick = Ticker(period: 100.milliseconds).channel
 let boom = Timer(deadline: 500.milliseconds.fromNow()).channel
 
 forSelect { when, done in
-    when.received(valueFrom: tick) { _ in
+    when.receive(from: tick) { _ in
         print("tick")
     }
-    when.received(valueFrom: boom) { _ in
+    when.receive(from: boom) { _ in
         print("BOOM!")
         done()
     }
@@ -1471,7 +1500,7 @@ forSelect { when, done in
 }
 ```
 
-###Output
+### Output
 
 ```
     .
@@ -1495,19 +1524,19 @@ BOOM!
 
 ```swift
 extension Collection where Index == Int {
-    func shuffle() -> [Iterator.Element] {
+    func shuffled() -> [Iterator.Element] {
         var list = Array(self)
-        list.shuffleInPlace()
+        list.shuffle()
         return list
     }
 }
 
 extension MutableCollection where Index == Int {
-    mutating func shuffleInPlace() {
+    mutating func shuffle() {
         if count < 2 { return }
 
-        for i in 0..<count - 1 {
-            let j = Int(arc4random_uniform(UInt32(count - i))) + i
+        for i in startIndex..<endIndex - 1 {
+            let j = Int(arc4random_uniform(UInt32(endIndex - i))) + i  // could use random() from example 15
             guard i != j else { continue }
             swap(&self[i], &self[j])
         }
@@ -1531,7 +1560,7 @@ Traverses a tree depth-first,
 sending each Value on a channel.
 
 ```swift
-func walk<T>(tree: Tree<T>?, channel: Channel<T>) {
+func walk<T>(_ tree: Tree<T>?, channel: Channel<T>) {
     if let tree = tree {
         walk(tree.left, channel: channel)
         channel.send(tree.value)
@@ -1580,10 +1609,10 @@ Returns a new, random binary tree
 holding the values 1*k, 2*k, ..., n*k.
 
 ```swift
-func newTree(n n: Int, k: Int) -> Tree<Int> {
+func newTree(n: Int, k: Int) -> Tree<Int> {
     var tree: Tree<Int>?
-    for value in (1...n).shuffle() {
-        tree = insert(tree, value: value * k)
+    for value in Array(1...n).shuffled() {
+        tree = insert(value * k, in: tree)
     }
     return tree!
 }
@@ -1592,13 +1621,13 @@ func newTree(n n: Int, k: Int) -> Tree<Int> {
 Inserts a value in the tree
 
 ```swift
-func insert(tree: Tree<Int>?, value: Int) -> Tree<Int> {
+func insert(_ value: Int, in tree: Tree<Int>?) -> Tree<Int> {
     if let tree = tree {
         if value < tree.value {
-            tree.left = insert(tree.left, value: value)
+            tree.left = insert(value, in: tree.left)
             return tree
         } else {
-            tree.right = insert(tree.right, value: value)
+            tree.right = insert(value, in: tree.right)
             return tree
         }
     } else {
@@ -1614,7 +1643,7 @@ print("Differing values \(tree == newTree(n: 100, k: 2))")
 print("Dissimilar \(tree == newTree(n: 101, k: 2))")
 ```
 
-###Output
+### Output
 
 ```
 Same contents true
@@ -1637,121 +1666,146 @@ func ==(lhs: Item, rhs: Item) -> Bool {
     return lhs.GUID == rhs.GUID
 }
 
+enum Result<T> {
+	case value(T)
+	case failure(Error)
+
+	func success(completionHandler: (T) -> ()) {
+		switch self {
+		case .value(let value):
+			completionHandler(value)
+		case .failure:
+			return
+		}
+	}
+
+	func failed(completionHandler: (Error) -> ()) {
+		switch self {
+		case .value:
+			return
+		case .failure(let error):
+			completionHandler(error)
+		}
+	}
+}
+
 struct FetchResponse {
-    let items: [Item]
-    let nextFetchTime: Int
+	let items: [Item]
+	let nextFetchTime: Int
 }
 
 protocol FetcherType {
-    func fetch() -> Result<FetchResponse>
+	func fetch() -> Result<FetchResponse>
 }
 
 struct Fetcher : FetcherType {
-    let domain: String
+	let domain: String
 
-    func randomItems() -> [Item] {
-        let items = [
-            Item(domain: domain, title: "Swift 2.0", GUID: "1"),
-            Item(domain: domain, title: "Strings in Swift 2", GUID: "2"),
-            Item(domain: domain, title: "Swift-er SDK", GUID: "3"),
-            Item(domain: domain, title: "Swift 2 Apps in the App Store", GUID: "4"),
-            Item(domain: domain, title: "Literals in Playgrounds", GUID: "5"),
-            Item(domain: domain, title: "Swift Open Source", GUID: "6")
-        ]
-        return [Item](items[0..<Int(arc4random_uniform(UInt32(items.count)))])
-    }
+	func randomItems() -> [Item] {
+		let items = [
+			Item(domain: domain, title: "Swift 2.0", GUID: "1"),
+			Item(domain: domain, title: "Strings in Swift 2", GUID: "2"),
+			Item(domain: domain, title: "Swift-er SDK", GUID: "3"),
+			Item(domain: domain, title: "Swift 2 Apps in the App Store", GUID: "4"),
+			Item(domain: domain, title: "Literals in Playgrounds", GUID: "5"),
+			Item(domain: domain, title: "Swift Open Source", GUID: "6")
+		]
+		return [Item](items[0..<Int(arc4random_uniform(UInt32(items.count)))])
+	}
 
-    func fetch() -> Result<FetchResponse> {
-        if arc4random_uniform(2) == 0 {
-            let fetchResponse = FetchResponse(
-                items: randomItems(),
-                nextFetchTime: 300.milliseconds.fromNow()
-            )
-            return Result.Value(fetchResponse)
-        } else {
-            struct Error : ErrorProtocol, CustomStringConvertible { let description: String }
-            return Result.Error(Error(description: "Network Error"))
-        }
-    }
+	func fetch() -> Result<FetchResponse> {
+		if arc4random_uniform(2) == 0 {
+			let fetchResponse = FetchResponse(
+   items: randomItems(),
+   nextFetchTime: Int(300.milliseconds.fromNow())
+   )
+			return Result.value(fetchResponse)
+		} else {
+			struct LocalError : Error, CustomStringConvertible { let description: String }
+			return Result.failure(LocalError(description: "Network Error"))
+		}
+	}
 }
 
 protocol SubscriptionType {
-    var updates: ReceivingChannel<Item> { get }
-    func close() -> ErrorProtocol?
+	var uprint_headerates: ReceivingChannel<Item> { get }
+	func close() -> Error?
 }
 
 struct Subscription : SubscriptionType {
-    let fetcher: FetcherType
-    let items = Channel<Item>()
-    let closing = Channel<Channel<ErrorProtocol?>>()
+	let fetcher: FetcherType
+	let items = Channel<Item>()
+	let closing = Channel<Channel<Error?>>()
 
-    init(fetcher: FetcherType) {
-        self.fetcher = fetcher
-        co(self.getUpdates())
-    }
+	init(fetcher: FetcherType) {
+		self.fetcher = fetcher
+		let copy = self
+		co { copy.getUprint_headerates() }
+	}
 
-    var updates: ReceivingChannel<Item> {
-        return self.items.receivingChannel
-    }
+	var uprint_headerates: ReceivingChannel<Item> {
+		return self.items.receivingChannel
+	}
 
-    func getUpdates() {
-        let maxPendingItems = 10
-        let fetchDone = Channel<Result<FetchResponse>>(bufferSize: 1)
+	func getUprint_headerates() {
+		let maxPendingItems = 10
+		let fetchDone = Channel<Result<FetchResponse>>(bufferSize: 1)
 
-        var lastError: ErrorProtocol?
-        var pendingItems: [Item] = []
-        var seenItems: [Item] = []
-        var nextFetchTime = now
-        var fetching = false
+		var lastError: Error?
+		var pendingItems: [Item] = []
+		var seenItems: [Item] = []
+		var nextFetchTime = now()
+		var fetching = false
 
-        forSelect { when, done in
-            when.received(valueFrom: closing) { errorChannel in
-                errorChannel.send(lastError)
-                self.items.close()
-                done()
-            }
+		forSelect { when, done in
+			when.receive(from: closing) { errorChannel in
+				errorChannel.send(lastError)
+				self.items.close()
+				done()
+			}
 
-            if !fetching && pendingItems.count < maxPendingItems {
-                when.timedOut(nextFetchTime) {
-                    fetching = true
-                    co {
-                        fetchDone.send(self.fetcher.fetch())
-                    }
-                }
-            }
+			if !fetching && pendingItems.count < maxPendingItems {
+				when.timeout(nextFetchTime) {
+					fetching = true
+					co {
+						fetchDone.send(self.fetcher.fetch())
+					}
+				}
+			}
 
-            when.received(resultFrom: fetchDone) { fetchResult in
-                fetching = false
-                fetchResult.success { response in
-                    for item in response.items {
-                        if !seenItems.contains(item) {
-                            pendingItems.append(item)
-                            seenItems.append(item)
-                        }
-                    }
-                    lastError = nil
-                    nextFetchTime = response.nextFetchTime
-                }
-                fetchResult.failure { error in
-                    lastError = error
-                    nextFetchTime = 1.second.fromNow()
-                }
-            }
+			when.receive(from: fetchDone) { fetchResult in
+				fetching = false
+				fetchResult.success { response in
+					for item in response.items {
+						if !seenItems.contains(item) {
+							pendingItems.append(item)
+							seenItems.append(item)
+						}
+					}
+					lastError = nil
+					nextFetchTime = Double(response.nextFetchTime)
+				}
+				fetchResult.failed { error in
+					lastError = error
+					nextFetchTime = 1.second.fromNow()
+				}
+			}
 
-            if let item = pendingItems.first {
-                when.sent(item, to: items) {
-                    pendingItems.removeFirst()
-                }
-            }
-        }
-    }
+			if let item = pendingItems.first {
+				when.send(item, to: items) {
+					pendingItems.removeFirst()
+				}
+			}
+		}
+	}
 
-    func close() -> ErrorProtocol? {
-        let errorChannel = Channel<ErrorProtocol?>()
-        closing.send(errorChannel)
-        return errorChannel.receive()!
-    }
+	func close() -> Error? {
+		let errorChannel = Channel<Error?>()
+		closing.send(errorChannel)
+		return errorChannel.receive()!
+	}
 }
+
 
 let fetcher = Fetcher(domain: "developer.apple.com/swift/blog/")
 let subscription = Subscription(fetcher: fetcher)
@@ -1764,12 +1818,12 @@ after(5.seconds) {
     }
 }
 
-for item in subscription.updates {
+for item in subscription.uprint_headerates {
     print("\(item.domain): \(item.title)")
 }
 ```
 
-###Output
+### Output
 
 ```
 developer.apple.com/swift/blog/: Swift 2.0
