@@ -38,10 +38,9 @@ let package = Package(
 )
 ```
 
-##Usage
+## Usage
 
-`co`
-----
+### `co`
 
 ```swift
 func doSomething() {
@@ -60,8 +59,7 @@ co {
 }
 ```
 
-`nap` and `wake`
-------------------
+### `nap` and `wake`
 
 `nap` stops the execution **for** the given amount of time, while `wake` stops the execution **until** some moment.
 
@@ -80,8 +78,7 @@ wake(at: deadline)
 
 Always use `nap` if you're setting up the time yourself. Use `wake` only if you got `deadline` from somewhere else.
 
-`after`
------------------
+### `after`
 
 `after` runs the coroutine after the specified duration.
 
@@ -98,8 +95,7 @@ co {
 }
 ```
 
-`every`
-------------------
+### `every`
 
 `every` runs the expression in a coroutine periodically. Call done() to leave the loop.
 
@@ -126,8 +122,7 @@ co {
 }
 ```
 
-`Channel<Element>`
----------------
+### `Channel<Element>`
 
 Channels are typed and return optionals wrapping the value or nil if the channel is closed and doesn't have any values left in the buffer.
 
@@ -148,8 +143,7 @@ print(messages.receive()!)
 print(messages.receive()!)
 ```
 
-`ReceivingChannel<Element>` and `SendingChannel<Element>`
----------------------------------------------------
+### `ReceivingChannel<Element>` and `SendingChannel<Element>`
 
 You can get a reference to a channel with receive or send only capabilities.
 
@@ -169,8 +163,7 @@ receiveOnly(channel.receivingChannel)
 sendOnly(channel.sendingChannel)
 ```
 
-`FallibleChannel<Type>`
------------------------
+### `FallibleChannel<Type>`
 
 Fallible channels accept values and errors as well.
 
@@ -191,8 +184,7 @@ do {
 
 ```
 
-`select`
---------
+### `select`
 
 Sometimes `select` can clash with the system libraries function with the same name `select`. To solve this you can call Venice's select with `Venice.select`or with the terser alias `sel`.
 
@@ -283,8 +275,7 @@ select { when in
 
 ```
 
-`forSelect`
------------
+### `forSelect`
 
 A lot of times we need to wrap our select inside a while loop. To make it easier to work with this pattern we can use `forSelect`. `forSelect` will loop until you call `done()`.
 
@@ -315,8 +306,7 @@ forSelect { when, done in
 }
 ```
 
-`Timer`
--------
+### `Timer`
 
 `Timer` sends to its channel when it expires.
 
@@ -333,8 +323,7 @@ if timer.stop() {
 }
 ```
 
-`Ticker`
---------
+### `Ticker`
 
 `Ticker` sends current time to its channel periodically until stopped.
 
@@ -352,8 +341,7 @@ after(2.seconds) {
 }
 ```
 
-`poll`
---------
+### `poll`
 
 `poll` polls a file descriptor for reading or writing optionally timing out if the file descriptor is not ready before the given deadline.
 
@@ -368,13 +356,11 @@ do {
 }
 ```
 
-Examples
-========
+# Examples
 
 The examples 01-15 were taken from [gobyexample](http://gobyexample.com) and translated from Go to Swift using **Venice**.
 
-01 - Coroutines
----------------
+## 01 - Coroutines
 
 A *coroutine* is a lightweight thread of execution.
 
@@ -423,7 +409,7 @@ first, then the interleaved output of the two coroutines. This
 interleaving reflects the coroutines being run concurrently by the
 runtime.
 
-###Output
+### Output
 
 ```
 direct: 0
@@ -438,8 +424,7 @@ coroutine: 3
 done
 ```
 
-02 - Channels
--------------
+## 02 - Channels
 
 *Channels* are the pipes that connect concurrent
 coroutines. You can send values into channels from one
@@ -475,14 +460,13 @@ one coroutine to another via our channel. By default sends and receives block un
 
 Values received from channels are `Optional`s. If you try to get a value from a closed channel with no values left in the buffer, it'll return `nil`. If you are sure that there is a value wraped in the `Optional`, you can use the `!` operator, to force unwrap the optional.
 
-###Output
+### Output
 
 ```
 ping
 ```
 
-03 - Channel Buffering
-----------------------
+## 03 - Channel Buffering
 
 By default channels are *unbuffered*, meaning that they
 will only accept values (`channel.send(value)`) if there is a
@@ -514,15 +498,14 @@ print(messages.receive()!)
 print(messages.receive()!)
 ```
 
-###Output
+### Output
 
 ```
 buffered
 channel
 ```
 
-04 - Channel Synchronization
-----------------------------
+### 04 - Channel Synchronization
 
 We can use channels to synchronize execution
 across coroutines. Here's an example of using a
@@ -559,15 +542,14 @@ done.receive()
 If you remove the `done.receive()` line from this program, the program would
 exit before the worker even started.
 
-###Output
+### Output
 
 ```
 working...
 done
 ```
 
-05 - Channel Directions
------------------------
+## 05 - Channel Directions
 
 When using channels as function parameters, you can
 specify if a channel is meant to only send or receive
@@ -602,14 +584,13 @@ pong(from: pings.receivingChannel, to: pongs.sendingChannel)
 print(pongs.receive()!)
 ```
 
-###Output
+### Output
 
 ```
 passed message
 ```
 
-06 - Select
------------
+## 06 - Select
 
 _Select_ lets you wait on multiple channel
 operations. Combining coroutines and channels with
@@ -656,15 +637,14 @@ We receive the values `"one"` and then `"two"` as expected.
 Note that the total execution time is only ~2 seconds since
 both the 1 and 2 second `nap`s execute concurrently.
 
-###Output
+### Output
 
 ```
 received one
 received two
 ```
 
-07 - Timeouts
--------------
+## 07 - Timeouts
 
 _Timeouts_ are important for programs that connect to
 external resources or that otherwise need to bound
@@ -734,8 +714,7 @@ timeout 1
 result 2
 ```
 
-08 - Non-Blocking Channel Operations
-------------------------------------
+## 08 - Non-Blocking Channel Operations
 
 Basic sends and receives on channels are blocking.
 However, we can use `select` with a `otherwise` clause to
@@ -805,8 +784,7 @@ no message sent
 no activity
 ```
 
-09 - Closing Channels
----------------------
+## 09 - Closing Channels
 
 _Closing_ a channel indicates that no more values
 can be sent to it. This can be useful to communicate
@@ -878,8 +856,7 @@ received job 3
 received all jobs
 ```
 
-10 - Iterating Over Channels
-----------------------------
+## 10 - Iterating Over Channels
 
 We can use `for in` to iterate over
 values received from a channel.
@@ -915,8 +892,7 @@ one
 two
 ```
 
-11 - Timers
------------
+## 11 - Timers
 
 We often want to execute code at some point in the
 future, or repeatedly at some interval. _Timer_ and
@@ -970,8 +946,7 @@ Timer 1 expired
 Timer 2 stopped
 ```
 
-12 - Tickers
-------------
+## 12 - Tickers
 
 Timers are for when you want to do
 something once in the future - _tickers_ are for when
@@ -1015,8 +990,7 @@ Tick at 37025105
 Ticker stopped
 ```
 
-13 - Worker Pools
------------------
+## 13 - Worker Pools
 
 In this example we'll look at how to implement
 a _worker pool_ using coroutines and channels.
@@ -1092,8 +1066,7 @@ worker 2 processing job 8
 worker 3 processing job 9
 ```
 
-14 - Rate Limiting
-------------------
+## 14 - Rate Limiting
 
 _[Rate limiting](http://en.wikipedia.org/wiki/Rate_limiting)_
 is an important mechanism for controlling resource
@@ -1210,8 +1183,7 @@ request 4 115343.519245856    <- 200msec later
 request 5 115343.719813082    <- 200msec later
 ```
 
-15 - Stateful Coroutines
-------------------------
+## 15 - Stateful Coroutines
 
 In this example our state will be owned by a single
 coroutine. This will guarantee that the data is never
@@ -1361,8 +1333,7 @@ print("operations: \(operations)")
 operations: 55798
 ```
 
-16 - Chinese Whispers
----------------------
+## 16 - Chinese Whispers
 
 ```swift
 func whisper(_ left: SendingChannel<Int>, _ right: ReceivingChannel<Int>) {
@@ -1396,8 +1367,7 @@ print(leftmost.receive()!)
 
 (takes between 1 and 2 seconds)
 
-17 - Ping Pong
---------------
+## 17 - Ping Pong
 
 ```swift
 final class Ball {
@@ -1440,8 +1410,7 @@ pong 10
 ping 11
 ```
 
-18 - Fibonacci
---------------
+## 18 - Fibonacci
 
 ```swift
 func fibonacci(n: Int, channel: Channel<Int>) {
@@ -1478,8 +1447,7 @@ for n in fibonacciChannel {
 34
 ```
 
-19 - Bomb
----------
+## 19 - Bomb
 
 ```swift
 let tick = Ticker(period: 100.milliseconds).channel
@@ -1519,8 +1487,7 @@ tick
 BOOM!
 ```
 
-20 - Tree
----------
+## 20 - Tree
 
 ```swift
 extension Collection where Index == Int {
@@ -1652,8 +1619,7 @@ Differing values false
 Dissimilar false
 ```
 
-21 - Fake RSS Client
---------------------
+## 21 - Fake RSS Client
 
 ```swift
 struct Item : Equatable {
