@@ -32,9 +32,9 @@
 import PackageDescription
 
 let package = Package(
-	dependencies: [
-		.Package(url: "https://github.com/VeniceX/Venice.git", majorVersion: 0, minor: 12)
-	]
+    dependencies: [
+        .Package(url: "https://github.com/VeniceX/Venice.git", majorVersion: 0, minor: 12)
+    ]
 )
 ```
 
@@ -92,8 +92,8 @@ after(1.second) {
 // same as
 
 co {
-	nap(for: 1.second)
-	print("yoo")
+    nap(for: 1.second)
+    print("yoo")
 }
 ```
 
@@ -1203,18 +1203,18 @@ import C7
 import Venice
 
 #if os(Linux)
-	import Glibc
+    import Glibc
 #else
-	import Darwin.C
+    import Darwin.C
 #endif
 
 func random (_ range: ClosedRange<Int>) -> Int {
-	let (min, max) = (Int(range.lowerBound), Int(range.upperBound))
-	#if os(Linux)
-		return min + Int(random() % ((max - min) + 1))
-	#else
-		return min + Int(arc4random_uniform(UInt32(max - min + 1)))
-	#endif
+    let (min, max) = (Int(range.lowerBound), Int(range.upperBound))
+    #if os(Linux)
+        return min + Int(random() % ((max - min) + 1))
+    #else
+        return min + Int(arc4random_uniform(UInt32(max - min + 1)))
+    #endif
 }
 ```
 
@@ -1634,144 +1634,121 @@ func ==(lhs: Item, rhs: Item) -> Bool {
     return lhs.GUID == rhs.GUID
 }
 
-enum Result<T> {
-	case value(T)
-	case failure(Error)
-
-	func success(completionHandler: (T) -> ()) {
-		switch self {
-		case .value(let value):
-			completionHandler(value)
-		case .failure:
-			return
-		}
-	}
-
-	func failed(completionHandler: (Error) -> ()) {
-		switch self {
-		case .value:
-			return
-		case .failure(let error):
-			completionHandler(error)
-		}
-	}
-}
-
 struct FetchResponse {
-	let items: [Item]
-	let nextFetchTime: Int
+    let items: [Item]
+    let nextFetchTime: Int
 }
 
 protocol FetcherType {
-	func fetch() -> Result<FetchResponse>
+    func fetch() -> ChannelResult<FetchResponse>
 }
 
 struct Fetcher : FetcherType {
-	let domain: String
+    let domain: String
 
-	func randomItems() -> [Item] {
-		let items = [
-			Item(domain: domain, title: "Swift 2.0", GUID: "1"),
-			Item(domain: domain, title: "Strings in Swift 2", GUID: "2"),
-			Item(domain: domain, title: "Swift-er SDK", GUID: "3"),
-			Item(domain: domain, title: "Swift 2 Apps in the App Store", GUID: "4"),
-			Item(domain: domain, title: "Literals in Playgrounds", GUID: "5"),
-			Item(domain: domain, title: "Swift Open Source", GUID: "6")
-		]
-		return [Item](items[0..<Int(arc4random_uniform(UInt32(items.count)))])
-	}
+    func randomItems() -> [Item] {
+        let items = [
+            Item(domain: domain, title: "Swift 2.0", GUID: "1"),
+            Item(domain: domain, title: "Strings in Swift 2", GUID: "2"),
+            Item(domain: domain, title: "Swift-er SDK", GUID: "3"),
+            Item(domain: domain, title: "Swift 2 Apps in the App Store", GUID: "4"),
+            Item(domain: domain, title: "Literals in Playgrounds", GUID: "5"),
+            Item(domain: domain, title: "Swift Open Source", GUID: "6")
+        ]
+        return [Item](items[0..<Int(arc4random_uniform(UInt32(items.count)))])
+    }
 
-	func fetch() -> Result<FetchResponse> {
-		if arc4random_uniform(2) == 0 {
-			let fetchResponse = FetchResponse(
-   items: randomItems(),
-   nextFetchTime: Int(300.milliseconds.fromNow())
-   )
-			return Result.value(fetchResponse)
-		} else {
-			struct LocalError : Error, CustomStringConvertible { let description: String }
-			return Result.failure(LocalError(description: "Network Error"))
-		}
-	}
+    func fetch() -> ChannelResult<FetchResponse> {
+        if arc4random_uniform(2) == 0 {
+            let fetchResponse = FetchResponse(
+                items: randomItems(),
+                nextFetchTime: Int(300.milliseconds.fromNow())
+            )
+            return ChannelResult.value(fetchResponse)
+        } else {
+            struct LocalError : Error, CustomStringConvertible { let description: String }
+            return ChannelResult.error(LocalError(description: "Network Error"))
+        }
+    }
 }
 
 protocol SubscriptionType {
-	var uprint_headerates: ReceivingChannel<Item> { get }
-	func close() -> Error?
+    var uprint_headerates: ReceivingChannel<Item> { get }
+    func close() -> Error?
 }
 
 struct Subscription : SubscriptionType {
-	let fetcher: FetcherType
-	let items = Channel<Item>()
-	let closing = Channel<Channel<Error?>>()
+    let fetcher: FetcherType
+    let items = Channel<Item>()
+    let closing = Channel<Channel<Error?>>()
 
-	init(fetcher: FetcherType) {
-		self.fetcher = fetcher
-		let copy = self
-		co { copy.getUprint_headerates() }
-	}
+    init(fetcher: FetcherType) {
+        self.fetcher = fetcher
+        let copy = self
+        co { copy.getUpdates() }
+    }
 
-	var uprint_headerates: ReceivingChannel<Item> {
-		return self.items.receivingChannel
-	}
+    var uprint_headerates: ReceivingChannel<Item> {
+        return self.items.receivingChannel
+    }
 
-	func getUprint_headerates() {
-		let maxPendingItems = 10
-		let fetchDone = Channel<Result<FetchResponse>>(bufferSize: 1)
+    func getUpdates() {
+        let maxPendingItems = 10
+        let fetchDone = Channel<ChannelResult<FetchResponse>>(bufferSize: 1)
 
-		var lastError: Error?
-		var pendingItems: [Item] = []
-		var seenItems: [Item] = []
-		var nextFetchTime = now()
-		var fetching = false
+        var lastError: Error?
+        var pendingItems: [Item] = []
+        var seenItems: [Item] = []
+        var nextFetchTime = now()
+        var fetching = false
 
-		forSelect { when, done in
-			when.receive(from: closing) { errorChannel in
-				errorChannel.send(lastError)
-				self.items.close()
-				done()
-			}
+        forSelect { when, done in
+            when.receive(from: closing) { errorChannel in
+                errorChannel.send(lastError)
+                self.items.close()
+                done()
+            }
 
-			if !fetching && pendingItems.count < maxPendingItems {
-				when.timeout(nextFetchTime) {
-					fetching = true
-					co {
-						fetchDone.send(self.fetcher.fetch())
-					}
-				}
-			}
+            if !fetching && pendingItems.count < maxPendingItems {
+                when.timeout(nextFetchTime) {
+                    fetching = true
+                    co {
+                        fetchDone.send(self.fetcher.fetch())
+                    }
+                }
+            }
 
-			when.receive(from: fetchDone) { fetchResult in
-				fetching = false
-				fetchResult.success { response in
-					for item in response.items {
-						if !seenItems.contains(item) {
-							pendingItems.append(item)
-							seenItems.append(item)
-						}
-					}
-					lastError = nil
-					nextFetchTime = Double(response.nextFetchTime)
-				}
-				fetchResult.failed { error in
-					lastError = error
-					nextFetchTime = 1.second.fromNow()
-				}
-			}
+            when.receive(from: fetchDone) { fetchResult in
+                fetching = false
+                fetchResult.success { response in
+                    for item in response.items {
+                        if !seenItems.contains(item) {
+                            pendingItems.append(item)
+                            seenItems.append(item)
+                        }
+                    }
+                    lastError = nil
+                    nextFetchTime = Double(response.nextFetchTime)
+                }
+                fetchResult.failure { error in
+                    lastError = error
+                    nextFetchTime = 1.second.fromNow()
+                }
+            }
 
-			if let item = pendingItems.first {
-				when.send(item, to: items) {
-					pendingItems.removeFirst()
-				}
-			}
-		}
-	}
+            if let item = pendingItems.first {
+                when.send(item, to: items) {
+                    pendingItems.removeFirst()
+                }
+            }
+        }
+    }
 
-	func close() -> Error? {
-		let errorChannel = Channel<Error?>()
-		closing.send(errorChannel)
-		return errorChannel.receive()!
-	}
+    func close() -> Error? {
+        let errorChannel = Channel<Error?>()
+        closing.send(errorChannel)
+        return errorChannel.receive()!
+    }
 }
 
 
