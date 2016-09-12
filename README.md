@@ -1673,7 +1673,7 @@ struct Fetcher : FetcherType {
 }
 
 protocol SubscriptionType {
-    var uprint_headerates: ReceivingChannel<Item> { get }
+    var updates: ReceivingChannel<Item> { get }
     func close() -> Error?
 }
 
@@ -1688,7 +1688,7 @@ struct Subscription : SubscriptionType {
         co { copy.getUpdates() }
     }
 
-    var uprint_headerates: ReceivingChannel<Item> {
+    var updates: ReceivingChannel<Item> {
         return self.items.receivingChannel
     }
 
@@ -1763,7 +1763,7 @@ after(5.seconds) {
     }
 }
 
-for item in subscription.uprint_headerates {
+for item in subscription.updates {
     print("\(item.domain): \(item.title)")
 }
 ```
