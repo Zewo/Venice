@@ -5,7 +5,11 @@ public class TickerTests : XCTestCase {
     func testTicker() {
         let ticker = Ticker(period: 10.milliseconds)
         co {
-            for _ in ticker.channel {}
+            var last: Double = 0
+            for time in ticker.channel {
+                XCTAssertTrue(time - last >= Double(0))
+                last = time
+            }
         }
         nap(for: 100.milliseconds)
         ticker.stop()
