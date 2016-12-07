@@ -378,20 +378,20 @@ func f(from: String) {
 Suppose we have a function call `f(s)`. Here's how we'd call
 that in the usual way, running it synchronously.
 
-```
+```swift
 f(from: "direct")
 ```
 
 To invoke this function in a coroutine, use `co(f(s))`. This new
 coroutine will execute concurrently with the calling one.
 
-```
+```swift
 co(f(from: "coroutine"))
 ```
 
 You can also start a coroutine with a closure.
 
-```
+```swift
 co {
     print("going")
 }
@@ -1082,7 +1082,6 @@ We'll serve these requests off a channel of the
 same name.
 
 ```swift
-import C7  // now()
 import Venice
 
 var requests = Channel<Int>(bufferSize: 5)
@@ -1199,7 +1198,6 @@ coroutine to respond.
 First you need a quick & dirty random function for this example
 
 ```swift
-import C7
 import Venice
 
 #if os(Linux)
