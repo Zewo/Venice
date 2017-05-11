@@ -2,7 +2,10 @@
 
 [![Swift][swift-badge]][swift-url]
 [![License][mit-badge]][mit-url]
-[![Circle CI][circle-badge]][circle-url]
+[![Slack][slack-badge]][slack-url]
+[![Travis][travis-badge]][travis-url]
+[![Codecov][codecov-badge]][codecov-url]
+[![Codebeat][codebeat-badge]][codebeat-url]
 [![Documentation][docs-badge]][docs-url]
 
 **Venice** provides [structured concurrency](http://libdill.org//structured-concurrency.html) and [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) for **Swift**.
@@ -92,8 +95,18 @@ This project is released under the MIT license. See [LICENSE](LICENSE) for detai
 [mit-badge]: https://img.shields.io/badge/License-MIT-blue.svg?style=flat
 [mit-url]: https://tldrlegal.com/license/mit-license
 
-[circle-badge]: https://circleci.com/gh/formbound/Venice/tree/master.svg?style=shield&circle-token=37c65efdaff51b4e719fbb2ebb31ace419543736
-[circle-url]: https://circleci.com/gh/Formbound/Venice
+[slack-image]: http://s13.postimg.org/ybwy92ktf/Slack.png
+[slack-badge]: https://zewo-slackin.herokuapp.com/badge.svg
+[slack-url]: http://slack.zewo.io
 
-[docs-badge]: https://formbound.github.io/Venice/badge.svg
-[docs-url]: https://formbound.github.io/Venice
+[travis-badge]: https://travis-ci.org/Zewo/Venice.svg?branch=master
+[travis-url]: https://travis-ci.org/Zewo/Venice
+
+[codecov-badge]: https://codecov.io/gh/Zewo/Venice/branch/master/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/Zewo/Venice
+
+[codebeat-badge]: https://codebeat.co/badges/bd12fff5-d499-4636-83e6-d4edf89585c5
+[codebeat-url]: https://codebeat.co/projects/github-com-zewo-venice
+
+[docs-badge]: http://www.zewo.io/Venice/badge.svg
+[docs-url]: http://www.zewo.io/Venice/
