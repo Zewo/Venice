@@ -72,7 +72,7 @@ public class CoroutineTests : XCTestCase {
         let deadline = 100.milliseconds.fromNow()
         try Coroutine.wakeUp(deadline)
         let difference = Deadline.now().value - deadline.value
-        XCTAssert(difference > -50.milliseconds.value && difference < 50.milliseconds.value)
+        XCTAssert(difference > -100.milliseconds.value && difference < 100.milliseconds.value)
     }
 
     func testWakeUpOnCanceledCoroutine() throws {
