@@ -13,11 +13,12 @@
 ## Features
 
 - Coroutines
-- Coroutine Cancelation
+- Coroutine cancelation
+- Coroutine groups
 - Channels
-- Receive-only Channels
-- Send-only Channels
-- File Descriptor Polling
+- Receive-only channels
+- Send-only channels
+- File descriptor polling
 
 **Venice** wraps a fork of the C library [libdill](https://github.com/sustrik/libdill).
 
@@ -30,7 +31,7 @@ import PackageDescription
 
 let package = Package(
     dependencies: [
-        .Package(url: "https://github.com/Zewo/Venice.git", majorVersion: 0)
+        .Package(url: "https://github.com/Zewo/Venice.git", majorVersion: 0, minor: 15)
     ]
 )
 ```
