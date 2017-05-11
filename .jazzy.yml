@@ -1,7 +1,7 @@
 module: Venice
 author: Zewo
 author_url: http://zewo.io
-github_url: https://github.com/Formbound/Venice
+github_url: https://github.com/Zewo/Venice
 swift_version: 3.1
 xcodebuild_arguments:
   - -scheme
