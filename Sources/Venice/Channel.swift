@@ -244,3 +244,21 @@ public final class Channel<Type> : Handle {
         }
     }
 }
+
+extension Channel where Type == Void {
+    /// Sends to the channel.
+    ///
+    /// :nodoc:
+    public func send(deadline: Deadline) throws {
+        try send((), deadline: deadline)
+    }
+}
+
+extension Channel.SendOnly where Type == Void {
+    /// Sends to the channel.
+    ///
+    /// :nodoc:
+    public func send(deadline: Deadline) throws {
+        try send((), deadline: deadline)
+    }
+}
