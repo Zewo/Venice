@@ -35,7 +35,7 @@ public class ChannelTests : XCTestCase {
         try channel.cancel()
 
         XCTAssertThrowsError(
-            try channel.send((), deadline: .never),
+            try channel.send(deadline: .never),
             error: VeniceError.canceledChannel
         )
     }
@@ -45,7 +45,7 @@ public class ChannelTests : XCTestCase {
 
         let coroutine = try Coroutine {
             XCTAssertThrowsError(
-                try channel.send((), deadline: .never),
+                try channel.send(deadline: .never),
                 error: VeniceError.canceledCoroutine
             )
         }
@@ -57,7 +57,7 @@ public class ChannelTests : XCTestCase {
         let channel = try Channel<Void>()
         try channel.done()
 
-        XCTAssertThrowsError(try channel.send((), deadline: .never), error: VeniceError.channelIsDone)
+        XCTAssertThrowsError(try channel.send(deadline: .never), error: VeniceError.channelIsDone)
     }
 
     func testSendTimeout() throws {
