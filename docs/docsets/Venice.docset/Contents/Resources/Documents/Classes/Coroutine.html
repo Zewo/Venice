@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Coroutine Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/Coroutine" class="dashAnchor"></a>
+    <a title="Coroutine Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">Venice Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/Formbound/Venice"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Venice Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        Coroutine Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Coroutines.html">Coroutines</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Coroutine.html">Coroutine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Coroutine/Group.html">– Group</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Channels.html">Channels</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Channel.html">Channel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Channel/SendOnly.html">– SendOnly</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Channel/ReceiveOnly.html">– ReceiveOnly</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../File Descriptors.html">File Descriptors</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/FileDescriptor.html">FileDescriptor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/FileDescriptor/PollEvent.html">– PollEvent</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Time.html">Time</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/Duration.html">Duration</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Deadline.html">Deadline</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Int.html">Int</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Handles.html">Handles</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Handle.html">Handle</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Errors.html">Errors</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/VeniceError.html">VeniceError</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Coroutine</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Coroutine</span> <span class="p">:</span> <span class="kt"><a href="../Classes/Handle.html">Handle</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>Lightweight coroutine.</p>
+
+<p>Launching coroutines and switching between them is extremely fast.
+It requires only a few machine instructions.
+This makes coroutines a suitable basic flow control mechanism,
+like the <code>if</code> or <code>while</code> keywords, which have comparable performance.</p>
+
+<p>Coroutines have one big limitation, though: All coroutines run on a single
+CPU core. If you want to take advantage of multiple cores, you have to launch
+multiple threads or processes, presumably as many of them as there are CPU cores
+on your machine.</p>
+
+<p>Coroutines are scheduled cooperatively. What that means is that a coroutine has to
+explicitly yield control of the CPU to allow a different coroutine to run.
+In a typical scenario, this is done transparently to the user: When a coroutine
+invokes a function that would block (such as <code>Coroutine.wakeUp</code>, <code>fileDescriptor.poll</code>, <code>channel.send</code> or <code>channel.receive</code>),
+the CPU is automatically yielded.
+However, if a coroutine runs without calling any blocking functions, it may hold
+the CPU forever. For these cases, the <code>Coroutine.yield</code> function can be used to manually relinquish
+the CPU to other coroutines manually.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Venice9CoroutinecFzT4bodyFzT_T__S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(body:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Venice9CoroutinecFzT4bodyFzT_T__S0_">init(body:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Launches a coroutine that executes the closure passed as argument.
+The coroutine is executed concurrently, and its lifetime may exceed the lifetime
+of the caller.</p>
+<h2 id='example' class='heading'>Example:</h2>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">coroutine</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Coroutine</span> <span class="p">{</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+
+<span class="k">try</span> <span class="n">coroutine</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
+</code></pre>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>The following errors might be thrown:</p>
+<h4 id='veniceerror-canceled' class='heading'>VeniceError.canceled</h4>
+
+<p>Thrown when the operation is performed within a canceled coroutine.</p>
+<h4 id='veniceerror-outofmemory' class='heading'>VeniceError.outOfMemory</h4>
+
+<p>Thrown when the system doesn&rsquo;t have enough memory to perform the operation.</p>
+<h4 id='veniceerror-unexpectederror' class='heading'>VeniceError.unexpectedError</h4>
+
+<p>Thrown when an unexpected error occurs.
+This should never happen in the regular flow of an application.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Body of the newly created coroutine.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC6Venice9Coroutine5yieldFzT_T_"></a>
+                    <a name="//apple_ref/swift/Method/yield()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC6Venice9Coroutine5yieldFzT_T_">yield()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Explicitly passes control to other coroutines.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">yield</span><span class="p">()</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC6Venice9Coroutine6wakeUpFzVS_8DeadlineT_"></a>
+                    <a name="//apple_ref/swift/Method/wakeUp(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC6Venice9Coroutine6wakeUpFzVS_8DeadlineT_">wakeUp(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wakes up at deadline.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">wakeUp</span><span class="p">(</span><span class="n">_</span> <span class="nv">deadline</span><span class="p">:</span> <span class="kt"><a href="../Structs/Deadline.html">Deadline</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:CC6Venice9Coroutine5Group"></a>
+                    <a name="//apple_ref/swift/Class/Group" class="dashAnchor"></a>
+                    <a class="token" href="#/s:CC6Venice9Coroutine5Group">Group</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Coroutine groups are useful for canceling multiple coroutines at the
+same time.</p>
+<h2 id='example' class='heading'>Example:</h2>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">group</span> <span class="o">=</span> <span class="kt">Coroutine</span><span class="o">.</span><span class="kt">Group</span><span class="p">(</span><span class="nv">minimumCapacity</span><span class="p">:</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="k">try</span> <span class="n">group</span><span class="o">.</span><span class="n">addCoroutine</span> <span class="p">{</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+
+<span class="k">try</span> <span class="n">group</span><span class="o">.</span><span class="n">addCoroutine</span> <span class="p">{</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+
+<span class="c1">// all coroutines in the group will be canceled</span>
+<span class="k">try</span> <span class="n">group</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
+</code></pre>
+
+                        <a href="../Classes/Coroutine/Group.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Group</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2017 <a class="link" href="http://zewo.io" target="_blank" rel="external">Zewo</a>. All rights reserved. (Last updated: 2017-05-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

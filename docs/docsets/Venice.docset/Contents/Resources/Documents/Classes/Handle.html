@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Handle Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/Handle" class="dashAnchor"></a>
+    <a title="Handle Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">Venice Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/Formbound/Venice"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Venice Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        Handle Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Coroutines.html">Coroutines</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Coroutine.html">Coroutine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Coroutine/Group.html">– Group</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Channels.html">Channels</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Channel.html">Channel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Channel/SendOnly.html">– SendOnly</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Channel/ReceiveOnly.html">– ReceiveOnly</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../File Descriptors.html">File Descriptors</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/FileDescriptor.html">FileDescriptor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/FileDescriptor/PollEvent.html">– PollEvent</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Time.html">Time</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/Duration.html">Duration</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Deadline.html">Deadline</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Int.html">Int</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Handles.html">Handles</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Handle.html">Handle</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Errors.html">Errors</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/VeniceError.html">VeniceError</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Handle</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Handle</span></code></pre>
+
+                </div>
+              </div>
+            <p>Representation of a Venice resource.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Venice6Handle6cancelFzT_T_"></a>
+                    <a name="//apple_ref/swift/Method/cancel()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Venice6Handle6cancelFzT_T_">cancel()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Cancels the handle.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <p><code>cancel</code> guarantees that all associated resources are deallocated.
+However, it does not guarantee that the handle&rsquo;s work will have been fully finished.
+For example, outbound network data may not be flushed.</p>
+
+</div>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>The following errors might be thrown:</p>
+<h4 id='veniceerror-canceledchannel' class='heading'>VeniceError.canceledChannel</h4>
+
+<p>Thrown when the operation is performed on a canceled channel.</p>
+<h4 id='veniceerror-unexpectederror' class='heading'>VeniceError.unexpectedError</h4>
+
+<p>Thrown when an unexpected error occurs.
+This should never happen in the regular flow of an application.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">cancel</span><span class="p">()</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2017 <a class="link" href="http://zewo.io" target="_blank" rel="external">Zewo</a>. All rights reserved. (Last updated: 2017-05-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

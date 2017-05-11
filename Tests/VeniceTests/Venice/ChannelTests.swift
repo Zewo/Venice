@@ -1,5 +1,5 @@
 import XCTest
-@testable import Venice
+import Venice
 
 struct Fou {
     let bar: Int
@@ -7,235 +7,387 @@ struct Fou {
 }
 
 public class ChannelTests : XCTestCase {
-    func testReceiverWaitsForSender() {
-        let channel = Channel<Int>()
-        co {
-            yield
-            channel.send(333)
+    func testCreationOnCanceledCoroutine() throws {
+        let coroutine = try Coroutine {
+            try Coroutine.yield()
+            XCTAssertThrowsError(try Channel<Void>(), error: VeniceError.canceledCoroutine)
         }
-        XCTAssert(channel.receive() == 333)
+
+        try coroutine.cancel()
     }
 
-    func testSenderWaitsForReceiver() {
-        let channel = Channel<Int>()
-        co {
-            channel.send(444)
-        }
-        XCTAssert(channel.receive() == 444)
+    func testDoneOnCanceledChannel() throws {
+        let channel = try Channel<Void>()
+        try channel.cancel()
+
+        XCTAssertThrowsError(try channel.done(), error: VeniceError.canceledChannel)
     }
 
-    func testSendingChannel() {
-        let channel = Channel<Int>()
-        func send(_ channel: SendingChannel<Int>) {
-            channel.send(888)
-        }
-        co(send(channel.sendingChannel))
-        XCTAssert(channel.receive() == 888)
+    func testDoneOnDoneChannel() throws {
+        let channel = try Channel<Void>()
+        try channel.done()
+
+        XCTAssertThrowsError(try channel.done(), error: VeniceError.channelIsDone)
     }
 
-    func testReceivingChannel() {
-        let channel = Channel<Int>()
-        func receive(_ channel: ReceivingChannel<Int>) {
-            XCTAssert(channel.receive() == 999)
-        }
-        co {
-            channel.send(999)
-        }
-        receive(channel.receivingChannel)
+    func testSendOnCanceledChannel() throws {
+        let channel = try Channel<Void>()
+        try channel.cancel()
+
+        XCTAssertThrowsError(
+            try channel.send((), deadline: .never),
+            error: VeniceError.canceledChannel
+        )
     }
 
-    func testTwoSimultaneousSenders() {
-        let channel = Channel<Int>()
-        co {
-            channel.send(888)
+    func testSendOnCanceledCoroutine() throws {
+        let channel = try Channel<Void>()
+
+        let coroutine = try Coroutine {
+            XCTAssertThrowsError(
+                try channel.send((), deadline: .never),
+                error: VeniceError.canceledCoroutine
+            )
         }
-        co {
-            channel.send(999)
-        }
-        XCTAssert(channel.receive() == 888)
-        yield
-        XCTAssert(channel.receive() == 999)
+
+        try coroutine.cancel()
     }
 
-    func testTwoSimultaneousReceivers() {
-        let channel = Channel<Int>()
-        co {
-            XCTAssert(channel.receive() == 333)
-        }
-        co {
-            XCTAssert(channel.receive() == 444)
-        }
-        channel.send(333)
-        channel.send(444)
+    func testSendOnDoneChannel() throws {
+        let channel = try Channel<Void>()
+        try channel.done()
+
+        XCTAssertThrowsError(try channel.send((), deadline: .never), error: VeniceError.channelIsDone)
     }
 
-    func testTypedChannels() {
-        let stringChannel = Channel<String>()
-        co {
-            stringChannel.send("yo")
+    func testSendTimeout() throws {
+        let channel = try Channel<Int>()
+
+        XCTAssertThrowsError(try channel.send(111, deadline: .immediately), error: VeniceError.timeout)
+
+        let coroutine = try Coroutine {
+            try channel.send(222, deadline: .never)
         }
-        XCTAssert(stringChannel.receive() == "yo")
 
-        let fooChannel = Channel<Fou>()
-        co {
-            fooChannel.send(Fou(bar: 555, baz: 222))
+        XCTAssertEqual(try channel.receive(deadline: .never), 222)
+        try coroutine.cancel()
+    }
+
+    func testDoubleSendTimeout() throws {
+        let channel = try Channel<Int>()
+
+        let coroutine1 = try Coroutine {
+            XCTAssertThrowsError(
+                try channel.send(111, deadline: 50.milliseconds.fromNow()),
+                error: VeniceError.timeout
+            )
         }
-        let foo = fooChannel.receive()
-        XCTAssert(foo?.bar == 555 && foo?.baz == 222)
+
+        let coroutine2 = try Coroutine {
+            XCTAssertThrowsError(
+                try channel.send(222, deadline: 50.milliseconds.fromNow()),
+                error: VeniceError.timeout
+            )
+        }
+
+        try Coroutine.wakeUp(100.milliseconds.fromNow())
+
+        let coroutine3 = try Coroutine {
+            try channel.send(333, deadline: .never)
+        }
+
+        XCTAssertEqual(try channel.receive(deadline: .never), 333)
+
+        try coroutine1.cancel()
+        try coroutine2.cancel()
+        try coroutine3.cancel()
     }
 
-    func testMessageBuffering() {
-        let channel = Channel<Int>(bufferSize: 2)
-        channel.send(222)
-        channel.send(333)
-        XCTAssert(channel.receive() == 222)
-        XCTAssert(channel.receive() == 333)
-        channel.send(444)
-        XCTAssert(channel.receive() == 444)
-        channel.send(555)
-        channel.send(666)
-        XCTAssert(channel.receive() == 555)
-        XCTAssert(channel.receive() == 666)
+    func testReceiveOnCanceledChannel() throws {
+        let channel = try Channel<Void>()
+        try channel.cancel()
+
+        XCTAssertThrowsError(
+            try channel.receive(deadline: .never),
+            error: VeniceError.canceledChannel
+        )
     }
 
-    func testSimpleChannelClose() {
-        let channel1 = Channel<Int>()
-        channel1.close()
-        XCTAssert(channel1.receive() == nil)
-        XCTAssert(channel1.receive() == nil)
-        XCTAssert(channel1.receive() == nil)
+    func testReceiveOnCanceledCoroutine() throws {
+        let channel = try Channel<Void>()
 
-        let channel2 = Channel<Int>(bufferSize: 10)
-        channel2.close()
-        XCTAssert(channel2.receive() == nil)
-        XCTAssert(channel2.receive() == nil)
-        XCTAssert(channel2.receive() == nil)
+        let coroutine = try Coroutine {
+            XCTAssertThrowsError(
+                try channel.receive(deadline: .never),
+                error: VeniceError.canceledCoroutine
+            )
+        }
 
-        let channel3 = Channel<Int>(bufferSize: 10)
-        channel3.send(999)
-        channel3.close()
-        XCTAssert(channel3.receive() == 999)
-        XCTAssert(channel3.receive() == nil)
-        XCTAssert(channel3.receive() == nil)
-
-        let channel4 = Channel<Int>(bufferSize: 1)
-        channel4.send(222)
-        channel4.close()
-        XCTAssert(channel4.receive() == 222)
-        XCTAssert(channel4.receive() == nil)
-        XCTAssert(channel4.receive() == nil)
+        try coroutine.cancel()
     }
 
-    func testChannelCloseUnblocks() {
-        let channel1 = Channel<Int>()
-        let channel2 = Channel<Int>()
-        co {
-            co {
-                XCTAssert(channel1.receive() == nil)
-                channel2.send(0)
+    func testReceiveOnDoneChannel() throws {
+        let channel = try Channel<Void>()
+        try channel.done()
+
+        XCTAssertThrowsError(
+            try channel.receive(deadline: .never),
+            error: VeniceError.channelIsDone
+        )
+    }
+
+    func testReceiveTimeout() throws {
+        let channel = try Channel<Int>()
+
+        XCTAssertThrowsError(
+            try channel.receive(deadline: .immediately),
+            error: VeniceError.timeout
+        )
+
+        let coroutine = try Coroutine {
+            XCTAssertEqual(try channel.receive(deadline: .never), 222)
+        }
+
+        try channel.send(222, deadline: .never)
+        try coroutine.cancel()
+    }
+
+    func testReceiverWaitsForSender() throws {
+        let channel = try Channel<Int>()
+
+        let coroutine = try Coroutine {
+            XCTAssertEqual(try channel.receive(deadline: .never), 333)
+        }
+
+        try channel.send(333, deadline: .never)
+        try coroutine.cancel()
+    }
+
+    func testSenderWaitsForReceiver() throws {
+        let channel = try Channel<Int>()
+
+        let coroutine = try Coroutine {
+            try channel.send(444, deadline: .never)
+        }
+
+        XCTAssertEqual(try channel.receive(deadline: .never), 444)
+        try coroutine.cancel()
+    }
+
+    func testSendingChannel() throws {
+        let channel = try Channel<Int>()
+
+        func send(to channel: Channel<Int>.SendOnly) throws {
+            try channel.send(111, deadline: .never)
+        }
+
+        let coroutine = try Coroutine {
+            try send(to: channel.sendOnly)
+        }
+
+        XCTAssertEqual(try channel.receive(deadline: .never), 111)
+        try coroutine.cancel()
+    }
+
+    func testSendErrorToSendingChannel() throws {
+        let channel = try Channel<Int>()
+
+        func send(to channel: Channel<Int>.SendOnly) throws {
+            try channel.send(VeniceError.unexpectedError, deadline: .never)
+        }
+
+        let coroutine = try Coroutine {
+            try send(to: channel.sendOnly)
+        }
+
+        XCTAssertThrowsError(try channel.receive(deadline: .never), error: VeniceError.unexpectedError)
+
+        try coroutine.cancel()
+    }
+
+    func testDoneOnDoneSendingChannel() throws {
+        let channel = try Channel<Void>()
+        let sending = channel.sendOnly
+
+        try channel.done()
+
+        XCTAssertThrowsError(try sending.done(), error: VeniceError.channelIsDone)
+    }
+
+    func testReceivingChannel() throws {
+        let channel = try Channel<Int>()
+
+        func receive(_ channel: Channel<Int>.ReceiveOnly) {
+            XCTAssertEqual(try channel.receive(deadline: .never), 999)
+        }
+
+        let coroutine = try Coroutine {
+            try channel.send(999, deadline: .never)
+        }
+
+        receive(channel.receiveOnly)
+        try coroutine.cancel()
+    }
+
+    func testDoneOnDoneReceivingChannel() throws {
+        let channel = try Channel<Void>()
+        let receiving = channel.receiveOnly
+
+        try channel.done()
+
+        XCTAssertThrowsError(try receiving.done(), error: VeniceError.channelIsDone)
+    }
+
+    func testTwoSimultaneousSenders() throws {
+        let channel = try Channel<Int>()
+
+        let coroutine1 = try Coroutine {
+            try channel.send(888, deadline: .never)
+        }
+
+        let coroutine2 = try Coroutine {
+            try channel.send(999, deadline: .never)
+        }
+
+        XCTAssertEqual(try channel.receive(deadline: .never), 888)
+        XCTAssertEqual(try channel.receive(deadline: .never), 999)
+
+        try coroutine1.cancel()
+        try coroutine2.cancel()
+    }
+
+    func testTwoSimultaneousReceivers() throws {
+        let channel = try Channel<Int>()
+
+        let coroutine1 = try Coroutine {
+            XCTAssertEqual(try channel.receive(deadline: .never), 333)
+        }
+
+        let coroutine2 = try Coroutine {
+            XCTAssertEqual(try channel.receive(deadline: .never), 444)
+        }
+
+        try channel.send(333, deadline: .never)
+        try channel.send(444, deadline: .never)
+
+        try coroutine1.cancel()
+        try coroutine2.cancel()
+    }
+
+    func testTypedChannels() throws {
+        let stringChannel = try Channel<String>()
+
+        let coroutine1 = try Coroutine {
+            try stringChannel.send("yo", deadline: .never)
+        }
+
+        XCTAssertEqual(try stringChannel.receive(deadline: .never), "yo")
+
+        let fooChannel = try Channel<Fou>()
+
+        let coroutine2 = try Coroutine {
+            try fooChannel.send(Fou(bar: 555, baz: 222), deadline: .never)
+        }
+
+        let foo = try fooChannel.receive(deadline: .never)
+        XCTAssertEqual(foo.bar, 555)
+        XCTAssertEqual(foo.baz, 222)
+
+        try coroutine1.cancel()
+        try coroutine2.cancel()
+    }
+
+    func testDoneChannelUnblocks() throws {
+        let channel1 = try Channel<Int>()
+        let channel2 = try Channel<Int>()
+
+        let coroutine1 = try Coroutine {
+            XCTAssertThrowsError(
+                try channel1.receive(deadline: .never),
+                error: VeniceError.channelIsDone
+            )
+
+            try channel2.send(0, deadline: .never)
+        }
+
+        let coroutine2 = try Coroutine {
+            XCTAssertThrowsError(
+                try channel1.receive(deadline: .never),
+                error: VeniceError.channelIsDone
+            )
+
+            try channel2.send(0, deadline: .never)
+        }
+
+        try channel1.done()
+
+        XCTAssertEqual(try channel2.receive(deadline: .never), 0)
+        XCTAssertEqual(try channel2.receive(deadline: .never), 0)
+
+        try coroutine1.cancel()
+        try coroutine2.cancel()
+    }
+
+    func testTenThousandWhispers() throws {
+        self.measure {
+            do {
+                let numberOfWhispers = 10_000
+                let whispers = Coroutine.Group(minimumCapacity: numberOfWhispers)
+
+                let leftmost = try Channel<Int>()
+
+                var right = leftmost
+                var left = leftmost
+
+                for _ in 0 ..< numberOfWhispers {
+                    right = try Channel<Int>()
+
+                    try whispers.addCoroutine {
+                        try left.send(right.receive(deadline: .never) + 1, deadline: .never)
+                    }
+
+                    left = right
+                }
+
+                let starter = try Coroutine {
+                    try right.send(1, deadline: .never)
+                }
+
+                XCTAssertEqual(try leftmost.receive(deadline: .never), numberOfWhispers + 1)
+
+                try starter.cancel()
+                try whispers.cancel()
+            } catch {
+                XCTFail()
             }
-            co {
-                XCTAssert(channel1.receive() == nil)
-                channel2.send(0)
-            }
         }
-        channel1.close()
-        XCTAssert(channel2.receive() == 0)
-        XCTAssert(channel2.receive() == 0)
-    }
-
-    func testBlockedSenderAndItemInTheChannel() {
-        let channel = Channel<Int>(bufferSize: 1)
-        channel.send(1)
-        co {
-            channel.send(2)
-        }
-        XCTAssert(channel.receive() == 1)
-        XCTAssert(channel.receive() == 2)
-    }
-
-    func testPanicWhenSendingToChannelDeadlocks() {
-        // These work on Xcode locally but not on Travis
-#if Xcode
-//        let pid = fork()
-//        XCTAssert(pid >= 0)
-//        if pid == 0 {
-//            alarm(1)
-//            let channel = Channel<Int>()
-//            signal(SIGABRT) { _ in
-//                _exit(0)
-//            }
-//            channel.send(42)
-//            XCTFail()
-//        }
-//        var exitCode: Int32 = 0
-//        XCTAssert(waitpid(pid, &exitCode, 0) != 0)
-//        XCTAssert(exitCode == 0)
-#endif
-    }
-
-    func testPanicWhenReceivingFromChannelDeadlocks() {
-        // These work on Xcode locally but not on Travis
-#if Xcode
-//        let pid = fork()
-//        XCTAssert(pid >= 0)
-//        if pid == 0 {
-//            alarm(1)
-//            let channel = Channel<Int>()
-//            signal(SIGABRT) { _ in
-//                _exit(0)
-//            }
-//            channel.receive()
-//            XCTFail()
-//        }
-//        var exitCode: Int32 = 0
-//        XCTAssert(waitpid(pid, &exitCode, 0) != 0)
-//        XCTAssert(exitCode == 0)
-#endif
-    }
-
-    func testChannelIteration() {
-        let channel =  Channel<Int>(bufferSize: 2)
-        channel.send(555)
-        channel.send(555)
-        channel.close()
-        for value in channel {
-            XCTAssert(value == 555)
-        }
-    }
-
-    func testReceivingChannelIteration() {
-        let channel =  Channel<Int>(bufferSize: 2)
-        channel.send(444)
-        channel.send(444)
-        func receive(_ channel: ReceivingChannel<Int>) {
-            channel.close()
-            for value in channel {
-                XCTAssert(value == 444)
-            }
-        }
-        receive(channel.receivingChannel)
     }
 }
 
 extension ChannelTests {
     public static var allTests: [(String, (ChannelTests) -> () throws -> Void)] {
         return [
+            ("testCreationOnCanceledCoroutine", testCreationOnCanceledCoroutine),
+            ("testDoneOnCanceledChannel", testDoneOnCanceledChannel),
+            ("testDoneOnDoneChannel", testDoneOnDoneChannel),
+            ("testSendOnCanceledChannel", testSendOnCanceledChannel),
+            ("testSendOnCanceledCoroutine", testSendOnCanceledCoroutine),
+            ("testSendOnDoneChannel", testSendOnDoneChannel),
+            ("testSendTimeout", testSendTimeout),
+            ("testReceiveOnCanceledChannel", testReceiveOnCanceledChannel),
+            ("testReceiveOnCanceledCoroutine", testReceiveOnCanceledCoroutine),
+            ("testReceiveOnDoneChannel", testReceiveOnDoneChannel),
+            ("testReceiveTimeout", testReceiveTimeout),
             ("testReceiverWaitsForSender", testReceiverWaitsForSender),
             ("testSenderWaitsForReceiver", testSenderWaitsForReceiver),
             ("testSendingChannel", testSendingChannel),
+            ("testDoneOnDoneSendingChannel", testDoneOnDoneSendingChannel),
             ("testReceivingChannel", testReceivingChannel),
             ("testTwoSimultaneousSenders", testTwoSimultaneousSenders),
             ("testTwoSimultaneousReceivers", testTwoSimultaneousReceivers),
             ("testTypedChannels", testTypedChannels),
-            ("testMessageBuffering", testMessageBuffering),
-            ("testSimpleChannelClose", testSimpleChannelClose),
-            ("testChannelCloseUnblocks", testChannelCloseUnblocks),
-            ("testBlockedSenderAndItemInTheChannel", testBlockedSenderAndItemInTheChannel),
-            ("testPanicWhenSendingToChannelDeadlocks", testPanicWhenSendingToChannelDeadlocks),
-            ("testPanicWhenReceivingFromChannelDeadlocks", testPanicWhenReceivingFromChannelDeadlocks),
-            ("testChannelIteration", testChannelIteration),
-            ("testReceivingChannelIteration", testReceivingChannelIteration),
+            ("testDoneChannelUnblocks", testDoneChannelUnblocks),
+            ("testTenThousandWhispers", testTenThousandWhispers),
         ]
     }
 }

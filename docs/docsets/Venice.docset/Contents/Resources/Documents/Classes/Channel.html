@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Channel Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/Channel" class="dashAnchor"></a>
+    <a title="Channel Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">Venice Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/Formbound/Venice"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Venice Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        Channel Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Coroutines.html">Coroutines</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Coroutine.html">Coroutine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Coroutine/Group.html">– Group</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Channels.html">Channels</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Channel.html">Channel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Channel/SendOnly.html">– SendOnly</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Channel/ReceiveOnly.html">– ReceiveOnly</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../File Descriptors.html">File Descriptors</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/FileDescriptor.html">FileDescriptor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/FileDescriptor/PollEvent.html">– PollEvent</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Time.html">Time</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/Duration.html">Duration</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Deadline.html">Deadline</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Int.html">Int</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Handles.html">Handles</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Handle.html">Handle</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Errors.html">Errors</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/VeniceError.html">VeniceError</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Channel</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">Channel</span><span class="o">&lt;</span><span class="k">Type</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="../Classes/Handle.html">Handle</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>A channel is a synchronization primitive.</p>
+<h1 id='threads' class='heading'>Threads</h1>
+
+<p>You can use Venice in multi-threaded programs.
+However, individual threads are strictly separated.
+You may think of each thread as a separate process.</p>
+
+<p>In particular, a coroutine created in a thread will
+be executed in that same thread, and it will never
+migrate to a different one.</p>
+
+<p>In a similar manner, a handle, such as a channel or
+a coroutine handle, created in one thread cannot be
+used in a different thread.</p>
+<h2 id='example' class='heading'>Example:</h2>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">channel</span> <span class="o">=</span> <span class="kt">Channel</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">()</span>
+
+<span class="k">let</span> <span class="nv">coroutine</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Coroutine</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="n">channel</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="nv">deadline</span><span class="p">:</span> <span class="mi">1</span><span class="o">.</span><span class="n">second</span><span class="o">.</span><span class="nf">fromNow</span><span class="p">())</span>
+<span class="p">}</span>
+
+<span class="k">let</span> <span class="nv">theAnswer</span> <span class="o">=</span> <span class="k">try</span> <span class="n">channel</span><span class="o">.</span><span class="nf">receive</span><span class="p">(</span><span class="nv">deadline</span><span class="p">:</span> <span class="mi">1</span><span class="o">.</span><span class="n">second</span><span class="o">.</span><span class="nf">fromNow</span><span class="p">())</span>
+<span class="k">try</span> <span class="n">coroutine</span><span class="o">.</span><span class="nf">close</span><span class="p">()</span>
+</code></pre>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Venice7ChannelcFzT_GS0_x_"></a>
+                    <a name="//apple_ref/swift/Method/init()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Venice7ChannelcFzT_GS0_x_">init()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a channel</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <p>A channel is a synchronization primitive, not a container.
+It doesn&rsquo;t store any items.</p>
+
+</div>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>The following errors might be thrown:</p>
+<h4 id='veniceerror-canceled' class='heading'>VeniceError.canceled</h4>
+
+<p>Thrown when the operation is performed within a canceled coroutine.</p>
+<h4 id='veniceerror-outofmemory' class='heading'>VeniceError.outOfMemory</h4>
+
+<p>Thrown when the system doesn&rsquo;t have enough memory to perform the operation.</p>
+<h4 id='veniceerror-unexpectederror' class='heading'>VeniceError.unexpectedError</h4>
+
+<p>Thrown when an unexpected error occurs.
+This should never happen in the regular flow of an application.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">()</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6Venice7Channel8sendOnlyGCS0_8SendOnlyx__"></a>
+                    <a name="//apple_ref/swift/Property/sendOnly" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6Venice7Channel8sendOnlyGCS0_8SendOnlyx__">sendOnly</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Reference to the channel which can only send.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">sendOnly</span><span class="p">:</span> <span class="kt"><a href="../Classes/Channel/SendOnly.html">SendOnly</a></span> <span class="o">=</span> <span class="kt"><a href="../Classes/Channel/SendOnly.html">SendOnly</a></span><span class="p">(</span><span class="k">self</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6Venice7Channel11receiveOnlyGCS0_11ReceiveOnlyx__"></a>
+                    <a name="//apple_ref/swift/Property/receiveOnly" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6Venice7Channel11receiveOnlyGCS0_11ReceiveOnlyx__">receiveOnly</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Reference to the channel which can only receive.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">receiveOnly</span><span class="p">:</span> <span class="kt"><a href="../Classes/Channel/ReceiveOnly.html">ReceiveOnly</a></span> <span class="o">=</span> <span class="kt"><a href="../Classes/Channel/ReceiveOnly.html">ReceiveOnly</a></span><span class="p">(</span><span class="k">self</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Venice7Channel4sendFzTx8deadlineVS_8Deadline_T_"></a>
+                    <a name="//apple_ref/swift/Method/send(_:deadline:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Venice7Channel4sendFzTx8deadlineVS_8Deadline_T_">send(_:deadline:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Sends a value to the channel.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">send</span><span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="k">Type</span><span class="p">,</span> <span class="nv">deadline</span><span class="p">:</span> <span class="kt"><a href="../Structs/Deadline.html">Deadline</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Venice7Channel4sendFzTPs5Error_8deadlineVS_8Deadline_T_"></a>
+                    <a name="//apple_ref/swift/Method/send(_:deadline:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Venice7Channel4sendFzTPs5Error_8deadlineVS_8Deadline_T_">send(_:deadline:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Sends an error to the channel.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">send</span><span class="p">(</span><span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">,</span> <span class="nv">deadline</span><span class="p">:</span> <span class="kt"><a href="../Structs/Deadline.html">Deadline</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Venice7Channel7receiveFzT8deadlineVS_8Deadline_x"></a>
+                    <a name="//apple_ref/swift/Method/receive(deadline:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Venice7Channel7receiveFzT8deadlineVS_8Deadline_x">receive(deadline:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Receives a value from channel.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">@discardableResult</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">receive</span><span class="p">(</span><span class="nv">deadline</span><span class="p">:</span> <span class="kt"><a href="../Structs/Deadline.html">Deadline</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="k">Type</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Venice7Channel4doneFzT_T_"></a>
+                    <a name="//apple_ref/swift/Method/done()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Venice7Channel4doneFzT_T_">done()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Mark the channel as done.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <p>When a channel is marked as done it cannot receive or send anymore.</p>
+
+</div>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>The following errors might be thrown:</p>
+<h4 id='veniceerror-canceledchannel' class='heading'>VeniceError.canceledChannel</h4>
+
+<p>Thrown when the operation is performed on a canceled channel.</p>
+<h4 id='veniceerror-channelisdone' class='heading'>VeniceError.channelIsDone</h4>
+
+<p>Thrown when the operation is performed on an done channel.</p>
+<h4 id='veniceerror-unexpectederror' class='heading'>VeniceError.unexpectedError</h4>
+
+<p>Thrown when an unexpected error occurs.
+This should never happen in the regular flow of an application.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">done</span><span class="p">()</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:CC6Venice7Channel8SendOnly"></a>
+                    <a name="//apple_ref/swift/Class/SendOnly" class="dashAnchor"></a>
+                    <a class="token" href="#/s:CC6Venice7Channel8SendOnly">SendOnly</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Send-only reference to an existing channel.</p>
+<h2 id='example' class='heading'>Example:</h2>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">channel</span> <span class="o">=</span> <span class="kt">Channel</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">()</span>
+
+<span class="kd">func</span> <span class="nf">send</span><span class="p">(</span><span class="n">to</span> <span class="nv">channel</span><span class="p">:</span> <span class="kt">Channel</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;.</span><span class="kt">SendOnly</span><span class="p">)</span> <span class="k">throws</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="n">channel</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="nv">deadline</span><span class="p">:</span> <span class="mi">1</span><span class="o">.</span><span class="n">second</span><span class="o">.</span><span class="nf">fromNow</span><span class="p">())</span>
+<span class="p">}</span>
+
+<span class="k">try</span> <span class="nf">send</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="n">channel</span><span class="o">.</span><span class="n">sendOnly</span><span class="p">)</span>
+</code></pre>
+
+                        <a href="../Classes/Channel/SendOnly.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">SendOnly</span> <span class="p">:</span> <span class="kt"><a href="../Classes/Handle.html">Handle</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:CC6Venice7Channel11ReceiveOnly"></a>
+                    <a name="//apple_ref/swift/Class/ReceiveOnly" class="dashAnchor"></a>
+                    <a class="token" href="#/s:CC6Venice7Channel11ReceiveOnly">ReceiveOnly</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Receive-only reference to an existing channel.</p>
+<h2 id='example' class='heading'>Example:</h2>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">channel</span> <span class="o">=</span> <span class="kt">Channel</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">()</span>
+
+<span class="kd">func</span> <span class="nf">receive</span><span class="p">(</span><span class="n">from</span> <span class="nv">channel</span><span class="p">:</span> <span class="kt">Channel</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;.</span><span class="kt">ReceiveOnly</span><span class="p">)</span> <span class="k">throws</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">value</span> <span class="o">=</span> <span class="k">try</span> <span class="n">channel</span><span class="o">.</span><span class="nf">receive</span><span class="p">(</span><span class="nv">deadline</span><span class="p">:</span> <span class="mi">1</span><span class="o">.</span><span class="n">second</span><span class="o">.</span><span class="nf">fromNow</span><span class="p">())</span>
+<span class="p">}</span>
+
+<span class="k">try</span> <span class="nf">receive</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="n">channel</span><span class="o">.</span><span class="n">receiveOnly</span><span class="p">)</span>
+</code></pre>
+
+                        <a href="../Classes/Channel/ReceiveOnly.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">ReceiveOnly</span> <span class="p">:</span> <span class="kt"><a href="../Classes/Handle.html">Handle</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2017 <a class="link" href="http://zewo.io" target="_blank" rel="external">Zewo</a>. All rights reserved. (Last updated: 2017-05-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

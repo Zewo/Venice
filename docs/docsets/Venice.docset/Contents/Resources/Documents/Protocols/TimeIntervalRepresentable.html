@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>TimeIntervalRepresentable Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/TimeIntervalRepresentable" class="dashAnchor"></a>
+    <a title="TimeIntervalRepresentable Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">Venice Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/Formbound/Venice"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Venice Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        TimeIntervalRepresentable Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Coroutines.html">Coroutines</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Coroutine.html">Coroutine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/CoroutineGroup.html">CoroutineGroup</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Channels.html">Channels</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Channel.html">Channel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Channel/SendOnly.html">– SendOnly</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Channel/ReceiveOnly.html">– ReceiveOnly</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../File Descriptor Polling.html">File Descriptor Polling</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../File Descriptor Polling.html#/s:6Venice14FileDescriptor">FileDescriptor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../File Descriptor Polling.html#/s:F6Venice4pollFzTVs5Int325eventOS_9PollEvent8deadlineVs5Int64_T_">poll(_:event:deadline:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../File Descriptor Polling.html#/s:F6Venice5cleanFVs5Int32T_">clean(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/PollEvent.html">PollEvent</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Yielding.html">Yielding</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Yielding.html#/s:F6Venice5yieldFzT_T_">yield()</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Sleeping.html">Sleeping</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Sleeping.html#/s:F6Venice6wakeUpFzVs5Int64T_">wakeUp(_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Time.html">Time</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Time.html#/s:F6Venice3nowFT_Vs5Int64">now()</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Time.html#/s:6Venice8Deadline">Deadline</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Deadline.html">Deadline</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Time.html#/s:6Venice12TimeInterval">TimeInterval</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/TimeIntervalRepresentable.html">TimeIntervalRepresentable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Int.html">Int</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Handles.html">Handles</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Handle.html">Handle</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Errors.html">Errors</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/VeniceError.html">VeniceError</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>TimeIntervalRepresentable</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">TimeIntervalRepresentable</span></code></pre>
+
+                </div>
+              </div>
+            <p>Type that can be represented as a time interval</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vP6Venice25TimeIntervalRepresentable12millisecondsVs5Int64"></a>
+                    <a name="//apple_ref/swift/Property/milliseconds" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vP6Venice25TimeIntervalRepresentable12millisecondsVs5Int64">milliseconds</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Time interval represented in milliseconds</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">milliseconds</span><span class="p">:</span> <span class="kt"><a href="../Time.html#/s:6Venice8Deadline">Deadline</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FE6VenicePS_25TimeIntervalRepresentable7fromNowFT_Vs5Int64"></a>
+                    <a name="//apple_ref/swift/Method/fromNow()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FE6VenicePS_25TimeIntervalRepresentable7fromNowFT_Vs5Int64">fromNow()</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Interval of <code>self</code> from now.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">fromNow</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Time.html#/s:6Venice8Deadline">Deadline</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vE6VenicePS_25TimeIntervalRepresentable11millisecondVs5Int64"></a>
+                    <a name="//apple_ref/swift/Property/millisecond" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vE6VenicePS_25TimeIntervalRepresentable11millisecondVs5Int64">millisecond</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Time interval represented in milliseconds</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">millisecond</span><span class="p">:</span> <span class="kt"><a href="../Time.html#/s:6Venice8Deadline">Deadline</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vE6VenicePS_25TimeIntervalRepresentable7secondsVs5Int64"></a>
+                    <a name="//apple_ref/swift/Property/seconds" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vE6VenicePS_25TimeIntervalRepresentable7secondsVs5Int64">seconds</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Time interval represented in seconds</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">seconds</span><span class="p">:</span> <span class="kt"><a href="../Time.html#/s:6Venice8Deadline">Deadline</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vE6VenicePS_25TimeIntervalRepresentable6secondVs5Int64"></a>
+                    <a name="//apple_ref/swift/Property/second" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vE6VenicePS_25TimeIntervalRepresentable6secondVs5Int64">second</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Time interval represented in seconds</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">second</span><span class="p">:</span> <span class="kt"><a href="../Time.html#/s:6Venice8Deadline">Deadline</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vE6VenicePS_25TimeIntervalRepresentable7minutesVs5Int64"></a>
+                    <a name="//apple_ref/swift/Property/minutes" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vE6VenicePS_25TimeIntervalRepresentable7minutesVs5Int64">minutes</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Time interval represented in minutes</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">minutes</span><span class="p">:</span> <span class="kt"><a href="../Time.html#/s:6Venice8Deadline">Deadline</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vE6VenicePS_25TimeIntervalRepresentable6minuteVs5Int64"></a>
+                    <a name="//apple_ref/swift/Property/minute" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vE6VenicePS_25TimeIntervalRepresentable6minuteVs5Int64">minute</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Time interval represented in minutes</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">minute</span><span class="p">:</span> <span class="kt"><a href="../Time.html#/s:6Venice8Deadline">Deadline</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vE6VenicePS_25TimeIntervalRepresentable5hoursVs5Int64"></a>
+                    <a name="//apple_ref/swift/Property/hours" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vE6VenicePS_25TimeIntervalRepresentable5hoursVs5Int64">hours</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Time interval represented in hours</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">hours</span><span class="p">:</span> <span class="kt"><a href="../Time.html#/s:6Venice8Deadline">Deadline</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vE6VenicePS_25TimeIntervalRepresentable4hourVs5Int64"></a>
+                    <a name="//apple_ref/swift/Property/hour" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vE6VenicePS_25TimeIntervalRepresentable4hourVs5Int64">hour</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Time interval represented in hours</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">hour</span><span class="p">:</span> <span class="kt"><a href="../Time.html#/s:6Venice8Deadline">Deadline</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2017 <a class="link" href="http://zewo.io" target="_blank" rel="external">Zewo</a>. All rights reserved. (Last updated: 2017-05-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

@@ -1,0 +1,5 @@
+module CLibdill {
+    header "CLibdill.h"
+    link "CLibdill"
+    export *
+}
