@@ -89,7 +89,7 @@ In a similar manner, a handle, such as a channel or a coroutine handle, created 
 
 This project is released under the MIT license. See [LICENSE](LICENSE) for details.
 
-[swift-badge]: https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat
+[swift-badge]: https://img.shields.io/badge/Swift-3.1-orange.svg?style=flat
 [swift-url]: https://swift.org
 
 [mit-badge]: https://img.shields.io/badge/License-MIT-blue.svg?style=flat
