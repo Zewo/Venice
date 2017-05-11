@@ -8,7 +8,7 @@ coverage:
 
   ignore:
     - "Tests/.*"
-    - "Sources/CLibdill/.*"
+    - "CLibdill/.*"
 
   notify:
     slack:
