@@ -55,18 +55,18 @@ Venice implements structured concurrency by allowing you to cancel a running cor
 ```swift
 let coroutine = try Coroutine {
     let resource = malloc(1000)
-
+    
     defer {
-         free(resource)
-     }
-
+        free(resource)
+    }
+    
     while true {
-        try wakeUp(100.milliseconds.fromNow())
+        try Coroutine.wakeUp(100.milliseconds.fromNow())
         print(".")
     }
 }
 
-try wakeUp(1.second.fromNow())
+try Coroutine.wakeUp(1.second.fromNow())
 try coroutine.cancel()
 ```
 
