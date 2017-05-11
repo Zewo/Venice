@@ -30,14 +30,14 @@ import PackageDescription
 
 let package = Package(
     dependencies: [
-        .Package(url: "https://github.com/Zewo/Venice.git", majorVersion: 0, minor: X)
+        .Package(url: "https://github.com/Zewo/Venice.git", majorVersion: 0)
     ]
 )
 ```
 
 # Structured Concurrency
 
-Structured concurrency means that lifetimes of concurrent functions are cleanly nested. If coroutine foo launches coroutine bar, then bar must finish before foo finishes.
+Structured concurrency means that lifetimes of concurrent functions are cleanly nested. If coroutine `foo` launches coroutine `bar`, then `bar` must finish before `foo` finishes.
 
 This is not structured concurrency:
 
@@ -75,7 +75,7 @@ try coroutine.cancel()
 
  When a coroutine is being canceled all blocking calls will start to throw `VeniceError.canceledCoroutine`. On one hand, this forces the function to finish quickly (there's not much you can do without blocking functions); on the other hand, it provides an opportunity for cleanup.
 
-In the example above, when `coroutine.cancel` is called the call to `wakeUp` inside the coroutine will throw `VeniceError.canceledCoroutine` and then the `defer` statement will run, thus releasing the memory allocated for `resource`.
+In the example above, when `coroutine.cancel` is called the call to `Coroutine.wakeUp` inside the coroutine will throw `VeniceError.canceledCoroutine` and then the `defer` statement will run, thus releasing the memory allocated for `resource`.
 
 # Threads
 
