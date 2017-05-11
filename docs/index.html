@@ -101,21 +101,25 @@
             
             <h1 id='venice' class='heading'>Venice</h1>
 
-<p><a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat" alt="Swift"></a>
+<p><a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-3.1-orange.svg?style=flat" alt="Swift"></a>
 <a href="https://tldrlegal.com/license/mit-license"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat" alt="License"></a>
-<a href="https://circleci.com/gh/Formbound/Venice"><img src="https://circleci.com/gh/formbound/Venice/tree/master.svg?style=shield&circle-token=37c65efdaff51b4e719fbb2ebb31ace419543736" alt="Circle CI"></a>
-<a href="https://formbound.github.io/Venice"><img src="https://formbound.github.io/Venice/badge.svg" alt="Documentation"></a></p>
+<a href="http://slack.zewo.io"><img src="https://zewo-slackin.herokuapp.com/badge.svg" alt="Slack"></a>
+<a href="https://travis-ci.org/Zewo/Venice"><img src="https://travis-ci.org/Zewo/Venice.svg?branch=master" alt="Travis"></a>
+<a href="https://codecov.io/gh/Zewo/Venice"><img src="https://codecov.io/gh/Zewo/Venice/branch/master/graph/badge.svg" alt="Codecov"></a>
+<a href="https://codebeat.co/projects/github-com-zewo-venice"><img src="https://codebeat.co/badges/bd12fff5-d499-4636-83e6-d4edf89585c5" alt="Codebeat"></a>
+<a href="http://www.zewo.io/Venice/"><img src="http://www.zewo.io/Venice/badge.svg" alt="Documentation"></a></p>
 
 <p><strong>Venice</strong> provides <a href="http://libdill.org//structured-concurrency.html">structured concurrency</a> and <a href="https://en.wikipedia.org/wiki/Communicating_sequential_processes">CSP</a> for <strong>Swift</strong>.</p>
 <h2 id='features' class='heading'>Features</h2>
 
 <ul>
 <li>Coroutines</li>
-<li>Coroutine Cancelation</li>
+<li>Coroutine cancelation</li>
+<li>Coroutine groups</li>
 <li>Channels</li>
-<li>Receive-only Channels</li>
-<li>Send-only Channels</li>
-<li>File Descriptor Polling</li>
+<li>Receive-only channels</li>
+<li>Send-only channels</li>
+<li>File descriptor polling</li>
 </ul>
 
 <p><strong>Venice</strong> wraps a fork of the C library <a href="https://github.com/sustrik/libdill">libdill</a>.</p>
@@ -128,13 +132,13 @@
 
 <span class="k">let</span> <span class="nv">package</span> <span class="o">=</span> <span class="kt">Package</span><span class="p">(</span>
     <span class="nv">dependencies</span><span class="p">:</span> <span class="p">[</span>
-        <span class="o">.</span><span class="kt">Package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/Zewo/Venice.git"</span><span class="p">,</span> <span class="nv">majorVersion</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">minor</span><span class="p">:</span> <span class="kt">X</span><span class="p">)</span>
+        <span class="o">.</span><span class="kt">Package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/Zewo/Venice.git"</span><span class="p">,</span> <span class="nv">majorVersion</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">minor</span><span class="p">:</span> <span class="mi">15</span><span class="p">)</span>
     <span class="p">]</span>
 <span class="p">)</span>
 </code></pre>
 <h1 id='structured-concurrency' class='heading'>Structured Concurrency</h1>
 
-<p>Structured concurrency means that lifetimes of concurrent functions are cleanly nested. If coroutine foo launches coroutine bar, then bar must finish before foo finishes.</p>
+<p>Structured concurrency means that lifetimes of concurrent functions are cleanly nested. If coroutine <code>foo</code> launches coroutine <code>bar</code>, then <code>bar</code> must finish before <code>foo</code> finishes.</p>
 
 <p>This is not structured concurrency:</p>
 
@@ -155,22 +159,22 @@
     <span class="k">let</span> <span class="nv">resource</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
 
     <span class="k">defer</span> <span class="p">{</span>
-         <span class="nf">free</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
-     <span class="p">}</span>
+        <span class="nf">free</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
+    <span class="p">}</span>
 
     <span class="k">while</span> <span class="kc">true</span> <span class="p">{</span>
-        <span class="k">try</span> <span class="nf">wakeUp</span><span class="p">(</span><span class="mi">100</span><span class="o">.</span><span class="n">milliseconds</span><span class="o">.</span><span class="nf">fromNow</span><span class="p">())</span>
+        <span class="k">try</span> <span class="kt">Coroutine</span><span class="o">.</span><span class="nf">wakeUp</span><span class="p">(</span><span class="mi">100</span><span class="o">.</span><span class="n">milliseconds</span><span class="o">.</span><span class="nf">fromNow</span><span class="p">())</span>
         <span class="nf">print</span><span class="p">(</span><span class="s">"."</span><span class="p">)</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="k">try</span> <span class="nf">wakeUp</span><span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="n">second</span><span class="o">.</span><span class="nf">fromNow</span><span class="p">())</span>
+<span class="k">try</span> <span class="kt">Coroutine</span><span class="o">.</span><span class="nf">wakeUp</span><span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="n">second</span><span class="o">.</span><span class="nf">fromNow</span><span class="p">())</span>
 <span class="k">try</span> <span class="n">coroutine</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
 </code></pre>
 
 <p>When a coroutine is being canceled all blocking calls will start to throw <code>VeniceError.canceledCoroutine</code>. On one hand, this forces the function to finish quickly (there&rsquo;s not much you can do without blocking functions); on the other hand, it provides an opportunity for cleanup.</p>
 
-<p>In the example above, when <code>coroutine.cancel</code> is called the call to <code>wakeUp</code> inside the coroutine will throw <code>VeniceError.canceledCoroutine</code> and then the <code>defer</code> statement will run, thus releasing the memory allocated for <code>resource</code>.</p>
+<p>In the example above, when <code>coroutine.cancel</code> is called the call to <code>Coroutine.wakeUp</code> inside the coroutine will throw <code>VeniceError.canceledCoroutine</code> and then the <code>defer</code> statement will run, thus releasing the memory allocated for <code>resource</code>.</p>
 <h1 id='threads' class='heading'>Threads</h1>
 
 <p>You can use Venice in multi-threaded programs. However, individual threads are strictly separated. You may think of each thread as a separate process.</p>
