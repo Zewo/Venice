@@ -6,7 +6,7 @@ os:
 language: generic
 sudo: required
 dist: trusty
-osx_image: xcode8
+osx_image: xcode8.3
 install:
   - eval "$(curl -sL https://raw.githubusercontent.com/Zewo/Zewo/master/Scripts/Travis/install.sh)"
 script:
