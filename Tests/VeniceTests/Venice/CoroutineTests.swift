@@ -109,7 +109,7 @@ public class CoroutineTests : XCTestCase {
     }
 
     func testPollFileDescriptor() throws {
-        let (socket1, socket2) = createSocketPair()
+        let (socket1, socket2) = try createSocketPair()
 
         try socket1.poll(event: .write, deadline: 100.milliseconds.fromNow())
         try socket1.poll(event: .write, deadline: 100.milliseconds.fromNow())
@@ -132,16 +132,15 @@ public class CoroutineTests : XCTestCase {
         XCTAssert(character == 65)
     }
 
-    func testPollInvalidFileDescriptor() throws {
-        let fileDescriptor = FileDescriptor(-1)
+    func testInvalidFileDescriptor() throws {
         XCTAssertThrowsError(
-            try fileDescriptor.poll(event: .write, deadline: .never),
+            try FileDescriptor(-1),
             error: VeniceError.invalidFileDescriptor
         )
     }
 
     func testPollOnCanceledCoroutine() throws {
-        let (socket1, _) = createSocketPair()
+        let (socket1, _) = try createSocketPair()
 
         let coroutine = try Coroutine {
             XCTAssertThrowsError(
@@ -154,7 +153,7 @@ public class CoroutineTests : XCTestCase {
     }
 
     func testFileDescriptorBlockedInAnotherCoroutine() throws {
-        let (socket1, _) = createSocketPair()
+        let (socket1, _) = try createSocketPair()
 
         let coroutine1 = try Coroutine {
             XCTAssertThrowsError(
@@ -175,12 +174,34 @@ public class CoroutineTests : XCTestCase {
     }
 
     func testCleanFileDescriptor() throws {
-        let fileDescriptor = FileDescriptor(STDIN_FILENO)
+        let fileDescriptor = try FileDescriptor(STDIN_FILENO)
         fileDescriptor.clean()
+    }
+    
+    func testDetachFileDescriptor() throws {
+        var sockets = [Int32](repeating: 0, count: 2)
+        
+        #if os(Linux)
+            let result = socketpair(AF_UNIX, Int32(SOCK_STREAM.rawValue), 0, &sockets)
+        #else
+            let result = socketpair(AF_UNIX, SOCK_STREAM, 0, &sockets)
+        #endif
+        
+        XCTAssert(result == 0)
+        
+        let fileDescriptor = try FileDescriptor(sockets[0])
+        let standardInput = fileDescriptor.detach()
+        XCTAssertEqual(standardInput, sockets[0])
+        XCTAssertEqual(fileDescriptor.fileDescriptor, -1)
+        
+        XCTAssertThrowsError(
+            try fileDescriptor.poll(event: .read, deadline: .never),
+            error: VeniceError.invalidFileDescriptor
+        )
     }
 }
 
-func createSocketPair() -> (FileDescriptor, FileDescriptor) {
+func createSocketPair() throws -> (FileDescriptor, FileDescriptor) {
     var sockets = [Int32](repeating: 0, count: 2)
 
     #if os(Linux)
@@ -191,7 +212,7 @@ func createSocketPair() -> (FileDescriptor, FileDescriptor) {
 
     XCTAssert(result == 0)
 
-    return (FileDescriptor(sockets[0]), FileDescriptor(sockets[1]))
+    return try (FileDescriptor(sockets[0]), FileDescriptor(sockets[1]))
 }
 
 extension CoroutineTests {
@@ -205,7 +226,7 @@ extension CoroutineTests {
             ("testWakeUpOnCanceledCoroutine", testWakeUpOnCanceledCoroutine),
             ("testWakeUpWithChannels", testWakeUpWithChannels),
             ("testPollFileDescriptor", testPollFileDescriptor),
-            ("testPollInvalidFileDescriptor", testPollInvalidFileDescriptor),
+            ("testInvalidFileDescriptor", testInvalidFileDescriptor),
             ("testPollOnCanceledCoroutine", testPollOnCanceledCoroutine),
             ("testFileDescriptorBlockedInAnotherCoroutine", testFileDescriptorBlockedInAnotherCoroutine),
             ("testCleanFileDescriptor", testCleanFileDescriptor),

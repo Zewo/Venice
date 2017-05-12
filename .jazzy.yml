@@ -1,3 +1,4 @@
+clean: true
 module: Venice
 author: Zewo
 author_url: http://zewo.io

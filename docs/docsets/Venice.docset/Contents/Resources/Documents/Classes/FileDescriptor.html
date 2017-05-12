@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>FileDescriptor Struct Reference</title>
+    <title>FileDescriptor Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/FileDescriptor" class="dashAnchor"></a>
-    <a title="FileDescriptor Struct Reference"></a>
+    <a name="//apple_ref/swift/Class/FileDescriptor" class="dashAnchor"></a>
+    <a title="FileDescriptor Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">Venice Docs</a> (100% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">Venice Reference</a>
         <img id="carat" src="../img/carat.png" />
-        FileDescriptor Struct Reference
+        FileDescriptor Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -57,10 +57,10 @@
             <a href="../File Descriptors.html">File Descriptors</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Structs/FileDescriptor.html">FileDescriptor</a>
+                <a href="../Classes/FileDescriptor.html">FileDescriptor</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/FileDescriptor/PollEvent.html">– PollEvent</a>
+                <a href="../Classes/FileDescriptor/PollEvent.html">– PollEvent</a>
               </li>
             </ul>
           </li>
@@ -102,7 +102,7 @@
             <h1>FileDescriptor</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">FileDescriptor</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">FileDescriptor</span></code></pre>
 
                 </div>
               </div>
@@ -116,36 +116,9 @@ such as a pipe or network socket.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FV6Venice14FileDescriptorcFVs5Int32S0_"></a>
-                    <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FV6Venice14FileDescriptorcFVs5Int32S0_">init(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Creates a <code>FileDescriptor</code> from a file descriptor handle.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">fileDescriptor</span><span class="p">:</span> <span class="kt">Int32</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV6Venice14FileDescriptor14fileDescriptorVs5Int32"></a>
+                    <a name="/s:vC6Venice14FileDescriptor14fileDescriptorVs5Int32"></a>
                     <a name="//apple_ref/swift/Property/fileDescriptor" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV6Venice14FileDescriptor14fileDescriptorVs5Int32">fileDescriptor</a>
+                    <a class="token" href="#/s:vC6Venice14FileDescriptor14fileDescriptorVs5Int32">fileDescriptor</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -160,7 +133,7 @@ such as a pipe or network socket.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">fileDescriptor</span><span class="p">:</span> <span class="kt">Int32</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">fileDescriptor</span><span class="p">:</span> <span class="kt">Int32</span></code></pre>
 
                         </div>
                       </div>
@@ -170,9 +143,64 @@ such as a pipe or network socket.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FV6Venice14FileDescriptor4pollFzT5eventOS0_9PollEvent8deadlineVS_8Deadline_T_"></a>
+                    <a name="/s:FC6Venice14FileDescriptorcFzVs5Int32S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Venice14FileDescriptorcFzVs5Int32S0_">init(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a <code>FileDescriptor</code> from a file descriptor handle and
+configures it as non-blocking.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>The following errors might be thrown:</p>
+<h4 id='veniceerror-invalidfiledescriptor' class='heading'>VeniceError.invalidFileDescriptor</h4>
+
+<p>Thrown when <code><a href="../Classes/FileDescriptor.html#/s:vC6Venice14FileDescriptor14fileDescriptorVs5Int32">fileDescriptor</a></code> is not an open file descriptor.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">fileDescriptor</span><span class="p">:</span> <span class="kt">Int32</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fileDescriptor</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Previously opened file descriptor.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Venice14FileDescriptor4pollFzT5eventOS0_9PollEvent8deadlineVS_8Deadline_T_"></a>
                     <a name="//apple_ref/swift/Method/poll(event:deadline:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FV6Venice14FileDescriptor4pollFzT5eventOS0_9PollEvent8deadlineVS_8Deadline_T_">poll(event:deadline:)</a>
+                    <a class="token" href="#/s:FC6Venice14FileDescriptor4pollFzT5eventOS0_9PollEvent8deadlineVS_8Deadline_T_">poll(event:deadline:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -211,7 +239,7 @@ This should never happen in the regular flow of an application.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">poll</span><span class="p">(</span><span class="nv">event</span><span class="p">:</span> <span class="kt"><a href="../Structs/FileDescriptor/PollEvent.html">PollEvent</a></span><span class="p">,</span> <span class="nv">deadline</span><span class="p">:</span> <span class="kt"><a href="../Structs/Deadline.html">Deadline</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">poll</span><span class="p">(</span><span class="nv">event</span><span class="p">:</span> <span class="kt"><a href="../Classes/FileDescriptor/PollEvent.html">PollEvent</a></span><span class="p">,</span> <span class="nv">deadline</span><span class="p">:</span> <span class="kt"><a href="../Structs/Deadline.html">Deadline</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -219,18 +247,6 @@ This should never happen in the regular flow of an application.</p>
                         <h4>Parameters</h4>
                         <table class="graybox">
                           <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>fileDescriptor</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Valid file descriptor to be polled</p>
-                                </div>
-                              </td>
-                            </tr>
                             <tr>
                               <td>
                                 <code>
@@ -268,9 +284,9 @@ Use <code>.never</code> to allow the operation to block forever if needed.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FV6Venice14FileDescriptor5cleanFT_T_"></a>
+                    <a name="/s:FC6Venice14FileDescriptor5cleanFT_T_"></a>
                     <a name="//apple_ref/swift/Method/clean()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FV6Venice14FileDescriptor5cleanFT_T_">clean()</a>
+                    <a class="token" href="#/s:FC6Venice14FileDescriptor5cleanFT_T_">clean()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -284,15 +300,9 @@ Use <code>.never</code> to allow the operation to block forever if needed.</p>
 the file descriptor.</p>
 <div class="aside aside-warning">
     <p class="aside-title">Warning</p>
-    <p><code>clean</code> has to be called before the file descriptor
-is closed. Otherwise the behavior is <strong>undefined</strong>.</p>
-
-</div>
-<div class="aside aside-warning">
-    <p class="aside-title">Warning</p>
-    <p><code>clean</code> has to be called with file descriptors provided by
+    <code>clean</code> has to be called with file descriptors provided by
 third-party libraries, just before returning them back to
-their original owners. Otherwise the behavior is <strong>undefined</strong>.</p>
+their original owners. Otherwise the behavior is <strong>undefined</strong>.
 
 </div>
 
@@ -305,24 +315,52 @@ their original owners. Otherwise the behavior is <strong>undefined</strong>.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>fileDescriptor</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>File descriptor to be cleaned</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Venice14FileDescriptor5closeFzT_T_"></a>
+                    <a name="//apple_ref/swift/Method/close()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Venice14FileDescriptor5closeFzT_T_">close()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Closes a file descriptor, so that it no longer refers to any
+file and may be reused.  Any record locks held on the
+file it was associated with, and owned by the process, are removed
+(regardless of the file descriptor that was used to obtain the lock).</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <p>If <code><a href="../Classes/FileDescriptor.html#/s:vC6Venice14FileDescriptor14fileDescriptorVs5Int32">fileDescriptor</a></code> is the last file descriptor referring to the underlying open
+file description, the resources associated with the
+open file description are freed; if the file descriptor was the last
+reference to a file which has been removed using <code>unlink</code>, the file
+is deleted.</p>
+
+</div>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>The following errors might be thrown:</p>
+<h4 id='veniceerror-invalidfiledescriptor' class='heading'>VeniceError.invalidFileDescriptor</h4>
+
+<p>Thrown when <code><a href="../Classes/FileDescriptor.html#/s:vC6Venice14FileDescriptor14fileDescriptorVs5Int32">fileDescriptor</a></code> is not an open file descriptor.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">close</span><span class="p">()</span> <span class="k">throws</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -330,9 +368,41 @@ their original owners. Otherwise the behavior is <strong>undefined</strong>.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:OV6Venice14FileDescriptor9PollEvent"></a>
+                    <a name="/s:FC6Venice14FileDescriptor6detachFT_Vs5Int32"></a>
+                    <a name="//apple_ref/swift/Method/detach()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Venice14FileDescriptor6detachFT_Vs5Int32">detach()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Detaches the underlying <code><a href="../Classes/FileDescriptor.html#/s:vC6Venice14FileDescriptor14fileDescriptorVs5Int32">fileDescriptor</a></code>.
+After <code>detach</code> any operation will throw an error.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">detach</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Int32</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The underlying file descriptor.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:OC6Venice14FileDescriptor9PollEvent"></a>
                     <a name="//apple_ref/swift/Enum/PollEvent" class="dashAnchor"></a>
-                    <a class="token" href="#/s:OV6Venice14FileDescriptor9PollEvent">PollEvent</a>
+                    <a class="token" href="#/s:OC6Venice14FileDescriptor9PollEvent">PollEvent</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -342,7 +412,7 @@ their original owners. Otherwise the behavior is <strong>undefined</strong>.</p>
                       <div class="abstract">
                         <p>Event used to poll file descriptors for reading or writing.</p>
 
-                        <a href="../Structs/FileDescriptor/PollEvent.html" class="slightly-smaller">See more</a>
+                        <a href="../Classes/FileDescriptor/PollEvent.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -360,7 +430,7 @@ their original owners. Otherwise the behavior is <strong>undefined</strong>.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="http://zewo.io" target="_blank" rel="external">Zewo</a>. All rights reserved. (Last updated: 2017-05-11)</p>
+          <p>&copy; 2017 <a class="link" href="http://zewo.io" target="_blank" rel="external">Zewo</a>. All rights reserved. (Last updated: 2017-05-12)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

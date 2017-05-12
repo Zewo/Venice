@@ -8,14 +8,36 @@ import CLibdill
 
 /// A handle used to access a file or other input/output resource,
 /// such as a pipe or network socket.
-public struct FileDescriptor {
-    /// Creates a `FileDescriptor` from a file descriptor handle.
-    public init(_ fileDescriptor: Int32) {
+public final class FileDescriptor {
+    /// File descriptor handle.
+    public private(set) var fileDescriptor: Int32
+    
+    /// Creates a `FileDescriptor` from a file descriptor handle and
+    /// configures it as non-blocking.
+    ///
+    /// - Parameters:
+    ///   - fileDescriptor: Previously opened file descriptor.
+    ///
+    /// - Throws: The following errors might be thrown:
+    ///   #### VeniceError.invalidFileDescriptor
+    ///   Thrown when `fileDescriptor` is not an open file descriptor.
+    public init(_ fileDescriptor: Int32) throws {
+        let flags = fcntl(fileDescriptor, F_GETFL, 0)
+        
+        guard flags != -1 else {
+            throw VeniceError.invalidFileDescriptor
+        }
+        
+        guard fcntl(fileDescriptor, F_SETFL, flags | O_NONBLOCK) == 0 else {
+            throw VeniceError.invalidFileDescriptor
+        }
+        
         self.fileDescriptor = fileDescriptor
     }
     
-    /// File descriptor handle.
-    public let fileDescriptor: Int32
+    deinit {
+        try? close()
+    }
     
     /// Waits for the file descriptor to become either readable/writable
     /// or to get into an error state. Either case leads to a successful return
@@ -23,7 +45,6 @@ public struct FileDescriptor {
     /// read/write operation on the file descriptor.
     ///
     /// - Parameters:
-    ///   - fileDescriptor: Valid file descriptor to be polled
     ///   - event:
     ///     Use `.read` to wait for the file descriptor to become readable.
     ///     Use `.write` to wait for the file descriptor to become writable.
@@ -76,16 +97,56 @@ public struct FileDescriptor {
     /// the file descriptor.
     ///
     /// - Warning:
-    /// `clean` has to be called before the file descriptor
-    /// is closed. Otherwise the behavior is **undefined**.
-    ///
-    /// - Warning:
     /// `clean` has to be called with file descriptors provided by
     /// third-party libraries, just before returning them back to
     /// their original owners. Otherwise the behavior is **undefined**.
-    /// - Parameter fileDescriptor: File descriptor to be cleaned
     public func clean() {
+        guard fileDescriptor != -1 else {
+            return
+        }
+        
         fdclean(fileDescriptor)
+    }
+    
+    /// Closes a file descriptor, so that it no longer refers to any
+    /// file and may be reused.  Any record locks held on the
+    /// file it was associated with, and owned by the process, are removed
+    /// (regardless of the file descriptor that was used to obtain the lock).
+    ///
+    /// - Warning:
+    /// If `fileDescriptor` is the last file descriptor referring to the underlying open
+    /// file description, the resources associated with the
+    /// open file description are freed; if the file descriptor was the last
+    /// reference to a file which has been removed using `unlink`, the file
+    /// is deleted.
+    ///
+    /// - Throws: The following errors might be thrown:
+    ///   #### VeniceError.invalidFileDescriptor
+    ///   Thrown when `fileDescriptor` is not an open file descriptor.
+    public func close() throws {
+        clean()
+        
+        #if os(Linux)
+            guard Glibc.close(fileDescriptor) == 0 else {
+                throw VeniceError.invalidFileDescriptor
+            }
+        #else
+            guard Darwin.close(fileDescriptor) == 0 else {
+                throw VeniceError.invalidFileDescriptor
+            }
+        #endif
+    }
+    
+    /// Detaches the underlying `fileDescriptor`.
+    /// After `detach` any operation will throw an error.
+    ///
+    /// - Returns: The underlying file descriptor.
+    public func detach() -> Int32 {
+        defer {
+            fileDescriptor = -1
+        }
+        
+        return fileDescriptor
     }
     
     /// Event used to poll file descriptors for reading or writing.
