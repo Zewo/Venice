@@ -141,7 +141,9 @@ public final class FileDescriptor {
     /// After `detach` any operation will throw an error.
     ///
     /// - Returns: The underlying file descriptor.
-    public func detach() -> Int32 {
+    @discardableResult public func detach() -> Int32 {
+        clean()
+        
         defer {
             fileDescriptor = -1
         }
