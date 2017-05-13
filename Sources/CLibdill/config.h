@@ -1,18 +1,20 @@
 /* confdefs.h */
 #define PACKAGE_NAME "libdill"
 #define PACKAGE_TARNAME "libdill"
-#define PACKAGE_VERSION "1.0"
-#define PACKAGE_STRING "libdill 1.0"
+#define PACKAGE_VERSION "1.6"
+#define PACKAGE_STRING "libdill 1.6"
 #define PACKAGE_BUGREPORT "libmill@freelists.org"
 #define PACKAGE_URL "http://libdill.org/"
 #define PACKAGE "libdill"
-#define VERSION "1.0"
+#define VERSION "1.6"
 #define DILL_THREADS 1
 #define DILL_PTHREAD 1
 #define HAVE_POSIX_MEMALIGN 1
 #define HAVE_MPROTECT 1
-#define DILL_NO_EPOLL 1
+#define HAVE_CLOCK_GETTIME 1
 #define HAVE_KQUEUE 1
+#define HAVE_KQUEUE 1
+#define HAVE_STRUCT_SOCKADDR_SA_LEN 1
 #define STDC_HEADERS 1
 #define HAVE_SYS_TYPES_H 1
 #define HAVE_SYS_STAT_H 1

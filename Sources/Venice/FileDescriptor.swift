@@ -56,12 +56,12 @@ public final class FileDescriptor {
     /// - Throws: The following errors might be thrown:
     ///   #### VeniceError.invalidFileDescriptor
     ///   Thrown when the operation is performed on an invalid file descriptor.
-    ///   #### VeniceError.canceledCoroutine
-    ///   Thrown when the operation is performed within a canceled coroutine.
+    ///   #### VeniceError.canceled
+    ///   Thrown when the operation is performed within a closed coroutine.
     ///   #### VeniceError.fileDescriptorBlockedInAnotherCoroutine
     ///   Thrown when another coroutine is already blocked on `poll` with this file descriptor.
-    ///   #### VeniceError.timeout
-    ///   Thrown when the operation times out.
+    ///   #### VeniceError.deadlineReached
+    ///   Thrown when the operation reaches the deadline.
     ///   #### VeniceError.unexpectedError
     ///   Thrown when an unexpected error occurs.
     ///   This should never happen in the regular flow of an application.
@@ -80,11 +80,11 @@ public final class FileDescriptor {
             case EBADF:
                 throw VeniceError.invalidFileDescriptor
             case ECANCELED:
-                throw VeniceError.canceledCoroutine
-            case EEXIST:
+                throw VeniceError.canceled
+            case EBUSY:
                 throw VeniceError.fileDescriptorBlockedInAnotherCoroutine
             case ETIMEDOUT:
-                throw VeniceError.timeout
+                throw VeniceError.deadlineReached
             default:
                 throw VeniceError.unexpectedError
             }

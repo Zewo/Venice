@@ -23,10 +23,19 @@
 #ifndef DILL_KQUEUE_INCLUDED
 #define DILL_KQUEUE_INCLUDED
 
+#include "cr.h"
+#include "list.h"
+
 struct dill_fdinfo;
+
+struct dill_fdclause {
+   struct dill_clause cl;
+   struct dill_fdinfo *fdinfo;
+};
 
 struct dill_ctx_pollset {
     int kfd;
+    int nfdinfos;
     struct dill_fdinfo *fdinfos;
     uint32_t changelist;
 };

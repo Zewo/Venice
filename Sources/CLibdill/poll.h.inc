@@ -25,7 +25,15 @@
 
 #include <poll.h>
 
+#include "cr.h"
+#include "list.h"
+
 struct dill_fdinfo;
+
+struct dill_fdclause {
+   struct dill_clause cl;
+   struct dill_fdinfo *fdinfo;
+};
 
 struct dill_ctx_pollset {
     /* Pollset, as used by poll(2). */
@@ -33,6 +41,7 @@ struct dill_ctx_pollset {
     struct pollfd *pollset;
     /* Info about all file descriptors.
        File descriptors are used as indices in this array. */
+    int nfdinfos;
     struct dill_fdinfo *fdinfos;
 };
 

@@ -1,6 +1,6 @@
 /*
 
-  Copyright (c) 2015 Martin Sustrik
+  Copyright (c) 2017 Martin Sustrik
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"),
@@ -22,9 +22,23 @@
 
 */
 
-#include <stddef.h>
+#ifndef DILL_IOL_INCLUDED
+#define DILL_IOL_INCLUDED
 
-#include "slist.h"
+#include <sys/uio.h>
 
-/* After removing item from a list, next points here. */
-struct dill_slist_item dill_slist_item_none = {NULL};
+#include "libdill.h"
+
+/* Checks whether iolist is valid. Returns 0 in case of success or -1 in case
+   of error. Fills in number of buffers in the list and overall number of bytes
+   if requested. */
+int iol_check(struct iolist *first, struct iolist *last,
+    size_t *nbufs, size_t *nbytes);
+
+/* Copy the iolist into an iovec. Iovec must have at least as much elements
+   as the iolist, otherwise undefined behaviour ensues. The data buffers
+   as such are not affected by this operation .*/
+void iol_toiov(struct iolist *first, struct iovec *iov);
+
+#endif
+

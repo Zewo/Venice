@@ -25,7 +25,45 @@
 #ifndef DILL_FD_INCLUDED
 #define DILL_FD_INCLUDED
 
-/* Returns maximum possible number of file descriptors. */
-int dill_maxfds(void);
+#include <stdint.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+
+#include "libdill.h"
+
+struct fd_rxbuf {
+    size_t len;
+    size_t pos;
+    uint8_t data[2000];
+};
+
+void fd_initrxbuf(
+    struct fd_rxbuf *rxbuf);
+int fd_unblock(
+    int s);
+int fd_connect(
+    int s,
+    const struct sockaddr *addr,
+    socklen_t addrlen,
+    int64_t deadline);
+int fd_accept(
+    int s,
+    struct sockaddr *addr,
+    socklen_t *addrlen,
+    int64_t deadline);
+int fd_send(
+    int s,
+    struct iolist *first,
+    struct iolist *last,
+    int64_t deadline);
+int fd_recv(
+    int s,
+    struct fd_rxbuf *rxbuf,
+    struct iolist *first,
+    struct iolist *last,
+    int64_t deadline);
+void fd_close(
+    int s);
 
 #endif
+

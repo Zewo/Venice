@@ -1,6 +1,6 @@
 /*
 
-  Copyright (c) 2016 Martin Sustrik
+  Copyright (c) 2017 Martin Sustrik
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"),
@@ -22,9 +22,41 @@
 
 */
 
-#include <stddef.h>
+#include <string.h>
 
-#include "list.h"
+#include "iol.h"
+#include "utils.h"
 
-/* After removing item from a list, prev & next point here. */
-struct dill_list_item dill_list_item_none = {NULL, NULL};
+int iol_check(struct iolist *first, struct iolist *last,
+      size_t *nbufs, size_t *nbytes) {
+    if(dill_slow(!first || !last || last->iol_next)) {
+        errno = EINVAL; return -1;}
+    size_t nbf = 0, nbt = 0, res = 0;
+    struct iolist *it;
+    for(it = first; it; it = it->iol_next) {
+        if(dill_slow(it->iol_rsvd || (!it->iol_next && it != last)))
+            goto error;
+        it->iol_rsvd = 1;
+        nbf++;
+        nbt += it->iol_len;
+    }
+    for(it = first; it; it = it->iol_next) it->iol_rsvd = 0;
+    if(nbufs) *nbufs = nbf;
+    if(nbytes) *nbytes = nbt;
+    return 0;
+error:;
+    struct iolist *it2;
+    for(it2 = first; it2 != it; it2 = it2->iol_next) it->iol_rsvd = 0;
+    errno = EINVAL;
+    return -1;
+}
+
+void iol_toiov(struct iolist *first, struct iovec *iov) {
+    while(first) {
+        iov->iov_base = first->iol_base;
+        iov->iov_len = first->iol_len;
+        ++iov;
+        first = first->iol_next;
+    }
+}
+

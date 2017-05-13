@@ -9,6 +9,10 @@ xcodebuild_arguments:
   - Venice
 
 custom_categories:
+  - name: Handles
+    children:
+    - Handle
+
   - name: Coroutines
     children:
     - Coroutine
@@ -26,10 +30,6 @@ custom_categories:
     - Duration
     - Deadline
     - Int
-
-  - name: Handles
-    children:
-    - Handle
 
   - name: Errors
     children:

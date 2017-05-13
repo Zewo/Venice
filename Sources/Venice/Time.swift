@@ -56,7 +56,7 @@ extension Duration : Equatable {
 public struct Deadline {
     let value: Int64
     
-    fileprivate init(_ deadline: Int64) {
+    init(_ deadline: Int64) {
         self.value = deadline
     }
 

@@ -59,7 +59,7 @@ public final class Channel<Type> : Handle {
     ///
     /// - Throws: The following errors might be thrown:
     ///   #### VeniceError.canceled
-    ///   Thrown when the operation is performed within a canceled coroutine.
+    ///   Thrown when the operation is performed within a closed coroutine.
     ///   #### VeniceError.outOfMemory
     ///   Thrown when the system doesn't have enough memory to perform the operation.
     ///   #### VeniceError.unexpectedError
@@ -71,7 +71,7 @@ public final class Channel<Type> : Handle {
         guard result != -1 else {
             switch errno {
             case ECANCELED:
-                throw VeniceError.canceledCoroutine
+                throw VeniceError.canceled
             case ENOMEM:
                 throw VeniceError.outOfMemory
             default:
@@ -80,10 +80,6 @@ public final class Channel<Type> : Handle {
         }
 
         super.init(handle: result)
-    }
-
-    deinit {
-        try? cancel()
     }
     
     /// Reference to the channel which can only send.
@@ -109,14 +105,14 @@ public final class Channel<Type> : Handle {
         guard result == 0 else {
             switch errno {
             case EBADF:
-                throw VeniceError.canceledChannel
+                throw VeniceError.invalidHandle
             case ECANCELED:
-                throw VeniceError.canceledCoroutine
+                throw VeniceError.canceled
             case EPIPE:
-                throw VeniceError.channelIsDone
+                throw VeniceError.handleIsDone
             case ETIMEDOUT:
                 buffer.remove(node)
-                throw VeniceError.timeout
+                throw VeniceError.deadlineReached
             default:
                 throw VeniceError.unexpectedError
             }
@@ -130,47 +126,19 @@ public final class Channel<Type> : Handle {
         guard result == 0 else {
             switch errno {
             case EBADF:
-                throw VeniceError.canceledChannel
+                throw VeniceError.invalidHandle
             case ECANCELED:
-                throw VeniceError.canceledCoroutine
+                throw VeniceError.canceled
             case EPIPE:
-                throw VeniceError.channelIsDone
+                throw VeniceError.handleIsDone
             case ETIMEDOUT:
-                throw VeniceError.timeout
+                throw VeniceError.deadlineReached
             default:
                 throw VeniceError.unexpectedError
             }
         }
 
         return try buffer.removeFirst().getValue()
-    }
-    
-    /// Mark the channel as done.
-    ///
-    /// - Warning:
-    ///   When a channel is marked as done it cannot receive or send anymore.
-    ///
-    /// - Throws: The following errors might be thrown:
-    ///   #### VeniceError.canceledChannel
-    ///   Thrown when the operation is performed on a canceled channel.
-    ///   #### VeniceError.channelIsDone
-    ///   Thrown when the operation is performed on an done channel.
-    ///   #### VeniceError.unexpectedError
-    ///   Thrown when an unexpected error occurs.
-    ///   This should never happen in the regular flow of an application.
-    public func done() throws {
-        let result = chdone(handle)
-        
-        guard result == 0 else {
-            switch errno {
-            case EBADF:
-                throw VeniceError.canceledChannel
-            case EPIPE:
-                throw VeniceError.channelIsDone
-            default:
-                throw VeniceError.unexpectedError
-            }
-        }
     }
     
     /// Send-only reference to an existing channel.
@@ -203,12 +171,6 @@ public final class Channel<Type> : Handle {
         public func send(_ error: Error, deadline: Deadline) throws {
             try channel.send(error, deadline: deadline)
         }
-        
-        /// Mark the channel as done.
-        /// When a channel is marked as done it cannot receive or send anymore.
-        public func done() throws {
-            try channel.done()
-        }
     }
     
     /// Receive-only reference to an existing channel.
@@ -235,12 +197,6 @@ public final class Channel<Type> : Handle {
         /// Receives a value from channel.
         @discardableResult public func receive(deadline: Deadline) throws -> Type {
             return try channel.receive(deadline: deadline)
-        }
-        
-        /// Mark the channel as done.
-        /// When a channel is marked as done it cannot receive or send anymore.
-        public func done() throws {
-            try channel.done()
         }
     }
 }

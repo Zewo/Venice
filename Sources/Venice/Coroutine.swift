@@ -27,6 +27,16 @@ import CLibdill
 /// However, if a coroutine runs without calling any blocking functions, it may hold
 /// the CPU forever. For these cases, the `Coroutine.yield` function can be used to manually relinquish
 /// the CPU to other coroutines manually.
+///
+/// ## Example:
+///
+/// ```swift
+/// let coroutine = try Coroutine {
+///     ...
+/// }
+///
+/// try coroutine.close()
+/// ```
 public class Coroutine : Handle {
     /// Launches a coroutine that executes the closure passed as argument.
     /// The coroutine is executed concurrently, and its lifetime may exceed the lifetime
@@ -39,7 +49,7 @@ public class Coroutine : Handle {
     ///     ...
     /// }
     ///
-    /// try coroutine.cancel()
+    /// try coroutine.close()
     /// ```
     ///
     /// - Parameters:
@@ -47,7 +57,7 @@ public class Coroutine : Handle {
     ///
     /// - Throws: The following errors might be thrown:
     ///   #### VeniceError.canceled
-    ///   Thrown when the operation is performed within a canceled coroutine.
+    ///   Thrown when the operation is performed within a closed coroutine.
     ///   #### VeniceError.outOfMemory
     ///   Thrown when the system doesn't have enough memory to perform the operation.
     ///   #### VeniceError.unexpectedError
@@ -57,7 +67,7 @@ public class Coroutine : Handle {
         var coroutine = {
             do {
                 try body()
-            } catch VeniceError.canceledCoroutine {
+            } catch VeniceError.canceled {
                 return
             } catch {
                 print(error)
@@ -71,7 +81,7 @@ public class Coroutine : Handle {
         guard result != -1 else {
             switch errno {
             case ECANCELED:
-                throw VeniceError.canceledCoroutine
+                throw VeniceError.canceled
             case ENOMEM:
                 throw VeniceError.outOfMemory
             default:
@@ -81,19 +91,35 @@ public class Coroutine : Handle {
 
         super.init(handle: result)
     }
-
-    deinit {
-        try? cancel()
-    }
     
-    /// Explicitly passes control to other coroutines.
+    /// Explicitly passes control to other coroutines. 
+    /// By calling this function, you give other coroutines a chance to run.
+    ///
+    /// You should consider using `Coroutiner.yield()` when doing lengthy computations
+    /// which don't have natural coroutine switching points.
+    ///
+    /// ## Example:
+    ///
+    /// ```swift
+    /// for _ in 0 ..< 1000000 {
+    ///     expensiveComputation()
+    ///     try Coroutine.yield() // Give other coroutines a chance to run.
+    /// }
+    /// ```
+    ///
+    /// - Throws: The following errors might be thrown:
+    ///   #### VeniceError.canceled
+    ///   Thrown when the operation is performed within a closed coroutine.
+    ///   #### VeniceError.unexpectedError
+    ///   Thrown when an unexpected error occurs.
+    ///   This should never happen in the regular flow of an application.
     public static func yield() throws {
         let result = CLibdill.yield()
         
         guard result == 0 else {
             switch errno {
             case ECANCELED:
-                throw VeniceError.canceledCoroutine
+                throw VeniceError.canceled
             default:
                 throw VeniceError.unexpectedError
             }
@@ -107,14 +133,14 @@ public class Coroutine : Handle {
         guard result == 0 else {
             switch errno {
             case ECANCELED:
-                throw VeniceError.canceledCoroutine
+                throw VeniceError.canceled
             default:
                 throw VeniceError.unexpectedError
             }
         }
     }
     
-    /// Coroutine groups are useful for canceling multiple coroutines at the
+    /// Coroutine groups are useful for closing multiple coroutines at the
     /// same time.
     ///
     /// ## Example:
@@ -129,8 +155,8 @@ public class Coroutine : Handle {
     ///     ...
     /// }
     ///
-    /// // all coroutines in the group will be canceled
-    /// try group.cancel()
+    /// // all coroutines in the group will be closed
+    /// try group.close()
     /// ```
     public class Group {
         private var coroutines: [Int: Coroutine]
@@ -171,8 +197,8 @@ public class Coroutine : Handle {
         ///     ...
         /// }
         ///
-        /// // all coroutines in the group will be canceled
-        /// try group.cancel()
+        /// // all coroutines in the group will be closed
+        /// try group.close()
         /// ```
         ///
         /// - Parameter minimumCapacity: The minimum number of elements that the
@@ -183,7 +209,7 @@ public class Coroutine : Handle {
         }
         
         deinit {
-            try? cancel()
+            try? close()
         }
         
         /// Creates a lightweight coroutine and adds it to the group.
@@ -201,7 +227,7 @@ public class Coroutine : Handle {
         ///
         /// - Throws: The following errors might be thrown:
         ///   #### VeniceError.canceled
-        ///   Thrown when the operation is performed within a canceled coroutine.
+        ///   Thrown when the operation is performed within a closed coroutine.
         ///   #### VeniceError.outOfMemory
         ///   Thrown when the system doesn't have enough memory to perform the operation.
         ///   #### VeniceError.unexpectedError
@@ -230,20 +256,20 @@ public class Coroutine : Handle {
             return coroutine
         }
         
-        /// Cancels all coroutines in the group.
+        /// Closes all coroutines in the group.
         ///
         /// - Warning:
-        /// `cancel` guarantees that all associated resources are deallocated.
+        /// `close` guarantees that all associated resources are deallocated.
         /// However, it does not guarantee that the coroutines' work will have been fully finished.
         /// For example, outbound network data may not be flushed.
         ///
         /// - Throws: The following errors might be thrown:
         ///   #### VeniceError.canceled
-        ///   Thrown when the operation is performed on a canceled coroutine.
+        ///   Thrown when the operation is performed on a closed coroutine.
         ///   #### VeniceError.unexpectedError
         ///   Thrown when an unexpected error occurs.
         ///   This should never happen in the regular flow of an application.
-        public func cancel() throws {
+        public func close() throws {
             removeFinishedCoroutines()
             
             for (id, coroutine) in coroutines {
@@ -251,7 +277,7 @@ public class Coroutine : Handle {
                     coroutines[id] = nil
                 }
                 
-                try coroutine.cancel()
+                try coroutine.close()
             }
         }
         

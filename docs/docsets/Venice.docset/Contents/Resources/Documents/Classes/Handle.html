@@ -29,6 +29,14 @@
       <nav class="sidebar">
         <ul class="nav-groups">
           <li class="nav-group-name">
+            <a href="../Handles.html">Handles</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Handle.html">Handle</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a href="../Coroutines.html">Coroutines</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
@@ -79,14 +87,6 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Handles.html">Handles</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="../Classes/Handle.html">Handle</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
             <a href="../Errors.html">Errors</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
@@ -106,7 +106,7 @@
 
                 </div>
               </div>
-            <p>Representation of a Venice resource.</p>
+            <p>Representation of a Venice resource like <code><a href="../Classes/Coroutine.html">Coroutine</a></code> and <code><a href="../Classes/Channel.html">Channel</a></code>.</p>
 
           </section>
           <section class="section task-group-section">
@@ -115,9 +115,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6Venice6Handle6cancelFzT_T_"></a>
-                    <a name="//apple_ref/swift/Method/cancel()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6Venice6Handle6cancelFzT_T_">cancel()</a>
+                    <a name="/s:FC6Venice6Handle4doneFzT8deadlineVS_8Deadline_T_"></a>
+                    <a name="//apple_ref/swift/Method/done(deadline:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Venice6Handle4doneFzT8deadlineVS_8Deadline_T_">done(deadline:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -125,20 +125,39 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Cancels the handle.</p>
+                        <p>This function is used to inform the handle that there will be no more input.
+This gives it time to finish it&rsquo;s work and possibly inform the user when it is
+safe to close the handle.</p>
+
+<p>For example, in case of TCP protocol handle, hdone sends out a FIN packet.
+However, it does not wait until it is acknowledged by the peer.</p>
 <div class="aside aside-warning">
     <p class="aside-title">Warning</p>
-    <p><code>cancel</code> guarantees that all associated resources are deallocated.
-However, it does not guarantee that the handle&rsquo;s work will have been fully finished.
-For example, outbound network data may not be flushed.</p>
+    After <code>done</code> is called on a handle, any attempts to send more data to the handle
+will result in a <code><a href="../Enums/VeniceError.html#/s:FO6Venice11VeniceError12handleIsDoneFMS0_S0_">VeniceError.handleIsDone</a></code> error.
+
+</div>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <p>Handle implementation may also decide to prevent any further receiving of data
+and return <code><a href="../Enums/VeniceError.html#/s:FO6Venice11VeniceError12handleIsDoneFMS0_S0_">VeniceError.handleIsDone</a></code> error instead.</p>
 
 </div>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     <p>The following errors might be thrown:</p>
-<h4 id='veniceerror-canceledchannel' class='heading'>VeniceError.canceledChannel</h4>
+<h4 id='veniceerror-invalidhandle' class='heading'>VeniceError.invalidHandle</h4>
 
-<p>Thrown when the operation is performed on a canceled channel.</p>
+<p>Thrown when the operation is performed on an invalid handle.</p>
+<h4 id='veniceerror-operationnotsupported' class='heading'>VeniceError.operationNotSupported</h4>
+
+<p>Thrown when the operation is not supported.</p>
+<h4 id='veniceerror-handleisdone' class='heading'>VeniceError.handleIsDone</h4>
+
+<p>Thrown when the operation is performed on an done handle.</p>
+<h4 id='veniceerror-deadlinereached' class='heading'>VeniceError.deadlineReached</h4>
+
+<p>Thrown when the operation reaches the deadline.</p>
 <h4 id='veniceerror-unexpectederror' class='heading'>VeniceError.unexpectedError</h4>
 
 <p>Thrown when an unexpected error occurs.
@@ -151,7 +170,75 @@ This should never happen in the regular flow of an application.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">cancel</span><span class="p">()</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">done</span><span class="p">(</span><span class="nv">deadline</span><span class="p">:</span> <span class="kt"><a href="../Structs/Deadline.html">Deadline</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>deadline</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p><code>deadline</code> is a point in time when the operation should timeout.
+Use the <code>.fromNow()</code> function to get the current point in time.
+Use <code>.immediate</code> if the operation needs to be performed without blocking.
+Use <code>.never</code> to allow the operation to block forever if needed.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Venice6Handle5closeFzT_T_"></a>
+                    <a name="//apple_ref/swift/Method/close()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Venice6Handle5closeFzT_T_">close()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Closes the handle.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <p><code>close</code> guarantees that all associated resources are deallocated.
+However, it does not guarantee that the handle&rsquo;s work will have been fully finished.
+For example, outbound network data may not be flushed.</p>
+
+</div>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>The following errors might be thrown:</p>
+<h4 id='veniceerror-invalidhandle' class='heading'>VeniceError.invalidHandle</h4>
+
+<p>Thrown when the operation is performed on a invalid handle.</p>
+<h4 id='veniceerror-unexpectederror' class='heading'>VeniceError.unexpectedError</h4>
+
+<p>Thrown when an unexpected error occurs.
+This should never happen in the regular flow of an application.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">close</span><span class="p">()</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -163,7 +250,7 @@ This should never happen in the regular flow of an application.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="http://zewo.io" target="_blank" rel="external">Zewo</a>. All rights reserved. (Last updated: 2017-05-12)</p>
+          <p>&copy; 2017 <a class="link" href="http://zewo.io" target="_blank" rel="external">Zewo</a>. All rights reserved. (Last updated: 2017-05-13)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

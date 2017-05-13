@@ -28,7 +28,7 @@
 #include <string.h>
 
 #include "cr.h"
-#include "libdill.h"
+#include "libdillimpl.h"
 #include "list.h"
 #include "utils.h"
 
@@ -41,15 +41,17 @@ struct dill_chan {
     struct dill_list in;
     /* List of clauses wanting to send to the channel. */
     struct dill_list out;
-    /* 1 if chdone() was already called. 0 otherwise. */
+    /* 1 if hdone() has been called on this channel. 0 otherwise. */
     unsigned int done : 1;
-    /* 1 if the object was created via chmake_mem() function. */
+    /* 1 if the object was created with chmake_mem(). */
     unsigned int mem : 1;
 };
 
 /* Channel clause. */
-struct dill_chcl {
+struct dill_chclause {
     struct dill_clause cl;
+    /* An item in either the dill_chan::in or dill_chan::out list. */
+    struct dill_list item;
     void *val;
 };
 
@@ -63,6 +65,7 @@ static const int dill_chan_type_placeholder = 0;
 static const void *dill_chan_type = &dill_chan_type_placeholder;
 static void *dill_chan_query(struct hvfs *vfs, const void *type);
 static void dill_chan_close(struct hvfs *vfs);
+static int dill_chan_done(struct hvfs *vfs, int64_t deadline);
 
 /******************************************************************************/
 /*  Channel creation and deallocation.                                        */
@@ -70,12 +73,13 @@ static void dill_chan_close(struct hvfs *vfs);
 
 int chmake_mem(size_t itemsz, struct chmem *mem) {
     if(dill_slow(!mem)) {errno = EINVAL; return -1;}
-    /* Return ECANCELED if the coroutine is shutting down. */
+    /* Returns ECANCELED if the coroutine is shutting down. */
     int rc = dill_canblock();
     if(dill_slow(rc < 0)) return -1;
     struct dill_chan *ch = (struct dill_chan*)mem;
     ch->vfs.query = dill_chan_query;
     ch->vfs.close = dill_chan_close;
+    ch->vfs.done = dill_chan_done;
     ch->sz = itemsz;
     dill_list_init(&ch->in);
     dill_list_init(&ch->out);
@@ -109,16 +113,16 @@ static void dill_chan_close(struct hvfs *vfs) {
     struct dill_chan *ch = (struct dill_chan*)vfs;
     dill_assert(ch);
     /* Resume any remaining senders and receivers on the channel
-       with EPIPE error. */
+       with the EPIPE error. */
     while(!dill_list_empty(&ch->in)) {
-        struct dill_clause *cl = dill_cont(dill_list_begin(&ch->in),
-            struct dill_clause, epitem);
-        dill_trigger(cl, EPIPE);
+        struct dill_chclause *chcl = dill_cont(dill_list_next(&ch->in),
+            struct dill_chclause, item);
+        dill_trigger(&chcl->cl, EPIPE);
     }
     while(!dill_list_empty(&ch->out)) {
-        struct dill_clause *cl = dill_cont(dill_list_begin(&ch->out),
-            struct dill_clause, epitem);
-        dill_trigger(cl, EPIPE);
+        struct dill_chclause *chcl = dill_cont(dill_list_next(&ch->out),
+            struct dill_chclause, item);
+        dill_trigger(&chcl->cl, EPIPE);
     }
     if(!ch->mem) free(ch);
 }
@@ -127,6 +131,11 @@ static void dill_chan_close(struct hvfs *vfs) {
 /*  Sending and receiving.                                                    */
 /******************************************************************************/
 
+static void dill_chcancel(struct dill_clause *cl) {
+    struct dill_chclause *chcl = dill_cont(cl, struct dill_chclause, cl);
+    dill_list_erase(&chcl->item);
+}
+
 int chsend(int h, const void *val, size_t len, int64_t deadline) {
     int rc = dill_canblock();
     if(dill_slow(rc < 0)) return -1;
@@ -134,13 +143,13 @@ int chsend(int h, const void *val, size_t len, int64_t deadline) {
     struct dill_chan *ch = hquery(h, dill_chan_type);
     if(dill_slow(!ch)) return -1;
     /* Check that the length provided matches the channel length */
-    if(dill_slow(len != ch->sz)) return -1;
+    if(dill_slow(len != ch->sz)) {errno = EINVAL; return -1;}
     /* Check if the channel is done. */
     if(dill_slow(ch->done)) {errno = EPIPE; return -1;}
+        /* Copy the message directly to the waiting receiver, if any. */
     if(!dill_list_empty(&ch->in)) {
-        /* Copy the message directly to the waiting receiver. */
-        struct dill_chcl *chcl = dill_cont(dill_list_begin(&ch->in),
-            struct dill_chcl, cl.epitem);
+        struct dill_chclause *chcl = dill_cont(dill_list_next(&ch->in),
+            struct dill_chclause, item);
         memcpy(chcl->val, val, len);
         dill_trigger(&chcl->cl, 0);
         return 0;
@@ -148,10 +157,11 @@ int chsend(int h, const void *val, size_t len, int64_t deadline) {
     /* The clause is not available immediately. */
     if(dill_slow(deadline == 0)) {errno = ETIMEDOUT; return -1;}
     /* Let's wait. */
-    struct dill_chcl chcl;
+    struct dill_chclause chcl;
+    dill_list_insert(&chcl.item, &ch->out);
     chcl.val = (void*)val;
-    dill_waitfor(&chcl.cl, 0, &ch->out, NULL);
-    struct dill_tmcl tmcl;
+    dill_waitfor(&chcl.cl, 0, dill_chcancel);
+    struct dill_tmclause tmcl;
     dill_timer(&tmcl, 1, deadline);
     int id = dill_wait();
     if(dill_slow(id < 0)) return -1;
@@ -167,24 +177,25 @@ int chrecv(int h, void *val, size_t len, int64_t deadline) {
     struct dill_chan *ch = hquery(h, dill_chan_type);
     if(dill_slow(!ch)) return -1;
     /* Check that the length provided matches the channel length */
-    if(dill_slow(len != ch->sz)) return -1;
-    /* If there's a sender waiting copy the message directly from the sender. */
+    if(dill_slow(len != ch->sz)) {errno = EINVAL; return -1;}
+    /* Check whether the channel is done. */
+    if(dill_slow(ch->done)) {errno = EPIPE; return -1;}
+    /* If there's a sender waiting, copy the message directly from the sender. */
     if(!dill_list_empty(&ch->out)) {
-        struct dill_chcl *chcl = dill_cont(dill_list_begin(&ch->out),
-            struct dill_chcl, cl.epitem);
+        struct dill_chclause *chcl = dill_cont(dill_list_next(&ch->out),
+            struct dill_chclause, item);
         memcpy(val, chcl->val, len);
         dill_trigger(&chcl->cl, 0);
         return 0;
     }
-    /* Check whether channel is done. */
-    if(dill_slow(ch->done)) {errno = EPIPE; return -1;}
-    /* The clause is not available immediately. */
+    /* The clause is not immediately available. */
     if(dill_slow(deadline == 0)) {errno = ETIMEDOUT; return -1;}
     /* Let's wait. */
-    struct dill_chcl chcl;
+    struct dill_chclause chcl;
+    dill_list_insert(&chcl.item, &ch->in);
     chcl.val = val;
-    dill_waitfor(&chcl.cl, 0, &ch->in, NULL);
-    struct dill_tmcl tmcl;
+    dill_waitfor(&chcl.cl, 0, dill_chcancel);
+    struct dill_tmclause tmcl;
     dill_timer(&tmcl, 1, deadline);
     int id = dill_wait();
     if(dill_slow(id < 0)) return -1;
@@ -193,22 +204,22 @@ int chrecv(int h, void *val, size_t len, int64_t deadline) {
     return 0;
 }
 
-int chdone(int h) {
-    struct dill_chan *ch = hquery(h, dill_chan_type);
-    if(dill_slow(!ch)) return -1;
+static int dill_chan_done(struct hvfs *vfs, int64_t deadline) {
+    struct dill_chan *ch = (struct dill_chan*)vfs;
+    dill_assert(ch);
     if(ch->done) {errno = EPIPE; return -1;}
     ch->done = 1;
     /* Resume any remaining senders and receivers on the channel
-       with EPIPE error. */
+       with the EPIPE error. */
     while(!dill_list_empty(&ch->in)) {
-        struct dill_clause *cl = dill_cont(dill_list_begin(&ch->in),
-            struct dill_clause, epitem);
-        dill_trigger(cl, EPIPE);
+        struct dill_chclause *chcl = dill_cont(dill_list_next(&ch->in),
+            struct dill_chclause, item);
+        dill_trigger(&chcl->cl, EPIPE);
     }
     while(!dill_list_empty(&ch->out)) {
-        struct dill_clause *cl = dill_cont(dill_list_begin(&ch->out),
-            struct dill_clause, epitem);
-        dill_trigger(cl, EPIPE);
+        struct dill_chclause *chcl = dill_cont(dill_list_next(&ch->out),
+            struct dill_chclause, item);
+        dill_trigger(&chcl->cl, EPIPE);
     }
     return 0;
 }
@@ -225,13 +236,13 @@ int choose(struct chclause *clauses, int nclauses, int64_t deadline) {
         if(dill_slow(!ch)) return i;
         if(dill_slow(cl->len != ch->sz || (cl->len > 0 && !cl->val))) {
             errno = EINVAL; return i;}
-        struct dill_chcl *chcl;
+        struct dill_chclause *chcl;
         switch(cl->op) {
         case CHSEND:
             if(dill_slow(ch->done)) {errno = EPIPE; return i;}
             if(dill_list_empty(&ch->in)) break;
-            chcl = dill_cont(dill_list_begin(&ch->in),
-                struct dill_chcl, cl.epitem);
+            chcl = dill_cont(dill_list_next(&ch->in),
+                struct dill_chclause, item);
             memcpy(chcl->val, cl->val, cl->len);
             dill_trigger(&chcl->cl, 0);
             errno = 0;
@@ -239,8 +250,8 @@ int choose(struct chclause *clauses, int nclauses, int64_t deadline) {
         case CHRECV:
             if(dill_slow(ch->done)) {errno = EPIPE; return i;}
             if(dill_list_empty(&ch->out)) break;
-            chcl = dill_cont(dill_list_begin(&ch->out),
-                struct dill_chcl, cl.epitem);
+            chcl = dill_cont(dill_list_next(&ch->out),
+                struct dill_chclause, item);
             memcpy(cl->val, chcl->val, ch->sz);
             dill_trigger(&chcl->cl, 0);
             errno = 0;
@@ -250,18 +261,19 @@ int choose(struct chclause *clauses, int nclauses, int64_t deadline) {
             return i;
         } 
     }
-    /* There are no clauses available immediately. */
+    /* There are no clauses immediately available. */
     if(dill_slow(deadline == 0)) {errno = ETIMEDOUT; return -1;}
     /* Let's wait. */
-    struct dill_chcl chcls[nclauses];
+    struct dill_chclause chcls[nclauses];
     for(i = 0; i != nclauses; ++i) {
         struct dill_chan *ch = hquery(clauses[i].ch, dill_chan_type);
         dill_assert(ch);
+        dill_list_insert(&chcls[i].item,
+            clauses[i].op == CHRECV ? &ch->in : &ch->out);
         chcls[i].val = clauses[i].val;
-        dill_waitfor(&chcls[i].cl, i,
-            clauses[i].op == CHRECV ? &ch->in : &ch->out, NULL);
+        dill_waitfor(&chcls[i].cl, i, dill_chcancel);
     }
-    struct dill_tmcl tmcl;
+    struct dill_tmclause tmcl;
     dill_timer(&tmcl, nclauses, deadline);
     int id = dill_wait();
     if(dill_slow(id < 0)) return -1;

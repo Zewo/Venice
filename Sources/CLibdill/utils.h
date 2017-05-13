@@ -1,6 +1,6 @@
 /*
 
-  Copyright (c) 2016 Martin Sustrik
+  Copyright (c) 2017 Martin Sustrik
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"),
@@ -29,6 +29,13 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#define dill_concat(x,y) x##y
+
+/* Defines a unique identifier of type const void*. */
+#define dill_unique_id(name) \
+    static const int dill_concat(name, ___) = 0;\
+    const void *name = & dill_concat(name, ___);
 
 /*  Takes a pointer to a member variable and computes pointer to the structure
     that contains it. 'type' is type of the structure, not the member. */
@@ -64,6 +71,39 @@
             abort();\
         }\
     } while (0)
+
+/* Workaround missing __rdtsc in Clang < 3.5 (or Clang < 6.0 on Xcode) */
+#if defined(__x86_64__) || defined(__i386__)
+#if defined __clang__
+#if (!defined(__apple_build_version__) && \
+    ((__clang_major__ < 3) || \
+    ((__clang_major__ == 3) && (__clang_minor__ < 5)))) || \
+    (defined(__apple_build_version__) && (__clang_major__ < 6))
+static inline uint64_t __rdtsc() {
+#if defined __i386__
+    uint64_t x;
+    asm volatile ("rdtsc" : "=A" (x));
+    return x;
+#else
+    uint64_t a, d;
+    asm volatile ("rdtsc" : "=a" (a), "=d" (d));
+    return (d << 32) | a;
+#endif
+}
+#endif
+#endif
+#endif
+
+/* Returns the maximum possible file descriptor number */
+int dill_maxfds(void);
+
+/* Encoding and decoding integers from network byte order. */
+uint16_t dill_gets(const uint8_t *buf);
+void dill_puts(uint8_t *buf, uint16_t val);
+uint32_t dill_getl(const uint8_t *buf);
+void dill_putl(uint8_t *buf, uint32_t val);
+uint64_t dill_getll(const uint8_t *buf);
+void dill_putll(uint8_t *buf, uint64_t val);
 
 #endif
 

@@ -23,11 +23,23 @@
 #ifndef DILL_EPOLL_INCLUDED
 #define DILL_EPOLL_INCLUDED
 
+#include <stdint.h>
+
+#include "cr.h"
+#include "list.h"
+
 struct dill_fdinfo;
+
+struct dill_fdclause {
+   struct dill_clause cl;
+   struct dill_fdinfo *fdinfo;
+
+};
 
 struct dill_ctx_pollset {
     int efd;
     struct dill_fdinfo *fdinfos;
+    size_t nfdinfos;
     uint32_t changelist;
 };
 

@@ -1,6 +1,6 @@
 /*
 
-  Copyright (c) 2016 Martin Sustrik
+  Copyright (c) 2017 Martin Sustrik
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"),
@@ -41,18 +41,18 @@
 /******************************************************************************/
 
 /*  Don't change this unless you know exactly what you're doing and have      */
-/*  read and understand the following documents:                              */
+/*  read and understood the following documents:                              */
 /*  www.gnu.org/software/libtool/manual/html_node/Libtool-versioning.html     */
 /*  www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html  */
 
 /*  The current interface version. */
-#define DILL_VERSION_CURRENT 10
+#define DILL_VERSION_CURRENT 14
 
 /*  The latest revision of the current interface. */
 #define DILL_VERSION_REVISION 0
 
 /*  How many past interface versions are still supported. */
-#define DILL_VERSION_AGE 0
+#define DILL_VERSION_AGE 1
 
 /******************************************************************************/
 /*  Symbol visibility                                                         */
@@ -84,17 +84,9 @@ DILL_EXPORT int64_t now(void);
 /*  Handles                                                                   */
 /******************************************************************************/
 
-struct hvfs {
-    void *(*query)(struct hvfs *vfs, const void *type);
-    void (*close)(struct hvfs *vfs);
-    /* Reserved. Do not use directly! */
-    unsigned int refcount;
-};
-
-DILL_EXPORT int hmake(struct hvfs *vfs);
-DILL_EXPORT void *hquery(int h, const void *type);
 DILL_EXPORT int hdup(int h);
 DILL_EXPORT int hclose(int h);
+DILL_EXPORT int hdone(int h, int64_t deadline);
 
 /******************************************************************************/
 /*  Coroutines                                                                */
@@ -108,12 +100,12 @@ DILL_EXPORT __attribute__((noinline)) int dill_prologue(sigjmp_buf **ctx,
     void **ptr, size_t len, const char *file, int line);
 DILL_EXPORT __attribute__((noinline)) void dill_epilogue(void);
 
-/* In the following macros alloca(sizeof(size_t)) is used because clang
+/* The following macros use alloca(sizeof(size_t)) because clang
    doesn't support alloca with size zero. */
 
 /* This assembly setjmp/longjmp mechanism is in the same order as glibc and
-   musl but glibc implements pointer mangling, which is hard to support.
-   This should be binary-compatible with musl though. */
+   musl, but glibc implements pointer mangling, which is hard to support.
+   This should be binary-compatible with musl, though. */
 
 /* Stack-switching on X86-64. */
 #if defined(__x86_64__) && !defined DILL_ARCH_FALLBACK
@@ -195,12 +187,12 @@ DILL_EXPORT __attribute__((noinline)) void dill_epilogue(void);
     asm(""::"r"(alloca(sizeof(size_t))));\
     asm volatile("leal (%%eax), %%esp"::"eax"(x));
 
-/* Stack-switching on other microarchiterctures. */
+/* Stack-switching on other microarchitectures. */
 #else
 #define dill_setjmp(ctx) sigsetjmp(ctx, 0)
 #define dill_longjmp(ctx) siglongjmp(ctx, 1)
 /* For newer GCCs, -fstack-protector breaks on this; use -fno-stack-protector.
-   Alternatively, implement custom DILL_SETSP for your microarchitecture. */
+   Alternatively, implement a custom DILL_SETSP for your microarchitecture. */
 #define DILL_SETSP(x) \
     dill_unoptimisable = alloca((char*)alloca(sizeof(size_t)) - (char*)(x));
 #endif
@@ -209,19 +201,24 @@ DILL_EXPORT __attribute__((noinline)) void dill_epilogue(void);
    Given that there's no other way to do this, screw other compilers for now.
    See https://gcc.gnu.org/onlinedocs/gcc-3.2/gcc/Statement-Exprs.html */
 
+/* A bug in gcc have been observed where name clash between variable in the
+   outer scope and a local variable in this macro causes the variable to
+   get weird values. To avoid that, we use fancy names (dill_*__). */ 
+
 #define go_mem(fn, ptr, len) \
     ({\
-        sigjmp_buf *ctx;\
-        void *stk = (ptr);\
-        int h = dill_prologue(&ctx, &stk, (len), __FILE__, __LINE__);\
-        if(h >= 0) {\
-            if(!dill_setjmp(*ctx)) {\
-                DILL_SETSP(stk);\
+        sigjmp_buf *dill_ctx__;\
+        void *dill_stk__ = (ptr);\
+        int dill_handle__ = dill_prologue(&dill_ctx__, &dill_stk__, (len),\
+            __FILE__, __LINE__);\
+        if(dill_handle__ >= 0) {\
+            if(!dill_setjmp(*dill_ctx__)) {\
+                DILL_SETSP(dill_stk__);\
                 fn;\
                 dill_epilogue();\
             }\
         }\
-        h;\
+        dill_handle__;\
     })
 
 #define go(fn) go_mem(fn, NULL, 0)
@@ -231,7 +228,7 @@ DILL_EXPORT int co(void **ptr, size_t len,
     void (*routine)(void *));
 DILL_EXPORT int yield(void);
 DILL_EXPORT int msleep(int64_t deadline);
-DILL_EXPORT void fdclean(int fd);
+DILL_EXPORT int fdclean(int fd);
 DILL_EXPORT int fdin(int fd, int64_t deadline);
 DILL_EXPORT int fdout(int fd, int64_t deadline);
 
@@ -251,9 +248,9 @@ struct chclause {
 
 struct chmem {
 #if defined(__i386__)
-    char reserved[36];
+    char reserved[44];
 #else
-    char reserved[72];
+    char reserved[88];
 #endif
 };
 
@@ -261,9 +258,178 @@ DILL_EXPORT int chmake(size_t itemsz);
 DILL_EXPORT int chmake_mem(size_t itemsz, struct chmem *mem);
 DILL_EXPORT int chsend(int ch, const void *val, size_t len, int64_t deadline);
 DILL_EXPORT int chrecv(int ch, void *val, size_t len, int64_t deadline);
-DILL_EXPORT int chdone(int ch);
 DILL_EXPORT int choose(struct chclause *clauses, int nclauses,
     int64_t deadline);
+
+#define chdone(ch) hdone((ch), -1)
+
+#if !defined DILL_DISABLE_SOCKETS
+
+/******************************************************************************/
+/*  Gather/scatter list.                                                      */
+/******************************************************************************/
+
+struct iolist {
+    void *iol_base;
+    size_t iol_len;
+    struct iolist *iol_next;
+    int iol_rsvd;
+};
+
+/******************************************************************************/
+/*  Bytestream sockets.                                                       */
+/******************************************************************************/
+
+DILL_EXPORT int bsend(
+    int s,
+    const void *buf,
+    size_t len,
+    int64_t deadline);
+DILL_EXPORT int brecv(
+    int s,
+    void *buf,
+    size_t len,
+    int64_t deadline);
+DILL_EXPORT int bsendl(
+    int s,
+    struct iolist *first,
+    struct iolist *last,
+    int64_t deadline);
+DILL_EXPORT int brecvl(
+    int s,
+    struct iolist *first,
+    struct iolist *last,
+    int64_t deadline);
+
+/******************************************************************************/
+/*  Message sockets.                                                          */
+/******************************************************************************/
+
+DILL_EXPORT int msend(
+    int s,
+    const void *buf,
+    size_t len,
+    int64_t deadline);
+DILL_EXPORT ssize_t mrecv(
+    int s,
+    void *buf,
+    size_t len,
+    int64_t deadline);
+DILL_EXPORT int msendl(
+    int s,
+    struct iolist *first,
+    struct iolist *last,
+    int64_t deadline);
+DILL_EXPORT ssize_t mrecvl(
+    int s,
+    struct iolist *first,
+    struct iolist *last,
+    int64_t deadline);
+
+/******************************************************************************/
+/*  IP address resolution.                                                    */
+/******************************************************************************/
+
+struct sockaddr;
+
+#define IPADDR_IPV4 1
+#define IPADDR_IPV6 2
+#define IPADDR_PREF_IPV4 3
+#define IPADDR_PREF_IPV6 4
+#define IPADDR_MAXSTRLEN 46
+
+struct ipaddr {
+    char data[32];
+};
+
+DILL_EXPORT int ipaddr_local(
+    struct ipaddr *addr,
+    const char *name,
+    int port,
+    int mode);
+DILL_EXPORT int ipaddr_remote(
+    struct ipaddr *addr,
+    const char *name,
+    int port,
+    int mode,
+    int64_t deadline);
+DILL_EXPORT const char *ipaddr_str(
+    const struct ipaddr *addr,
+    char *ipstr);
+DILL_EXPORT int ipaddr_family(
+    const struct ipaddr *addr);
+DILL_EXPORT const struct sockaddr *ipaddr_sockaddr(
+    const struct ipaddr *addr);
+DILL_EXPORT int ipaddr_len(
+    const struct ipaddr *addr);
+DILL_EXPORT int ipaddr_port(
+    const struct ipaddr *addr);
+DILL_EXPORT void ipaddr_setport(
+    struct ipaddr *addr,
+    int port);
+
+/******************************************************************************/
+/*  TCP protocol.                                                             */
+/******************************************************************************/
+
+DILL_EXPORT int tcp_listen(
+    struct ipaddr *addr,
+    int backlog);
+DILL_EXPORT int tcp_accept(
+    int s,
+    struct ipaddr *addr,
+    int64_t deadline);
+DILL_EXPORT int tcp_connect(
+    const struct ipaddr *addr,
+    int64_t deadline);
+DILL_EXPORT int tcp_close(
+    int s,
+    int64_t deadline);
+
+/******************************************************************************/
+/*  IPC protocol.                                                            */
+/******************************************************************************/
+
+DILL_EXPORT int ipc_listen(
+    const char *addr,
+    int backlog);
+DILL_EXPORT int ipc_accept(
+    int s,
+    int64_t deadline);
+DILL_EXPORT int ipc_connect(
+    const char *addr,
+    int64_t deadline);
+DILL_EXPORT int ipc_close(
+    int s,
+    int64_t deadline);
+DILL_EXPORT int ipc_pair(
+    int s[2]);
+
+/******************************************************************************/
+/*  PFX protocol.                                                             */
+/*  Messages are prefixed by 8-byte size in network byte order.               */
+/*  The protocol is terminated by 0xffffffffffffffff.                         */
+/******************************************************************************/
+
+DILL_EXPORT int pfx_attach(
+    int s);
+DILL_EXPORT int pfx_detach(
+    int s,
+    int64_t deadline);
+
+/******************************************************************************/
+/*  CRLF protocol.                                                            */
+/*  Messages are delimited by CRLF (0x0d 0x0a) sequences.                     */
+/*  The protocol is terminated by an empty line.                              */
+/******************************************************************************/
+
+DILL_EXPORT int crlf_attach(
+    int s);
+DILL_EXPORT int crlf_detach(
+    int s,
+    int64_t deadline);
+
+#endif
 
 #endif
 
