@@ -54,7 +54,7 @@ extension Duration : Equatable {
 /// let deadline = 30.seconds.fromNow()
 /// ```
 public struct Deadline {
-    let value: Int64
+    public let value: Int64
     
     init(_ deadline: Int64) {
         self.value = deadline
