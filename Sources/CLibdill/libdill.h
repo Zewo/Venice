@@ -285,7 +285,7 @@ DILL_EXPORT int bsend(
     const void *buf,
     size_t len,
     int64_t deadline);
-DILL_EXPORT int brecv(
+DILL_EXPORT ssize_t brecv(
     int s,
     void *buf,
     size_t len,
@@ -295,7 +295,7 @@ DILL_EXPORT int bsendl(
     struct iolist *first,
     struct iolist *last,
     int64_t deadline);
-DILL_EXPORT int brecvl(
+DILL_EXPORT ssize_t brecvl(
     int s,
     struct iolist *first,
     struct iolist *last,

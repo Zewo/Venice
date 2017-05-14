@@ -82,6 +82,10 @@ public final class Channel<Type> : Handle {
         super.init(handle: result)
     }
     
+    deinit {
+        try? close()
+    }
+    
     /// Reference to the channel which can only send.
     public lazy var sendOnly: SendOnly = SendOnly(self)
     

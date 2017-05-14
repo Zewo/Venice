@@ -49,7 +49,7 @@ static void tcp_hclose(struct hvfs *hvfs);
 static int tcp_hdone(struct hvfs *hvfs, int64_t deadline);
 static int tcp_bsendl(struct bsock_vfs *bvfs,
     struct iolist *first, struct iolist *last, int64_t deadline);
-static int tcp_brecvl(struct bsock_vfs *bvfs,
+static ssize_t tcp_brecvl(struct bsock_vfs *bvfs,
     struct iolist *first, struct iolist *last, int64_t deadline);
 
 struct tcp_conn {
@@ -104,13 +104,13 @@ static int tcp_bsendl(struct bsock_vfs *bvfs,
     return -1;
 }
 
-static int tcp_brecvl(struct bsock_vfs *bvfs,
+static ssize_t tcp_brecvl(struct bsock_vfs *bvfs,
       struct iolist *first, struct iolist *last, int64_t deadline) {
     struct tcp_conn *self = dill_cont(bvfs, struct tcp_conn, bvfs);
     if(dill_slow(self->indone)) {errno = EPIPE; return -1;}
     if(dill_slow(self->inerr)) {errno = ECONNRESET; return -1;}
-    int rc = fd_recv(self->fd, &self->rxbuf, first, last, deadline);
-    if(dill_fast(rc == 0)) return 0;
+    int sz = fd_recv(self->fd, &self->rxbuf, first, last, deadline);
+    if(dill_fast(sz > 0)) return sz;
     if(errno == EPIPE) self->indone = 1;
     else self->inerr = 1;
     return -1;
@@ -145,7 +145,9 @@ int tcp_close(int s, int64_t deadline) {
     /* Now we are going to read all the inbound data until we reach end of the
        stream. That way we can be sure that the peer either received all our
        data or consciously closed the connection without reading all of it. */
-    int rc = tcp_brecvl(&self->bvfs, NULL, NULL, deadline);
+    int rc = 0;
+    while(rc >= 0)
+        rc = tcp_brecvl(&self->bvfs, NULL, NULL, deadline);
     dill_assert(rc < 0);
     if(dill_slow(errno != EPIPE)) {err = errno; goto error;}
     return 0;
@@ -234,9 +236,6 @@ int tcp_accept(int s, struct ipaddr *addr, int64_t deadline) {
     socklen_t addrlen = sizeof(struct ipaddr);
     int as = fd_accept(lst->fd, (struct sockaddr*)addr, &addrlen, deadline);
     if(dill_slow(as < 0)) {err = errno; goto error1;}
-    /* Set it to non-blocking mode. */
-    int rc = fd_unblock(as);
-    if(dill_slow(rc < 0)) {err = errno; goto error2;}
     /* Create the handle. */
     int h = tcp_makeconn(as);
     if(dill_slow(h < 0)) {err = errno; goto error2;}

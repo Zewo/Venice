@@ -92,6 +92,10 @@ public class Coroutine : Handle {
         super.init(handle: result)
     }
     
+    deinit {
+        try? close()
+    }
+    
     /// Explicitly passes control to other coroutines. 
     /// By calling this function, you give other coroutines a chance to run.
     ///

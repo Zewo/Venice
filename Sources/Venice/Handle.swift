@@ -9,15 +9,11 @@ import CLibdill
 public typealias HandleDescriptor = Int32
 
 /// Representation of a Venice resource like `Coroutine` and `Channel`.
-public class Handle {
-    let handle: HandleDescriptor
+open class Handle {
+    public var handle: HandleDescriptor
     
-    init(handle: HandleDescriptor) {
+    public init(handle: HandleDescriptor) {
         self.handle = handle
-    }
-    
-    deinit {
-        try? close()
     }
 
     /// Returns an opaque pointer associated with the passed type.
@@ -106,7 +102,7 @@ public class Handle {
     ///   #### VeniceError.unexpectedError
     ///   Thrown when an unexpected error occurs.
     ///   This should never happen in the regular flow of an application.
-    public func done(deadline: Deadline) throws {
+    open func done(deadline: Deadline) throws {
         let result = hdone(handle, deadline.value)
         
         guard result == 0 else {
@@ -138,7 +134,7 @@ public class Handle {
     ///   #### VeniceError.unexpectedError
     ///   Thrown when an unexpected error occurs.
     ///   This should never happen in the regular flow of an application.
-    public func close() throws {
+    open func close() throws {
         let result = hclose(handle)
         
         guard result == 0 else {
@@ -390,7 +386,7 @@ func brecvl(
     first: UnsafeMutablePointer<iolist>?,
     last: UnsafeMutablePointer<iolist>?,
     deadline: Int64
-) -> Int32 {
+) -> Int {
     guard let table = table else {
         errno = ENOTSUP
         return -1

@@ -55,7 +55,7 @@ struct bsock_vfs {
     void *context;
     int (*bsendl)(struct bsock_vfs *vfs,
         struct iolist *first, struct iolist *last, int64_t deadline);
-    int (*brecvl)(struct bsock_vfs *vfs,
+    ssize_t (*brecvl)(struct bsock_vfs *vfs,
         struct iolist *first, struct iolist *last, int64_t deadline);
 };
 
