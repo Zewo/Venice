@@ -102,7 +102,7 @@
             <h1>Handle</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Handle</span></code></pre>
+                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">Handle</span></code></pre>
 
                 </div>
               </div>
@@ -112,6 +112,79 @@
           <section class="section task-group-section">
             <div class="task-group">
               <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6Venice6Handle6handleVs5Int32"></a>
+                    <a name="//apple_ref/swift/Property/handle" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6Venice6Handle6handleVs5Int32">handle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Raw handle representing the resource.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">handle</span><span class="p">:</span> <span class="kt">HandleDescriptor</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Venice6HandlecFT6handleVs5Int32_S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(handle:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Venice6HandlecFT6handleVs5Int32_S0_">init(handle:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializes <code>Handle</code> with the raw handle.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">handle</span><span class="p">:</span> <span class="kt">HandleDescriptor</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>handle</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Raw handle representing the resource.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -170,7 +243,7 @@ This should never happen in the regular flow of an application.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">done</span><span class="p">(</span><span class="nv">deadline</span><span class="p">:</span> <span class="kt"><a href="../Structs/Deadline.html">Deadline</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">done</span><span class="p">(</span><span class="nv">deadline</span><span class="p">:</span> <span class="kt"><a href="../Structs/Deadline.html">Deadline</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -238,7 +311,7 @@ This should never happen in the regular flow of an application.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">close</span><span class="p">()</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">close</span><span class="p">()</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -250,7 +323,7 @@ This should never happen in the regular flow of an application.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="http://zewo.io" target="_blank" rel="external">Zewo</a>. All rights reserved. (Last updated: 2017-05-13)</p>
+          <p>&copy; 2017 <a class="link" href="http://zewo.io" target="_blank" rel="external">Zewo</a>. All rights reserved. (Last updated: 2017-05-14)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
