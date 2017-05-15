@@ -20,9 +20,6 @@
 
 */
 
-#include <sys/time.h>
-#include <time.h>
-
 #if defined(__x86_64__) || defined(__i386__)
 #include <x86intrin.h>
 #endif
