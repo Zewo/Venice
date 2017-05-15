@@ -26,6 +26,7 @@
 #define LIBDILL_H_INCLUDED
 
 #include <errno.h>
+#include <setjmp.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -33,8 +34,6 @@
 
 #if defined __linux__
 #include <alloca.h>
-#else
-#include <setjmp.h>
 #endif
 
 /******************************************************************************/
