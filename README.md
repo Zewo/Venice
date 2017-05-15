@@ -110,4 +110,4 @@ This project is released under the MIT license. See [LICENSE](LICENSE) for detai
 [codebeat-url]: https://codebeat.co/projects/github-com-zewo-venice
 
 [docs-badge]: http://zewo.github.io/Venice/badge.svg
-[docs-url]: http://www.zewo.io/Venice/
+[docs-url]: http://zewo.github.io/Venice
