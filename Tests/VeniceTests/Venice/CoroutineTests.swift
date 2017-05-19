@@ -119,14 +119,14 @@ public class CoroutineTests : XCTestCase {
             error: VeniceError.deadlineReached
         )
 
-        var size = send(socket2.fileDescriptor, "A", 1, 0)
+        var size = send(socket2.rawValue, "A", 1, 0)
         XCTAssert(size == 1)
 
         try socket1.poll(event: .write, deadline: 100.milliseconds.fromNow())
         try socket1.poll(event: .read, deadline: 100.milliseconds.fromNow())
 
         var character: Int8 = 0
-        size = recv(socket1.fileDescriptor, &character, 1, 0)
+        size = recv(socket1.rawValue, &character, 1, 0)
 
         XCTAssert(size == 1)
         XCTAssert(character == 65)
@@ -134,7 +134,7 @@ public class CoroutineTests : XCTestCase {
 
     func testInvalidFileDescriptor() throws {
         XCTAssertThrowsError(
-            try FileDescriptor(-1),
+            try FileDescriptor(nonblocking: -1),
             error: VeniceError.invalidFileDescriptor
         )
     }
@@ -174,7 +174,7 @@ public class CoroutineTests : XCTestCase {
     }
 
     func testCleanFileDescriptor() throws {
-        let fileDescriptor = try FileDescriptor(STDIN_FILENO)
+        let fileDescriptor = try FileDescriptor(nonblocking: STDIN_FILENO)
         fileDescriptor.clean()
     }
     
@@ -189,10 +189,10 @@ public class CoroutineTests : XCTestCase {
         
         XCTAssert(result == 0)
         
-        let fileDescriptor = try FileDescriptor(sockets[0])
+        let fileDescriptor = try FileDescriptor(nonblocking: sockets[0])
         let standardInput = fileDescriptor.detach()
         XCTAssertEqual(standardInput, sockets[0])
-        XCTAssertEqual(fileDescriptor.fileDescriptor, -1)
+        XCTAssertEqual(fileDescriptor.rawValue, -1)
         
         XCTAssertThrowsError(
             try fileDescriptor.poll(event: .read, deadline: .never),
@@ -212,7 +212,7 @@ func createSocketPair() throws -> (FileDescriptor, FileDescriptor) {
 
     XCTAssert(result == 0)
 
-    return try (FileDescriptor(sockets[0]), FileDescriptor(sockets[1]))
+    return try (FileDescriptor(nonblocking: sockets[0]), FileDescriptor(nonblocking: sockets[1]))
 }
 
 extension CoroutineTests {

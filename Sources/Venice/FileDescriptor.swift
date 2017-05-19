@@ -8,10 +8,18 @@ import CLibdill
 
 /// A handle used to access a file or other input/output resource,
 /// such as a pipe or network socket.
-public final class FileDescriptor {
+public final class FileDescriptor: RawRepresentable {
     /// File descriptor handle.
-    public private(set) var fileDescriptor: Int32
-    
+    public private(set) var rawValue: Int32
+
+    /// Creates a `FileDescriptor` from a file descriptor handle
+    ///
+    /// - Parameters:
+    ///   - fileDescriptor: Previously opened file descriptor.
+    public init(rawValue fileDescriptor: Int32) {
+        rawValue = fileDescriptor
+    }
+
     /// Creates a `FileDescriptor` from a file descriptor handle and
     /// configures it as non-blocking.
     ///
@@ -21,7 +29,7 @@ public final class FileDescriptor {
     /// - Throws: The following errors might be thrown:
     ///   #### VeniceError.invalidFileDescriptor
     ///   Thrown when `fileDescriptor` is not an open file descriptor.
-    public init(_ fileDescriptor: Int32) throws {
+    public convenience init(nonblocking fileDescriptor: Int32) throws {
         let flags = fcntl(fileDescriptor, F_GETFL, 0)
         
         guard flags != -1 else {
@@ -32,7 +40,7 @@ public final class FileDescriptor {
             throw VeniceError.invalidFileDescriptor
         }
         
-        self.fileDescriptor = fileDescriptor
+        self.init(rawValue: fileDescriptor)
     }
     
     deinit {
@@ -70,9 +78,9 @@ public final class FileDescriptor {
         
         switch event {
         case .read:
-            result = fdin(fileDescriptor, deadline.value)
+            result = fdin(rawValue, deadline.value)
         case .write:
-            result = fdout(fileDescriptor, deadline.value)
+            result = fdout(rawValue, deadline.value)
         }
         
         guard result == 0 else {
@@ -101,11 +109,11 @@ public final class FileDescriptor {
     /// third-party libraries, just before returning them back to
     /// their original owners. Otherwise the behavior is **undefined**.
     public func clean() {
-        guard fileDescriptor != -1 else {
+        guard rawValue != -1 else {
             return
         }
         
-        fdclean(fileDescriptor)
+        fdclean(rawValue)
     }
     
     /// Closes a file descriptor, so that it no longer refers to any
@@ -131,7 +139,7 @@ public final class FileDescriptor {
                 throw VeniceError.invalidFileDescriptor
             }
         #else
-            guard Darwin.close(fileDescriptor) == 0 else {
+            guard Darwin.close(rawValue) == 0 else {
                 throw VeniceError.invalidFileDescriptor
             }
         #endif
@@ -145,10 +153,10 @@ public final class FileDescriptor {
         clean()
         
         defer {
-            fileDescriptor = -1
+            rawValue = -1
         }
         
-        return fileDescriptor
+        return rawValue
     }
     
     /// Event used to poll file descriptors for reading or writing.
