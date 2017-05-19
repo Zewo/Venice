@@ -135,7 +135,7 @@ public final class FileDescriptor: RawRepresentable {
         clean()
         
         #if os(Linux)
-            guard Glibc.close(fileDescriptor) == 0 else {
+            guard Glibc.close(rawValue) == 0 else {
                 throw VeniceError.invalidFileDescriptor
             }
         #else
