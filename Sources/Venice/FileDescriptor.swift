@@ -24,7 +24,7 @@ public final class FileDescriptor {
     ///
     /// - Throws: The following errors might be thrown:
     ///   #### VeniceError.invalidFileDescriptor
-    ///   Thrown when `fileDescriptor` is not an open file descriptor.
+    ///   Thrown when `handle` is not an open file descriptor.
     public func setNonblocking() throws {
         let flags = fcntl(handle, F_GETFL, 0)
 
@@ -116,7 +116,7 @@ public final class FileDescriptor {
     /// (regardless of the file descriptor that was used to obtain the lock).
     ///
     /// - Warning:
-    /// If `fileDescriptor` is the last file descriptor referring to the underlying open
+    /// If `handle` is the last file descriptor referring to the underlying open
     /// file description, the resources associated with the
     /// open file description are freed; if the file descriptor was the last
     /// reference to a file which has been removed using `unlink`, the file
@@ -124,7 +124,7 @@ public final class FileDescriptor {
     ///
     /// - Throws: The following errors might be thrown:
     ///   #### VeniceError.invalidFileDescriptor
-    ///   Thrown when `fileDescriptor` is not an open file descriptor.
+    ///   Thrown when `handle` is not an open file descriptor.
     public func close() throws {
         clean()
         
@@ -139,7 +139,7 @@ public final class FileDescriptor {
         #endif
     }
     
-    /// Detaches the underlying `fileDescriptor`.
+    /// Detaches the underlying `handle`.
     /// After `detach` any operation will throw an error.
     ///
     /// - Returns: The underlying file descriptor.

@@ -184,7 +184,7 @@ public class CoroutineTests : XCTestCase {
         var sockets = [Int32](repeating: 0, count: 2)
         
         #if os(Linux)
-            let result = socketpair(AF_UNIX, Int32(SOCK_STREAM.handle), 0, &sockets)
+            let result = socketpair(AF_UNIX, Int32(SOCK_STREAM.rawValue), 0, &sockets)
         #else
             let result = socketpair(AF_UNIX, SOCK_STREAM, 0, &sockets)
         #endif
@@ -207,7 +207,7 @@ func createSocketPair() throws -> (FileDescriptor, FileDescriptor) {
     var sockets = [Int32](repeating: 0, count: 2)
 
     #if os(Linux)
-        let result = socketpair(AF_UNIX, Int32(SOCK_STREAM.handle), 0, &sockets)
+        let result = socketpair(AF_UNIX, Int32(SOCK_STREAM.rawValue), 0, &sockets)
     #else
         let result = socketpair(AF_UNIX, SOCK_STREAM, 0, &sockets)
     #endif
