@@ -119,22 +119,24 @@ public class CoroutineTests : XCTestCase {
             error: VeniceError.deadlineReached
         )
 
-        var size = send(socket2.fileDescriptor, "A", 1, 0)
+        var size = send(socket2.handle, "A", 1, 0)
         XCTAssert(size == 1)
 
         try socket1.poll(event: .write, deadline: 100.milliseconds.fromNow())
         try socket1.poll(event: .read, deadline: 100.milliseconds.fromNow())
 
         var character: Int8 = 0
-        size = recv(socket1.fileDescriptor, &character, 1, 0)
+        size = recv(socket1.handle, &character, 1, 0)
 
         XCTAssert(size == 1)
         XCTAssert(character == 65)
     }
 
     func testInvalidFileDescriptor() throws {
+        let fd = FileDescriptor(handle: -1)
+
         XCTAssertThrowsError(
-            try FileDescriptor(-1),
+            try fd.setNonblocking(),
             error: VeniceError.invalidFileDescriptor
         )
     }
@@ -174,7 +176,7 @@ public class CoroutineTests : XCTestCase {
     }
 
     func testCleanFileDescriptor() throws {
-        let fileDescriptor = try FileDescriptor(STDIN_FILENO)
+        let fileDescriptor = FileDescriptor(handle: STDIN_FILENO)
         fileDescriptor.clean()
     }
     
@@ -189,10 +191,10 @@ public class CoroutineTests : XCTestCase {
         
         XCTAssert(result == 0)
         
-        let fileDescriptor = try FileDescriptor(sockets[0])
+        let fileDescriptor = FileDescriptor(handle: sockets[0])
         let standardInput = fileDescriptor.detach()
         XCTAssertEqual(standardInput, sockets[0])
-        XCTAssertEqual(fileDescriptor.fileDescriptor, -1)
+        XCTAssertEqual(fileDescriptor.handle, -1)
         
         XCTAssertThrowsError(
             try fileDescriptor.poll(event: .read, deadline: .never),
@@ -212,7 +214,7 @@ func createSocketPair() throws -> (FileDescriptor, FileDescriptor) {
 
     XCTAssert(result == 0)
 
-    return try (FileDescriptor(sockets[0]), FileDescriptor(sockets[1]))
+    return (FileDescriptor(handle: sockets[0]), FileDescriptor(handle: sockets[1]))
 }
 
 extension CoroutineTests {

@@ -10,29 +10,31 @@ import CLibdill
 /// such as a pipe or network socket.
 public final class FileDescriptor {
     /// File descriptor handle.
-    public private(set) var fileDescriptor: Int32
-    
-    /// Creates a `FileDescriptor` from a file descriptor handle and
-    /// configures it as non-blocking.
+    public private(set) var handle: Int32
+
+    /// Creates a `FileDescriptor` from a file descriptor handle
     ///
     /// - Parameters:
     ///   - fileDescriptor: Previously opened file descriptor.
+    public init(handle: Int32) {
+        self.handle = handle
+    }
+
+    /// Configures the `FileDescriptor` to non-blocking
     ///
     /// - Throws: The following errors might be thrown:
     ///   #### VeniceError.invalidFileDescriptor
-    ///   Thrown when `fileDescriptor` is not an open file descriptor.
-    public init(_ fileDescriptor: Int32) throws {
-        let flags = fcntl(fileDescriptor, F_GETFL, 0)
-        
+    ///   Thrown when `handle` is not an open file descriptor.
+    public func setNonblocking() throws {
+        let flags = fcntl(handle, F_GETFL, 0)
+
         guard flags != -1 else {
             throw VeniceError.invalidFileDescriptor
         }
-        
-        guard fcntl(fileDescriptor, F_SETFL, flags | O_NONBLOCK) == 0 else {
+
+        guard fcntl(handle, F_SETFL, flags | O_NONBLOCK) == 0 else {
             throw VeniceError.invalidFileDescriptor
         }
-        
-        self.fileDescriptor = fileDescriptor
     }
     
     deinit {
@@ -70,9 +72,9 @@ public final class FileDescriptor {
         
         switch event {
         case .read:
-            result = fdin(fileDescriptor, deadline.value)
+            result = fdin(handle, deadline.value)
         case .write:
-            result = fdout(fileDescriptor, deadline.value)
+            result = fdout(handle, deadline.value)
         }
         
         guard result == 0 else {
@@ -101,11 +103,11 @@ public final class FileDescriptor {
     /// third-party libraries, just before returning them back to
     /// their original owners. Otherwise the behavior is **undefined**.
     public func clean() {
-        guard fileDescriptor != -1 else {
+        guard handle != -1 else {
             return
         }
         
-        fdclean(fileDescriptor)
+        fdclean(handle)
     }
     
     /// Closes a file descriptor, so that it no longer refers to any
@@ -114,7 +116,7 @@ public final class FileDescriptor {
     /// (regardless of the file descriptor that was used to obtain the lock).
     ///
     /// - Warning:
-    /// If `fileDescriptor` is the last file descriptor referring to the underlying open
+    /// If `handle` is the last file descriptor referring to the underlying open
     /// file description, the resources associated with the
     /// open file description are freed; if the file descriptor was the last
     /// reference to a file which has been removed using `unlink`, the file
@@ -122,22 +124,22 @@ public final class FileDescriptor {
     ///
     /// - Throws: The following errors might be thrown:
     ///   #### VeniceError.invalidFileDescriptor
-    ///   Thrown when `fileDescriptor` is not an open file descriptor.
+    ///   Thrown when `handle` is not an open file descriptor.
     public func close() throws {
         clean()
         
         #if os(Linux)
-            guard Glibc.close(fileDescriptor) == 0 else {
+            guard Glibc.close(handle) == 0 else {
                 throw VeniceError.invalidFileDescriptor
             }
         #else
-            guard Darwin.close(fileDescriptor) == 0 else {
+            guard Darwin.close(handle) == 0 else {
                 throw VeniceError.invalidFileDescriptor
             }
         #endif
     }
     
-    /// Detaches the underlying `fileDescriptor`.
+    /// Detaches the underlying `handle`.
     /// After `detach` any operation will throw an error.
     ///
     /// - Returns: The underlying file descriptor.
@@ -145,10 +147,10 @@ public final class FileDescriptor {
         clean()
         
         defer {
-            fileDescriptor = -1
+            handle = -1
         }
         
-        return fileDescriptor
+        return handle
     }
     
     /// Event used to poll file descriptors for reading or writing.
