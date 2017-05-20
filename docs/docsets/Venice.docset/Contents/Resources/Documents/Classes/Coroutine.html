@@ -29,14 +29,6 @@
       <nav class="sidebar">
         <ul class="nav-groups">
           <li class="nav-group-name">
-            <a href="../Handles.html">Handles</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="../Classes/Handle.html">Handle</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
             <a href="../Coroutines.html">Coroutines</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
@@ -54,10 +46,10 @@
                 <a href="../Classes/Channel.html">Channel</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/Channel/SendOnly.html">– SendOnly</a>
+                <a href="../Classes/Channel.html#/s:CC6Venice7Channel7Sending">– Sending</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/Channel/ReceiveOnly.html">– ReceiveOnly</a>
+                <a href="../Classes/Channel.html#/s:CC6Venice7Channel9Receiving">– Receiving</a>
               </li>
             </ul>
           </li>
@@ -102,7 +94,7 @@
             <h1>Coroutine</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Coroutine</span> <span class="p">:</span> <span class="kt"><a href="../Classes/Handle.html">Handle</a></span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">Coroutine</span></code></pre>
 
                 </div>
               </div>
@@ -121,7 +113,7 @@ on your machine.</p>
 <p>Coroutines are scheduled cooperatively. What that means is that a coroutine has to
 explicitly yield control of the CPU to allow a different coroutine to run.
 In a typical scenario, this is done transparently to the user: When a coroutine
-invokes a function that would block (such as <code>Coroutine.wakeUp</code>, <code>fileDescriptor.poll</code>, <code>channel.send</code> or <code>channel.receive</code>),
+invokes a function that would block (such as <code>Coroutine.wakeUp</code>, <code>FileDescriptor.poll</code>, <code>channel.send</code> or <code>channel.receive</code>),
 the CPU is automatically yielded.
 However, if a coroutine runs without calling any blocking functions, it may hold
 the CPU forever. For these cases, the <code>Coroutine.yield</code> function can be used to manually relinquish
@@ -131,7 +123,7 @@ the CPU to other coroutines manually.</p>
     <span class="o">...</span>
 <span class="p">}</span>
 
-<span class="k">try</span> <span class="n">coroutine</span><span class="o">.</span><span class="nf">close</span><span class="p">()</span>
+<span class="n">coroutine</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
 </code></pre>
 
           </section>
@@ -159,21 +151,17 @@ of the caller.</p>
     <span class="o">...</span>
 <span class="p">}</span>
 
-<span class="k">try</span> <span class="n">coroutine</span><span class="o">.</span><span class="nf">close</span><span class="p">()</span>
+<span class="n">coroutine</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
 </code></pre>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     <p>The following errors might be thrown:</p>
-<h4 id='veniceerror-canceled' class='heading'>VeniceError.canceled</h4>
+<h4 id='veniceerror-canceledcoroutine' class='heading'>VeniceError.canceledCoroutine</h4>
 
-<p>Thrown when the operation is performed within a closed coroutine.</p>
+<p>Thrown when the operation is performed within a canceled coroutine.</p>
 <h4 id='veniceerror-outofmemory' class='heading'>VeniceError.outOfMemory</h4>
 
-<p>Thrown when the system doesn&rsquo;t have enough memory to perform the operation.</p>
-<h4 id='veniceerror-unexpectederror' class='heading'>VeniceError.unexpectedError</h4>
-
-<p>Thrown when an unexpected error occurs.
-This should never happen in the regular flow of an application.</p>
+<p>Thrown when the system doesn&rsquo;t have enough memory to create a new coroutine.</p>
 
 </div>
 
@@ -211,6 +199,39 @@ This should never happen in the regular flow of an application.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:FC6Venice9Coroutine6cancelFT_T_"></a>
+                    <a name="//apple_ref/swift/Method/cancel()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Venice9Coroutine6cancelFT_T_">cancel()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Cancels the coroutine.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    Once a coroutine is canceled any coroutine-blocking operation within the coroutine
+will throw <code><a href="../Enums/VeniceError.html#/s:FO6Venice11VeniceError17canceledCoroutineFMS0_S0_">VeniceError.canceledCoroutine</a></code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">cancel</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:ZFC6Venice9Coroutine5yieldFzT_T_"></a>
                     <a name="//apple_ref/swift/Method/yield()" class="dashAnchor"></a>
                     <a class="token" href="#/s:ZFC6Venice9Coroutine5yieldFzT_T_">yield()</a>
@@ -232,14 +253,18 @@ which don&rsquo;t have natural coroutine switching points.</p>
     <span class="k">try</span> <span class="kt">Coroutine</span><span class="o">.</span><span class="nf">yield</span><span class="p">()</span> <span class="c1">// Give other coroutines a chance to run.</span>
 <span class="p">}</span>
 </code></pre>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <p>Once a coroutine is canceled calling <code>Couroutine.yield</code>
+will throw <code><a href="../Enums/VeniceError.html#/s:FO6Venice11VeniceError17canceledCoroutineFMS0_S0_">VeniceError.canceledCoroutine</a></code>.</p>
+
+</div>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    The following errors might be thrown:
-#### VeniceError.canceled
-Thrown when the operation is performed within a closed coroutine.
-#### VeniceError.unexpectedError
-Thrown when an unexpected error occurs.
-This should never happen in the regular flow of an application.
+    <p>The following errors might be thrown:</p>
+<h4 id='veniceerror-canceledcoroutine' class='heading'>VeniceError.canceledCoroutine</h4>
+
+<p>Thrown when the operation is performed within a canceled coroutine.</p>
 
 </div>
 
@@ -269,6 +294,30 @@ This should never happen in the regular flow of an application.
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Wakes up at deadline.</p>
+<h2 id='example' class='heading'>Example:</h2>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="n">execute</span><span class="o">&lt;</span><span class="kt">R</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">deadline</span><span class="p">:</span> <span class="kt">Deadline</span><span class="p">,</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="kt">Void</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">R</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">R</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="kt">Coroutine</span><span class="o">.</span><span class="nf">wakeUp</span><span class="p">(</span><span class="n">deadline</span><span class="p">)</span>
+    <span class="k">try</span> <span class="nf">body</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="k">try</span> <span class="nf">execute</span><span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="n">second</span><span class="o">.</span><span class="nf">fromNow</span><span class="p">())</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Hey! Ho! Let's go!"</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <p>Once a coroutine is canceled calling <code>Couroutine.wakeUp</code>
+will throw <code><a href="../Enums/VeniceError.html#/s:FO6Venice11VeniceError17canceledCoroutineFMS0_S0_">VeniceError.canceledCoroutine</a></code>.</p>
+
+</div>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>The following errors might be thrown:</p>
+<h4 id='veniceerror-canceledcoroutine' class='heading'>VeniceError.canceledCoroutine</h4>
+
+<p>Thrown when the operation is performed within a canceled coroutine.</p>
+
+</div>
 
                       </div>
                       <div class="declaration">
@@ -295,7 +344,7 @@ This should never happen in the regular flow of an application.
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Coroutine groups are useful for closing multiple coroutines at the
+                        <p>Coroutine groups are useful for canceling multiple coroutines at the
 same time.</p>
 <h2 id='example' class='heading'>Example:</h2>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">group</span> <span class="o">=</span> <span class="kt">Coroutine</span><span class="o">.</span><span class="kt">Group</span><span class="p">(</span><span class="nv">minimumCapacity</span><span class="p">:</span> <span class="mi">2</span><span class="p">)</span>
@@ -308,8 +357,8 @@ same time.</p>
     <span class="o">...</span>
 <span class="p">}</span>
 
-<span class="c1">// all coroutines in the group will be closed</span>
-<span class="k">try</span> <span class="n">group</span><span class="o">.</span><span class="nf">close</span><span class="p">()</span>
+<span class="c1">// all coroutines in the group will be canceled</span>
+<span class="n">group</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
 </code></pre>
 
                         <a href="../Classes/Coroutine/Group.html" class="slightly-smaller">See more</a>
@@ -330,7 +379,7 @@ same time.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="http://zewo.io" target="_blank" rel="external">Zewo</a>. All rights reserved. (Last updated: 2017-05-14)</p>
+          <p>&copy; 2017 <a class="link" href="http://zewo.io" target="_blank" rel="external">Zewo</a>. All rights reserved. (Last updated: 2017-05-20)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

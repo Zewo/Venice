@@ -10,34 +10,10 @@ public class ChannelTests : XCTestCase {
     func testCreationOnCanceledCoroutine() throws {
         let coroutine = try Coroutine {
             try Coroutine.yield()
-            XCTAssertThrowsError(try Channel<Void>(), error: VeniceError.canceled)
+            XCTAssertThrowsError(try Channel<Void>(), error: VeniceError.canceledCoroutine)
         }
 
-        try coroutine.close()
-    }
-
-    func testDoneOnCanceledChannel() throws {
-        let channel = try Channel<Void>()
-        try channel.close()
-
-        XCTAssertThrowsError(try channel.done(deadline: .immediately), error: VeniceError.invalidHandle)
-    }
-
-    func testDoneOnDoneChannel() throws {
-        let channel = try Channel<Void>()
-        try channel.done(deadline: .immediately)
-
-        XCTAssertThrowsError(try channel.done(deadline: .immediately), error: VeniceError.handleIsDone)
-    }
-
-    func testSendOnCanceledChannel() throws {
-        let channel = try Channel<Void>()
-        try channel.close()
-
-        XCTAssertThrowsError(
-            try channel.send(deadline: .never),
-            error: VeniceError.invalidHandle
-        )
+        coroutine.cancel()
     }
 
     func testSendOnCanceledCoroutine() throws {
@@ -46,18 +22,18 @@ public class ChannelTests : XCTestCase {
         let coroutine = try Coroutine {
             XCTAssertThrowsError(
                 try channel.send(deadline: .never),
-                error: VeniceError.canceled
+                error: VeniceError.canceledCoroutine
             )
         }
 
-        try coroutine.close()
+        coroutine.cancel()
     }
 
     func testSendOnDoneChannel() throws {
         let channel = try Channel<Void>()
-        try channel.done(deadline: .immediately)
+        channel.done()
 
-        XCTAssertThrowsError(try channel.send(deadline: .never), error: VeniceError.handleIsDone)
+        XCTAssertThrowsError(try channel.send(deadline: .never), error: VeniceError.doneChannel)
     }
 
     func testSendTimeout() throws {
@@ -70,7 +46,7 @@ public class ChannelTests : XCTestCase {
         }
 
         XCTAssertEqual(try channel.receive(deadline: .never), 222)
-        try coroutine.close()
+        coroutine.cancel()
     }
 
     func testDoubleSendTimeout() throws {
@@ -98,19 +74,9 @@ public class ChannelTests : XCTestCase {
 
         XCTAssertEqual(try channel.receive(deadline: .never), 333)
 
-        try coroutine1.close()
-        try coroutine2.close()
-        try coroutine3.close()
-    }
-
-    func testReceiveOnCanceledChannel() throws {
-        let channel = try Channel<Void>()
-        try channel.close()
-
-        XCTAssertThrowsError(
-            try channel.receive(deadline: .never),
-            error: VeniceError.invalidHandle
-        )
+        coroutine1.cancel()
+        coroutine2.cancel()
+        coroutine3.cancel()
     }
 
     func testReceiveOnCanceledCoroutine() throws {
@@ -119,21 +85,17 @@ public class ChannelTests : XCTestCase {
         let coroutine = try Coroutine {
             XCTAssertThrowsError(
                 try channel.receive(deadline: .never),
-                error: VeniceError.canceled
+                error: VeniceError.canceledCoroutine
             )
         }
 
-        try coroutine.close()
+        coroutine.cancel()
     }
 
     func testReceiveOnDoneChannel() throws {
         let channel = try Channel<Void>()
-        try channel.done(deadline: .immediately)
-
-        XCTAssertThrowsError(
-            try channel.receive(deadline: .never),
-            error: VeniceError.handleIsDone
-        )
+        channel.done()
+        XCTAssertThrowsError(try channel.receive(deadline: .never), error: VeniceError.doneChannel)
     }
 
     func testReceiveTimeout() throws {
@@ -149,7 +111,7 @@ public class ChannelTests : XCTestCase {
         }
 
         try channel.send(222, deadline: .never)
-        try coroutine.close()
+        coroutine.cancel()
     }
 
     func testReceiverWaitsForSender() throws {
@@ -160,7 +122,7 @@ public class ChannelTests : XCTestCase {
         }
 
         try channel.send(333, deadline: .never)
-        try coroutine.close()
+        coroutine.cancel()
     }
 
     func testSenderWaitsForReceiver() throws {
@@ -171,53 +133,50 @@ public class ChannelTests : XCTestCase {
         }
 
         XCTAssertEqual(try channel.receive(deadline: .never), 444)
-        try coroutine.close()
+        coroutine.cancel()
     }
 
     func testSendingChannel() throws {
         let channel = try Channel<Int>()
 
-        func send(to channel: Channel<Int>.SendOnly) throws {
+        func send(to channel: Channel<Int>.Sending) throws {
             try channel.send(111, deadline: .never)
         }
 
         let coroutine = try Coroutine {
-            try send(to: channel.sendOnly)
+            try send(to: channel.sending)
         }
 
         XCTAssertEqual(try channel.receive(deadline: .never), 111)
-        try coroutine.close()
+        coroutine.cancel()
     }
 
     func testSendErrorToSendingChannel() throws {
         let channel = try Channel<Int>()
 
-        func send(to channel: Channel<Int>.SendOnly) throws {
+        func send(to channel: Channel<Int>.Sending) throws {
             try channel.send(VeniceError.unexpectedError, deadline: .never)
         }
 
         let coroutine = try Coroutine {
-            try send(to: channel.sendOnly)
+            try send(to: channel.sending)
         }
 
         XCTAssertThrowsError(try channel.receive(deadline: .never), error: VeniceError.unexpectedError)
-
-        try coroutine.close()
+        coroutine.cancel()
     }
 
     func testDoneOnDoneSendingChannel() throws {
         let channel = try Channel<Void>()
-        let sending = channel.sendOnly
-
-        try channel.done(deadline: .immediately)
-
-        XCTAssertThrowsError(try sending.done(deadline: .immediately), error: VeniceError.handleIsDone)
+        let sending = channel.sending
+        channel.done()
+        sending.done()
     }
 
     func testReceivingChannel() throws {
         let channel = try Channel<Int>()
 
-        func receive(_ channel: Channel<Int>.ReceiveOnly) {
+        func receive(_ channel: Channel<Int>.Receiving) {
             XCTAssertEqual(try channel.receive(deadline: .never), 999)
         }
 
@@ -225,17 +184,15 @@ public class ChannelTests : XCTestCase {
             try channel.send(999, deadline: .never)
         }
 
-        receive(channel.receiveOnly)
-        try coroutine.close()
+        receive(channel.receiving)
+        coroutine.cancel()
     }
 
     func testDoneOnDoneReceivingChannel() throws {
         let channel = try Channel<Void>()
-        let receiving = channel.receiveOnly
-
-        try channel.done(deadline: .immediately)
-
-        XCTAssertThrowsError(try receiving.done(deadline: .immediately), error: VeniceError.handleIsDone)
+        let receiving = channel.receiving
+        channel.done()
+        receiving.done()
     }
 
     func testTwoSimultaneousSenders() throws {
@@ -252,8 +209,8 @@ public class ChannelTests : XCTestCase {
         XCTAssertEqual(try channel.receive(deadline: .never), 888)
         XCTAssertEqual(try channel.receive(deadline: .never), 999)
 
-        try coroutine1.close()
-        try coroutine2.close()
+        coroutine1.cancel()
+        coroutine2.cancel()
     }
 
     func testTwoSimultaneousReceivers() throws {
@@ -270,8 +227,8 @@ public class ChannelTests : XCTestCase {
         try channel.send(333, deadline: .never)
         try channel.send(444, deadline: .never)
 
-        try coroutine1.close()
-        try coroutine2.close()
+        coroutine1.cancel()
+        coroutine2.cancel()
     }
 
     func testTypedChannels() throws {
@@ -293,8 +250,8 @@ public class ChannelTests : XCTestCase {
         XCTAssertEqual(foo.bar, 555)
         XCTAssertEqual(foo.baz, 222)
 
-        try coroutine1.close()
-        try coroutine2.close()
+        coroutine1.cancel()
+        coroutine2.cancel()
     }
 
     func testDoneChannelUnblocks() throws {
@@ -304,7 +261,7 @@ public class ChannelTests : XCTestCase {
         let coroutine1 = try Coroutine {
             XCTAssertThrowsError(
                 try channel1.receive(deadline: .never),
-                error: VeniceError.handleIsDone
+                error: VeniceError.doneChannel
             )
 
             try channel2.send(0, deadline: .never)
@@ -313,19 +270,19 @@ public class ChannelTests : XCTestCase {
         let coroutine2 = try Coroutine {
             XCTAssertThrowsError(
                 try channel1.receive(deadline: .never),
-                error: VeniceError.handleIsDone
+                error: VeniceError.doneChannel
             )
 
             try channel2.send(0, deadline: .never)
         }
 
-        try channel1.done(deadline: .immediately)
+        channel1.done()
 
         XCTAssertEqual(try channel2.receive(deadline: .never), 0)
         XCTAssertEqual(try channel2.receive(deadline: .never), 0)
 
-        try coroutine1.close()
-        try coroutine2.close()
+        coroutine1.cancel()
+        coroutine2.cancel()
     }
 
     func testTenThousandWhispers() throws {
@@ -355,8 +312,8 @@ public class ChannelTests : XCTestCase {
 
                 XCTAssertEqual(try leftmost.receive(deadline: .never), numberOfWhispers + 1)
 
-                try starter.close()
-                try whispers.close()
+                starter.cancel()
+                whispers.cancel()
             } catch {
                 XCTFail()
             }
@@ -368,13 +325,9 @@ extension ChannelTests {
     public static var allTests: [(String, (ChannelTests) -> () throws -> Void)] {
         return [
             ("testCreationOnCanceledCoroutine", testCreationOnCanceledCoroutine),
-            ("testDoneOnCanceledChannel", testDoneOnCanceledChannel),
-            ("testDoneOnDoneChannel", testDoneOnDoneChannel),
-            ("testSendOnCanceledChannel", testSendOnCanceledChannel),
             ("testSendOnCanceledCoroutine", testSendOnCanceledCoroutine),
             ("testSendOnDoneChannel", testSendOnDoneChannel),
             ("testSendTimeout", testSendTimeout),
-            ("testReceiveOnCanceledChannel", testReceiveOnCanceledChannel),
             ("testReceiveOnCanceledCoroutine", testReceiveOnCanceledCoroutine),
             ("testReceiveOnDoneChannel", testReceiveOnDoneChannel),
             ("testReceiveTimeout", testReceiveTimeout),

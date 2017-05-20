@@ -9,10 +9,6 @@ xcodebuild_arguments:
   - Venice
 
 custom_categories:
-  - name: Handles
-    children:
-    - Handle
-
   - name: Coroutines
     children:
     - Coroutine
