@@ -8,39 +8,33 @@ import CLibdill
 
 /// A handle used to access a file or other input/output resource,
 /// such as a pipe or network socket.
-public final class FileDescriptor: RawRepresentable {
+public final class FileDescriptor {
     /// File descriptor handle.
-    public private(set) var rawValue: Int32
+    public private(set) var handle: Int32
 
     /// Creates a `FileDescriptor` from a file descriptor handle
     ///
     /// - Parameters:
     ///   - fileDescriptor: Previously opened file descriptor.
-    public init(rawValue fileDescriptor: Int32) {
-        rawValue = fileDescriptor
+    public init(handle: Int32) {
+        self.handle = handle
     }
 
-    /// Creates a `FileDescriptor` from a file descriptor handle and
-    /// configures it as non-blocking.
-    ///
-    /// - Parameters:
-    ///   - fileDescriptor: Previously opened file descriptor.
+    /// Configures the `FileDescriptor` to non-blocking
     ///
     /// - Throws: The following errors might be thrown:
     ///   #### VeniceError.invalidFileDescriptor
     ///   Thrown when `fileDescriptor` is not an open file descriptor.
-    public convenience init(nonblocking fileDescriptor: Int32) throws {
-        let flags = fcntl(fileDescriptor, F_GETFL, 0)
-        
+    public func setNonblocking() throws {
+        let flags = fcntl(handle, F_GETFL, 0)
+
         guard flags != -1 else {
             throw VeniceError.invalidFileDescriptor
         }
-        
-        guard fcntl(fileDescriptor, F_SETFL, flags | O_NONBLOCK) == 0 else {
+
+        guard fcntl(handle, F_SETFL, flags | O_NONBLOCK) == 0 else {
             throw VeniceError.invalidFileDescriptor
         }
-        
-        self.init(rawValue: fileDescriptor)
     }
     
     deinit {
@@ -78,9 +72,9 @@ public final class FileDescriptor: RawRepresentable {
         
         switch event {
         case .read:
-            result = fdin(rawValue, deadline.value)
+            result = fdin(handle, deadline.value)
         case .write:
-            result = fdout(rawValue, deadline.value)
+            result = fdout(handle, deadline.value)
         }
         
         guard result == 0 else {
@@ -109,11 +103,11 @@ public final class FileDescriptor: RawRepresentable {
     /// third-party libraries, just before returning them back to
     /// their original owners. Otherwise the behavior is **undefined**.
     public func clean() {
-        guard rawValue != -1 else {
+        guard handle != -1 else {
             return
         }
         
-        fdclean(rawValue)
+        fdclean(handle)
     }
     
     /// Closes a file descriptor, so that it no longer refers to any
@@ -135,11 +129,11 @@ public final class FileDescriptor: RawRepresentable {
         clean()
         
         #if os(Linux)
-            guard Glibc.close(rawValue) == 0 else {
+            guard Glibc.close(handle) == 0 else {
                 throw VeniceError.invalidFileDescriptor
             }
         #else
-            guard Darwin.close(rawValue) == 0 else {
+            guard Darwin.close(handle) == 0 else {
                 throw VeniceError.invalidFileDescriptor
             }
         #endif
@@ -153,10 +147,10 @@ public final class FileDescriptor: RawRepresentable {
         clean()
         
         defer {
-            rawValue = -1
+            handle = -1
         }
         
-        return rawValue
+        return handle
     }
     
     /// Event used to poll file descriptors for reading or writing.
