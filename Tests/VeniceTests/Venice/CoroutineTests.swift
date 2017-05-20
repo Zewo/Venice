@@ -107,31 +107,6 @@ public class CoroutineTests : XCTestCase {
 
         group.cancel()
     }
-
-    func testPollFileDescriptor() throws {
-        let deadline = 1.second.fromNow()
-        let (socket1, socket2) = try createSocketPair()
-
-        try socket1.poll(event: .write, deadline: deadline)
-        try socket1.poll(event: .write, deadline: deadline)
-
-        XCTAssertThrowsError(
-            try socket1.poll(event: .read, deadline: deadline),
-            error: VeniceError.deadlineReached
-        )
-
-        var size = send(socket2.handle, "A", 1, 0)
-        XCTAssertEqual(size, 1)
-
-        try socket1.poll(event: .write, deadline: deadline)
-        try socket1.poll(event: .read, deadline: deadline)
-
-        var character: Int8 = 0
-        size = recv(socket1.handle, &character, 1, 0)
-
-        XCTAssertEqual(size, 1)
-        XCTAssertEqual(character, 65)
-    }
     
     func testReadWriteFileDescriptor() throws {
         let deadline = 1.second.fromNow()
@@ -173,7 +148,7 @@ public class CoroutineTests : XCTestCase {
 
         let coroutine = try Coroutine {
             XCTAssertThrowsError(
-                try socket1.poll(event: .read, deadline: .never),
+                try FileDescriptor.poll(socket1.handle, event: .read, deadline: .never),
                 error: VeniceError.canceledCoroutine
             )
         }
@@ -186,14 +161,14 @@ public class CoroutineTests : XCTestCase {
 
         let coroutine1 = try Coroutine {
             XCTAssertThrowsError(
-                try socket1.poll(event: .read, deadline: .never),
+                try FileDescriptor.poll(socket1.handle, event: .read, deadline: .never),
                 error: VeniceError.canceledCoroutine
             )
         }
 
         let coroutine2 = try Coroutine {
             XCTAssertThrowsError(
-                try socket1.poll(event: .read, deadline: .never),
+                try FileDescriptor.poll(socket1.handle, event: .read, deadline: .never),
                 error: VeniceError.fileDescriptorBlockedInAnotherCoroutine
             )
         }
@@ -219,7 +194,7 @@ public class CoroutineTests : XCTestCase {
         XCTAssertEqual(fileDescriptor.handle, -1)
         
         XCTAssertThrowsError(
-            try fileDescriptor.poll(event: .read, deadline: .never),
+            try FileDescriptor.poll(fileDescriptor.handle, event: .read, deadline: .never),
             error: VeniceError.invalidFileDescriptor
         )
     }
@@ -258,7 +233,6 @@ extension CoroutineTests {
             ("testWakeUp", testWakeUp),
             ("testWakeUpOnCanceledCoroutine", testWakeUpOnCanceledCoroutine),
             ("testWakeUpWithChannels", testWakeUpWithChannels),
-            ("testPollFileDescriptor", testPollFileDescriptor),
             ("testReadWriteFileDescriptor", testReadWriteFileDescriptor),
             ("testInvalidFileDescriptor", testInvalidFileDescriptor),
             ("testPollOnCanceledCoroutine", testPollOnCanceledCoroutine),

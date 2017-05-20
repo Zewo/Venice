@@ -276,7 +276,7 @@ public class ChannelTests : XCTestCase {
             try channel2.send(0, deadline: .never)
         }
 
-        try channel1.done()
+        channel1.done()
 
         XCTAssertEqual(try channel2.receive(deadline: .never), 0)
         XCTAssertEqual(try channel2.receive(deadline: .never), 0)
