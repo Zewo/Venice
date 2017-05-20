@@ -8,20 +8,6 @@ import CLibdill
 
 /// A channel is a synchronization primitive.
 ///
-/// # Threads
-///
-/// You can use Venice in multi-threaded programs.
-/// However, individual threads are strictly separated.
-/// You may think of each thread as a separate process.
-///
-/// In particular, a coroutine created in a thread will
-/// be executed in that same thread, and it will never
-/// migrate to a different one.
-///
-/// In a similar manner, a handle, such as a channel or
-/// a coroutine handle, created in one thread cannot be
-/// used in a different thread.
-///
 /// ## Example:
 ///
 /// ```swift
@@ -32,9 +18,10 @@ import CLibdill
 /// }
 ///
 /// let theAnswer = try channel.receive(deadline: 1.second.fromNow())
-/// try coroutine.close()
 /// ```
-public final class Channel<Type> : Handle {
+public final class Channel<Type> {
+    private typealias Handle = Int32
+    
     private enum ChannelResult<Type> {
         case value(Type)
         case error(Error)
@@ -49,6 +36,7 @@ public final class Channel<Type> : Handle {
         }
     }
     
+    private let handle: Handle
     private var buffer = List<ChannelResult<Type>>()
 
     /// Creates a channel
@@ -58,20 +46,17 @@ public final class Channel<Type> : Handle {
     ///   It doesn't store any items.
     ///
     /// - Throws: The following errors might be thrown:
-    ///   #### VeniceError.canceled
-    ///   Thrown when the operation is performed within a closed coroutine.
+    ///   #### VeniceError.canceledCoroutine
+    ///   Thrown when the operation is performed within a canceled coroutine.
     ///   #### VeniceError.outOfMemory
-    ///   Thrown when the system doesn't have enough memory to perform the operation.
-    ///   #### VeniceError.unexpectedError
-    ///   Thrown when an unexpected error occurs.
-    ///   This should never happen in the regular flow of an application.
+    ///   Thrown when the system doesn't have enough memory to create a new channel.
     public init() throws {
         let result = chmake(0)
 
         guard result != -1 else {
             switch errno {
             case ECANCELED:
-                throw VeniceError.canceled
+                throw VeniceError.canceledCoroutine
             case ENOMEM:
                 throw VeniceError.outOfMemory
             default:
@@ -79,18 +64,18 @@ public final class Channel<Type> : Handle {
             }
         }
 
-        super.init(handle: result)
+        handle = result
     }
     
     deinit {
-        try? close()
+        hclose(handle)
     }
     
     /// Reference to the channel which can only send.
-    public lazy var sendOnly: SendOnly = SendOnly(self)
+    public lazy var sending: Sending = Sending(self)
     
     /// Reference to the channel which can only receive.
-    public lazy var receiveOnly: ReceiveOnly = ReceiveOnly(self)
+    public lazy var receiving: Receiving = Receiving(self)
 
     /// Sends a value to the channel.
     public func send(_ value: Type, deadline: Deadline) throws {
@@ -108,12 +93,10 @@ public final class Channel<Type> : Handle {
 
         guard result == 0 else {
             switch errno {
-            case EBADF:
-                throw VeniceError.invalidHandle
             case ECANCELED:
-                throw VeniceError.canceled
+                throw VeniceError.canceledCoroutine
             case EPIPE:
-                throw VeniceError.handleIsDone
+                throw VeniceError.doneChannel
             case ETIMEDOUT:
                 buffer.remove(node)
                 throw VeniceError.deadlineReached
@@ -129,12 +112,10 @@ public final class Channel<Type> : Handle {
 
         guard result == 0 else {
             switch errno {
-            case EBADF:
-                throw VeniceError.invalidHandle
             case ECANCELED:
-                throw VeniceError.canceled
+                throw VeniceError.canceledCoroutine
             case EPIPE:
-                throw VeniceError.handleIsDone
+                throw VeniceError.doneChannel
             case ETIMEDOUT:
                 throw VeniceError.deadlineReached
             default:
@@ -145,6 +126,16 @@ public final class Channel<Type> : Handle {
         return try buffer.removeFirst().getValue()
     }
     
+    /// This function is used to inform the channel that no more `send` or `receive` should be
+    /// performed on the channel.
+    ///
+    /// - Warning:
+    /// After `done` is called on a channel, any attempts to `send` or `receive`
+    /// will result in a `VeniceError.doneChannel` error.
+    public func done() {
+        hdone(handle, 0)
+    }
+    
     /// Send-only reference to an existing channel.
     ///
     /// ## Example:
@@ -152,28 +143,32 @@ public final class Channel<Type> : Handle {
     /// ```swift
     /// let channel = Channel<Int>()
     ///
-    /// func send(to channel: Channel<Int>.SendOnly) throws {
+    /// func send(to channel: Channel<Int>.Sending) throws {
     ///     try channel.send(42, deadline: 1.second.fromNow())
     /// }
     ///
-    /// try send(to: channel.sendOnly)
+    /// try send(to: channel.sending)
     /// ```
-    public final class SendOnly : Handle {
+    public final class Sending {
         private let channel: Channel<Type>
         
         fileprivate init(_ channel: Channel<Type>) {
             self.channel = channel
-            super.init(handle: channel.handle)
         }
         
-        /// Sends a value to the channel.
+        /// :nodoc:
         public func send(_ value: Type, deadline: Deadline) throws {
             try channel.send(value, deadline: deadline)
         }
         
-        /// Sends an error to the channel.
+        /// :nodoc:
         public func send(_ error: Error, deadline: Deadline) throws {
             try channel.send(error, deadline: deadline)
+        }
+        
+        /// :nodoc:
+        public func done() {
+            channel.done()
         }
     }
     
@@ -184,41 +179,100 @@ public final class Channel<Type> : Handle {
     /// ```swift
     /// let channel = Channel<Int>()
     ///
-    /// func receive(from channel: Channel<Int>.ReceiveOnly) throws {
+    /// func receive(from channel: Channel<Int>.Receiving) throws {
     ///     let value = try channel.receive(deadline: 1.second.fromNow())
     /// }
     ///
-    /// try receive(from: channel.receiveOnly)
+    /// try receive(from: channel.receiving)
     /// ```
-    public final class ReceiveOnly : Handle {
+    public final class Receiving {
         private let channel: Channel<Type>
         
         fileprivate init(_ channel: Channel<Type>) {
             self.channel = channel
-            super.init(handle: channel.handle)
         }
         
-        /// Receives a value from channel.
+        /// :nodoc:
         @discardableResult public func receive(deadline: Deadline) throws -> Type {
             return try channel.receive(deadline: deadline)
+        }
+        
+        /// :nodoc:
+        public func done() {
+            channel.done()
         }
     }
 }
 
 extension Channel where Type == Void {
-    /// Sends to the channel.
-    ///
     /// :nodoc:
     public func send(deadline: Deadline) throws {
         try send((), deadline: deadline)
     }
 }
 
-extension Channel.SendOnly where Type == Void {
-    /// Sends to the channel.
-    ///
+extension Channel.Sending where Type == Void {
     /// :nodoc:
     public func send(deadline: Deadline) throws {
         try send((), deadline: deadline)
+    }
+}
+
+class Node<T> {
+    var value: T
+    var next: Node<T>?
+    weak var previous: Node<T>?
+    
+    init(value: T) {
+        self.value = value
+    }
+}
+
+fileprivate class List<T> {
+    private var head: Node<T>?
+    private var tail: Node<T>?
+    
+    @discardableResult fileprivate func append(_ value: T) -> Node<T> {
+        let newNode = Node(value: value)
+        
+        if let tailNode = tail {
+            newNode.previous = tailNode
+            tailNode.next = newNode
+        } else {
+            head = newNode
+        }
+        
+        tail = newNode
+        return newNode
+    }
+    
+    @discardableResult fileprivate func remove(_ node: Node<T>) -> T {
+        let prev = node.previous
+        let next = node.next
+        
+        if let prev = prev {
+            prev.next = next
+        } else {
+            head = next
+        }
+        
+        next?.previous = prev
+        
+        if next == nil {
+            tail = prev
+        }
+        
+        node.previous = nil
+        node.next = nil
+        
+        return node.value
+    }
+    
+    @discardableResult fileprivate func removeFirst() throws -> T {
+        guard let head = head else {
+            throw VeniceError.unexpectedError
+        }
+        
+        return remove(head)
     }
 }

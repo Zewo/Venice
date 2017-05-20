@@ -29,14 +29,6 @@
       <nav class="sidebar">
         <ul class="nav-groups">
           <li class="nav-group-name">
-            <a href="../Handles.html">Handles</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="../Classes/Handle.html">Handle</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
             <a href="../Coroutines.html">Coroutines</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
@@ -54,10 +46,10 @@
                 <a href="../Classes/Channel.html">Channel</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/Channel/SendOnly.html">– SendOnly</a>
+                <a href="../Classes/Channel.html#/s:CC6Venice7Channel7Sending">– Sending</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/Channel/ReceiveOnly.html">– ReceiveOnly</a>
+                <a href="../Classes/Channel.html#/s:CC6Venice7Channel9Receiving">– Receiving</a>
               </li>
             </ul>
           </li>
@@ -115,9 +107,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6Venice11VeniceError8canceledFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/canceled" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6Venice11VeniceError8canceledFMS0_S0_">canceled</a>
+                    <a name="/s:FO6Venice11VeniceError17canceledCoroutineFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/canceledCoroutine" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO6Venice11VeniceError17canceledCoroutineFMS0_S0_">canceledCoroutine</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -125,76 +117,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Thrown when the operation is performed on a closed handle.</p>
+                        <p>Thrown when the operation is performed within a canceled coroutine.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">canceled</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO6Venice11VeniceError21operationNotSupportedFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/operationNotSupported" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6Venice11VeniceError21operationNotSupportedFMS0_S0_">operationNotSupported</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Thrown when the operation is not supported.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">operationNotSupported</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO6Venice11VeniceError13invalidHandleFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/invalidHandle" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6Venice11VeniceError13invalidHandleFMS0_S0_">invalidHandle</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Thrown when the operation is performed on an invalid handle.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">invalidHandle</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">canceledCoroutine</span></code></pre>
 
                         </div>
                       </div>
@@ -332,9 +262,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6Venice11VeniceError12handleIsDoneFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/handleIsDone" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6Venice11VeniceError12handleIsDoneFMS0_S0_">handleIsDone</a>
+                    <a name="/s:FO6Venice11VeniceError11doneChannelFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/doneChannel" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO6Venice11VeniceError11doneChannelFMS0_S0_">doneChannel</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -342,14 +272,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Thrown when the operation is performed on an done handle.</p>
+                        <p>Thrown when the operation is performed on an done channel.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">handleIsDone</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">doneChannel</span></code></pre>
 
                         </div>
                       </div>
@@ -363,9 +293,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6Venice11VeniceError16brokenConnectionFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/brokenConnection" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6Venice11VeniceError16brokenConnectionFMS0_S0_">brokenConnection</a>
+                    <a name="/s:FO6Venice11VeniceError10readFailedFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/readFailed" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO6Venice11VeniceError10readFailedFMS0_S0_">readFailed</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -373,14 +303,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Thrown when the operation is performed on a broken connection.</p>
+                        <p>Thrown when a read operation fails.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">brokenConnection</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">readFailed</span></code></pre>
 
                         </div>
                       </div>
@@ -394,9 +324,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6Venice11VeniceError16closedConnectionFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/closedConnection" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6Venice11VeniceError16closedConnectionFMS0_S0_">closedConnection</a>
+                    <a name="/s:FO6Venice11VeniceError11writeFailedFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/writeFailed" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO6Venice11VeniceError11writeFailedFMS0_S0_">writeFailed</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -404,45 +334,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Thrown when the operation is performed on a closed connection.</p>
+                        <p>Thrown when a write operation fails.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">closedConnection</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO6Venice11VeniceError16invalidArgumentsFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/invalidArguments" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6Venice11VeniceError16invalidArgumentsFMS0_S0_">invalidArguments</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Thrown when the operation is performed with invalid arguments.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">invalidArguments</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">writeFailed</span></code></pre>
 
                         </div>
                       </div>
@@ -486,7 +385,7 @@ This should never happen in the regular flow of an application.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="http://zewo.io" target="_blank" rel="external">Zewo</a>. All rights reserved. (Last updated: 2017-05-14)</p>
+          <p>&copy; 2017 <a class="link" href="http://zewo.io" target="_blank" rel="external">Zewo</a>. All rights reserved. (Last updated: 2017-05-20)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

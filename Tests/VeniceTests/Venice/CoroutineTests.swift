@@ -5,7 +5,7 @@
 #endif
 
 import XCTest
-import Venice
+@testable import Venice
 
 public class CoroutineTests : XCTestCase {    
     func testCoroutine() throws {
@@ -33,18 +33,18 @@ public class CoroutineTests : XCTestCase {
         try Coroutine.wakeUp(100.milliseconds.fromNow())
         XCTAssertEqual(sum, 42)
 
-        try coroutine1.close()
-        try coroutine2.close()
-        try coroutine3.close()
+        coroutine1.cancel()
+        coroutine2.cancel()
+        coroutine3.cancel()
     }
 
     func testCoroutineOnCanceledCoroutine() throws {
         let coroutine = try Coroutine {
             try Coroutine.yield()
-            XCTAssertThrowsError(try Coroutine(body: {}), error: VeniceError.canceled)
+            XCTAssertThrowsError(try Coroutine(body: {}), error: VeniceError.canceledCoroutine)
         }
 
-        try coroutine.close()
+        coroutine.cancel()
     }
 
     func testThrowOnCoroutine() throws {
@@ -56,34 +56,34 @@ public class CoroutineTests : XCTestCase {
             throw NiceError(description: "NICE™")
         }
 
-        try coroutine.close()
+        coroutine.cancel()
     }
 
     func testYiedOnCanceledCoroutine() throws {
         let coroutine = try Coroutine {
             try Coroutine.yield()
-            XCTAssertThrowsError(try Coroutine.yield(), error: VeniceError.canceled)
+            XCTAssertThrowsError(try Coroutine.yield(), error: VeniceError.canceledCoroutine)
         }
 
-        try coroutine.close()
+        coroutine.cancel()
     }
 
-//    func testWakeUp() throws {
-//        let deadline = 100.milliseconds.fromNow()
-//        try Coroutine.wakeUp(deadline)
-//        let difference = Deadline.now().value - deadline.value
-//        XCTAssert(difference > -100.milliseconds.value && difference < 100.milliseconds.value)
-//    }
+    func testWakeUp() throws {
+        let deadline = 100.milliseconds.fromNow()
+        try Coroutine.wakeUp(deadline)
+        let difference = Deadline.now().value - deadline.value
+        XCTAssert(difference > -100.milliseconds.value && difference < 100.milliseconds.value)
+    }
 
     func testWakeUpOnCanceledCoroutine() throws {
         let coroutine = try Coroutine {
             XCTAssertThrowsError(
                 try Coroutine.wakeUp(100.milliseconds.fromNow()),
-                error: VeniceError.canceled
+                error: VeniceError.canceledCoroutine
             )
         }
 
-        try coroutine.close()
+        coroutine.cancel()
     }
 
     func testWakeUpWithChannels() throws {
@@ -105,40 +105,67 @@ public class CoroutineTests : XCTestCase {
         XCTAssert(try channel.receive(deadline: .never) == 111)
         XCTAssert(try channel.receive(deadline: .never) == 222)
 
-        try group.close()
+        group.cancel()
     }
 
     func testPollFileDescriptor() throws {
+        let deadline = 1.second.fromNow()
         let (socket1, socket2) = try createSocketPair()
 
-        try socket1.poll(event: .write, deadline: 100.milliseconds.fromNow())
-        try socket1.poll(event: .write, deadline: 100.milliseconds.fromNow())
+        try socket1.poll(event: .write, deadline: deadline)
+        try socket1.poll(event: .write, deadline: deadline)
 
         XCTAssertThrowsError(
-            try socket1.poll(event: .read, deadline: 100.milliseconds.fromNow()),
+            try socket1.poll(event: .read, deadline: deadline),
             error: VeniceError.deadlineReached
         )
 
         var size = send(socket2.handle, "A", 1, 0)
-        XCTAssert(size == 1)
+        XCTAssertEqual(size, 1)
 
-        try socket1.poll(event: .write, deadline: 100.milliseconds.fromNow())
-        try socket1.poll(event: .read, deadline: 100.milliseconds.fromNow())
+        try socket1.poll(event: .write, deadline: deadline)
+        try socket1.poll(event: .read, deadline: deadline)
 
         var character: Int8 = 0
         size = recv(socket1.handle, &character, 1, 0)
 
-        XCTAssert(size == 1)
-        XCTAssert(character == 65)
+        XCTAssertEqual(size, 1)
+        XCTAssertEqual(character, 65)
+    }
+    
+    func testReadWriteFileDescriptor() throws {
+        let deadline = 1.second.fromNow()
+        let (socket1, socket2) = try createSocketPair()
+        
+        let socket1Buffer = UnsafeMutableRawBufferPointer.allocate(count: 1)
+        let socket2Buffer = UnsafeMutableRawBufferPointer.allocate(count: 1)
+        
+        defer {
+            socket1Buffer.deallocate()
+            socket2Buffer.deallocate()
+        }
+        
+        var read: UnsafeRawBufferPointer
+        
+        socket1Buffer[0] = 42
+        socket2Buffer[0] = 0
+        try socket1.write(UnsafeRawBufferPointer(socket1Buffer), deadline: deadline)
+        read = try socket2.read(socket2Buffer, deadline: deadline)
+        XCTAssertEqual(read[0], 42)
+        XCTAssertEqual(socket1Buffer[0], 42)
+        XCTAssertEqual(socket2Buffer[0], 42)
+        
+        socket1Buffer[0] = 0
+        socket2Buffer[0] = 69
+        try socket2.write(UnsafeRawBufferPointer(socket2Buffer), deadline: deadline)
+        read = try socket1.read(socket1Buffer, deadline: deadline)
+        XCTAssertEqual(read[0], 69)
+        XCTAssertEqual(socket1Buffer[0], 69)
+        XCTAssertEqual(socket2Buffer[0], 69)
     }
 
     func testInvalidFileDescriptor() throws {
-        let fd = FileDescriptor(handle: -1)
-
-        XCTAssertThrowsError(
-            try fd.setNonblocking(),
-            error: VeniceError.invalidFileDescriptor
-        )
+        XCTAssertThrowsError(try FileDescriptor(-1), error: VeniceError.invalidFileDescriptor)
     }
 
     func testPollOnCanceledCoroutine() throws {
@@ -147,11 +174,11 @@ public class CoroutineTests : XCTestCase {
         let coroutine = try Coroutine {
             XCTAssertThrowsError(
                 try socket1.poll(event: .read, deadline: .never),
-                error: VeniceError.canceled
+                error: VeniceError.canceledCoroutine
             )
         }
 
-        try coroutine.close()
+        coroutine.cancel()
     }
 
     func testFileDescriptorBlockedInAnotherCoroutine() throws {
@@ -160,7 +187,7 @@ public class CoroutineTests : XCTestCase {
         let coroutine1 = try Coroutine {
             XCTAssertThrowsError(
                 try socket1.poll(event: .read, deadline: .never),
-                error: VeniceError.canceled
+                error: VeniceError.canceledCoroutine
             )
         }
 
@@ -171,13 +198,8 @@ public class CoroutineTests : XCTestCase {
             )
         }
 
-        try coroutine1.close()
-        try coroutine2.close()
-    }
-
-    func testCleanFileDescriptor() throws {
-        let fileDescriptor = FileDescriptor(handle: STDIN_FILENO)
-        fileDescriptor.clean()
+        coroutine1.cancel()
+        coroutine2.cancel()
     }
     
     func testDetachFileDescriptor() throws {
@@ -191,15 +213,25 @@ public class CoroutineTests : XCTestCase {
         
         XCTAssert(result == 0)
         
-        let fileDescriptor = FileDescriptor(handle: sockets[0])
-        let standardInput = fileDescriptor.detach()
-        XCTAssertEqual(standardInput, sockets[0])
+        let fileDescriptor = try FileDescriptor(sockets[0])
+        let socket = try fileDescriptor.detach()
+        XCTAssertEqual(socket, sockets[0])
         XCTAssertEqual(fileDescriptor.handle, -1)
         
         XCTAssertThrowsError(
             try fileDescriptor.poll(event: .read, deadline: .never),
             error: VeniceError.invalidFileDescriptor
         )
+    }
+    
+    func testStandardStreams() {
+        let input = FileDescriptor.standardInput
+        let output = FileDescriptor.standardOutput
+        let error = FileDescriptor.standardError
+        
+        XCTAssertEqual(try input.detach(), STDIN_FILENO)
+        XCTAssertEqual(try output.detach(), STDOUT_FILENO)
+        XCTAssertEqual(try error.detach(), STDERR_FILENO)
     }
 }
 
@@ -213,8 +245,7 @@ func createSocketPair() throws -> (FileDescriptor, FileDescriptor) {
     #endif
 
     XCTAssert(result == 0)
-
-    return (FileDescriptor(handle: sockets[0]), FileDescriptor(handle: sockets[1]))
+    return try (FileDescriptor(sockets[0]), FileDescriptor(sockets[1]))
 }
 
 extension CoroutineTests {
@@ -224,14 +255,16 @@ extension CoroutineTests {
             ("testCoroutineOnCanceledCoroutine", testCoroutineOnCanceledCoroutine),
             ("testThrowOnCoroutine", testThrowOnCoroutine),
             ("testYiedOnCanceledCoroutine", testYiedOnCanceledCoroutine),
-//            ("testWakeUp", testWakeUp),
+            ("testWakeUp", testWakeUp),
             ("testWakeUpOnCanceledCoroutine", testWakeUpOnCanceledCoroutine),
             ("testWakeUpWithChannels", testWakeUpWithChannels),
             ("testPollFileDescriptor", testPollFileDescriptor),
+            ("testReadWriteFileDescriptor", testReadWriteFileDescriptor),
             ("testInvalidFileDescriptor", testInvalidFileDescriptor),
             ("testPollOnCanceledCoroutine", testPollOnCanceledCoroutine),
             ("testFileDescriptorBlockedInAnotherCoroutine", testFileDescriptorBlockedInAnotherCoroutine),
-            ("testCleanFileDescriptor", testCleanFileDescriptor),
+            ("testDetachFileDescriptor", testDetachFileDescriptor),
+            ("testStandardStreams", testStandardStreams),
         ]
     }
 }
