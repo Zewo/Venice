@@ -214,7 +214,7 @@ func createSocketPair() throws -> (FileDescriptor, FileDescriptor) {
 
     XCTAssert(result == 0)
 
-    return try (FileDescriptor(handle: sockets[0]), FileDescriptor(handle: sockets[1]))
+    return (FileDescriptor(handle: sockets[0]), FileDescriptor(handle: sockets[1]))
 }
 
 extension CoroutineTests {
