@@ -2,8 +2,9 @@ import PackageDescription
 
 let package = Package(
     name: "Venice",
-    targets: [
-        Target(name: "CLibdill"),
-        Target(name: "Venice", dependencies: ["CLibdill"]),
+
+    dependencies: [
+        .Package(url: "https://github.com/Zewo/CLibdill.git", majorVersion: 1, minor: 0)
     ]
+
 )
