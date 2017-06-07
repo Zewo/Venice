@@ -8,6 +8,7 @@ sudo: required
 dist: trusty
 osx_image: xcode8.3
 install:
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install zewo/tap/libdill; fi
   - eval "$(curl -sL https://raw.githubusercontent.com/Zewo/Zewo/master/Scripts/Travis/install.sh)"
 script:
   - bash <(curl -s https://raw.githubusercontent.com/Zewo/Zewo/master/Scripts/Travis/build-test.sh) Venice
