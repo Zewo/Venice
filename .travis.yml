@@ -16,10 +16,7 @@ install:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then make; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo make install; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then cd ..; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then cd ..; fi
-  - echo $PKG_CONFIG_PATH
   - export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
-  - echo $PKG_CONFIG_PATH
   - eval "$(curl -sL https://raw.githubusercontent.com/Zewo/Zewo/master/Scripts/Travis/install.sh)"
 script:
   - bash <(curl -s https://raw.githubusercontent.com/Zewo/Zewo/master/Scripts/Travis/build-test.sh) Venice
