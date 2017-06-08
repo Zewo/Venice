@@ -9,11 +9,13 @@ dist: trusty
 osx_image: xcode8.3
 install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install zewo/tap/libdill; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then git clone https://github.com/Zewo/libdill .; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then git clone https://github.com/Zewo/libdill; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then cd libdill; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then ./autogen.sh; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then ./configure; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then make; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then make install; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then cd ..; fi
   - eval "$(curl -sL https://raw.githubusercontent.com/Zewo/Zewo/master/Scripts/Travis/install.sh)"
 script:
   - bash <(curl -s https://raw.githubusercontent.com/Zewo/Zewo/master/Scripts/Travis/build-test.sh) Venice
