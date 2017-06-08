@@ -3,6 +3,10 @@ notifications:
 os:
   - linux
   - osx
+addons:
+  apt:
+    packages:
+      - pkg-config
 language: generic
 sudo: required
 dist: trusty
