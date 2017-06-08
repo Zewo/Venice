@@ -16,9 +16,8 @@ install:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then make; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo make install; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then cd ..; fi
-  - echo $LD_LIBRARY_PATH
+  - cat /usr/local/lib/pkgconfig/libdill.pc
   - export LD_LIBRARY_PATH=/usr/local/lib
-  - echo $LD_LIBRARY_PATH
   - eval "$(curl -sL https://raw.githubusercontent.com/Zewo/Zewo/master/Scripts/Travis/install.sh)"
 script:
   - bash <(curl -s https://raw.githubusercontent.com/Zewo/Zewo/master/Scripts/Travis/build-test.sh) Venice
