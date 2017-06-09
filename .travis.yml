@@ -14,4 +14,4 @@ addons:
 install:
   - eval "$(curl -sL http://sh.zewo.io/install-libdill.sh)"
 script:
-  - bash <(curl -sL http://sh.zewo.io/build.sh)
+  - eval "$(curl -sL http://sh.zewo.io/build.sh)"

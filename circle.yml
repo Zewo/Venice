@@ -3,4 +3,4 @@ dependencies:
     - eval "$(curl -sL http://sh.zewo.io/install-libdill.sh)"
 test:
   override:
-    - bash <(curl -sL http://sh.zewo.io/build.sh)
+    - eval "$(curl -sL http://sh.zewo.io/build.sh)"
