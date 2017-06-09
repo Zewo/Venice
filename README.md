@@ -32,17 +32,28 @@ Before using Venice you need to install our [libdill](https://github.com/Zewo/li
 
 ### macOS
 
+On *macOS* install *libdill* using [brew](https://brew.sh).
+
 ```sh
 brew install zewo/tap/libdill
 ```
 
 ### Linux
 
+On *Linux* we have to add our *apt* source first. You only need to run this command once in a lifetime. You don't need to run it again if you already have.
+
 ```sh
 echo "deb [trusted=yes] http://apt.zewo.io ./" | sudo tee -a /etc/apt/sources.list
 sudo apt-get update
+```
+
+Now just install the *libdill* apt package.
+
+```sh
 sudo apt-get install libdill
 ```
+
+### Add `Venice` to `Pacakge.swift`
 
 After that just add `Venice` as a dependency in your `Package.swift` file.
 
