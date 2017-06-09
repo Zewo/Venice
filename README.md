@@ -1,3 +1,7 @@
+<p align="center">
+<img src="https://github.com/Zewo/Venice/blob/master/Images/header.png?raw=true" width="250" />
+</p>
+
 # Venice
 
 [![Swift][swift-badge]][swift-url]
