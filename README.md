@@ -28,14 +28,30 @@
 
 ## Installation
 
-- Add `Venice` to your `Package.swift`
+Before using Venice you need to install our [libdill](https://github.com/Zewo/libdill) fork. Follow the instruction for your operating system.
+
+### macOS
+
+```sh
+brew install zewo/tap/libdill
+```
+
+### Linux
+
+```sh
+echo "deb [trusted=yes] http://apt.zewo.io ./" | sudo tee -a /etc/apt/sources.list
+sudo apt-get update
+sudo apt-get install libdill
+```
+
+After that just add `Venice` as a dependency in your `Package.swift` file.
 
 ```swift
 import PackageDescription
 
 let package = Package(
     dependencies: [
-        .Package(url: "https://github.com/Zewo/Venice.git", majorVersion: 0, minor: 18)
+        .Package(url: "https://github.com/Zewo/Venice.git", majorVersion: 0, minor: 19)
     ]
 )
 ```
