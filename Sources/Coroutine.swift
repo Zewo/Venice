@@ -75,7 +75,7 @@ public final class Coroutine {
         }
 
         let result = co(nil, 0, &coroutine, nil, 0) { pointer in
-            pointer?.assumingMemoryBound(to: ((Void) -> Void).self).pointee()
+            pointer?.assumingMemoryBound(to: (() -> Void).self).pointee()
         }
 
         guard result != -1 else {

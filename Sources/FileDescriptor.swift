@@ -134,7 +134,11 @@ public final class FileDescriptor {
                 }
             }
             
-            buffer = buffer.suffix(from: result)
+            #if swift(>=3.2)
+                buffer = UnsafeRawBufferPointer(rebasing: buffer.suffix(from: result))
+            #else
+                buffer = buffer.suffix(from: result)
+            #endif
         }
     }
     
