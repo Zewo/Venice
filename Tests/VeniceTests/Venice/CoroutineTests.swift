@@ -208,6 +208,13 @@ public class CoroutineTests : XCTestCase {
         XCTAssertEqual(try output.detach(), STDOUT_FILENO)
         XCTAssertEqual(try error.detach(), STDERR_FILENO)
     }
+
+    func testReadFromEmptyFileDescriptor() throws {
+        let socketPair = try createSocketPair()
+        let buf = UnsafeMutableRawBufferPointer.allocate(count: 0)
+        let ret = try socketPair.0.read(buf, deadline: 1.second.fromNow())
+        XCTAssert(ret.isEmpty)
+    }
 }
 
 func createSocketPair() throws -> (FileDescriptor, FileDescriptor) {
