@@ -40,7 +40,7 @@ brew install zewo/tap/libdill
 
 ### Linux
 
-On **Linux** we have to add our *apt* source first. You only need to run this command once in a lifetime. You don't need to run it again if you already have.
+On **Linux** we have to add our **apt** source first. You only need to run this command once in a lifetime. You don't need to run it again if you already have.
 
 ```sh
 echo "deb [trusted=yes] http://apt.zewo.io ./" | sudo tee -a /etc/apt/sources.list
