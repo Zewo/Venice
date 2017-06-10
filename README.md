@@ -55,7 +55,7 @@ sudo apt-get install libdill
 
 ### Add **Venice** to **Package.swift**
 
-After installing *libdill* just add `Venice` as a dependency in your `Package.swift` file.
+After installing **libdill** just add `Venice` as a dependency in your `Package.swift` file.
 
 ```swift
 import PackageDescription
