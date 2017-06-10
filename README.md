@@ -67,7 +67,11 @@ let package = Package(
 )
 ```
 
-# Structured Concurrency
+## Documentation
+
+You can check the [Venice API reference](http://zewo.github.io/Venice/) for more in-depth documentation.
+
+## Structured Concurrency
 
 Structured concurrency means that lifetimes of concurrent functions are cleanly nested. If coroutine `foo` launches coroutine `bar`, then `bar` must finish before `foo` finishes.
 
@@ -109,7 +113,7 @@ coroutine.cancel()
 
 In the example above, when `coroutine.cancel` is called the call to `Coroutine.wakeUp` inside the coroutine will throw `VeniceError.canceledCoroutine` and then the `defer` statement will run, thus releasing the memory allocated for `resource`.
 
-# Threads
+## Threads
 
 You can use Venice in multi-threaded programs. However, individual threads are strictly separated. You may think of each thread as a separate process.
 
