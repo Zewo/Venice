@@ -271,6 +271,10 @@ extension CoroutineTests {
             ("testFileDescriptorBlockedInAnotherCoroutine", testFileDescriptorBlockedInAnotherCoroutine),
             ("testDetachFileDescriptor", testDetachFileDescriptor),
             ("testStandardStreams", testStandardStreams),
+            ("testReadUsingEmptyBuffer", testReadUsingEmptyBuffer),
+            ("testReadFromEmptyFildes", testReadFromEmptyFildes),
+            ("testCleanInvalidHandle", testCleanInvalidHandle),
+            ("testInvalidWrite", testInvalidWrite)
         ]
     }
 }
