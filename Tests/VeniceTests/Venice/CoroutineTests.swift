@@ -7,7 +7,7 @@
 import XCTest
 @testable import Venice
 
-public class CoroutineTests : XCTestCase {    
+public class CoroutineTests : XCTestCase {
     func testCoroutine() throws {
         var sum = 0
 
@@ -227,6 +227,18 @@ public class CoroutineTests : XCTestCase {
 
     func testCleanInvalidHandle() {
         FileDescriptor.clean(-1)
+    }
+
+    func testInvalidWrite() {
+        let handle = open("/dev/null", O_RDONLY)
+        let fildes = try! FileDescriptor(handle)
+        let mutableBuf = UnsafeMutableRawBufferPointer.allocate(count: 1)
+        mutableBuf[0] = 42
+        let buf = UnsafeRawBufferPointer(mutableBuf)
+        XCTAssertThrowsError(
+          try fildes.write(buf, deadline: 1.second.fromNow()),
+          error: VeniceError.writeFailed
+        )
     }
 }
 
