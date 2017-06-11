@@ -41,7 +41,7 @@ public final class FileDescriptor {
         }
         // Error checking here is unecessary. If the file descriptor is invalid,
         // it was caught by the previous statement.
-        fcntl(handle, F_SETFL, flags | O_NONBLOCK)
+        let _ = fcntl(handle, F_SETFL, flags | O_NONBLOCK)
         self.handle = handle
     }
     
