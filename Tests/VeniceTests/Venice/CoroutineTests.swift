@@ -223,7 +223,11 @@ public class CoroutineTests : XCTestCase {
           try socketPair.0.read(buf, deadline: 1.second.fromNow()),
           error: VeniceError.deadlineReached
         )
-    } 
+    }
+
+    func testCleanInvalidHandle() {
+        FileDescriptor.clean(-1)
+    }
 }
 
 func createSocketPair() throws -> (FileDescriptor, FileDescriptor) {
