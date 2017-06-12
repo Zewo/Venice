@@ -67,6 +67,14 @@ let package = Package(
 )
 ```
 
+## Test Coverage
+
+<p align="center">
+    <a href="https://codecov.io/gh/Zewo/Venice"><img src="https://codecov.io/gh/Zewo/Venice/branch/master/graphs/sunburst.svg" alt="Coverage Sunburst"/></a>
+</p>
+
+The inner-most circle is the entire project, moving away from the center are folders then, finally, a single file. The size and color of each slice is represented by the number of statements and the coverage, respectively.
+
 ## Documentation
 
 You can check the [Venice API reference](http://zewo.github.io/Venice/) for more in-depth documentation.
