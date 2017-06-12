@@ -85,14 +85,14 @@ Structured concurrency means that lifetimes of concurrent functions are cleanly 
 
 This is not structured concurrency:
 
-<p align="center">
-    <img src="http://libdill.org/index1.jpeg" alt="Not Structured Concurrency"/><
+<p align="left">
+    <img src="http://libdill.org/index1.jpeg" alt="Not Structured Concurrency"/>
 </p>
 
 This is structured concurrency:
 
-<p align="center">
-    <img src="http://libdill.org/index2.jpeg" alt="Structured Concurrency"/><
+<p align="left">
+    <img src="http://libdill.org/index2.jpeg" alt="Structured Concurrency"/>
 </p>
 
 The goal of structured concurrency is to guarantee encapsulation. If the `main` function calls `foo`, which in turn launches `bar` in a concurrent fashion, `main` will be guaranteed that once `foo` has finished, there will be no leftover functions still running in the background.
@@ -100,7 +100,7 @@ The goal of structured concurrency is to guarantee encapsulation. If the `main` 
 What you end up with is a tree of coroutines rooted in the `main` function. This tree spreads out towards the smallest worker functions, and you may think of this as a generalization of the call stack — a call tree, if you will. In it, you can walk from any particular function towards the root until you reach the main function:
 
 <p align="center">
-    <img src="http://libdill.org/index3.jpeg" alt="Call Tree"/><
+    <img src="http://libdill.org/index3.jpeg" alt="Call Tree"/>
 </p>
 
 Venice implements structured concurrency by allowing you to cancel a running coroutine.
