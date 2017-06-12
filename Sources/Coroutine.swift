@@ -40,6 +40,16 @@ import CLibdill
 public final class Coroutine {
     private typealias Handle = Int32
     private let handle: Handle
+    private var cancelled = true
+
+    /// Termination handler. You should set this if you want to execute any
+    /// house keeping or react to a coroutine termination. This is called after
+    /// the coroutine is ended or when it is terminated.
+    ///
+    /// - Parameters:
+    ///   - cancelled: True if the coroutine is being cancelled. False, if it is
+    ///     terminating gracefully.
+    public var terminationHandler: ((Bool)->())?
     
     /// Launches a coroutine that executes the closure passed as argument.
     /// The coroutine is executed concurrently, and its lifetime may exceed the lifetime
@@ -93,6 +103,7 @@ public final class Coroutine {
     }
     
     deinit {
+        cancelled = false
         cancel()
     }
     
@@ -102,6 +113,8 @@ public final class Coroutine {
     /// Once a coroutine is canceled any coroutine-blocking operation within the coroutine
     /// will throw `VeniceError.canceledCoroutine`.
     public func cancel() {
+        terminationHandler?(cancelled)
+        terminationHandler = nil
         hclose(handle)
     }
     

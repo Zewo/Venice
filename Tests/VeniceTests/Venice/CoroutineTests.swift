@@ -208,6 +208,40 @@ public class CoroutineTests : XCTestCase {
         XCTAssertEqual(try output.detach(), STDOUT_FILENO)
         XCTAssertEqual(try error.detach(), STDERR_FILENO)
     }
+
+    func testNormalTerminationHandler() {
+        var stop = false
+        let coroutine = try? Coroutine {
+            while !stop {
+                try? Coroutine.yield()
+            }
+        }
+        coroutine?.terminationHandler = { (cancelled: Bool) in 
+            XCTAssertEqual(cancelled, false, "Wrong cancellation behavior")
+        }
+        try? Coroutine.wakeUp(1.second.fromNow())
+        stop = true
+        try? Coroutine.wakeUp(1.second.fromNow())
+    }
+
+    func testCancelledTerminationHandler() {
+        let coroutine = try? Coroutine {
+            var stop = false
+            while !stop {
+                do {
+                    try Coroutine.yield()
+                } catch {
+                    stop = true
+                }
+            }
+        }
+        coroutine?.terminationHandler = { (cancelled: Bool) in
+            XCTAssertEqual(cancelled, true, "Wrong cancellation behavior")
+        }
+        try? Coroutine.wakeUp(1.second.fromNow())
+        coroutine?.cancel()
+        try? Coroutine.wakeUp(1.second.fromNow())
+    }
 }
 
 func createSocketPair() throws -> (FileDescriptor, FileDescriptor) {
@@ -239,6 +273,8 @@ extension CoroutineTests {
             ("testFileDescriptorBlockedInAnotherCoroutine", testFileDescriptorBlockedInAnotherCoroutine),
             ("testDetachFileDescriptor", testDetachFileDescriptor),
             ("testStandardStreams", testStandardStreams),
+            ("testNormalTerminationHandler", testNormalTerminationHandler),
+            ("testCancelledTerminationHandler", testCancelledTerminationHandler)
         ]
     }
 }
