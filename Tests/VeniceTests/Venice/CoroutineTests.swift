@@ -225,14 +225,17 @@ public class CoroutineTests : XCTestCase {
     }
 
     func testCancelledTerminationHandler() {
-        var stop = false
         let coroutine = try? Coroutine {
+            var stop = false
             while !stop {
-                try? Coroutine.yield()
+                do {
+                    try Coroutine.yield()
+                } catch {
+                    stop = true
+                }
             }
         }
         coroutine?.terminationHandler = { (cancelled: Bool) in
-            stop = true
             XCTAssertEqual(cancelled, true, "Wrong cancellation behavior")
         }
         try? Coroutine.wakeUp(1.second.fromNow())
