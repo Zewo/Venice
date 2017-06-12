@@ -36,15 +36,12 @@ public final class FileDescriptor {
     ///   Thrown when the operation is performed on an invalid file descriptor.
     public init(_ handle: Handle) throws {
         let flags = fcntl(handle, F_GETFL, 0)
-
         guard flags != -1 else {
             throw VeniceError.invalidFileDescriptor
         }
-
-        guard fcntl(handle, F_SETFL, flags | O_NONBLOCK) == 0 else {
-            throw VeniceError.invalidFileDescriptor
-        }
-        
+        // Error checking here is unecessary. If the file descriptor is invalid,
+        // it was caught by the previous statement.
+        let _ = fcntl(handle, F_SETFL, flags | O_NONBLOCK)
         self.handle = handle
     }
     

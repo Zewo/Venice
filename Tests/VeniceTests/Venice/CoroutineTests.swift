@@ -7,7 +7,7 @@
 import XCTest
 @testable import Venice
 
-public class CoroutineTests : XCTestCase {    
+public class CoroutineTests : XCTestCase {
     func testCoroutine() throws {
         var sum = 0
 
@@ -208,6 +208,38 @@ public class CoroutineTests : XCTestCase {
         XCTAssertEqual(try output.detach(), STDOUT_FILENO)
         XCTAssertEqual(try error.detach(), STDERR_FILENO)
     }
+
+    func testReadUsingEmptyBuffer() throws {
+        let socketPair = try createSocketPair()
+        let buf = UnsafeMutableRawBufferPointer.allocate(count: 0)
+        let ret = try socketPair.0.read(buf, deadline: 1.second.fromNow())
+        XCTAssert(ret.isEmpty)
+    }
+
+    func testReadFromEmptyFildes() throws {
+        let socketPair = try createSocketPair()
+        let buf = UnsafeMutableRawBufferPointer.allocate(count: Int(BUFSIZ))
+        XCTAssertThrowsError(
+          try socketPair.0.read(buf, deadline: 1.second.fromNow()),
+          error: VeniceError.deadlineReached
+        )
+    }
+
+    func testCleanInvalidHandle() {
+        FileDescriptor.clean(-1)
+    }
+
+    func testInvalidWrite() {
+        let handle = open("/dev/null", O_RDONLY)
+        let fildes = try! FileDescriptor(handle)
+        let mutableBuf = UnsafeMutableRawBufferPointer.allocate(count: 1)
+        mutableBuf[0] = 42
+        let buf = UnsafeRawBufferPointer(mutableBuf)
+        XCTAssertThrowsError(
+          try fildes.write(buf, deadline: 1.second.fromNow()),
+          error: VeniceError.writeFailed
+        )
+    }
 }
 
 func createSocketPair() throws -> (FileDescriptor, FileDescriptor) {
@@ -239,6 +271,10 @@ extension CoroutineTests {
             ("testFileDescriptorBlockedInAnotherCoroutine", testFileDescriptorBlockedInAnotherCoroutine),
             ("testDetachFileDescriptor", testDetachFileDescriptor),
             ("testStandardStreams", testStandardStreams),
+            ("testReadUsingEmptyBuffer", testReadUsingEmptyBuffer),
+            ("testReadFromEmptyFildes", testReadFromEmptyFildes),
+            ("testCleanInvalidHandle", testCleanInvalidHandle),
+            ("testInvalidWrite", testInvalidWrite)
         ]
     }
 }
