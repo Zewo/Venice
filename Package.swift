@@ -1,10 +1,25 @@
-// swift-tools-version:3.1
+// swift-tools-version:4.0
 
 import PackageDescription
 
 let package = Package(
     name: "Venice",
+    products: [
+        .library(
+            name: "Venice",
+            type: .dynamic,
+            targets: [
+               "Venice"
+            ]
+        )
+    ],
     dependencies: [
-        .Package(url: "https://github.com/Zewo/CLibdill.git", majorVersion: 1)
+        .package(url: "https://github.com/Zewo/CLibdill.git", .branch("swift-4"))
+    ],
+    targets: [
+        .target(
+            name: "Venice",
+            dependencies: []
+        ),
     ]
 )
