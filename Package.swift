@@ -5,13 +5,7 @@ import PackageDescription
 let package = Package(
     name: "Venice",
     products: [
-        .library(
-            name: "Venice",
-            type: .dynamic,
-            targets: [
-               "Venice"
-            ]
-        )
+        .library(name: "Venice", targets: ["Venice"])
     ],
     dependencies: [
         .package(url: "https://github.com/Zewo/CLibdill.git", .branch("swift-4"))
