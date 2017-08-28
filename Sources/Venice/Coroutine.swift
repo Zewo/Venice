@@ -2,9 +2,10 @@
     import Glibc
 #else
     import Darwin.C
-    import Foundation
 #endif
 
+import Foundation
+import Dispatch
 import CLibdill
 
 /// Lightweight coroutine.
@@ -31,16 +32,11 @@ import CLibdill
 /// ## Example:
 ///
 /// ```swift
-/// let coroutine = try Coroutine {
+/// Coroutine.run {
 ///     ...
 /// }
-///
-/// coroutine.cancel()
 /// ```
-public final class Coroutine {
-    private typealias Handle = Int32
-    private let handle: Handle
-    
+public final class Coroutine : CustomStringConvertible {
     /// Launches a coroutine that executes the closure passed as argument.
     /// The coroutine is executed concurrently, and its lifetime may exceed the lifetime
     /// of the caller.
@@ -48,64 +44,175 @@ public final class Coroutine {
     /// ## Example:
     ///
     /// ```swift
-    /// let coroutine = try Coroutine {
+    /// Coroutine.run {
     ///     ...
     /// }
-    ///
-    /// coroutine.cancel()
     /// ```
     ///
     /// - Parameters:
-    ///   - body: Body of the newly created coroutine.
-    ///
-    /// - Throws: The following errors might be thrown:
-    ///   #### VeniceError.canceledCoroutine
-    ///   Thrown when the operation is performed within a canceled coroutine.
-    ///   #### VeniceError.outOfMemory
-    ///   Thrown when the system doesn't have enough memory to create a new coroutine.
-    public init(body: @escaping () throws -> Void) throws {
-        var coroutine = {
-            do {
-                try body()
-            } catch VeniceError.canceledCoroutine {
-                return
-            } catch {
-                print(error)
-            }
+    ///   - routine: The routine to execute
+    public static func run(label: String = "anonymous", file: String = #file, line: Int = #line, routine: @escaping () -> Void) {
+        Coroutine.reaper.reap()
+
+        var _routine = {
+            Coroutine.current = Coroutine(label: label)
+            routine()
+            Coroutine.current = Coroutine.main
         }
 
-        let result = co(nil, 0, &coroutine, nil, 0) { pointer in
+        let result = co(nil, 0, &_routine, file, Int32(line)) { handle, pointer in
             pointer?.assumingMemoryBound(to: (() -> Void).self).pointee()
+            Coroutine.reaper.push(handle: handle)
         }
 
         guard result != -1 else {
             switch errno {
-            case ECANCELED:
-                throw VeniceError.canceledCoroutine
             case ENOMEM:
-                throw VeniceError.outOfMemory
+                fatalError("Out of memory while creating coroutine.")
             default:
-                throw VeniceError.unexpectedError
+                fatalError("Unexpected error \(errno) while creating coroutine.")
             }
         }
+    }
 
-        handle = result
-    }
-    
-    deinit {
-        cancel()
-    }
-    
-    /// Cancels the coroutine.
+    /// Launches a coroutine on a background thread that executes the closure passed
+    /// as an argument. The coroutine is executed concurrently but the caller is
+    /// blocked cooperatively until a result is available.
     ///
+    /// ## Example:
+    ///
+    /// ```swift
+    /// let result: Bool = Coroutine.worker {
+    ///    ... some heavy processing work
+    ///    return true
+    /// }
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - routine: the routine to execute
     /// - Warning:
-    /// Once a coroutine is canceled any coroutine-blocking operation within the coroutine
-    /// will throw `VeniceError.canceledCoroutine`.
-    public func cancel() {
-        hclose(handle)
+    ///   Worker coroutines should be treated mostly like individual processes. Care must be taken not
+    ///   to share any coroutine compatible primitives such as channels or sockets as they are not threadsafe.
+    public static func worker<T>(routine: @escaping () throws -> T) throws -> T {
+        var resultingValue: T? = nil
+        var resultingError: Error? = nil
+
+        var fds: [Int32] = [0, 0]
+        var rc: Int32 = fds.withUnsafeMutableBufferPointer {
+            #if os(Linux)
+            return socketpair(AF_UNIX, Int32(SOCK_STREAM.rawValue), 0, $0.baseAddress!)
+            #else
+            return socketpair(AF_UNIX, SOCK_STREAM, 0, $0.baseAddress!)
+            #endif
+        }
+        guard rc == 0 else {
+            throw VeniceError.systemError(number: errno)
+        }
+        defer {
+            #if os(Linux)
+                Glibc.close(fds[0])
+                Glibc.close(fds[1])
+            #else
+                Darwin.close(fds[0])
+                Darwin.close(fds[1])
+            #endif
+        }
+
+        let local = try FileDescriptor(fds[0])
+        let remote = try FileDescriptor(fds[1])
+
+        DispatchQueue.global().async {
+            do {
+                resultingValue = try routine()
+            } catch {
+                resultingError = error
+            }
+            try? [UInt8(1)].withUnsafeBufferPointer {
+                try remote.write(UnsafeRawBufferPointer($0), deadline: .never)
+                return
+            }
+            try? remote.close()
+        }
+
+        var buffer = UnsafeMutableRawBufferPointer.allocate(count: 1)
+        defer {
+            buffer.deallocate()
+        }
+        _ = try? local.read(buffer, deadline: .never)
+        
+        guard let value = resultingValue else {
+            guard let error = resultingError else {
+                throw VeniceError.unexpectedError
+            }
+            throw error
+        }
+
+        return value
     }
-    
-    /// Explicitly passes control to other coroutines. 
+
+    /// Gets a reference to the current running coroutine
+    public private(set) static var current: Coroutine {
+        get {
+            guard let raw = clsget() else {
+                return Coroutine.main
+            }
+            return Unmanaged<Coroutine>.fromOpaque(raw).takeUnretainedValue()
+        }
+        set {
+            if let raw = clsget() {
+                _ = Unmanaged<Coroutine>.fromOpaque(raw).takeRetainedValue()
+                clsset(nil)
+            }
+            clsset(Unmanaged.passRetained(newValue).toOpaque())
+        }
+    }
+
+    private static var main: Coroutine {
+        let coroutine: Coroutine
+        if let existing = Thread.current.threadDictionary["Venice.Coroutine.main"] as? Coroutine {
+            coroutine = existing
+        } else {
+            coroutine = Coroutine()
+            Thread.current.threadDictionary["Venice.Coroutine.main"] = coroutine
+        }
+        return coroutine
+    }
+
+    private final class Reaper {
+        private var handles: [Int32] = []
+
+        func push(handle: Int32) {
+            handles.append(handle)
+        }
+
+        func reap() {
+            guard !handles.isEmpty else {
+                return
+            }
+
+            for handle in handles {
+                hclose(handle)
+            }
+            handles = []
+        }
+
+        deinit {
+            reap()
+        }
+    }
+
+    private static var reaper: Reaper {
+        let reaper: Reaper
+        if let existing = Thread.current.threadDictionary["Venice.Coroutine.reaper"] as? Reaper {
+            reaper = existing
+        } else {
+            reaper = Reaper()
+            Thread.current.threadDictionary["Venice.Coroutine.reaper"] = reaper
+        }
+        return reaper
+    }
+
+    /// Explicitly passes control to other coroutines.
     /// By calling this function, you give other coroutines a chance to run.
     ///
     /// You should consider using `Coroutiner.yield()` when doing lengthy computations
@@ -119,24 +226,11 @@ public final class Coroutine {
     ///     try Coroutine.yield() // Give other coroutines a chance to run.
     /// }
     /// ```
-    ///
-    /// - Warning:
-    /// Once a coroutine is canceled calling `Couroutine.yield`
-    /// will throw `VeniceError.canceledCoroutine`.
-    ///
-    /// - Throws: The following errors might be thrown:
-    ///   #### VeniceError.canceledCoroutine
-    ///   Thrown when the operation is performed within a canceled coroutine.
-    public static func yield() throws {
+    public static func yield() {
         let result = CLibdill.yield()
-        
-        guard result == 0 else {
-            switch errno {
-            case ECANCELED:
-                throw VeniceError.canceledCoroutine
-            default:
-                throw VeniceError.unexpectedError
-            }
+
+        guard result != -1 else {
+            fatalError("Unexpected error while yielding coroutine.")
         }
     }
 
@@ -145,172 +239,77 @@ public final class Coroutine {
     /// ## Example:
     ///
     /// ```swift
-    /// func execute<R>(_ deadline: Deadline, body: (Void) throws -> R) throws -> R {
-    ///     try Coroutine.wakeUp(deadline)
+    /// func execute<R>(at deadline: Deadline, body: (Void) throws -> R) throws -> R {
+    ///     Coroutine.wakeUp(at: deadline)
     ///     try body()
     /// }
     ///
-    /// try execute(1.second.fromNow()) {
+    /// try execute(at: 1.second.fromNow()) {
     ///     print("Hey! Ho! Let's go!")
     /// }
     /// ```
-    ///
-    /// - Warning:
-    /// Once a coroutine is canceled calling `Couroutine.wakeUp`
-    /// will throw `VeniceError.canceledCoroutine`.
-    ///
-    /// - Throws: The following errors might be thrown:
-    ///   #### VeniceError.canceledCoroutine
-    ///   Thrown when the operation is performed within a canceled coroutine.
-    public static func wakeUp(_ deadline: Deadline) throws {
-        let result = msleep(deadline.value)
-        
-        guard result == 0 else {
-            switch errno {
-            case ECANCELED:
-                throw VeniceError.canceledCoroutine
-            default:
-                throw VeniceError.unexpectedError
-            }
+    public static func wakeUp(at deadline: Deadline) {
+        let result = CLibdill.msleep(deadline.value)
+
+        guard result != -1 else {
+            fatalError("Unexpected error while sleeping coroutine.")
         }
     }
-    
-    /// Coroutine groups are useful for canceling multiple coroutines at the
-    /// same time.
+
+    /// Sleeps for duration.
     ///
     /// ## Example:
+    ///
     /// ```swift
-    /// let group = Coroutine.Group(minimumCapacity: 2)
-    ///
-    /// try group.addCoroutine {
-    ///     ...
+    /// func execute<R>(after duration: Duration, body: (Void) throws -> R) throws -> R {
+    ///     Coroutine.sleep(for: duration)
+    ///     try body()
     /// }
     ///
-    /// try group.addCoroutine {
-    ///     ...
+    /// try execute(after 1.second) {
+    ///     print("Hey! Ho! Let's go!")
     /// }
-    ///
-    /// // all coroutines in the group will be canceled
-    /// group.cancel()
     /// ```
-    public class Group {
-        private var coroutines: [Int: Coroutine]
-        private var finishedCoroutines: Set<Int> = []
-        
-        private static var id = 0
-        
-        private static func getNextID() -> Int {
-            defer {
-                if id == Int.max {
-                    id = -1
-                }
-                
-                id += 1
-            }
-            
-            return id
+    public static func sleep(for duration: Duration) {
+        wakeUp(at: duration.fromNow())
+    }
+
+    /// Coroutine label
+    public let label: String
+
+    /// Coroutine description
+    public var description: String {
+        return label
+    }
+
+    /// Coroutine local storage subscripting
+    public subscript(key: String) -> Any? {
+        get {
+            return storage[key]
         }
-        
-        /// Creates a new, empty coroutine group with at least the specified number
-        /// of elements' worth of buffer.
-        ///
-        /// Use this initializer to avoid repeated reallocations of a group's buffer
-        /// if you know you'll be adding elements to the group after creation. The
-        /// actual capacity of the created group will be the smallest power of 2 that
-        /// is greater than or equal to `minimumCapacity`.
-        ///
-        /// ## Example:
-        ///
-        /// ```swift
-        /// let group = CoroutineGroup(minimumCapacity: 2)
-        ///
-        /// try group.addCoroutine {
-        ///     ...
-        /// }
-        ///
-        /// try group.addCoroutine {
-        ///     ...
-        /// }
-        ///
-        /// // all coroutines in the group will be canceled
-        /// group.cancel()
-        /// ```
-        ///
-        /// - Parameter minimumCapacity: The minimum number of elements that the
-        ///   newly created group should be able to store without reallocating its
-        ///   buffer.
-        public init(minimumCapacity: Int = 0) {
-            coroutines = [Int: Coroutine](minimumCapacity: minimumCapacity)
-        }
-        
-        deinit {
-            cancel()
-        }
-        
-        /// Creates a lightweight coroutine and adds it to the group.
-        ///
-        /// ## Example:
-        ///
-        /// ```swift
-        /// let coroutine = try group.addCoroutine {
-        ///     ...
-        /// }
-        /// ```
-        ///
-        /// - Parameters:
-        ///   - body: Body of the newly created coroutine.
-        ///
-        /// - Throws: The following errors might be thrown:
-        ///   #### VeniceError.canceledCoroutine
-        ///   Thrown when the operation is performed within a canceled coroutine.
-        ///   #### VeniceError.outOfMemory
-        ///   Thrown when the system doesn't have enough memory to create a new coroutine.
-        /// - Returns: Newly created coroutine
-        @discardableResult public func addCoroutine(body: @escaping () throws -> Void) throws -> Coroutine {
-            removeFinishedCoroutines()
-            
-            var finished = false
-            let id = Group.getNextID()
-            
-            let coroutine = try Coroutine { [unowned self] in
-                defer {
-                    finished = true
-                    self.finishedCoroutines.insert(id)
-                }
-                
-                try body()
+        set {
+            if let value = newValue {
+                storage[key] = value
+            } else {
+                storage.removeValue(forKey: key)
             }
-            
-            if !finished {
-                coroutines[id] = coroutine
-            }
-            
-            return coroutine
-        }
-        
-        /// Cancels all coroutines in the group.
-        ///
-        /// - Warning:
-        /// Once a coroutine is canceled any coroutine-blocking operation within the coroutine
-        /// will throw `VeniceError.canceledCoroutine`.
-        public func cancel() {
-            removeFinishedCoroutines()
-            
-            for (id, coroutine) in coroutines {
-                defer {
-                    coroutines[id] = nil
-                }
-                
-                coroutine.cancel()
-            }
-        }
-        
-        private func removeFinishedCoroutines() {
-            for id in finishedCoroutines {
-                coroutines[id] = nil
-            }
-            
-            finishedCoroutines.removeAll()
         }
     }
+
+    /// Coroutine local storage subscripting
+    public subscript(key: String, default: Any) -> Any? {
+        get {
+            return self[key] ?? `default`
+        }
+        set {
+            self[key] = newValue
+        }
+    }
+
+    private var storage: [String: Any] = [:]
+
+    private init(label: String = "anonymous") {
+        self.label = label
+    }
 }
+

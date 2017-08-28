@@ -6,112 +6,76 @@
 
 import XCTest
 @testable import Venice
+import CLibdill
 
 public class CoroutineTests : XCTestCase {
     func testCoroutine() throws {
         var sum = 0
 
-        func add(number: Int, count: Int) throws {
+        func add(number: Int, count: Int) {
             for _ in 0 ..< count {
                 sum += number
-                try Coroutine.yield()
+                Coroutine.yield()
             }
         }
 
-        let coroutine1 = try Coroutine {
-            try add(number: 7, count: 3)
+        Coroutine.run {
+            add(number: 7, count: 3)
         }
 
-        let coroutine2 = try Coroutine {
-            try add(number: 11, count: 1)
+        Coroutine.run {
+            add(number: 11, count: 1)
         }
 
-        let coroutine3 = try Coroutine {
-            try add(number: 5, count: 2)
+        Coroutine.run {
+            add(number: 5, count: 2)
         }
 
-        try Coroutine.wakeUp(100.milliseconds.fromNow())
+        Coroutine.wakeUp(at: 100.milliseconds.fromNow())
         XCTAssertEqual(sum, 42)
-
-        coroutine1.cancel()
-        coroutine2.cancel()
-        coroutine3.cancel()
-    }
-
-    func testCoroutineOnCanceledCoroutine() throws {
-        let coroutine = try Coroutine {
-            try Coroutine.yield()
-            XCTAssertThrowsError(try Coroutine(body: {}), error: VeniceError.canceledCoroutine)
-        }
-
-        coroutine.cancel()
-    }
-
-    func testThrowOnCoroutine() throws {
-        let coroutine = try Coroutine {
-            struct NiceError : Error, CustomStringConvertible {
-                let description: String
-            }
-
-            throw NiceError(description: "NICE™")
-        }
-
-        coroutine.cancel()
-    }
-
-    func testYiedOnCanceledCoroutine() throws {
-        let coroutine = try Coroutine {
-            try Coroutine.yield()
-            XCTAssertThrowsError(try Coroutine.yield(), error: VeniceError.canceledCoroutine)
-        }
-
-        coroutine.cancel()
     }
 
     func testWakeUp() throws {
         let deadline = 100.milliseconds.fromNow()
-        try Coroutine.wakeUp(deadline)
+        Coroutine.wakeUp(at: deadline)
         let difference = Deadline.now().value - deadline.value
         XCTAssert(difference > -100.milliseconds.value && difference < 100.milliseconds.value)
     }
 
-    func testWakeUpOnCanceledCoroutine() throws {
-        let coroutine = try Coroutine {
-            XCTAssertThrowsError(
-                try Coroutine.wakeUp(100.milliseconds.fromNow()),
-                error: VeniceError.canceledCoroutine
-            )
-        }
-
-        coroutine.cancel()
-    }
-
     func testWakeUpWithChannels() throws {
-        let channel = try Channel<Int>()
-        let group = Coroutine.Group()
+        let channel = Channel<Int>()
 
         func send(_ value: Int, after delay: Duration) throws {
-            try Coroutine.wakeUp(delay.fromNow())
+            Coroutine.wakeUp(at: delay.fromNow())
             try channel.send(value, deadline: .never)
         }
 
-        try group.addCoroutine(body: { try send(111, after: 30.milliseconds) })
-        try group.addCoroutine(body: { try send(222, after: 40.milliseconds) })
-        try group.addCoroutine(body: { try send(333, after: 10.milliseconds) })
-        try group.addCoroutine(body: { try send(444, after: 20.milliseconds) })
+        let runs = [(111, 30), (222, 40), (333, 10), (444, 20)]
+        for run in runs {
+            Coroutine.run {
+                XCTAssertThrowsNoError({ try send(run.0, after: run.1.milliseconds) })
+            }
+        }
 
         XCTAssert(try channel.receive(deadline: .never) == 333)
         XCTAssert(try channel.receive(deadline: .never) == 444)
         XCTAssert(try channel.receive(deadline: .never) == 111)
         XCTAssert(try channel.receive(deadline: .never) == 222)
-
-        group.cancel()
     }
-    
+
+    func testSleep() throws {
+        let duration = 100.milliseconds
+        let expected = duration.fromNow()
+        Coroutine.sleep(for: duration)
+        let difference = Deadline.now().value - expected.value
+
+        XCTAssert(difference > -100 && difference < 100)
+    }
+
     func testReadWriteFileDescriptor() throws {
         let deadline = 1.second.fromNow()
         let (socket1, socket2) = try createSocketPair()
-        
+
         let socket1Buffer = UnsafeMutableRawBufferPointer.allocate(count: 1)
         let socket2Buffer = UnsafeMutableRawBufferPointer.allocate(count: 1)
         
@@ -119,9 +83,9 @@ public class CoroutineTests : XCTestCase {
             socket1Buffer.deallocate()
             socket2Buffer.deallocate()
         }
-        
+
         var read: UnsafeRawBufferPointer
-        
+
         socket1Buffer[0] = 42
         socket2Buffer[0] = 0
         try socket1.write(UnsafeRawBufferPointer(socket1Buffer), deadline: deadline)
@@ -129,7 +93,7 @@ public class CoroutineTests : XCTestCase {
         XCTAssertEqual(read[0], 42)
         XCTAssertEqual(socket1Buffer[0], 42)
         XCTAssertEqual(socket2Buffer[0], 42)
-        
+
         socket1Buffer[0] = 0
         socket2Buffer[0] = 69
         try socket2.write(UnsafeRawBufferPointer(socket2Buffer), deadline: deadline)
@@ -140,65 +104,31 @@ public class CoroutineTests : XCTestCase {
     }
 
     func testInvalidFileDescriptor() throws {
-        XCTAssertThrowsError(try FileDescriptor(-1), error: VeniceError.invalidFileDescriptor)
+        XCTAssertThrowsError({ try FileDescriptor(-1) }, error: VeniceError.invalidFileDescriptor)
     }
 
-    func testPollOnCanceledCoroutine() throws {
-        let (socket1, _) = try createSocketPair()
-
-        let coroutine = try Coroutine {
-            XCTAssertThrowsError(
-                try FileDescriptor.poll(socket1.handle, event: .read, deadline: .never),
-                error: VeniceError.canceledCoroutine
-            )
-        }
-
-        coroutine.cancel()
-    }
-
-    func testFileDescriptorBlockedInAnotherCoroutine() throws {
-        let (socket1, _) = try createSocketPair()
-
-        let coroutine1 = try Coroutine {
-            XCTAssertThrowsError(
-                try FileDescriptor.poll(socket1.handle, event: .read, deadline: .never),
-                error: VeniceError.canceledCoroutine
-            )
-        }
-
-        let coroutine2 = try Coroutine {
-            XCTAssertThrowsError(
-                try FileDescriptor.poll(socket1.handle, event: .read, deadline: .never),
-                error: VeniceError.fileDescriptorBlockedInAnotherCoroutine
-            )
-        }
-
-        coroutine1.cancel()
-        coroutine2.cancel()
-    }
-    
     func testDetachFileDescriptor() throws {
         var sockets = [Int32](repeating: 0, count: 2)
-        
+
         #if os(Linux)
             let result = socketpair(AF_UNIX, Int32(SOCK_STREAM.rawValue), 0, &sockets)
         #else
             let result = socketpair(AF_UNIX, SOCK_STREAM, 0, &sockets)
         #endif
-        
+
         XCTAssert(result == 0)
-        
+
         let fileDescriptor = try FileDescriptor(sockets[0])
         let socket = try fileDescriptor.detach()
         XCTAssertEqual(socket, sockets[0])
         XCTAssertEqual(fileDescriptor.handle, -1)
-        
+
         XCTAssertThrowsError(
-            try FileDescriptor.poll(fileDescriptor.handle, event: .read, deadline: .never),
+            { try FileDescriptor.poll(fileDescriptor.handle, event: .read, deadline: .never) },
             error: VeniceError.invalidFileDescriptor
         )
     }
-    
+
     func testStandardStreams() {
         let input = FileDescriptor.standardInput
         let output = FileDescriptor.standardOutput
@@ -220,8 +150,8 @@ public class CoroutineTests : XCTestCase {
         let socketPair = try createSocketPair()
         let buf = UnsafeMutableRawBufferPointer.allocate(count: Int(BUFSIZ))
         XCTAssertThrowsError(
-          try socketPair.0.read(buf, deadline: 1.second.fromNow()),
-          error: VeniceError.deadlineReached
+            { try socketPair.0.read(buf, deadline: 1.second.fromNow()) },
+            error: VeniceError.deadlineReached
         )
     }
 
@@ -236,8 +166,8 @@ public class CoroutineTests : XCTestCase {
         mutableBuf[0] = 42
         let buf = UnsafeRawBufferPointer(mutableBuf)
         XCTAssertThrowsError(
-          try fildes.write(buf, deadline: 1.second.fromNow()),
-          error: VeniceError.writeFailed
+            { try fildes.write(buf, deadline: 1.second.fromNow()) },
+            error: VeniceError.writeFailed
         )
     }
 }
@@ -259,16 +189,10 @@ extension CoroutineTests {
     public static var allTests: [(String, (CoroutineTests) -> () throws -> Void)] {
         return [
             ("testCoroutine", testCoroutine),
-            ("testCoroutineOnCanceledCoroutine", testCoroutineOnCanceledCoroutine),
-            ("testThrowOnCoroutine", testThrowOnCoroutine),
-            ("testYiedOnCanceledCoroutine", testYiedOnCanceledCoroutine),
             ("testWakeUp", testWakeUp),
-            ("testWakeUpOnCanceledCoroutine", testWakeUpOnCanceledCoroutine),
             ("testWakeUpWithChannels", testWakeUpWithChannels),
             ("testReadWriteFileDescriptor", testReadWriteFileDescriptor),
             ("testInvalidFileDescriptor", testInvalidFileDescriptor),
-            ("testPollOnCanceledCoroutine", testPollOnCanceledCoroutine),
-            ("testFileDescriptorBlockedInAnotherCoroutine", testFileDescriptorBlockedInAnotherCoroutine),
             ("testDetachFileDescriptor", testDetachFileDescriptor),
             ("testStandardStreams", testStandardStreams),
             ("testReadUsingEmptyBuffer", testReadUsingEmptyBuffer),

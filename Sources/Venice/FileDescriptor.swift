@@ -228,8 +228,6 @@ public final class FileDescriptor {
             switch errno {
             case EBADF:
                 throw VeniceError.invalidFileDescriptor
-            case ECANCELED:
-                throw VeniceError.canceledCoroutine
             case EBUSY:
                 throw VeniceError.fileDescriptorBlockedInAnotherCoroutine
             case ETIMEDOUT:
