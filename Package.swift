@@ -7,11 +7,10 @@ let package = Package(
     products: [
         .library(name: "Venice", targets: ["Venice"])
     ],
-    dependencies: [
-        .package(url: "https://github.com/Zewo/CLibdill.git", .branch("swift-4"))
-    ],
     targets: [
-        .target(name: "Venice"),
+        .target(name: "CLibdill"),
+        .target(name: "Venice", dependencies: ["CLibdill"]),
         .testTarget(name: "VeniceTests", dependencies: ["Venice"]),
     ]
 )
+
