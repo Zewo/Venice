@@ -107,21 +107,21 @@ public class CoroutineTests : XCTestCase {
 
         group.cancel()
     }
-    
+
     func testReadWriteFileDescriptor() throws {
         let deadline = 1.second.fromNow()
         let (socket1, socket2) = try createSocketPair()
-        
+
         let socket1Buffer = UnsafeMutableRawBufferPointer.allocate(count: 1)
         let socket2Buffer = UnsafeMutableRawBufferPointer.allocate(count: 1)
-        
+
         defer {
             socket1Buffer.deallocate()
             socket2Buffer.deallocate()
         }
-        
+
         var read: UnsafeRawBufferPointer
-        
+
         socket1Buffer[0] = 42
         socket2Buffer[0] = 0
         try socket1.write(UnsafeRawBufferPointer(socket1Buffer), deadline: deadline)
@@ -129,7 +129,7 @@ public class CoroutineTests : XCTestCase {
         XCTAssertEqual(read[0], 42)
         XCTAssertEqual(socket1Buffer[0], 42)
         XCTAssertEqual(socket2Buffer[0], 42)
-        
+
         socket1Buffer[0] = 0
         socket2Buffer[0] = 69
         try socket2.write(UnsafeRawBufferPointer(socket2Buffer), deadline: deadline)
@@ -176,34 +176,34 @@ public class CoroutineTests : XCTestCase {
         coroutine1.cancel()
         coroutine2.cancel()
     }
-    
+
     func testDetachFileDescriptor() throws {
         var sockets = [Int32](repeating: 0, count: 2)
-        
+
         #if os(Linux)
             let result = socketpair(AF_UNIX, Int32(SOCK_STREAM.rawValue), 0, &sockets)
         #else
             let result = socketpair(AF_UNIX, SOCK_STREAM, 0, &sockets)
         #endif
-        
+
         XCTAssert(result == 0)
-        
+
         let fileDescriptor = try FileDescriptor(sockets[0])
         let socket = try fileDescriptor.detach()
         XCTAssertEqual(socket, sockets[0])
         XCTAssertEqual(fileDescriptor.handle, -1)
-        
+
         XCTAssertThrowsError(
             try FileDescriptor.poll(fileDescriptor.handle, event: .read, deadline: .never),
             error: VeniceError.invalidFileDescriptor
         )
     }
-    
+
     func testStandardStreams() {
         let input = FileDescriptor.standardInput
         let output = FileDescriptor.standardOutput
         let error = FileDescriptor.standardError
-        
+
         XCTAssertEqual(try input.detach(), STDIN_FILENO)
         XCTAssertEqual(try output.detach(), STDOUT_FILENO)
         XCTAssertEqual(try error.detach(), STDERR_FILENO)

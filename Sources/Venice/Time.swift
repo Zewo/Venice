@@ -26,11 +26,11 @@ import CLibdill
 /// ```
 public struct Duration {
     let value: Int64
-    
+
     fileprivate init(_ duration: Int) {
         self.value = Int64(duration)
     }
-    
+
     /// Creates a `Deadline` from the duration.
     public func fromNow() -> Deadline {
         return Deadline(value + CLibdill.now())
@@ -56,7 +56,7 @@ extension Duration : Equatable {
 public struct Deadline {
     /// Raw value representing the deadline.
     public let value: Int64
-    
+
     init(_ deadline: Int64) {
         self.value = deadline
     }
@@ -65,7 +65,7 @@ public struct Deadline {
     public static func now() -> Deadline {
         return Deadline(CLibdill.now())
     }
-    
+
     /// Special value to be used if the operation needs to be performed without blocking.
     public static var immediately: Deadline {
         return Deadline(0)
@@ -82,7 +82,7 @@ extension Int {
     public var millisecond: Duration {
         return Duration(self)
     }
-    
+
     /// `Duration` represented in milliseconds.
     public var milliseconds: Duration {
         return millisecond

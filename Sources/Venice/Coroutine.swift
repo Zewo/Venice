@@ -40,7 +40,7 @@ import CLibdill
 public final class Coroutine {
     private typealias Handle = Int32
     private let handle: Handle
-    
+
     /// Launches a coroutine that executes the closure passed as argument.
     /// The coroutine is executed concurrently, and its lifetime may exceed the lifetime
     /// of the caller.
@@ -91,11 +91,11 @@ public final class Coroutine {
 
         handle = result
     }
-    
+
     deinit {
         cancel()
     }
-    
+
     /// Cancels the coroutine.
     ///
     /// - Warning:
@@ -104,8 +104,8 @@ public final class Coroutine {
     public func cancel() {
         hclose(handle)
     }
-    
-    /// Explicitly passes control to other coroutines. 
+
+    /// Explicitly passes control to other coroutines.
     /// By calling this function, you give other coroutines a chance to run.
     ///
     /// You should consider using `Coroutiner.yield()` when doing lengthy computations
@@ -129,7 +129,7 @@ public final class Coroutine {
     ///   Thrown when the operation is performed within a canceled coroutine.
     public static func yield() throws {
         let result = CLibdill.yield()
-        
+
         guard result == 0 else {
             switch errno {
             case ECANCELED:
@@ -164,7 +164,7 @@ public final class Coroutine {
     ///   Thrown when the operation is performed within a canceled coroutine.
     public static func wakeUp(_ deadline: Deadline) throws {
         let result = msleep(deadline.value)
-        
+
         guard result == 0 else {
             switch errno {
             case ECANCELED:
@@ -174,7 +174,7 @@ public final class Coroutine {
             }
         }
     }
-    
+
     /// Coroutine groups are useful for canceling multiple coroutines at the
     /// same time.
     ///
@@ -196,21 +196,21 @@ public final class Coroutine {
     public class Group {
         private var coroutines: [Int: Coroutine]
         private var finishedCoroutines: Set<Int> = []
-        
+
         private static var id = 0
-        
+
         private static func getNextID() -> Int {
             defer {
                 if id == Int.max {
                     id = -1
                 }
-                
+
                 id += 1
             }
-            
+
             return id
         }
-        
+
         /// Creates a new, empty coroutine group with at least the specified number
         /// of elements' worth of buffer.
         ///
@@ -242,11 +242,11 @@ public final class Coroutine {
         public init(minimumCapacity: Int = 0) {
             coroutines = [Int: Coroutine](minimumCapacity: minimumCapacity)
         }
-        
+
         deinit {
             cancel()
         }
-        
+
         /// Creates a lightweight coroutine and adds it to the group.
         ///
         /// ## Example:
@@ -268,26 +268,26 @@ public final class Coroutine {
         /// - Returns: Newly created coroutine
         @discardableResult public func addCoroutine(body: @escaping () throws -> Void) throws -> Coroutine {
             removeFinishedCoroutines()
-            
+
             var finished = false
             let id = Group.getNextID()
-            
+
             let coroutine = try Coroutine { [unowned self] in
                 defer {
                     finished = true
                     self.finishedCoroutines.insert(id)
                 }
-                
+
                 try body()
             }
-            
+
             if !finished {
                 coroutines[id] = coroutine
             }
-            
+
             return coroutine
         }
-        
+
         /// Cancels all coroutines in the group.
         ///
         /// - Warning:
@@ -295,21 +295,21 @@ public final class Coroutine {
         /// will throw `VeniceError.canceledCoroutine`.
         public func cancel() {
             removeFinishedCoroutines()
-            
+
             for (id, coroutine) in coroutines {
                 defer {
                     coroutines[id] = nil
                 }
-                
+
                 coroutine.cancel()
             }
         }
-        
+
         private func removeFinishedCoroutines() {
             for id in finishedCoroutines {
                 coroutines[id] = nil
             }
-            
+
             finishedCoroutines.removeAll()
         }
     }

@@ -11,16 +11,16 @@ import CLibdill
 public final class FileDescriptor {
     /// File descriptor handle.
     public typealias Handle = Int32
-    
+
     /// File descriptor handle.
     public private(set) var handle: Handle
-    
+
     /// Standard input file descriptor
     public static var standardInput = try! FileDescriptor(STDIN_FILENO)
-    
+
     /// Standard output file descriptor
     public static var standardOutput = try! FileDescriptor(STDOUT_FILENO)
-    
+
     /// Standard error file descriptor
     public static var standardError = try! FileDescriptor(STDERR_FILENO)
 
@@ -44,11 +44,11 @@ public final class FileDescriptor {
         let _ = fcntl(handle, F_SETFL, flags | O_NONBLOCK)
         self.handle = handle
     }
-    
+
     deinit {
         try? close()
     }
-    
+
     /// Reads from the file descriptor.
     ///
     /// - Parameters:
@@ -70,18 +70,18 @@ public final class FileDescriptor {
         deadline: Deadline
     ) throws -> UnsafeRawBufferPointer {
         let handle = try getHandle()
-        
+
         guard !buffer.isEmpty, let baseAddress = buffer.baseAddress else {
             return UnsafeRawBufferPointer(start: nil, count: 0)
         }
-        
+
         loop: while true {
             #if os(Linux)
                 let result = Glibc.read(handle, buffer.baseAddress, buffer.count)
             #else
                 let result = Darwin.read(handle, buffer.baseAddress, buffer.count)
             #endif
-            
+
             guard result != -1 else {
                 switch errno {
                 case EWOULDBLOCK, EAGAIN:
@@ -91,11 +91,11 @@ public final class FileDescriptor {
                     throw VeniceError.readFailed
                 }
             }
-        
+
             return UnsafeRawBufferPointer(start: baseAddress, count: result)
         }
     }
-    
+
     /// Writes to the file descriptor.
     ///
     /// - Parameters:
@@ -120,7 +120,7 @@ public final class FileDescriptor {
             #else
                 let result = Darwin.write(handle, buffer.baseAddress, buffer.count)
             #endif
-            
+
             guard result != -1 else {
                 switch errno {
                 case EWOULDBLOCK, EAGAIN:
@@ -130,7 +130,7 @@ public final class FileDescriptor {
                     throw VeniceError.writeFailed
                 }
             }
-            
+
             #if swift(>=3.2)
                 buffer = UnsafeRawBufferPointer(rebasing: buffer.suffix(from: result))
             #else
@@ -138,7 +138,7 @@ public final class FileDescriptor {
             #endif
         }
     }
-    
+
     /// Closes a file descriptor, so that it no longer refers to any
     /// file and may be reused.  Any record locks held on the
     /// file it was associated with, and owned by the process, are removed
@@ -156,7 +156,7 @@ public final class FileDescriptor {
     ///   Thrown when `handle` is not an open file descriptor.
     public func close() throws {
         let handle = try detach()
-        
+
         #if os(Linux)
             guard Glibc.close(handle) == 0 else {
                 throw VeniceError.invalidFileDescriptor
@@ -167,30 +167,30 @@ public final class FileDescriptor {
             }
         #endif
     }
-    
+
     /// Detaches the underlying `handle`.
     /// After `detach` any operation on the `FileDescriptor` will throw an error.
     ///
     /// - Returns: The underlying file descriptor.
     @discardableResult public func detach() throws -> Handle {
         let handle = try getHandle()
-        
+
         defer {
             self.handle = -1
         }
-        
+
         FileDescriptor.clean(handle)
         return handle
     }
-    
+
     private func getHandle() throws -> Handle {
         guard handle != -1 else {
             throw VeniceError.invalidFileDescriptor
         }
-        
+
         return handle
     }
-    
+
     /// Waits for the file descriptor to become either readable/writable
     /// or to get into an error state. Either case leads to a successful return
     /// from the function. To distinguish the two outcomes, follow up with a
@@ -216,14 +216,14 @@ public final class FileDescriptor {
     ///   Thrown when the operation reaches the deadline.
     public static func poll(_ handle: Handle, event: PollEvent, deadline: Deadline) throws {
         let result: Int32
-        
+
         switch event {
         case .read:
             result = fdin(handle, deadline.value)
         case .write:
             result = fdout(handle, deadline.value)
         }
-        
+
         guard result == 0 else {
             switch errno {
             case EBADF:
@@ -239,7 +239,7 @@ public final class FileDescriptor {
             }
         }
     }
-    
+
     /// Erases cached info about a file descriptor.
     ///
     /// This function drops any state that Venice associates with
@@ -253,10 +253,10 @@ public final class FileDescriptor {
         guard handle != -1 else {
             return
         }
-        
+
         fdclean(handle)
     }
-    
+
     /// Event used to poll file descriptors for reading or writing.
     public enum PollEvent {
         /// Event which represents when data is available
