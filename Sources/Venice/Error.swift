@@ -16,7 +16,7 @@ public enum VeniceError : Error, Equatable {
     case readFailed
     /// Thrown when a write operation fails.
     case writeFailed
-    
+
     /// Thrown when an unexpected error occurs.
     /// This should never happen in the regular flow of an application.
     case unexpectedError

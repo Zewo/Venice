@@ -21,7 +21,7 @@ import CLibdill
 /// ```
 public final class Channel<Type> {
     private typealias Handle = Int32
-    
+
     private enum ChannelResult<Type> {
         case value(Type)
         case error(Error)
@@ -35,7 +35,7 @@ public final class Channel<Type> {
             }
         }
     }
-    
+
     private let handle: Handle
     private var buffer = List<ChannelResult<Type>>()
 
@@ -66,14 +66,14 @@ public final class Channel<Type> {
 
         handle = result
     }
-    
+
     deinit {
         hclose(handle)
     }
-    
+
     /// Reference to the channel which can only send.
     public lazy var sending: Sending = Sending(self)
-    
+
     /// Reference to the channel which can only receive.
     public lazy var receiving: Receiving = Receiving(self)
 
@@ -125,7 +125,7 @@ public final class Channel<Type> {
 
         return try buffer.removeFirst().getValue()
     }
-    
+
     /// This function is used to inform the channel that no more `send` or `receive` should be
     /// performed on the channel.
     ///
@@ -135,7 +135,7 @@ public final class Channel<Type> {
     public func done() {
         hdone(handle, 0)
     }
-    
+
     /// Send-only reference to an existing channel.
     ///
     /// ## Example:
@@ -151,27 +151,27 @@ public final class Channel<Type> {
     /// ```
     public final class Sending {
         private let channel: Channel<Type>
-        
+
         fileprivate init(_ channel: Channel<Type>) {
             self.channel = channel
         }
-        
+
         /// :nodoc:
         public func send(_ value: Type, deadline: Deadline) throws {
             try channel.send(value, deadline: deadline)
         }
-        
+
         /// :nodoc:
         public func send(_ error: Error, deadline: Deadline) throws {
             try channel.send(error, deadline: deadline)
         }
-        
+
         /// :nodoc:
         public func done() {
             channel.done()
         }
     }
-    
+
     /// Receive-only reference to an existing channel.
     ///
     /// ## Example:
@@ -187,16 +187,16 @@ public final class Channel<Type> {
     /// ```
     public final class Receiving {
         private let channel: Channel<Type>
-        
+
         fileprivate init(_ channel: Channel<Type>) {
             self.channel = channel
         }
-        
+
         /// :nodoc:
         @discardableResult public func receive(deadline: Deadline) throws -> Type {
             return try channel.receive(deadline: deadline)
         }
-        
+
         /// :nodoc:
         public func done() {
             channel.done()
@@ -222,7 +222,7 @@ class Node<T> {
     var value: T
     var next: Node<T>?
     weak var previous: Node<T>?
-    
+
     init(value: T) {
         self.value = value
     }
@@ -231,48 +231,48 @@ class Node<T> {
 fileprivate class List<T> {
     private var head: Node<T>?
     private var tail: Node<T>?
-    
+
     @discardableResult fileprivate func append(_ value: T) -> Node<T> {
         let newNode = Node(value: value)
-        
+
         if let tailNode = tail {
             newNode.previous = tailNode
             tailNode.next = newNode
         } else {
             head = newNode
         }
-        
+
         tail = newNode
         return newNode
     }
-    
+
     @discardableResult fileprivate func remove(_ node: Node<T>) -> T {
         let prev = node.previous
         let next = node.next
-        
+
         if let prev = prev {
             prev.next = next
         } else {
             head = next
         }
-        
+
         next?.previous = prev
-        
+
         if next == nil {
             tail = prev
         }
-        
+
         node.previous = nil
         node.next = nil
-        
+
         return node.value
     }
-    
+
     @discardableResult fileprivate func removeFirst() throws -> T {
         guard let head = head else {
             throw VeniceError.unexpectedError
         }
-        
+
         return remove(head)
     }
 }
