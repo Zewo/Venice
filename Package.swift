@@ -8,7 +8,7 @@ let package = Package(
         .library(name: "Venice", targets: ["Venice"])
     ],
     dependencies: [
-        .package(url: "https://github.com/zewo/CLibdill.git", .branch("master"))
+        .package(url: "https://github.com/Zewo/CLibdill.git", .branch("master"))
     ],
     targets: [
         .target(name: "Venice", dependencies: ["CLibdill"]),
