@@ -108,36 +108,36 @@ public class CoroutineTests : XCTestCase {
         group.cancel()
     }
     
-    func testReadWriteFileDescriptor() throws {
-        let deadline = 1.second.fromNow()
-        let (socket1, socket2) = try createSocketPair()
+    // func testReadWriteFileDescriptor() throws {
+    //     let deadline = 1.second.fromNow()
+    //     let (socket1, socket2) = try createSocketPair()
         
-        let socket1Buffer = UnsafeMutableRawBufferPointer.allocate(count: 1)
-        let socket2Buffer = UnsafeMutableRawBufferPointer.allocate(count: 1)
+    //     let socket1Buffer = UnsafeMutableRawBufferPointer.allocate(count: 1)
+    //     let socket2Buffer = UnsafeMutableRawBufferPointer.allocate(count: 1)
         
-        defer {
-            socket1Buffer.deallocate()
-            socket2Buffer.deallocate()
-        }
+    //     defer {
+    //         socket1Buffer.deallocate()
+    //         socket2Buffer.deallocate()
+    //     }
         
-        var read: UnsafeRawBufferPointer
+    //     var read: UnsafeRawBufferPointer
         
-        socket1Buffer[0] = 42
-        socket2Buffer[0] = 0
-        try socket1.write(UnsafeRawBufferPointer(socket1Buffer), deadline: deadline)
-        read = try socket2.read(socket2Buffer, deadline: deadline)
-        XCTAssertEqual(read[0], 42)
-        XCTAssertEqual(socket1Buffer[0], 42)
-        XCTAssertEqual(socket2Buffer[0], 42)
+    //     socket1Buffer[0] = 42
+    //     socket2Buffer[0] = 0
+    //     try socket1.write(UnsafeRawBufferPointer(socket1Buffer), deadline: deadline)
+    //     read = try socket2.read(socket2Buffer, deadline: deadline)
+    //     XCTAssertEqual(read[0], 42)
+    //     XCTAssertEqual(socket1Buffer[0], 42)
+    //     XCTAssertEqual(socket2Buffer[0], 42)
         
-        socket1Buffer[0] = 0
-        socket2Buffer[0] = 69
-        try socket2.write(UnsafeRawBufferPointer(socket2Buffer), deadline: deadline)
-        read = try socket1.read(socket1Buffer, deadline: deadline)
-        XCTAssertEqual(read[0], 69)
-        XCTAssertEqual(socket1Buffer[0], 69)
-        XCTAssertEqual(socket2Buffer[0], 69)
-    }
+    //     socket1Buffer[0] = 0
+    //     socket2Buffer[0] = 69
+    //     try socket2.write(UnsafeRawBufferPointer(socket2Buffer), deadline: deadline)
+    //     read = try socket1.read(socket1Buffer, deadline: deadline)
+    //     XCTAssertEqual(read[0], 69)
+    //     XCTAssertEqual(socket1Buffer[0], 69)
+    //     XCTAssertEqual(socket2Buffer[0], 69)
+    // }
 
     func testInvalidFileDescriptor() throws {
         XCTAssertThrowsError(try FileDescriptor(-1), error: VeniceError.invalidFileDescriptor)
@@ -209,37 +209,37 @@ public class CoroutineTests : XCTestCase {
         XCTAssertEqual(try error.detach(), STDERR_FILENO)
     }
 
-    func testReadUsingEmptyBuffer() throws {
-        let socketPair = try createSocketPair()
-        let buf = UnsafeMutableRawBufferPointer.allocate(count: 0)
-        let ret = try socketPair.0.read(buf, deadline: 1.second.fromNow())
-        XCTAssert(ret.isEmpty)
-    }
+    // func testReadUsingEmptyBuffer() throws {
+    //     let socketPair = try createSocketPair()
+    //     let buf = UnsafeMutableRawBufferPointer.allocate(count: 0)
+    //     let ret = try socketPair.0.read(buf, deadline: 1.second.fromNow())
+    //     XCTAssert(ret.isEmpty)
+    // }
 
-    func testReadFromEmptyFildes() throws {
-        let socketPair = try createSocketPair()
-        let buf = UnsafeMutableRawBufferPointer.allocate(count: Int(BUFSIZ))
-        XCTAssertThrowsError(
-          try socketPair.0.read(buf, deadline: 1.second.fromNow()),
-          error: VeniceError.deadlineReached
-        )
-    }
+    // func testReadFromEmptyFildes() throws {
+    //     let socketPair = try createSocketPair()
+    //     let buf = UnsafeMutableRawBufferPointer.allocate(count: Int(BUFSIZ))
+    //     XCTAssertThrowsError(
+    //       try socketPair.0.read(buf, deadline: 1.second.fromNow()),
+    //       error: VeniceError.deadlineReached
+    //     )
+    // }
 
     func testCleanInvalidHandle() {
         FileDescriptor.clean(-1)
     }
 
-    func testInvalidWrite() {
-        let handle = open("/dev/null", O_RDONLY)
-        let fildes = try! FileDescriptor(handle)
-        let mutableBuf = UnsafeMutableRawBufferPointer.allocate(count: 1)
-        mutableBuf[0] = 42
-        let buf = UnsafeRawBufferPointer(mutableBuf)
-        XCTAssertThrowsError(
-          try fildes.write(buf, deadline: 1.second.fromNow()),
-          error: VeniceError.writeFailed
-        )
-    }
+    // func testInvalidWrite() {
+    //     let handle = open("/dev/null", O_RDONLY)
+    //     let fildes = try! FileDescriptor(handle)
+    //     let mutableBuf = UnsafeMutableRawBufferPointer.allocate(count: 1)
+    //     mutableBuf[0] = 42
+    //     let buf = UnsafeRawBufferPointer(mutableBuf)
+    //     XCTAssertThrowsError(
+    //       try fildes.write(buf, deadline: 1.second.fromNow()),
+    //       error: VeniceError.writeFailed
+    //     )
+    // }
 }
 
 func createSocketPair() throws -> (FileDescriptor, FileDescriptor) {
@@ -265,16 +265,16 @@ extension CoroutineTests {
             ("testWakeUp", testWakeUp),
             ("testWakeUpOnCanceledCoroutine", testWakeUpOnCanceledCoroutine),
             ("testWakeUpWithChannels", testWakeUpWithChannels),
-            ("testReadWriteFileDescriptor", testReadWriteFileDescriptor),
+            // ("testReadWriteFileDescriptor", testReadWriteFileDescriptor),
             ("testInvalidFileDescriptor", testInvalidFileDescriptor),
             ("testPollOnCanceledCoroutine", testPollOnCanceledCoroutine),
             ("testFileDescriptorBlockedInAnotherCoroutine", testFileDescriptorBlockedInAnotherCoroutine),
             ("testDetachFileDescriptor", testDetachFileDescriptor),
             ("testStandardStreams", testStandardStreams),
-            ("testReadUsingEmptyBuffer", testReadUsingEmptyBuffer),
-            ("testReadFromEmptyFildes", testReadFromEmptyFildes),
+            // ("testReadUsingEmptyBuffer", testReadUsingEmptyBuffer),
+            // ("testReadFromEmptyFildes", testReadFromEmptyFildes),
             ("testCleanInvalidHandle", testCleanInvalidHandle),
-            ("testInvalidWrite", testInvalidWrite)
+            // ("testInvalidWrite", testInvalidWrite)
         ]
     }
 }
