@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:4.2
 
 import PackageDescription
 
@@ -8,7 +8,7 @@ let package = Package(
         .library(name: "Venice", targets: ["Venice"])
     ],
     dependencies: [
-        .package(url: "https://github.com/Zewo/CLibdill.git", .branch("master"))
+        .package(url: "https://github.com/satishbabariya/CLibdill.git", .branch("master"))
     ],
     targets: [
         .target(name: "Venice", dependencies: ["CLibdill"]),
